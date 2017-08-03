@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/mission_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="90dp"
+                  android:background="@color/colorWhite"
+                  android:layout_marginBottom="1dp"
+                  android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/mission_status"
+                android:layout_width="6dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorDelete"
+                android:layout_weight="0" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="12">
+
+                <TextView
+                    android:id="@+id/name"
+                    style="@style/AppTheme.Mission_style"
+                    android:text="My super task name"/>
+
+                <TextView
+                    android:id="@+id/device"
+                    style="@style/AppTheme.Mission_style"
+                    android:layout_below="@id/name"
+                    android:text="Dev"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_weight="0">
+
+                <TextView
+                    android:id="@+id/delivery_date"
+                    style="@style/AppTheme.Mission_style"
+                    android:text="27/11/2017"/>
+
+                <ImageButton
+                    android:id="@+id/check_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/colorWhite"
+                    android:src="@mipmap/ic_valid_passage"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>

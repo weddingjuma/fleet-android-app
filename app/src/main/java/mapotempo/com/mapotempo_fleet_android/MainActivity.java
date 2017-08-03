@@ -1,52 +1,69 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
+import android.content.res.Configuration;
 import android.support.v7.widget.Toolbar;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
+import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
+
+public class MainActivity extends AppCompatActivity implements MissionsFragment.OnMissionsInteractionListener, MissionFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public View.OnClickListener onListMissionsInteraction(final MissionModel item) {
+        View.OnClickListener onClick = new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                if (v.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    MissionContainerFragment fragment = (MissionContainerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+
+                    fragment.setCurrentItem(MissionsManager.getInstance().getIndexOf(item.id));
+                } else {
+                    Intent intent = new Intent(v.getContext(), SingleMissionView.class);
+                    intent.putExtra("mission_id", item.id);
+
+                    v.getContext().startActivity(intent);
+                }
             }
-        });
+        };
+
+        return onClick;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onSingleMissionInteraction(MissionModel mission) {
+        MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+        MissionContainerFragment fragment = (MissionContainerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+
+        if (missionsFragment != null)
+            missionsFragment.recyclerView.getAdapter().notifyDataSetChanged();
+
+        if (fragment != null)
+            fragment.notifyDataChange();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public MissionModel wichViewIsTheCurrent(MissionModel m) {
+        MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        if (missionsFragment != null)
+            missionsFragment.setCurrentMission(m);
 
-        return super.onOptionsItemSelected(item);
+        return m;
     }
 }
+
+

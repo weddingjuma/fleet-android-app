@@ -1,2 +1,2 @@
-include ':app', ':3party:mapotempo-fleet-java-client'
+include ':3party:mapotempo-fleet-java-client', ':app'
 

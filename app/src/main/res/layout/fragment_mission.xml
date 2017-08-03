@@ -1,0 +1,118 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             tools:context="mapotempo.com.mapotempo_fleet_android.MissionFragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGrey"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorDarkGrey"
+            android:layout_height="60dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:fontFamily="monospace"
+                android:textStyle="bold"
+                android:text="@string/mission" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/mission_status"
+                android:text="Pending status"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorChangeStatus"
+                style="@style/AppTheme.Single_Mission"
+                android:padding="2dp"
+                android:layout_width="match_parent"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/AppTheme.Single_Mission"
+                android:text="Mission name" />
+
+            <TextView
+                android:id="@+id/location"
+                style="@style/AppTheme.Single_Mission"
+                android:text="Test Location" />
+
+            <TextView
+                android:id="@+id/delivery_date"
+                style="@style/AppTheme.Single_Mission"
+                android:text="Test date" />
+
+            <TextView
+                android:id="@+id/device"
+                style="@style/AppTheme.Single_Mission"
+                android:text="Test device" />
+
+            <TextView
+                android:id="@+id/details"
+                style="@style/AppTheme.Single_Mission"
+                android:text="Test details" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" >
+
+            <Button
+                android:id="@+id/updateBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:background="@color/colorUpdate"/>
+
+            <Button
+                android:id="@+id/deleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DELETE"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorDelete"/>
+
+            <Button
+                android:id="@+id/statusBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentRight="true"
+                android:background="@color/colorChangeStatus"/>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/go_to_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Go to location"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorPrimaryDark"/>
+
+    </LinearLayout>
+</ScrollView>

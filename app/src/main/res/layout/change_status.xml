@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@color/colorPrimary"
+              android:layout_gravity="center"
+              android:layout_height="250dp">
+
+
+    <TextView
+        android:id="@+id/current_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:background="@color/colorDarkGrey"
+        android:padding="@dimen/base_margin"
+        android:text="DELETED"
+        />
+
+    <LinearLayout
+        android:layout_below="@+id/current_status"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        android:layout_height="wrap_content">
+
+        <!-- PENDING -->
+
+        <LinearLayout
+            android:tag="status"
+            android:id="@+id/pending_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_status_pending"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="PENDING"
+                android:textAlignment="center"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <!-- COMPLETED -->
+
+        <LinearLayout
+            android:tag="status"
+            android:id="@+id/completed_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_status_completed"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="COMPLETED"
+                android:textAlignment="center"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <!-- UNCOMPLETED -->
+
+        <LinearLayout
+            android:tag="status"
+            android:id="@+id/uncompleted_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_status_uncompleted"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="UNCOMPLETED"
+                android:textAlignment="center"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
