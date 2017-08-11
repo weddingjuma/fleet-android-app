@@ -3,9 +3,9 @@ package mapotempo.com.mapotempo_fleet_android;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
+import com.mapotempo.fleet.core.model.Mission;
 
-public class SingleMissionView extends AppCompatActivity implements MissionFragment.OnFragmentInteractionListener {
+public class SingleMissionView extends AppCompatActivity implements MissionFragment.OnFragmentInteractionListener, MissionContainerFragment.ContainerFragmentMission {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -13,7 +13,7 @@ public class SingleMissionView extends AppCompatActivity implements MissionFragm
     }
 
     @Override
-    public void onSingleMissionInteraction(MissionModel mission) {
+    public void onSingleMissionInteraction(Mission mission) {
         MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         MissionContainerFragment fragment = (MissionContainerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
 
@@ -25,7 +25,7 @@ public class SingleMissionView extends AppCompatActivity implements MissionFragm
     }
 
     @Override
-    public MissionModel wichViewIsTheCurrent(MissionModel m) {
-        return m;
+    public int wichViewIsTheCurrent(int position) {
+        return position;
     }
 }

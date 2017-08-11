@@ -59,7 +59,7 @@
                 android:text="Test date" />
 
             <TextView
-                android:id="@+id/device"
+                android:id="@+id/company"
                 style="@style/AppTheme.Single_Mission"
                 android:text="Test device" />
 

@@ -2,8 +2,8 @@ package mapotempo.com.mapotempo_fleet_android;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,7 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
+import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
+import com.mapotempo.fleet.core.exception.CoreException;
+import com.mapotempo.fleet.core.model.Mission;
+
+import java.util.List;
 
 
 /**
@@ -25,6 +30,10 @@ public class MissionContainerFragment extends Fragment {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private MissionFragment fMission;
+    private List<Mission> mMissions;
+    private MapotempoFleetManagerInterface mManager;
+    private int mCount;
+    private ContainerFragmentMission mListener;
 
     public enum ViewStyle {
         VIEWSCROLL(0),
@@ -55,20 +64,35 @@ public class MissionContainerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getManagerAndMissions();
+        mCount = mMissions.size();
+    }
+
+    private void getManagerAndMissions() {
+        MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
+        mManager = mapotempoApplication.getManager();
+
+        MissionAccessInterface<Mission> missionAccessInterface = mManager.getMissionAccess();
+
+        try {
+            mMissions = missionAccessInterface.getAll();
+        } catch (CoreException coreE) {
+            coreE.printStackTrace();
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_base, container, false);
         LinearLayout content = view.findViewById(R.id.mission_view_content);
 
         if (mViewStyle == ViewStyle.VIEWSCROLL) {
-            mPagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
+            mPagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager(), mCount, mMissions);
             ViewPager viewPager = (ViewPager) getActivity().getLayoutInflater().inflate(R.layout.view_pager, null);
             mPager = viewPager.findViewById(R.id.mission_viewpager);
-            mPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
+            mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+            setPagerChangeListener();
             content.addView(viewPager);
             mPager.setAdapter(mPagerAdapter);
         } else {
@@ -95,22 +119,54 @@ public class MissionContainerFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
+        mListener = (ContainerFragmentMission) context;
+        if (mListener == null)
+            throw new RuntimeException("You must implement ContainerFragmentMission Interface");
     }
 
     public void notifyDataChange() {
         mPagerAdapter.notifyDataSetChanged();
     }
 
-    public void setCurrentItem(int id) {
+    public void refreshPagerData(List<Mission> missions) {
+        mMissions = missions;
+        ScreenSlidePagerAdapter screenSlidePagerAdapter = (ScreenSlidePagerAdapter) mPagerAdapter;
+
+        screenSlidePagerAdapter.updateMissions(missions);
+    }
+
+    public void setCurrentItem(int position) {
         if (mViewStyle == ViewStyle.VIEWSCROLL) {
-            mPager.setCurrentItem(id, true);
+            mPager.setCurrentItem(position, true);
         } else {
-            fMission.fillViewFromActivity(id);
+            fMission.fillViewFromActivity(position);
         }
+    }
+
+    private void setPagerChangeListener() {
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+            @Override
+            public void onPageSelected(int position) {
+                mListener.wichViewIsTheCurrent(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) { }
+        });
+
+        final int position = getActivity().getIntent().getIntExtra("mission_id", 0);
+        mPager.post(new Runnable() {
+            @Override
+            public void run() {
+                mPager.setCurrentItem(position);
+            }
+        });
+    }
+
+    public interface ContainerFragmentMission {
+        int wichViewIsTheCurrent(int page);
     }
 }

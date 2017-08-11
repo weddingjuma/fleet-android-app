@@ -1,8 +1,9 @@
 package mapotempo.com.mapotempo_fleet_android;
 
+import android.content.res.Configuration;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ListView;
+import android.util.Log;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.content.Context;
@@ -11,12 +12,16 @@ import android.graphics.Color;
 import android.view.ViewGroup;
 import android.view.View;
 
+import com.mapotempo.fleet.core.model.Mission;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import mapotempo.com.mapotempo_fleet_android.MissionsFragment.OnMissionsInteractionListener;
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
 import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
+import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link MissionModel} and makes a call to the
@@ -25,20 +30,22 @@ import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
 public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
 
     private final OnMissionsInteractionListener mListener;
-    private final MissionsManager mManager;
     private final Context mContext;
     private List<View> mListViews = new ArrayList<>();
-    private int mCurrentPositionView = 0;
+    private boolean orientLandscape;
 
-    public MissionsRecyclerViewAdapter(Context context, OnMissionsInteractionListener listener) {
-        mManager = MissionsManager.getInstance();
+    private int missionsCount = 0;
+    private List<Mission> mMissions;
+
+
+    private int mCurrentPositionInView = 0;
+
+    public MissionsRecyclerViewAdapter(Context context, OnMissionsInteractionListener listener, List<Mission> missions) {
+        mMissions = missions;
+        missionsCount = missions.size();
         mContext = context;
-
-        if (listener instanceof OnMissionsInteractionListener && listener != null) {
-            mListener = listener;
-        } else {
-            throw new RuntimeException("Listener call back must be initialized on : " + context.getClass().getName());
-        }
+        mListener = listener;
+        orientLandscape = (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
 
     @Override
@@ -49,21 +56,23 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        //holder is a mission
-        int missionId = mManager.getMissionId(position);
-        final MissionModel mission = mManager.getMissionById(missionId);
+        final Mission mission = mMissions.get(position);
+        final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String missionDate = dateFormat.format(mission.getDeliveryDate());
 
         holder.mItem = mission;
-        holder.mName.setText(mission.name);
-        holder.mDevice.setText(mission.device);
-        holder.mDelivery_date.setText(mission.delivery_date);
-        holder.mDevice.setText(mission.device);
-        holder.mStatus.setBackgroundColor(Color.parseColor(mManager.getColorForMissionId(missionId)));
+        holder.mName.setText(mission.getName());
+        holder.mCompany.setText(mission.getCompanyId());
+        holder.mDelivery_date.setText(missionDate);
+        holder.mStatus.setBackgroundColor(MissionsManager.fakeStatusColor());
 
-        holder.mView.setOnClickListener(mListener.onListMissionsInteraction(mission));
-        holder.mView.setBackgroundColor((position == 0) ? Color.RED : Color.WHITE);
+        holder.mView.setOnClickListener(mListener.onListMissionsInteraction(position));
 
         mListViews.add(holder.mView);
+
+        if (position == 0 && mCurrentPositionInView == 0)
+            setCurrentMission(0);
 
         checkMissionStatus(holder);
     }
@@ -75,41 +84,49 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
         checkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mManager.setMissionStatusTo(MissionModel.Status.COMPLETED, holder.mItem.id);
+                Log.w("NOT IMPLEMENTED", "CHANGE MISSION STATUS IS NOT YET IMPLEMENTED");
             }
         });
     }
 
     public void setCurrentMission(int position) {
-        if (mListViews.size() > 0) {
+        if (mListViews.size() > 0 && orientLandscape) {
             View newView = mListViews.get(position);
-            View oldView = mListViews.get(mCurrentPositionView);
+            View oldView = mListViews.get(mCurrentPositionInView);
 
-            newView.setBackgroundColor(Color.RED);
-            oldView.setBackgroundColor(Color.WHITE);
+            newView.setBackgroundColor(Color.parseColor("#e2ecfd"));
+            if (position != mCurrentPositionInView)
+                oldView.setBackgroundColor(Color.WHITE);
 
-            mCurrentPositionView = position;
+            mCurrentPositionInView = position;
         }
     }
 
     @Override
     public int getItemCount() {
-        return mManager.getMissionsCount();
+        return missionsCount;
+    }
+
+    public void notifyDataSyncHasChanged(List<Mission> missions) {
+        mMissions = missions;
+        missionsCount = missions.size();
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mName;
-        public final TextView mDevice;
+        public final TextView mCompany;
         public final TextView mDelivery_date;
         public final RelativeLayout mStatus;
-        public MissionModel mItem;
+        public Mission mItem;
 
         public ViewHolder(View view) {
             super(view);
+
             mView = view;
             mName = view.findViewById(R.id.name);
-            mDevice = view.findViewById(R.id.device);
+            mCompany = view.findViewById(R.id.company);
             mStatus = view.findViewById(R.id.mission_status);
             mDelivery_date = view.findViewById(R.id.delivery_date);
         }

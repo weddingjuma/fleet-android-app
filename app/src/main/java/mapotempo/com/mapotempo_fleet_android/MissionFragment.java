@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +17,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
+import com.mapotempo.fleet.core.exception.CoreException;
+import com.mapotempo.fleet.core.model.Mission;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
 import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
 
 
@@ -32,26 +38,19 @@ import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
  */
 public class MissionFragment extends Fragment implements View.OnClickListener {
 
-    public static final String ARG_PAGE = "page";
-
     private OnFragmentInteractionListener mInteraction;
-    private MissionsManager mManager;
-    private MissionModel mMission;
-    private int mPageNumber;
+    private int mPageNumber = 0;
+    private Mission mMission;
 
-    public MissionFragment() {
+    public MissionFragment() { }
 
-    }
-
-    /**
-     * Factory method for this fragment class. Constructs a new fragment for the given page number.
-     */
-    public static MissionFragment create(int pageNumber) {
+    public static MissionFragment create(int pageNumber, Mission mission) {
         MissionFragment fragment = new MissionFragment();
-
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, pageNumber);
+
+        args.putInt("page", pageNumber);
         fragment.setArguments(args);
+        fragment.setMission(mission);
 
         return fragment;
     }
@@ -59,21 +58,13 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // If no mission has been provided by clicking,
-        // use the first one in the current set of data
-        if (mMission == null) {
-            mPageNumber = (getArguments() != null) ? getArguments().getInt(ARG_PAGE) : 0;
-            mManager = MissionsManager.getInstance();
-            mMission = mManager.getMissionById(mManager.getMissionId(mPageNumber));
-        }
+        mPageNumber = (getArguments() != null) ? getArguments().getInt("page") : 0;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mission, container, false);
-
         setButtonsBehaviors(view);
-        mInteraction.wichViewIsTheCurrent(mMission);
         return view;
     }
 
@@ -91,14 +82,13 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.fillViewFromActivity(mMission.id);
+        fillViewFromActivity(mPageNumber);
     }
 
-    public boolean fillViewFromActivity(int missionId) {
-        mManager = MissionsManager.getInstance();
-        mMission = mManager.getMissionById(missionId);
-
-        this.displayViewData(mMission);
+    public boolean fillViewFromActivity(int position) {
+        if (mMission != null) {
+            displayViewData(mMission);
+        }
         return true;
     }
 
@@ -108,18 +98,20 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         mInteraction = null;
     }
 
-    protected void displayViewData(MissionModel mission) {
+    protected void displayViewData(Mission mission) {
         TextView name = getView().findViewById(R.id.name);
-        TextView device = getView().findViewById(R.id.device);
+        TextView company = getView().findViewById(R.id.company);
         TextView details = getView().findViewById(R.id.details);
         TextView status = getView().findViewById(R.id.mission_status);
 
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String missionDate = dateFormat.format(mission.getDeliveryDate());
 
-        name.setText(mission.name);
-        details.setText(mission.delivery_date);
-        device.setText(mission.device);
-        status.setText(mission.status.toString());
-        status.setBackgroundColor(Color.parseColor(mission.status.getColor().getHexaColor()));
+        name.setText(mission.getName());
+        details.setText(missionDate);
+        company.setText(mission.getCompanyId());
+        status.setText("NOT SET");
+        status.setBackgroundColor(MissionsManager.fakeStatusColor());
     }
 
     /*****************************
@@ -149,13 +141,9 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     private void deleteCurrentMission() throws RuntimeException {
         currentMissionIsNotNull();
 
-        boolean removed = mManager.removeMission(mMission.id);
-        if (removed) {
-            if (mManager.getMissionsCount() > 0)
-                this.fillViewFromActivity(mManager.getMissionId(0));
+        Log.w("NOT IMPLEMENTED", "Delete can't be performed on this version");
 
-            this.backToListActivity();
-        }
+        backToListActivity();
     }
 
     private void changeStatusForCurrentMission() throws RuntimeException {
@@ -167,11 +155,13 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         View view = inf.inflate(R.layout.change_status, null);
         TextView status = view.findViewById(R.id.current_status);
 
-        status.setText(mMission.status.toString());
-        alert.setView(view);
-        alert.show();
+        Log.w("MISSIONS STATUS", "Missions status is not implemented yet");
 
-        setOnClickListenersForStatus(alert, view);
+//        status.setText(mMission.status.toString());
+//        alert.setView(view);
+//        alert.show();
+
+//        setOnClickListenersForStatus(alert, view);
     }
 
     private void setOnClickListenersForStatus(final AlertDialog alert, View view) {
@@ -179,35 +169,35 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         LinearLayout uncompleted = view.findViewById(R.id.uncompleted_status);
         LinearLayout pending = view.findViewById(R.id.pending_status);
 
-        completed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mManager.setMissionStatusTo(MissionModel.Status.COMPLETED, mMission.id);
-                mInteraction.onSingleMissionInteraction(mMission);
-                fillViewFromActivity(mMission.id);
-                alert.dismiss();
-            }
-        });
-
-        uncompleted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mManager.setMissionStatusTo(MissionModel.Status.UNCOMPLETED, mMission.id);
-                mInteraction.onSingleMissionInteraction(mMission);
-                fillViewFromActivity(mMission.id);
-                alert.dismiss();
-            }
-        });
-
-        pending.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mManager.setMissionStatusTo(MissionModel.Status.PENDING, mMission.id);
-                mInteraction.onSingleMissionInteraction(mMission);
-                fillViewFromActivity(mMission.id);
-                alert.dismiss();
-            }
-        });
+//        completed.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mManager.setMissionStatusTo(MissionModel.Status.COMPLETED, mMission.id);
+//                mInteraction.onSingleMissionInteraction(mMission);
+//                fillViewFromActivity(mMission.id);
+//                alert.dismiss();
+//            }
+//        });
+//
+//        uncompleted.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mManager.setMissionStatusTo(MissionModel.Status.UNCOMPLETED, mMission.id);
+//                mInteraction.onSingleMissionInteraction(mMission);
+//                fillViewFromActivity(mMission.id);
+//                alert.dismiss();
+//            }
+//        });
+//
+//        pending.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mManager.setMissionStatusTo(MissionModel.Status.PENDING, mMission.id);
+//                mInteraction.onSingleMissionInteraction(mMission);
+//                fillViewFromActivity(mMission.id);
+//                alert.dismiss();
+//            }
+//        });
     }
 
     private void fakeUriLocation() {
@@ -229,8 +219,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         if (getActivity().getClass().equals(SingleMissionView.class)) {
             // Silence is golden
         } else {
-            mMission = mManager.getFirstMission();
-            displayViewData(mMission);
+//            displayViewData(mMission);
         }
     }
 
@@ -243,6 +232,10 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     private void currentMissionIsNotNull() {
         if (mMission == null)
             throw new RuntimeException("Mission is already deleted or is invalid");
+    }
+
+    public void setMission(Mission mission) {
+        mMission = mission;
     }
 
     @Override
@@ -266,11 +259,10 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
+     * to the activity and potentially other mFragments contained in that
      * activity.
      */
     public interface OnFragmentInteractionListener {
-        void onSingleMissionInteraction(MissionModel mission);
-        MissionModel wichViewIsTheCurrent(MissionModel m);
+        void onSingleMissionInteraction(Mission mission);
     }
 }

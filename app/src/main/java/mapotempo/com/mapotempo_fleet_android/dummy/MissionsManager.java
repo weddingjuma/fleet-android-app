@@ -1,5 +1,7 @@
 package mapotempo.com.mapotempo_fleet_android.dummy;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,9 +33,24 @@ public class MissionsManager {
         this.missionModelHashMap.put(item.id, item);
     }
 
-    private MissionModel createMissionItem(int position) {
+    static public int fakeStatusColor() {
         List<MissionModel.Status> statusList = new ArrayList<>();
         int randomStatusNumber = (int) (Math.random() * (2) + 1);
+
+        statusList.add(MissionModel.Status.PENDING);
+        statusList.add(MissionModel.Status.COMPLETED);
+        statusList.add(MissionModel.Status.UNCOMPLETED);
+
+        MissionModel.Status s = statusList.get(randomStatusNumber);
+
+        MissionModel.StatusColors color = s.getColor();
+
+        return Color.parseColor(color.getHexaColor());
+    }
+
+    private MissionModel createMissionItem(int position) {
+
+
         int id = 5 + (int)(Math.random() * ((100 - 5) + 1));
         int namesId = 0 + (int)(Math.random() * ((4 - 0) + 1));
         Date d = new Date();
@@ -50,11 +67,9 @@ public class MissionsManager {
         String delivery_date =  dateFormatted;
         String device        = "GPS(Fleet)";
 
-        statusList.add(MissionModel.Status.PENDING);
-        statusList.add(MissionModel.Status.COMPLETED);
-        statusList.add(MissionModel.Status.UNCOMPLETED);
 
-        return new MissionModel(position, name, device, delivery_date, statusList.get(randomStatusNumber));
+
+        return new MissionModel(position, name, device, delivery_date, null);
     }
 
     public Map<Integer, MissionModel> emuleAsetOfFakeMissions(int maxMissions) {

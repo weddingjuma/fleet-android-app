@@ -29,8 +29,18 @@ repositories {
     mavenLocal()
 }
 
+repositories {
+    jcenter()
+    maven {
+        url "http://files.couchbase.com/maven2/"
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile ("com.mapotempo.fleet:mapotempo-fleet-java-client:1.0-SNAPSHOT")
+    compile ("com.couchbase.lite:couchbase-lite-android:1.4.0")
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

@@ -1,6 +1,5 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.content.res.Configuration;
 import android.support.v7.widget.Toolbar;
@@ -8,10 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
+import com.mapotempo.fleet.core.model.Mission;
 
-public class MainActivity extends AppCompatActivity implements MissionsFragment.OnMissionsInteractionListener, MissionFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MissionsFragment.OnMissionsInteractionListener, MissionFragment.OnFragmentInteractionListener, MissionContainerFragment.ContainerFragmentMission {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +21,16 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     }
 
     @Override
-    public View.OnClickListener onListMissionsInteraction(final MissionModel item) {
+    public View.OnClickListener onListMissionsInteraction(final int position) {
         View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     MissionContainerFragment fragment = (MissionContainerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-
-                    fragment.setCurrentItem(MissionsManager.getInstance().getIndexOf(item.id));
+                    fragment.setCurrentItem(position);
                 } else {
                     Intent intent = new Intent(v.getContext(), SingleMissionView.class);
-                    intent.putExtra("mission_id", item.id);
+                    intent.putExtra("mission_id", position);
 
                     v.getContext().startActivity(intent);
                 }
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     }
 
     @Override
-    public void onSingleMissionInteraction(MissionModel mission) {
+    public void onSingleMissionInteraction(Mission mission) {
         MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         MissionContainerFragment fragment = (MissionContainerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
 
@@ -56,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     }
 
     @Override
-    public MissionModel wichViewIsTheCurrent(MissionModel m) {
+    public int wichViewIsTheCurrent(int position) {
         MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
 
         if (missionsFragment != null)
-            missionsFragment.setCurrentMission(m);
+            missionsFragment.setCurrentMission(position);
 
-        return m;
+        return position;
     }
 }
 

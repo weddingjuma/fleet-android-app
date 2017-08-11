@@ -1,6 +1,5 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,45 +12,69 @@ import android.view.ViewGroup;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
-import java.util.Map;
 
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
+import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
+import com.mapotempo.fleet.core.accessor.Access;
+import com.mapotempo.fleet.core.exception.CoreException;
+import com.mapotempo.fleet.core.model.Mission;
 
+import java.util.List;
 /**
  * A fragment representing a list of Missions.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnMissionsInteractionListener}
- * interface. Or use {@link MapotempoFragmentsController} as a parent class of each activities.
  */
 public class MissionsFragment extends Fragment {
 
     private OnMissionsInteractionListener mListener;
-    private Map<Integer, MissionModel> mMissions;
-    private MissionsManager mManager;
+    private MapotempoFleetManagerInterface mManager;
+    private MissionsRecyclerViewAdapter mRecycler;
+    private List<Mission> mMissions;
     private int mColumnCount = 1;
     private Context mContext;
+    private Access.ChangeListener<Mission> missionChangeListener;
+    private MissionAccessInterface<Mission> iMissionAccess;
 
     protected RecyclerView recyclerView;
-    private MissionsRecyclerViewAdapter mRecycler;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        missionChangeListener = new Access.ChangeListener<Mission>() {
+            @Override
+            public void changed(final List<Mission> missions) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MissionContainerFragment singleFragment = (MissionContainerFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
+
+                        mRecycler.notifyDataSyncHasChanged(missions);
+
+                        if (singleFragment != null)
+                            singleFragment.refreshPagerData(missions);
+                    }
+                });
+            }
+        };
+
         mContext = getContext();
-        mManager = MissionsManager.getInstance();
-
-        if (savedInstanceState == null)
-            mMissions = mManager.emuleAsetOfFakeMissions(5);
+        setManagerAndMissions();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (recyclerView != null) {
-            recyclerView.getAdapter().notifyDataSetChanged();
-        }
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (recyclerView != null) {
+//            recyclerView.getAdapter().notifyDataSetChanged();
+//        }
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,18 +89,13 @@ public class MissionsFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(mContext, mColumnCount));
             }
 
-            mRecycler = new MissionsRecyclerViewAdapter(mContext, mListener);
+            mRecycler = new MissionsRecyclerViewAdapter(mContext, mListener, mMissions);
             recyclerView.setAdapter(mRecycler);
         }
 
         attachAddButton(view);
 
         return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     public void attachAddButton(View view) {
@@ -105,20 +123,40 @@ public class MissionsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        iMissionAccess.addRemoveListener(missionChangeListener);
     }
 
-    public void setCurrentMission (MissionModel mission) {
+    public void setCurrentMission (int position) {
         if (mRecycler != null)
-            mRecycler.setCurrentMission(mission.id);
+            mRecycler.setCurrentMission(position);
+    }
+
+    private void setManagerAndMissions() {
+        MapotempoApplication mapotempoApplication = (MapotempoApplication) mContext.getApplicationContext();
+        mManager = mapotempoApplication.getManager();
+
+        iMissionAccess = mManager.getMissionAccess();
+
+        try {
+            mMissions = iMissionAccess.getAll();
+        } catch (CoreException coreE) {
+            coreE.printStackTrace();
+        }
+
+        attachCallBack(iMissionAccess);
+    }
+
+    private void attachCallBack(MissionAccessInterface<Mission> iMissionAccess) {
+        iMissionAccess.addChangeListener(missionChangeListener);
     }
 
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
+     * to the activity and potentially other mFragments contained in that
      * activity.
      */
     public interface OnMissionsInteractionListener {
-        View.OnClickListener onListMissionsInteraction(MissionModel item);
+        View.OnClickListener onListMissionsInteraction(int position);
     }
 }
