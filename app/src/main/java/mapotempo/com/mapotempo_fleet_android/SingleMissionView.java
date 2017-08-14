@@ -10,6 +10,8 @@ public class SingleMissionView extends AppCompatActivity implements MissionFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_mission_view);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -22,6 +24,11 @@ public class SingleMissionView extends AppCompatActivity implements MissionFragm
 
         if (fragment != null)
             fragment.notifyDataChange();
+    }
+
+    @Override
+    public boolean onNavigateUp() {
+        return super.onNavigateUp();
     }
 
     @Override

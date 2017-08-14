@@ -1,11 +1,17 @@
 package mapotempo.com.mapotempo_fleet_android;
 
+import android.graphics.drawable.Drawable;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.content.res.Configuration;
 import android.support.v7.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.mapotempo.fleet.core.model.Mission;
 
@@ -18,6 +24,39 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        addDrawableHandler(toolbar);
+    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.mission_menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+
+    private void addDrawableHandler(Toolbar toolbar) {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout != null) {
+            ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name) {
+
+                public void onDrawerClosed(View view) {
+                    supportInvalidateOptionsMenu();
+                    //drawerOpened = false;
+                }
+
+                public void onDrawerOpened(View drawerView) {
+                    supportInvalidateOptionsMenu();
+                    //drawerOpened = true;
+                }
+            };
+
+            mDrawerToggle.setDrawerIndicatorEnabled(true);
+            drawerLayout.addDrawerListener(mDrawerToggle);
+            mDrawerToggle.syncState();
+
+            ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+            mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.menu.mission_menu, ADD_A_NEW_LIST_THERE));
+        }
     }
 
     @Override
