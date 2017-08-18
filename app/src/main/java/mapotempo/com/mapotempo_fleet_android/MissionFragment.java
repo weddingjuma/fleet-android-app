@@ -24,9 +24,9 @@ import com.mapotempo.fleet.core.base.MapotempoModelBase;
 import com.mapotempo.fleet.core.model.Mission;
 import com.mapotempo.fleet.core.model.submodel.Location;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
+
+import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
 
 
 /**
@@ -130,12 +130,9 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         TextView date = getView().findViewById(R.id.delivery_date);
         TextView address = getView().findViewById(R.id.delivery_adress);
 
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String missionDate = dateFormat.format(mission.getDeliveryDate());
-
         name.setText(mission.getName());
         address.setText(mission.getAddress().toString());
-        date.setText(missionDate);
+        date.setText(DateHelpers.parse(mission.getDeliveryDate(), DateHelpers.DateStyle.FULLDATE));
         details.setText(details.getText());
         company.setText(mission.getCompanyId());
         status.setText(mission.getStatus().getLabel().toUpperCase());

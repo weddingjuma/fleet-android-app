@@ -12,12 +12,11 @@ import android.view.View;
 
 import com.mapotempo.fleet.core.model.Mission;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import mapotempo.com.mapotempo_fleet_android.MissionsFragment.OnMissionsInteractionListener;
+import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Mission} and makes a call to the
@@ -52,12 +51,10 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        final DateFormat hoursFormat = new SimpleDateFormat("HH:mm");
         final Mission mission = mMissions.get(position);
 
-        String missionDate = dateFormat.format(mission.getDeliveryDate());
-        String missionHour = hoursFormat.format(mission.getDeliveryDate());
+        String missionDate = DateHelpers.parse(mission.getDeliveryDate(), DateHelpers.DateStyle.SHORTDATE);
+        String missionHour = DateHelpers.parse(mission.getDeliveryDate(), DateHelpers.DateStyle.HOURMINUTES);
 
         holder.mItem = mission;
         holder.mName.setText(mission.getName());
