@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -109,29 +110,13 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String missionDate = dateFormat.format(mission.getDeliveryDate());
 
-        Map<String, String> mapAddress = mission.getAddress().toMap();
-        String strAddress = getFullAdress(mapAddress);
-
         name.setText(mission.getName());
-        address.setText(strAddress);
+        address.setText(mission.getAddress().toString());
         date.setText(date.getText() + " (" + missionDate + ")");
         details.setText(details.getText());
         company.setText(mission.getCompanyId());
-        status.setText("Pending");
-    }
-
-    private String getFullAdress(Map<String, String> mapAddress) {
-        String address = "";
-        address += mapAddress.get("street");
-        address += " ";
-        address += mapAddress.get("city");
-        address += ", ";
-        address += mapAddress.get("postalcode");
-        address += " ";
-        address += mapAddress.get("state");
-        address += " ";
-
-        return address;
+        status.setText(mission.getStatus().getLabel());
+        status.setTextColor(Color.parseColor("#" + mission.getStatus().getColor()));
     }
 
     /*****************************
