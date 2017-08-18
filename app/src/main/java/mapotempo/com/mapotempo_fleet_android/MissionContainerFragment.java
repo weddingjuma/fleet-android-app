@@ -121,6 +121,22 @@ public class MissionContainerFragment extends Fragment {
             throw new RuntimeException("You must implement ContainerFragmentMission Interface");
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mListener = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        mPager = null;
+        mPagerAdapter = null;
+        fMission = null;
+    }
+
     public void notifyDataChange() {
         mPagerAdapter.notifyDataSetChanged();
     }
@@ -137,7 +153,7 @@ public class MissionContainerFragment extends Fragment {
         if (mViewStyle == ViewStyle.VIEWSCROLL) {
             mPager.setCurrentItem(position, true);
         } else {
-            fMission.fillViewFromActivity(position);
+            fMission.fillViewFromActivity();
         }
     }
 

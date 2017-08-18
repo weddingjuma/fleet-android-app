@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,13 +20,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mapotempo.fleet.core.base.MapotempoModelBase;
 import com.mapotempo.fleet.core.model.Mission;
 import com.mapotempo.fleet.core.model.submodel.Location;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -40,8 +39,8 @@ import java.util.Map;
 public class MissionFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mInteraction;
-    private int mPageNumber = 0;
     private Mission mMission;
+    private MapotempoModelBase.ChangeListener<Mission> mCallback;
 
     public MissionFragment() { }
 
@@ -59,7 +58,6 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPageNumber = (getArguments() != null) ? getArguments().getInt("page") : 0;
     }
 
     @Override
@@ -72,31 +70,50 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mInteraction = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement BaseFragmentForSingleView");
         }
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        fillViewFromActivity(mPageNumber);
-    }
-
-    public boolean fillViewFromActivity(int position) {
-        if (mMission != null) {
-            displayViewData(mMission);
-        }
-        return true;
+        mCallback = new MapotempoModelBase.ChangeListener<Mission>() {
+            @Override
+            public void changed(final Mission mission) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMission = mission;
+                        fillViewFromActivity();
+                    }
+                });
+            }
+        };
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mInteraction = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        fillViewFromActivity();
+    }
+
+    public boolean fillViewFromActivity() {
+        if (mMission != null) {
+            displayViewData(mMission);
+        }
+        return true;
     }
 
     protected void displayViewData(Mission mission) {
@@ -115,8 +132,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         date.setText(date.getText() + " (" + missionDate + ")");
         details.setText(details.getText());
         company.setText(mission.getCompanyId());
-        status.setText(mission.getStatus().getLabel());
-        status.setTextColor(Color.parseColor("#" + mission.getStatus().getColor()));
+        status.setText(mission.getStatus().getLabel().toUpperCase());
     }
 
     /*****************************
@@ -249,6 +265,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
 
     public void setMission(Mission mission) {
         mMission = mission;
+        mMission.addChangeListener(mCallback);
     }
 
     @Override

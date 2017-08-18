@@ -32,15 +32,19 @@ public class MissionsFragment extends Fragment {
     private MissionsRecyclerViewAdapter mRecycler;
     private List<Mission> mMissions;
     private int mColumnCount = 1;
-    private Context mContext;
     private Access.ChangeListener<Mission> missionChangeListener;
     private MissionAccessInterface iMissionAccess;
 
     protected RecyclerView recyclerView;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMissionsInteractionListener) {
+            mListener = (OnMissionsInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnMissionsInteractionListener");
+        }
     }
 
     @Override
@@ -64,17 +68,8 @@ public class MissionsFragment extends Fragment {
             }
         };
 
-        mContext = getContext();
         setManagerAndMissions();
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (recyclerView != null) {
-//            recyclerView.getAdapter().notifyDataSetChanged();
-//        }
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,12 +79,12 @@ public class MissionsFragment extends Fragment {
         if (recyclerView instanceof RecyclerView) {
 
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(mContext, mColumnCount));
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
             }
 
-            mRecycler = new MissionsRecyclerViewAdapter(mContext, mListener, mMissions);
+            mRecycler = new MissionsRecyclerViewAdapter(getContext(), mListener, mMissions);
             recyclerView.setAdapter(mRecycler);
         }
 
@@ -110,20 +105,16 @@ public class MissionsFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnMissionsInteractionListener) {
-            mListener = (OnMissionsInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnMissionsInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
         iMissionAccess.removeChangeListener(missionChangeListener);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mRecycler = null;
     }
 
     public void setCurrentMission (int position) {
@@ -132,7 +123,7 @@ public class MissionsFragment extends Fragment {
     }
 
     private void setManagerAndMissions() {
-        MapotempoApplication mapotempoApplication = (MapotempoApplication) mContext.getApplicationContext();
+        MapotempoApplication mapotempoApplication = (MapotempoApplication) getContext().getApplicationContext();
         mManager = mapotempoApplication.getManager();
 
         iMissionAccess = mManager.getMissionAccess();

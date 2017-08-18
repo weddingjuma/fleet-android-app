@@ -25,8 +25,8 @@ import mapotempo.com.mapotempo_fleet_android.MissionsFragment.OnMissionsInteract
  */
 public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
 
-    private final OnMissionsInteractionListener mListener;
-    private final Context mContext;
+    private OnMissionsInteractionListener mListener;
+    private Context mContext;
     private List<View> mListViews = new ArrayList<>();
     private boolean orientLandscape;
 
@@ -98,6 +98,15 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
             mCurrentPositionInView = position;
         }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+
+        mListViews = null;
+        mListener = null;
+        mContext = null;
     }
 
     @Override

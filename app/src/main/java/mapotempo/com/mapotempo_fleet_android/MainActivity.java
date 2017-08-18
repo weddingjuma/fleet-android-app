@@ -26,12 +26,6 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
         addDrawableHandler(toolbar);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.mission_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
     private void addDrawableHandler(Toolbar toolbar) {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawerLayout != null) {
