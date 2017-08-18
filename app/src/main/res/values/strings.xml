@@ -1,10 +1,24 @@
 <resources>
-    <string name="app_name">mapotempo fleet android</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Mapotempo Fleet</string>
 
     <!-- SINGLE MISSION FRAGMENT STRINGS -->
-    <string name="mission">MISSION</string>
+    <string name="mission">Mission</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!-- FAKE TEXT FOR DESIGN PURPOSE -->
+    <string name="Fake_details">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</string>
+    <string name="Fake_date">Wednesday, August 10 - 5:00PM</string>
+    <string name="Fake_location">3206 Timbercrest Road, CROSS TIMBERS 65634</string>
+    <string name="Fake_company">Mapotempo bis</string>
+    <string name="Fake_status">PENDING</string>
+    <string name="action_finish">Finish</string>
+    <string name="action_next">Next</string>
+
+    <string name="deletion">Suppression</string>
+    <string name="sur_to_delete">Êtes-vous sur de vouloir supprimer la mission ?</string>
+    <string name="cancel">Annuler</string>
+    <string name="valid_suppression">Supprimer</string>
 </resources>

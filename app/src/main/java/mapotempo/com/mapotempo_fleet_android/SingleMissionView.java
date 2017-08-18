@@ -11,6 +11,7 @@ public class SingleMissionView extends AppCompatActivity implements MissionFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_mission_view);
 
+        getSupportActionBar().setTitle(R.string.mission);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

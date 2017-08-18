@@ -3,4 +3,8 @@
     <dimen name="base_margin">5dp</dimen>
     <dimen name="content_margin">5dp</dimen>
     <dimen name="status_size">25dp</dimen>
+
+
+    <!-- TEXTS -->
+    <dimen name="textTinyHeaders">10dp</dimen>
 </resources>

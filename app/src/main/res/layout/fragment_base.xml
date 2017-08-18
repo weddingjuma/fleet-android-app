@@ -12,4 +12,5 @@
 
     </LinearLayout>
 
+    <include layout="@layout/nav_menu_missions_slide" />
 </FrameLayout>

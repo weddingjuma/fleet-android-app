@@ -1,17 +1,15 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.content.res.Configuration;
 import android.support.v7.widget.Toolbar;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.mapotempo.fleet.core.model.Mission;
 
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
             mDrawerToggle.syncState();
 
             ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-            mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.menu.mission_menu, ADD_A_NEW_LIST_THERE));
+//            mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.menu.mission_menu, ADD_A_NEW_LIST_THERE));
         }
     }
 

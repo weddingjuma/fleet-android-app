@@ -24,38 +24,102 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="12">
 
-                <TextView
-                    android:id="@+id/name"
-                    style="@style/AppTheme.Mission_style"
-                    android:text="My super task name"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/company"
-                    style="@style/AppTheme.Mission_style"
-                    android:layout_below="@id/name"
-                    android:text="Dev"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:text="Nom:"
+                        android:textSize="@dimen/textTinyHeaders"
+                        android:textColor="@color/colorPrimaryHeaders"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="My super task name"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:text="Company:"
+                        android:textSize="@dimen/textTinyHeaders"
+                        android:textColor="@color/colorPrimaryHeaders"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <TextView
+                        android:id="@+id/company"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Company"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:layout_weight="0">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="Date de livraison:"
+                    android:textSize="@dimen/textTinyHeaders"
+                    android:textColor="@color/colorPrimaryHeaders"
+                    android:layout_height="wrap_content"
+                    />
 
                 <TextView
                     android:id="@+id/delivery_date"
-                    style="@style/AppTheme.Mission_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="27/11/2017"/>
 
-                <ImageButton
-                    android:id="@+id/check_button"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@color/colorWhite"
-                    android:src="@mipmap/ic_status_completed"/>
-            </LinearLayout>
+                    android:background="@color/colorTinyGrey"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_height="0.1dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="Heure de livraison:"
+                    android:textSize="@dimen/textTinyHeaders"
+                    android:textColor="@color/colorPrimaryHeaders"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id="@+id/delivery_hour"
+                    android:layout_width="match_parent"
+                    android:text="13h30"
+                    android:textSize="15dp"
+                    android:layout_height="wrap_content"
+                    />
+
         </LinearLayout>
     </LinearLayout>
+</LinearLayout>

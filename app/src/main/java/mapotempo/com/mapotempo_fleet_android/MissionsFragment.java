@@ -34,7 +34,7 @@ public class MissionsFragment extends Fragment {
     private int mColumnCount = 1;
     private Context mContext;
     private Access.ChangeListener<Mission> missionChangeListener;
-    private MissionAccessInterface<Mission> iMissionAccess;
+    private MissionAccessInterface iMissionAccess;
 
     protected RecyclerView recyclerView;
 
@@ -123,7 +123,7 @@ public class MissionsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        iMissionAccess.addRemoveListener(missionChangeListener);
+        iMissionAccess.removeChangeListener(missionChangeListener);
     }
 
     public void setCurrentMission (int position) {
@@ -137,16 +137,12 @@ public class MissionsFragment extends Fragment {
 
         iMissionAccess = mManager.getMissionAccess();
 
-        try {
-            mMissions = iMissionAccess.getAll();
-        } catch (CoreException coreE) {
-            coreE.printStackTrace();
-        }
+        mMissions = iMissionAccess.getAll();
 
         attachCallBack(iMissionAccess);
     }
 
-    private void attachCallBack(MissionAccessInterface<Mission> iMissionAccess) {
+    private void attachCallBack(MissionAccessInterface iMissionAccess) {
         iMissionAccess.addChangeListener(missionChangeListener);
     }
 

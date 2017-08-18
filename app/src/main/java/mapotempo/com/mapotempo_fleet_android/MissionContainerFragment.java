@@ -3,7 +3,6 @@ package mapotempo.com.mapotempo_fleet_android;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,11 +12,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
-import com.mapotempo.fleet.core.exception.CoreException;
 import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.List;
@@ -72,13 +72,8 @@ public class MissionContainerFragment extends Fragment {
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
         mManager = mapotempoApplication.getManager();
 
-        MissionAccessInterface<Mission> missionAccessInterface = mManager.getMissionAccess();
-
-        try {
-            mMissions = missionAccessInterface.getAll();
-        } catch (CoreException coreE) {
-            coreE.printStackTrace();
-        }
+        MissionAccessInterface missionAccessInterface = mManager.getMissionAccess();
+        mMissions = missionAccessInterface.getAll();
     }
 
     @Override
@@ -91,10 +86,12 @@ public class MissionContainerFragment extends Fragment {
             ViewPager viewPager = (ViewPager) getActivity().getLayoutInflater().inflate(R.layout.view_pager, null);
             mPager = viewPager.findViewById(R.id.mission_viewpager);
 
-            mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+            mPager.setPageTransformer(true, new DepthPageTransformer());
             setPagerChangeListener();
             content.addView(viewPager);
             mPager.setAdapter(mPagerAdapter);
+            setListenerForButtons(view);
+            setNextAndPreviousVisibility(view);
         } else {
             FragmentManager manager = getFragmentManager();
             FragmentTransaction fragmentTransaction = manager.beginTransaction();
@@ -132,7 +129,8 @@ public class MissionContainerFragment extends Fragment {
         mMissions = missions;
         ScreenSlidePagerAdapter screenSlidePagerAdapter = (ScreenSlidePagerAdapter) mPagerAdapter;
 
-        screenSlidePagerAdapter.updateMissions(missions);
+        if (screenSlidePagerAdapter != null)
+            screenSlidePagerAdapter.updateMissions(missions);
     }
 
     public void setCurrentItem(int position) {
@@ -143,6 +141,7 @@ public class MissionContainerFragment extends Fragment {
         }
     }
 
+    // TODO When clicking on the last element from previous activity, both buttons get invisible
     private void setPagerChangeListener() {
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -151,6 +150,7 @@ public class MissionContainerFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 mListener.wichViewIsTheCurrent(position);
+                setNextAndPreviousVisibility(getView());
             }
 
             @Override
@@ -164,6 +164,46 @@ public class MissionContainerFragment extends Fragment {
                 mPager.setCurrentItem(position);
             }
         });
+    }
+
+    private void setNextAndPreviousVisibility(View view) {
+        int currentItem = mPager.getCurrentItem();
+        final Button next = view.findViewById(R.id.next_nav);
+        final Button prev = view.findViewById(R.id.previous_nav);
+
+        next.setVisibility(View.VISIBLE);
+        prev.setVisibility(View.VISIBLE);
+
+        if(currentItem == mPagerAdapter.getCount() - 1) {
+            next.setVisibility(View.INVISIBLE);
+        } else if (currentItem == 0) {
+            prev.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setListenerForButtons(View view) {
+        final Button prev = view.findViewById(R.id.previous_nav);
+        final Button next = view.findViewById(R.id.next_nav);
+
+        if (prev != null && next != null) {
+            prev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int currentItem = mPager.getCurrentItem();
+                    mPager.setCurrentItem(currentItem - 1);
+                }
+            });
+
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int currentItem = mPager.getCurrentItem();
+                    mPager.setCurrentItem(currentItem + 1);
+                }
+            });
+        } else {
+            throw new RuntimeException("Button aren't settled in view");
+        }
     }
 
     public interface ContainerFragmentMission {

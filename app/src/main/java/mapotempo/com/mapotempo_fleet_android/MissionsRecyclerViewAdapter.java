@@ -56,15 +56,18 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Mission mission = mMissions.get(position);
         final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        final DateFormat hoursFormat = new SimpleDateFormat("HH:mm");
+        final Mission mission = mMissions.get(position);
 
         String missionDate = dateFormat.format(mission.getDeliveryDate());
+        String missionHour = hoursFormat.format(mission.getDeliveryDate());
 
         holder.mItem = mission;
         holder.mName.setText(mission.getName());
         holder.mCompany.setText(mission.getCompanyId());
         holder.mDelivery_date.setText(missionDate);
+        holder.mDelivery_hour.setText(missionHour);
         holder.mStatus.setBackgroundColor(MissionsManager.fakeStatusColor());
 
         holder.mView.setOnClickListener(mListener.onListMissionsInteraction(position));
@@ -78,15 +81,15 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
     }
 
     private void checkMissionStatus(final ViewHolder holder) {
-        AppCompatImageButton checkBtn = holder.mView.findViewById(R.id.check_button);
-        if (checkBtn == null) return;
-
-        checkBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.w("NOT IMPLEMENTED", "CHANGE MISSION STATUS IS NOT YET IMPLEMENTED");
-            }
-        });
+//        AppCompatImageButton checkBtn = holder.mView.findViewById(R.id.check_button);
+//        if (checkBtn == null) return;
+//
+//        checkBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.w("NOT IMPLEMENTED", "CHANGE MISSION STATUS IS NOT YET IMPLEMENTED");
+//            }
+//        });
     }
 
     public void setCurrentMission(int position) {
@@ -114,12 +117,13 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public Mission mItem;
         public final View mView;
         public final TextView mName;
         public final TextView mCompany;
-        public final TextView mDelivery_date;
         public final RelativeLayout mStatus;
-        public Mission mItem;
+        public final TextView mDelivery_hour;
+        public final TextView mDelivery_date;
 
         public ViewHolder(View view) {
             super(view);
@@ -128,6 +132,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
             mName = view.findViewById(R.id.name);
             mCompany = view.findViewById(R.id.company);
             mStatus = view.findViewById(R.id.mission_status);
+            mDelivery_hour = view.findViewById(R.id.delivery_hour);
             mDelivery_date = view.findViewById(R.id.delivery_date);
         }
 
