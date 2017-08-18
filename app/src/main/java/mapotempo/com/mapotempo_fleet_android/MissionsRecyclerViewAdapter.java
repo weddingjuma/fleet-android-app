@@ -1,9 +1,7 @@
 package mapotempo.com.mapotempo_fleet_android;
 
 import android.content.res.Configuration;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.content.Context;
@@ -20,11 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mapotempo.com.mapotempo_fleet_android.MissionsFragment.OnMissionsInteractionListener;
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionModel;
-import mapotempo.com.mapotempo_fleet_android.dummy.MissionsManager;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link MissionModel} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Mission} and makes a call to the
  * specified {@link MissionsFragment.OnMissionsInteractionListener}.
  */
 public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
@@ -68,8 +64,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
         holder.mCompany.setText(mission.getCompanyId());
         holder.mDelivery_date.setText(missionDate);
         holder.mDelivery_hour.setText(missionHour);
-        holder.mStatus.setBackgroundColor(MissionsManager.fakeStatusColor());
-
+        holder.mStatus.setBackgroundColor(Color.parseColor("#" + mission.getStatus().getColor()));
         holder.mView.setOnClickListener(mListener.onListMissionsInteraction(position));
 
         mListViews.add(holder.mView);

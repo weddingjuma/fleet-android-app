@@ -229,7 +229,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     private void fakeUriLocation() {
         Location loc = mMission.getLocation();
 
-        Uri location = Uri.parse("geo:" + loc.lat + "," + loc.lon);
+        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon());
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
 
         PackageManager packageManager = getActivity().getPackageManager();
