@@ -40,7 +40,18 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mInteraction;
     private Mission mMission;
-    private MapotempoModelBase.ChangeListener<Mission> mCallback;
+    private MapotempoModelBase.ChangeListener<Mission> mCallback = new MapotempoModelBase.ChangeListener<Mission>() {
+        @Override
+        public void changed(final Mission mission) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mMission = mission;
+                    fillViewFromActivity();
+                }
+            });
+        }
+    };;
 
     public MissionFragment() { }
 
@@ -74,28 +85,23 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         if (context instanceof OnFragmentInteractionListener) {
             mInteraction = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement BaseFragmentForSingleView");
+            throw new RuntimeException(context.toString() + " must implement BaseFragmentForSingleView");
         }
+    }
 
-        mCallback = new MapotempoModelBase.ChangeListener<Mission>() {
-            @Override
-            public void changed(final Mission mission) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMission = mission;
-                        fillViewFromActivity();
-                    }
-                });
-            }
-        };
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (mMission != null)
+            mMission.removeChangeListener(mCallback);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mInteraction = null;
+
     }
 
     @Override
@@ -129,7 +135,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
 
         name.setText(mission.getName());
         address.setText(mission.getAddress().toString());
-        date.setText(date.getText() + " (" + missionDate + ")");
+        date.setText(missionDate);
         details.setText(details.getText());
         company.setText(mission.getCompanyId());
         status.setText(mission.getStatus().getLabel().toUpperCase());
@@ -264,8 +270,12 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setMission(Mission mission) {
-        mMission = mission;
-        mMission.addChangeListener(mCallback);
+        if (mission != null) {
+            mMission = mission;
+            mMission.addChangeListener(mCallback);
+        } else {
+            throw new RuntimeException("Mission passed to constructor must not be null");
+        }
     }
 
     @Override

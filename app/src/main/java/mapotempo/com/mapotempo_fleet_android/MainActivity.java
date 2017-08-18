@@ -1,5 +1,6 @@
 package mapotempo.com.mapotempo_fleet_android;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.widget.DrawerLayout;
