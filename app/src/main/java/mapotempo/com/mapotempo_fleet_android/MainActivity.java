@@ -1,6 +1,6 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +16,8 @@ import com.mapotempo.fleet.core.model.Mission;
 
 public class MainActivity extends AppCompatActivity implements MissionsFragment.OnMissionsInteractionListener, MissionFragment.OnFragmentInteractionListener, MissionContainerFragment.ContainerFragmentMission {
 
+    private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +30,9 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     }
 
     private void addDrawableHandler(Toolbar toolbar) {
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawerLayout != null) {
-            ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name) {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (mDrawerLayout != null) {
+            ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name) {
 
                 public void onDrawerClosed(View view) {
                     supportInvalidateOptionsMenu();
@@ -44,11 +46,13 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
             };
 
             mDrawerToggle.setDrawerIndicatorEnabled(true);
-            drawerLayout.addDrawerListener(mDrawerToggle);
+            mDrawerLayout.addDrawerListener(mDrawerToggle);
             mDrawerToggle.syncState();
 
+            String[] drawerElements = getResources().getStringArray(R.array.drawer_list_items);
             ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-//            mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.menu.mission_menu, ADD_A_NEW_LIST_THERE));
+            mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_menu, drawerElements));
+            mDrawerList.setOnItemClickListener(new DrawerOnClickListener());
         }
     }
 
@@ -70,6 +74,19 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
         };
 
         return onClick;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override

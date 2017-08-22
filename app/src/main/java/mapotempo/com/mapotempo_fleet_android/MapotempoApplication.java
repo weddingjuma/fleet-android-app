@@ -15,17 +15,31 @@ public class MapotempoApplication extends Application {
     private String userPassword = "juju";
 //    private String userPassword = "static";
 
+    private boolean connectionActive = false;
     private MapotempoFleetManagerInterface iFleetManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< init couch base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        iFleetManager = MapotempoFleetManager.getManager(new AndroidContext(getApplicationContext()),  userLogin, userPassword, dataBaseUrl);
+
     }
 
     public MapotempoFleetManagerInterface getManager() {
         return iFleetManager;
+    }
+
+    public void setManager(MapotempoFleetManagerInterface manager) {
+        if (manager != null) {
+            iFleetManager = manager;
+        }
+    }
+
+    public void setConnectionTo(boolean value) {
+        connectionActive = value;
+    }
+
+    public boolean isConnected() {
+        return connectionActive;
     }
 
 }

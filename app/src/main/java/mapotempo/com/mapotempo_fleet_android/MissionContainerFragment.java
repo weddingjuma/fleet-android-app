@@ -65,15 +65,17 @@ public class MissionContainerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getManagerAndMissions();
-        mCount = mMissions.size();
     }
 
     private void getManagerAndMissions() {
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
         mManager = mapotempoApplication.getManager();
+        if (mManager == null)
+            return;
 
         MissionAccessInterface missionAccessInterface = mManager.getMissionAccess();
         mMissions = missionAccessInterface.getAll();
+        mCount = mMissions.size();
     }
 
     @Override

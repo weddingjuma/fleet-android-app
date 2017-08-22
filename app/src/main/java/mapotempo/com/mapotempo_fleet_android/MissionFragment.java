@@ -5,28 +5,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.core.base.MapotempoModelBase;
 import com.mapotempo.fleet.core.model.Mission;
+import com.mapotempo.fleet.core.model.MissionStatusType;
+import com.mapotempo.fleet.core.model.accessor.MissionStatusTypeAccess;
 import com.mapotempo.fleet.core.model.submodel.Location;
+import com.mapotempo.fleet.core.model.submodel.MissionCommand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
+import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
 
 
 /**
@@ -51,7 +59,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
-    };;
+    };
 
     public MissionFragment() { }
 
@@ -145,12 +153,12 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     private void setButtonsBehaviors(View view) {
 //        Button update = view.findViewById(R.id.updateBtn);
         FloatingActionButton delete = view.findViewById(R.id.delete);
-//        Button status = view.findViewById(R.id.statusBtn);
+        FloatingActionButton status = view.findViewById(R.id.statusBtn);
         ImageButton location = view.findViewById(R.id.go_to_location);
 
 //        update.setOnClickListener(this);
         delete.setOnClickListener(this);
-//        status.setOnClickListener(this);
+        status.setOnClickListener(this);
         location.setOnClickListener(this);
     }
 
@@ -185,49 +193,63 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         View view = inf.inflate(R.layout.change_status, null);
         TextView status = view.findViewById(R.id.current_status);
 
-        Log.w("MISSIONS STATUS", "Missions status is not implemented yet");
+        status.setText(mMission.getStatus().getLabel().toUpperCase());
+        status.setBackgroundColor(Color.parseColor("#" + mMission.getStatus().getColor()));
+        alert.setView(view);
+        alert.show();
 
-//        status.setText(mMission.status.toString());
-//        alert.setView(view);
-//        alert.show();
-
-//        setOnClickListenersForStatus(alert, view);
+        setOnClickListenersForStatus(alert, view);
     }
 
     private void setOnClickListenersForStatus(final AlertDialog alert, View view) {
-        LinearLayout completed = view.findViewById(R.id.completed_status);
-        LinearLayout uncompleted = view.findViewById(R.id.uncompleted_status);
-        LinearLayout pending = view.findViewById(R.id.pending_status);
+        MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
+        MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
+        List<MissionCommand> missionStatusTypes = mMission.getStatus().getCommands();
+        ArrayList<MissionsStatusGeneric<LinearLayout, MissionCommand>> viewListStatus = buildViewFor(missionStatusTypes, view);
 
-//        completed.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mManager.setMissionStatusTo(MissionModel.Status.COMPLETED, mMission.id);
-//                mInteraction.onSingleMissionInteraction(mMission);
-//                fillViewFromActivity(mMission.id);
-//                alert.dismiss();
-//            }
-//        });
-//
-//        uncompleted.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mManager.setMissionStatusTo(MissionModel.Status.UNCOMPLETED, mMission.id);
-//                mInteraction.onSingleMissionInteraction(mMission);
-//                fillViewFromActivity(mMission.id);
-//                alert.dismiss();
-//            }
-//        });
-//
-//        pending.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mManager.setMissionStatusTo(MissionModel.Status.PENDING, mMission.id);
-//                mInteraction.onSingleMissionInteraction(mMission);
-//                fillViewFromActivity(mMission.id);
-//                alert.dismiss();
-//            }
-//        });
+        if (viewListStatus != null && viewListStatus.size() > 0) {
+            for (final MissionsStatusGeneric<LinearLayout, MissionCommand> status : viewListStatus) {
+                status.getView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mMission.setStatus(status.getType().getMissionStatusType());
+                        mMission.save();
+                        fillViewFromActivity();
+
+                        alert.dismiss();
+                    }
+                });
+            }
+        }
+    }
+
+    private ArrayList<MissionsStatusGeneric<LinearLayout, MissionCommand>> buildViewFor(List<MissionCommand> missionStatusTypes, View view) {
+        ArrayList<MissionsStatusGeneric<LinearLayout, MissionCommand>> statusViews = new ArrayList<>();
+
+        for (MissionCommand missionStatusType : missionStatusTypes) {
+            LinearLayout newLayout = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.single_statu, null);
+            LinearLayout layoutContainer = view.findViewById(R.id.status_container);
+            TextView textViewLabel = newLayout.findViewById(R.id.status_label);
+            ImageView imageViewIcon = newLayout.findViewById(R.id.icon);
+            MissionsStatusGeneric<LinearLayout, MissionCommand> missionsStatusGeneric;
+
+            String icon = null;
+            String label = missionStatusType.getLabel();
+            String color = missionStatusType.getMissionStatusType().getColor();
+
+            textViewLabel.setText(label);
+            imageViewIcon.setColorFilter(Color.parseColor("#" + color));
+            layoutContainer.addView(newLayout);
+
+            try {
+                missionsStatusGeneric = new MissionsStatusGeneric(newLayout, missionStatusType);
+                statusViews.add(missionsStatusGeneric);
+            } catch (NullPointerException e) {
+                e.getStackTrace();
+            }
+        }
+
+        return statusViews;
     }
 
     private void fakeUriLocation() {
@@ -284,9 +306,9 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
             case R.id.delete:
                 initDeletionForCurrentMission();
                 break;
-//            case R.id.statusBtn:
-//                changeStatusForCurrentMission();
-//                break;
+            case R.id.statusBtn:
+                changeStatusForCurrentMission();
+                break;
             case R.id.go_to_location:
                 fakeUriLocation();
                 break;
@@ -318,8 +340,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean deleteMission() {
-        boolean deletePassed = mMission.delete();
-        return deletePassed;
+        return mMission.delete();
     }
 
     /**

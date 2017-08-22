@@ -19,6 +19,7 @@ import com.mapotempo.fleet.core.accessor.Access;
 import com.mapotempo.fleet.core.exception.CoreException;
 import com.mapotempo.fleet.core.model.Mission;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * A fragment representing a list of Missions.
@@ -30,10 +31,25 @@ public class MissionsFragment extends Fragment {
     private OnMissionsInteractionListener mListener;
     private MapotempoFleetManagerInterface mManager;
     private MissionsRecyclerViewAdapter mRecycler;
-    private List<Mission> mMissions;
-    private int mColumnCount = 1;
-    private Access.ChangeListener<Mission> missionChangeListener;
     private MissionAccessInterface iMissionAccess;
+    private List<Mission> mMissions = new ArrayList<>();
+    private int mColumnCount = 1;
+    private Access.ChangeListener<Mission> missionChangeListener = new Access.ChangeListener<Mission>() {
+        @Override
+        public void changed(final List<Mission> missions) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    MissionContainerFragment singleFragment = (MissionContainerFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
+
+                    mRecycler.notifyDataSyncHasChanged(missions);
+
+                    if (singleFragment != null)
+                        singleFragment.refreshPagerData(missions);
+                }
+            });
+        }
+    };
 
     protected RecyclerView recyclerView;
 
@@ -50,24 +66,6 @@ public class MissionsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        missionChangeListener = new Access.ChangeListener<Mission>() {
-            @Override
-            public void changed(final List<Mission> missions) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        MissionContainerFragment singleFragment = (MissionContainerFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
-
-                        mRecycler.notifyDataSyncHasChanged(missions);
-
-                        if (singleFragment != null)
-                            singleFragment.refreshPagerData(missions);
-                    }
-                });
-            }
-        };
-
         setManagerAndMissions();
     }
 
@@ -88,27 +86,28 @@ public class MissionsFragment extends Fragment {
             recyclerView.setAdapter(mRecycler);
         }
 
-        attachAddButton(view);
-
         return view;
-    }
-
-    public void attachAddButton(View view) {
-        FloatingActionButton btn = view.findViewById(R.id.fab);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.w(getClass().getName(), "Not implemented");
-            }
-        });
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        iMissionAccess.removeChangeListener(missionChangeListener);
+        if (iMissionAccess != null)
+            iMissionAccess.removeChangeListener(missionChangeListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
+        if (app.isConnected()) {
+            mRecycler.notifyDataSyncHasChanged(app.getManager().getMissionAccess().getAll());
+            if (iMissionAccess != null)
+                iMissionAccess.removeChangeListener(missionChangeListener);
+            setManagerAndMissions();
+        }
     }
 
     @Override
@@ -124,10 +123,11 @@ public class MissionsFragment extends Fragment {
 
     private void setManagerAndMissions() {
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getContext().getApplicationContext();
+        if (!mapotempoApplication.isConnected())
+            return;
+
         mManager = mapotempoApplication.getManager();
-
         iMissionAccess = mManager.getMissionAccess();
-
         mMissions = iMissionAccess.getAll();
 
         attachCallBack(iMissionAccess);
