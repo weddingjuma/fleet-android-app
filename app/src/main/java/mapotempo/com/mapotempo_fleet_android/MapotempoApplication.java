@@ -8,13 +8,6 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 public class MapotempoApplication extends Application {
 
-    private String dataBaseUrl = "http://192.168.1.108:4984/db";
-//    private String dataBaseUrl = "http://192.168.1.135:4984/db";
-    private String userLogin = "juju";
-//    private String userLogin = "static";
-    private String userPassword = "juju";
-//    private String userPassword = "static";
-
     private boolean connectionActive = false;
     private MapotempoFleetManagerInterface iFleetManager;
 
@@ -30,6 +23,9 @@ public class MapotempoApplication extends Application {
 
     public void setManager(MapotempoFleetManagerInterface manager) {
         if (manager != null) {
+            if (iFleetManager != null)
+                iFleetManager.close();
+
             iFleetManager = manager;
         }
     }

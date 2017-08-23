@@ -37,6 +37,10 @@ import com.mapotempo.fleet.core.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -73,15 +77,33 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         } else {
             spinner.setVisibility(View.VISIBLE);
 
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            spinner.setVisibility(View.GONE);
+                            app.setConnectionTo(false);
+                        }
+                    });
+                }
+            };
+
+            final Timer timer = new Timer();
+            timer.schedule(timerTask, 5000);
+
             MapotempoFleetManagerInterface.OnUserAvailable onUserAvailable = new MapotempoFleetManagerInterface.OnUserAvailable() {
                 @Override
                 public void userAvailable(User user) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            timer.cancel();
+
                             app.setManager(manager);
                             app.setConnectionTo(true);
-                            spinner.setBackgroundColor(View.GONE);
+                            spinner.setVisibility(View.GONE);
                             manager.clearOnUserAvailable();
                             onBackPressed();
                         }
