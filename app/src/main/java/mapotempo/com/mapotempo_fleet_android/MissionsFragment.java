@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;

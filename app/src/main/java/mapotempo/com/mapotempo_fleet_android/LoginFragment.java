@@ -1,20 +1,36 @@
 package mapotempo.com.mapotempo_fleet_android;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.couchbase.lite.android.AndroidContext;
 import com.mapotempo.fleet.MapotempoFleetManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
+
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
     private String dataBaseUrl = "http://192.168.1.108:4984/db";
+    private String maxIp = "http://192.168.1.135:4984/db";
 
     private String mLogin = null;
     private String mPassword = null;
@@ -48,30 +64,121 @@ public class LoginFragment extends Fragment {
     }
 
     private void addButtonSubmit(View view) {
-        final EditText mPasswordView = (EditText) view.findViewById(R.id.password);
-        final EditText mLoginView = (EditText) view.findViewById(R.id.login);
+        final EditText mPasswordView = view.findViewById(R.id.password);
+        final EditText mLoginView = view.findViewById(R.id.login);
+        final Button button = view.findViewById(R.id.login_sign_in_button);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Mapotempo", 0);
 
-        (view.findViewById(R.id.login_sign_in_button)).setOnClickListener(new View.OnClickListener() {
+        mLoginView.setText(sharedPreferences.getString("UserLogin", ""));
+        mPasswordView.setText(sharedPreferences.getString("UserPassword", ""));
+
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLogin = mLoginView.getText().toString().toLowerCase();
-                mPassword = mPasswordView.getText().toString().toLowerCase();
+                mLogin = mLoginView.getText().toString();
+                mPassword = mPasswordView.getText().toString();
 
                 attemptLogin();
             }
         });
     }
 
+    /**
+     * Try to get connection with existing database through the library.
+     * If none as been found in 5 seconds, the TimerTask restart the view.
+     */
     private void attemptLogin() {
-        try {
-            loginValid(mLogin, mPassword);
-        } catch (InvalidLoginException e) {
-            e.getStackTrace();
-            return;
-        }
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        final MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
+        final ProgressBar spinner = (ProgressBar) getActivity().findViewById(R.id.login_progress);
+        final LinearLayout form = (LinearLayout) getActivity().findViewById(R.id.from_login_container);
+        final TextView textProgress = (TextView) getActivity().findViewById(R.id.login_text_progress);
+        final CheckBox checkbox = getActivity().findViewById(R.id.remember_logs);
+        final Context context = getContext();
 
-        iFleetManager = MapotempoFleetManager.getManager(new AndroidContext(getContext().getApplicationContext()),  mLogin, mPassword, dataBaseUrl);
-        mListener.onLoginFragmentImplementation(iFleetManager);
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            try {
+                loginValid(mLogin, mPassword);
+            } catch (InvalidLoginException e) {
+                e.getStackTrace();
+                return;
+            }
+
+            final TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toogleLogginView(false);
+                            app.setConnectionTo(false);
+                            AlertMessageHelper.errorAlert(context, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
+                        }
+                    });
+                }
+            };
+
+            MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
+                @Override
+                public void connexion(final Status status) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String[] logs = null;
+                            app.setConnectionTo(true);
+
+                            if (checkbox.isChecked())
+                                logs = new String[] { mLogin, mPassword };
+
+                            mListener.onLoginFragmentImplementation(status, timerTask, logs);
+                        }
+                    });
+                }
+            };
+            toogleLogginView(true);
+
+            final Timer timer = new Timer();
+            timer.schedule(timerTask, 5000);
+
+            iFleetManager = MapotempoFleetManager.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
+            app.setManager(iFleetManager);
+            hideCurrentKeyboard();
+        } else {
+            // Silence is golden
+        }
+    }
+
+    /**
+     * Toggle the login form view.
+     * @param active True: start spinner and kill form.
+     */
+    public void toogleLogginView(boolean active) {
+        final ProgressBar spinner = getActivity().findViewById(R.id.login_progress);
+        final LinearLayout form = getActivity().findViewById(R.id.from_login_container);
+        final TextView textProgress = getActivity().findViewById(R.id.login_text_progress);
+
+        if (active) {
+            textProgress.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.VISIBLE);
+            form.setVisibility(View.INVISIBLE);
+        } else {
+            textProgress.setVisibility(View.GONE);
+            spinner.setVisibility(View.GONE);
+            form.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Private method called when the virtual android keyboard needs to be hidden.
+     */
+    private void hideCurrentKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getActivity().getCurrentFocus();
+        if (view == null) {
+            view = new View(getContext());
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void loginValid(String login, String password) throws InvalidLoginException {
@@ -81,7 +188,7 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFragmentImplementation {
-        void onLoginFragmentImplementation(MapotempoFleetManagerInterface manager);
+        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins);
     }
 
     public class InvalidLoginException extends Exception {

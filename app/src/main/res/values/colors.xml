@@ -5,13 +5,13 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorGrey">#EBEBEB</color>
-    <color name="colorDarkGrey">#15b1ca</color>
+    <color name="colorDeepBlue">#15b1ca</color>
     <color name="colorPrimaryHeaders">#00aa8d</color>
 
 
     <!-- BUTTONS -->
     <color name="colorUpdate">#15b1ca</color>
-    <color name="colorDelete">#ff7636</color>
+    <color name="colorOrange">#ff7636</color>
     <color name="colorChangeStatus">#8ac541</color>
     <color name="colorMapoGreen">#89c53f</color>
     <color name="colorRedDeletion">#c54147</color>

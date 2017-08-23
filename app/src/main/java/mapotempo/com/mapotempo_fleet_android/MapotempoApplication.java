@@ -24,7 +24,7 @@ public class MapotempoApplication extends Application {
     public void setManager(MapotempoFleetManagerInterface manager) {
         if (manager != null) {
             if (iFleetManager != null)
-                iFleetManager.close();
+                iFleetManager.release();
 
             iFleetManager = manager;
         }

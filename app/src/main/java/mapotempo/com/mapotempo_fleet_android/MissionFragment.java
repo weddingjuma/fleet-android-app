@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,8 +25,6 @@ import android.widget.TextView;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.core.base.MapotempoModelBase;
 import com.mapotempo.fleet.core.model.Mission;
-import com.mapotempo.fleet.core.model.MissionStatusType;
-import com.mapotempo.fleet.core.model.accessor.MissionStatusTypeAccess;
 import com.mapotempo.fleet.core.model.submodel.Location;
 import com.mapotempo.fleet.core.model.submodel.MissionCommand;
 
@@ -137,6 +135,10 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         TextView status = getView().findViewById(R.id.mission_status);
         TextView date = getView().findViewById(R.id.delivery_date);
         TextView address = getView().findViewById(R.id.delivery_adress);
+        FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
+
+        int stateList = Color.parseColor("#" + mission.getStatus().getColor());
+        statusBtn.setBackgroundTintList(ColorStateList.valueOf(stateList));
 
         name.setText(mission.getName());
         address.setText(mission.getAddress().toString());
@@ -227,7 +229,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         ArrayList<MissionsStatusGeneric<LinearLayout, MissionCommand>> statusViews = new ArrayList<>();
 
         for (MissionCommand missionStatusType : missionStatusTypes) {
-            LinearLayout newLayout = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.single_statu, null);
+            LinearLayout newLayout = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.single_status, null);
             LinearLayout layoutContainer = view.findViewById(R.id.status_container);
             TextView textViewLabel = newLayout.findViewById(R.id.status_label);
             ImageView imageViewIcon = newLayout.findViewById(R.id.icon);

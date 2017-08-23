@@ -1,18 +1,21 @@
 package mapotempo.com.mapotempo_fleet_android;
 
+import android.graphics.Color;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.content.res.Configuration;
 import android.support.v7.widget.Toolbar;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.mapotempo.fleet.core.model.Mission;
+
+import mapotempo.com.mapotempo_fleet_android.utils.DrawerListAdapter;
+import mapotempo.com.mapotempo_fleet_android.utils.ListItemCustom;
 
 public class MainActivity extends AppCompatActivity implements MissionsFragment.OnMissionsInteractionListener, MissionFragment.OnFragmentInteractionListener, MissionContainerFragment.ContainerFragmentMission {
 
@@ -49,11 +52,20 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
             mDrawerLayout.addDrawerListener(mDrawerToggle);
             mDrawerToggle.syncState();
 
-            String[] drawerElements = getResources().getStringArray(R.array.drawer_list_items);
-            ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-            mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_menu, drawerElements));
-            mDrawerList.setOnItemClickListener(new DrawerOnClickListener());
+            customerDrawerList();
         }
+    }
+
+    private void customerDrawerList() {
+        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        ListItemCustom[] drawerElements = new ListItemCustom[] {
+                new ListItemCustom(R.drawable.ic_login_icon_24dp, "Connection", getResources().getColor(R.color.colorDeepBlue)),
+                new ListItemCustom(R.drawable.ic_about_black_24dp, "About", getResources().getColor(R.color.colorOrange)),
+        };
+
+        mDrawerList.setAdapter(new DrawerListAdapter(this, R.layout.drawer_layout_item_row, drawerElements));
+        mDrawerList.setOnItemClickListener(new DrawerOnClickListener());
+        mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_layout_header, null));
     }
 
     @Override

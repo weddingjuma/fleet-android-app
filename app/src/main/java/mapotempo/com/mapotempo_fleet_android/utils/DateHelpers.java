@@ -102,10 +102,10 @@ public class DateHelpers {
     // #########################
     private static String fullDateParsing(Date entryDate) {
         SimpleDateFormat formatter;
-        String dayNumberInMonth = "";
-        String month = "";
-        String date = "";
-        String day = "";
+        String dayNumberInMonth;
+        String month;
+        String date;
+        String day;
 
         formatter = new SimpleDateFormat("u");
         day = Days.getStringFromIndex( Integer.parseInt( formatter.format(entryDate) ) );

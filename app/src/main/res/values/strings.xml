@@ -8,8 +8,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="drawer_list_items">
-        <item>Page de connexion</item>
-        <item>Mapotempo web</item>
+        <item>Connection</item>
         <item>Settings</item>
         <item>About</item>
     </string-array>
@@ -23,6 +22,7 @@
     <string name="Fake_status">PENDING</string>
     <string name="action_finish">Finish</string>
     <string name="action_next">Next</string>
+    <string name="remember_me">Remember me</string>
 
     <string name="deletion">Suppression</string>
     <string name="sur_to_delete">Êtes-vous sur de vouloir supprimer la mission ?</string>
@@ -32,7 +32,7 @@
 
     <!-- Strings related to login -->
     <string name="prompt_login">Login</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Se connecter</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -46,4 +46,11 @@
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+
+    <!-- Strings related to alert dialogs -->
+    <string name="login_error_title">Sign in error</string>
+    <string name="login_error_short_text">Connection can\'t be established</string>
+    <string name="login_error_details">Either password and login doesn\'t match, please try again.</string>
+    <string name="login_error_forgotten">Forgotten password ? </string>
+
 </resources>

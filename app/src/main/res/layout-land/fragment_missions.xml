@@ -15,7 +15,7 @@
             android:id="@+id/mission_status"
             android:layout_width="6dp"
             android:layout_height="match_parent"
-            android:background="@color/colorDelete"
+            android:background="@color/colorOrange"
             android:layout_weight="0" />
 
         <LinearLayout

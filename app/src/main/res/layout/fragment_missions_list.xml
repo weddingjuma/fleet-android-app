@@ -25,7 +25,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_add_black_24dp"
-        app:backgroundTint="@color/colorMapoGreen"
+        app:backgroundTint="@color/colorPrimaryHeaders"
         android:tint="@color/colorWhite" />
 
 </RelativeLayout>

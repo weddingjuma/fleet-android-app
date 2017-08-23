@@ -5,7 +5,7 @@
              tools:context="mapotempo.com.mapotempo_fleet_android.LoginFragment">
 
     <LinearLayout
-        android:id="@+id/login_form"
+        android:id="@+id/from_login_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -16,6 +16,7 @@
 
             <AutoCompleteTextView
                 android:id="@+id/login"
+                android:textColor="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_login"
@@ -33,6 +34,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
                 android:hint="@string/prompt_password"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -42,6 +44,13 @@
                 android:singleLine="true"/>
 
         </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/remember_logs"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:text="@string/remember_me"/>
 
         <Button
             android:id="@+id/login_sign_in_button"

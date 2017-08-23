@@ -159,7 +159,6 @@ public class MissionContainerFragment extends Fragment {
         }
     }
 
-    // TODO When clicking on the last element from previous activity, both buttons get invisible
     private void setPagerChangeListener() {
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

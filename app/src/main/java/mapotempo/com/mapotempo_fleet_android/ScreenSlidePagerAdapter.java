@@ -15,11 +15,11 @@ class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     private int mCount;
     private List<Mission> mMissions;
 
-    public ScreenSlidePagerAdapter(android.support.v4.app.FragmentManager fm, int count, List<Mission> mission) {
+    public ScreenSlidePagerAdapter(android.support.v4.app.FragmentManager fm, int count, List<Mission> missions) {
         super(fm);
         mCount = count;
         mMissions = new ArrayList<>();
-        mMissions = mission;
+        mMissions = missions;
     }
 
     @Override

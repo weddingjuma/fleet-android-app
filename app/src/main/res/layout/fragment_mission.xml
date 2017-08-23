@@ -176,7 +176,7 @@
             android:layout_alignParentRight="true"
             android:clickable="true"
             android:tint="@color/colorWhite"
-            app:backgroundTint="@color/colorDarkGrey"
+            app:backgroundTint="@color/colorOrange"
             app:fabSize="mini"
             android:src="@drawable/ic_test_status_icone_24dp"/>
     </RelativeLayout>

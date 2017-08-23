@@ -11,14 +11,14 @@ public class DrawerOnClickListener implements ListView.OnItemClickListener {
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         switch (position) {
             case 0:
+                break;
+            case 1:
                 Intent intent = new Intent(view.getContext(), LoginActivity.class);
                 view.getContext().startActivity(intent);
                 break;
-            case 1:
-                break;
             case 2:
-                break;
             case 3:
+            default:
                 break;
         }
     }
