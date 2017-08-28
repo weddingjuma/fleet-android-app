@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
                     keepTraceOfConnectionLogsData(logs);
 
                 onBackPressed();
+                finish();
                 break;
             case USER_ERROR:
             case PASSWORD_ERROR:
