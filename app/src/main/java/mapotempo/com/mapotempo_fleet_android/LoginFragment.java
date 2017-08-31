@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
+import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
 
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
@@ -89,64 +91,58 @@ public class LoginFragment extends Fragment {
      */
     private void attemptLogin() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         final MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
-        final ProgressBar spinner = (ProgressBar) getActivity().findViewById(R.id.login_progress);
-        final LinearLayout form = (LinearLayout) getActivity().findViewById(R.id.from_login_container);
-        final TextView textProgress = (TextView) getActivity().findViewById(R.id.login_text_progress);
         final CheckBox checkbox = getActivity().findViewById(R.id.remember_logs);
         final Context context = getContext();
 
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            try {
-                loginValid(mLogin, mPassword);
-            } catch (InvalidLoginException e) {
-                e.getStackTrace();
-                return;
-            }
-
-            final TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            toogleLogginView(false);
-                            app.setConnectionTo(false);
-                            AlertMessageHelper.errorAlert(context, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
-                        }
-                    });
-                }
-            };
-
-            MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
-                @Override
-                public void connexion(final Status status) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String[] logs = null;
-                            app.setConnectionTo(true);
-
-                            if (checkbox.isChecked())
-                                logs = new String[] { mLogin, mPassword };
-
-                            mListener.onLoginFragmentImplementation(status, timerTask, logs);
-                        }
-                    });
-                }
-            };
-            toogleLogginView(true);
-
-            final Timer timer = new Timer();
-            timer.schedule(timerTask, 5000);
-
-            iFleetManager = MapotempoFleetManager.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
-            app.setManager(iFleetManager);
-            hideCurrentKeyboard();
-        } else {
-            // Silence is golden
+        try {
+            loginValid(mLogin, mPassword);
+        } catch (InvalidLoginException e) {
+            e.getStackTrace();
+            return;
         }
+
+        final TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toogleLogginView(false);
+                        AlertMessageHelper.errorAlert(context, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
+                    }
+                });
+            }
+        };
+
+        MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
+            @Override
+            public void connexion(final Status status) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] logs = null;
+
+                        if (checkbox.isChecked())
+                            logs = new String[] { mLogin, mPassword };
+
+                        mListener.onLoginFragmentImplementation(status, timerTask, logs);
+                    }
+                });
+            }
+        };
+        toogleLogginView(true);
+
+        final Timer timer = new Timer();
+        timer.schedule(timerTask, 5000);
+
+        iFleetManager = MapotempoFleetManager.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
+
+        MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
+        mapotempoApplication.setUserPref(getContext());
+
+        app.setManager(iFleetManager);
+        hideCurrentKeyboard();
     }
 
     /**

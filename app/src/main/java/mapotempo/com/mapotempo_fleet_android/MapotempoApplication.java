@@ -1,20 +1,26 @@
 package mapotempo.com.mapotempo_fleet_android;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Handler;
 
 import com.couchbase.lite.android.AndroidContext;
 import com.mapotempo.fleet.MapotempoFleetManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
-public class MapotempoApplication extends Application {
+import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
 
-    private boolean connectionActive = false;
+public class MapotempoApplication extends Application implements ConnectionManager.OnConnectionSetup {
+
     private MapotempoFleetManagerInterface iFleetManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
     }
 
     public MapotempoFleetManagerInterface getManager() {
@@ -27,15 +33,30 @@ public class MapotempoApplication extends Application {
                 iFleetManager.release();
 
             iFleetManager = manager;
+            iFleetManager.onlineStatus(false); // Default is false, wait validation from user.
         }
     }
 
-    public void setConnectionTo(boolean value) {
-        connectionActive = value;
+    public void setUserPref(Context context) {
+        ConnectionManager connectionManager = ConnectionManager.getInstance();
+        connectionManager.askUserPreference(context, this, R.layout.user_data_pref);
     }
 
-    public boolean isConnected() {
-        return connectionActive;
+    @Override
+    public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
+        iFleetManager.onlineStatus(false);
+        Activity activity = (Activity) context;
+
+        activity.onBackPressed();
+        activity.finish();
     }
 
+    @Override
+    public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
+        iFleetManager.onlineStatus(true);
+        Activity activity = (Activity) context;
+
+        activity.onBackPressed();
+        activity.finish();
+    }
 }

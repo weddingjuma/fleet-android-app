@@ -1,6 +1,7 @@
 package mapotempo.com.mapotempo_fleet_android.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelpers {
@@ -137,9 +138,12 @@ public class DateHelpers {
     }
 
 
-    // #########################
-    // Base function of parsing
-    // #########################
+    /**
+     * Parse a date depending on the format wanted.
+     * @param entryDate The date to be parsed
+     * @param format FULLDATE | SHORTDATE | HOURMINUTES
+     * @return
+     */
     public static String parse(Date entryDate, DateStyle format) {
         String dateFormatted = "";
 
@@ -158,5 +162,28 @@ public class DateHelpers {
         }
 
         return dateFormatted;
+    }
+
+    /**
+     * Build an array containing the date min and max from today's date.
+     * @param timeToAdd number of day to add from current date
+     * @return An array that contain 2 Date object, before(0) and after(1).
+     */
+    public static Date[] generateTimeWindowDate(int timeToAdd) {
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(currentDate);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        currentDate = calendar.getTime();
+
+        calendar.add(calendar.DATE, timeToAdd);
+        Date furtherDate = calendar.getTime();
+
+        return new Date[] { currentDate, furtherDate };
     }
 }

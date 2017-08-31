@@ -8,6 +8,7 @@ import android.util.Log;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import java.util.Date;
+import java.util.Observable;
 import java.util.TimerTask;
 
 /**
@@ -26,7 +27,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         setContentView(R.layout.activity_login);
     }
 
-
     /**
      * An interface which is trigger when the connection has been processed.
      * @param status The current status of connection
@@ -40,9 +40,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
             case VERIFY:
                 if (logs != null)
                     keepTraceOfConnectionLogsData(logs);
-
-                onBackPressed();
-                finish();
                 break;
             case USER_ERROR:
             case PASSWORD_ERROR:

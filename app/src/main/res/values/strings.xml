@@ -53,4 +53,10 @@
     <string name="login_error_details">Either password and login doesn\'t match, please try again.</string>
     <string name="login_error_forgotten">Forgotten password ? </string>
 
+    <!-- USER DATA PREF -->
+    <string name="user_data_pref_title">Network Configuration</string>
+    <string name="user_data_description">In order to synchronize data from server to you mobile device, please tell us what kind of configuration must be used:</string>
+    <string name="user_data_only_wifi">Use only Wifi</string>
+    <string name="user_data_mobile_wifi">Use both Wifi/Mobile</string>
+
 </resources>

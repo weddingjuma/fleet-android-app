@@ -7,6 +7,12 @@ public class ListItemCustom {
 
     public ListItemCustom() { super(); }
 
+    /**
+     * Hold specs for each element in the DrawerList
+     * @param icon the ID of an icon (Used by the R class)
+     * @param title Title of the list element
+     * @param color Color of the icon
+     */
     public ListItemCustom(int icon, String title, int color) {
         super();
         this.icon = icon;

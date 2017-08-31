@@ -1,7 +1,5 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +9,12 @@ import android.content.Context;
 import android.view.ViewGroup;
 import android.os.Bundle;
 import android.view.View;
-import android.util.Log;
-import android.widget.TextView;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
 import com.mapotempo.fleet.core.accessor.Access;
-import com.mapotempo.fleet.core.exception.CoreException;
 import com.mapotempo.fleet.core.model.Mission;
+import com.mapotempo.fleet.core.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +99,7 @@ public class MissionsFragment extends Fragment {
         super.onResume();
 
         MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
-        if (app.isConnected()) {
+        if (app.getManager() != null) {
             mRecycler.notifyDataSyncHasChanged(app.getManager().getMissionAccess().getAll());
             if (iMissionAccess != null)
                 iMissionAccess.removeChangeListener(missionChangeListener);
@@ -124,7 +120,7 @@ public class MissionsFragment extends Fragment {
 
     private void setManagerAndMissions() {
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getContext().getApplicationContext();
-        if (!mapotempoApplication.isConnected())
+        if (mapotempoApplication.getManager() == null)
             return;
 
         mManager = mapotempoApplication.getManager();
@@ -141,10 +137,14 @@ public class MissionsFragment extends Fragment {
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other mFragments contained in that
-     * activity.
+     * to the activity
      */
     public interface OnMissionsInteractionListener {
+        /**
+         * A Callback triggered when an item list is created. Use it to set a click listener to each of them.
+         * @param position return the item list position
+         * @return View.OnClickListener
+         */
         View.OnClickListener onListMissionsInteraction(int position);
     }
 }

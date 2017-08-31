@@ -12,6 +12,14 @@ public class AlertMessageHelper {
 
     private AlertMessageHelper() { }
 
+    /**
+     * Public helper which will display an alert box with text/xmlID given
+     * @param context The context where the alert must be displayed
+     * @param customView the view to be Inflate.
+     * @param title Custom title
+     * @param message Custom message
+     * @param details Custom Details
+     */
     public static void errorAlert(Context context, Integer customView, int title, int message, int details) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();

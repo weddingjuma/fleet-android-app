@@ -348,10 +348,13 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other mFragments contained in that
-     * activity.
+     * to the activity
      */
     public interface OnFragmentInteractionListener {
+        /**
+         * Callback triggered when a modification has been done to a mission
+         * @param mission a mission object from Mapotempo model Mission {@link Mission}
+         */
         void onSingleMissionInteraction(Mission mission);
     }
 }
