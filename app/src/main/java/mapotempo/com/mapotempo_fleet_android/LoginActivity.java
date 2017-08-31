@@ -5,11 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.mapotempo.fleet.MapotempoFleetManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import java.util.Date;
 import java.util.Observable;
 import java.util.TimerTask;
+
+import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
 
 /**
  * A login screen that offers login via email/password.
@@ -33,25 +36,26 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
      * @param task A task which is in charge to stop the timer if no connection has been established.
      */
     @Override
-    public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs) {
+    public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs, MapotempoFleetManager manager) {
         task.cancel();
 
         switch (status) {
             case VERIFY:
                 if (logs != null)
                     keepTraceOfConnectionLogsData(logs);
+                MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
+                mapotempoApplication.setManager(manager);
+                onBackPressed();
+                finish();
                 break;
-            case USER_ERROR:
-            case PASSWORD_ERROR:
+            case LOGIN_ERROR:
                 LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);
                 loginFragment.toogleLogginView(false);
+                AlertMessageHelper.errorAlert(this, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
                 break;
             case TIMEOUT:
                 // NOT SUPPORTED YET
                 Log.w("NOT SUPPORTED", "TIMEOUT from callback onLogin is not yet implemented");
-                break;
-            default:
-                onBackPressed();
                 break;
         }
     }

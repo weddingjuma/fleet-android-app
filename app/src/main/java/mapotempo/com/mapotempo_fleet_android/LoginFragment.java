@@ -117,7 +117,7 @@ public class LoginFragment extends Fragment {
 
         MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
             @Override
-            public void connexion(final Status status) {
+            public void connexion(final MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, final MapotempoFleetManager manager) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -126,7 +126,7 @@ public class LoginFragment extends Fragment {
                         if (checkbox.isChecked())
                             logs = new String[] { mLogin, mPassword };
 
-                        mListener.onLoginFragmentImplementation(status, timerTask, logs);
+                        mListener.onLoginFragmentImplementation(status, timerTask, logs, manager);
                     }
                 });
             }
@@ -136,12 +136,7 @@ public class LoginFragment extends Fragment {
         final Timer timer = new Timer();
         timer.schedule(timerTask, 5000);
 
-        iFleetManager = MapotempoFleetManager.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
-
-        MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
-        mapotempoApplication.setUserPref(getContext());
-
-        app.setManager(iFleetManager);
+        MapotempoFleetManager.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
         hideCurrentKeyboard();
     }
 
@@ -184,7 +179,7 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFragmentImplementation {
-        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins);
+        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins, MapotempoFleetManager manager);
     }
 
     public class InvalidLoginException extends Exception {
