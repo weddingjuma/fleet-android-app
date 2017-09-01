@@ -44,8 +44,8 @@ public class ConnectionManager {
 
     /**
      * Call this method only if user already took a decision concerning data (Return NONE otherwise)
-     * Call {@link ConnectionManager#askUserPreference(Context, Context, int)} to set data type
-     * @return
+     * Call {@link ConnectionManager#askUserPreference(Context, int)} to set data type
+     * @return void
      */
     public ConnectionType getConnectionType() {
         return connectionType;
@@ -56,12 +56,12 @@ public class ConnectionManager {
      * @param context
      * @param viewToInflate the View.xml to inflate must contain ([Button] id: only_wifi, [Button] id: both_wifi_and_mobile
      */
-    public void askUserPreference(Context context, Context parentContext, int viewToInflate) throws NullPointerException {
+    public void askUserPreference(Context context, int viewToInflate) throws NullPointerException {
         if (connectionType != ConnectionType.NONE)
             return;
 
-        if (parentContext instanceof OnConnectionSetup) {
-            mListener = (OnConnectionSetup) parentContext;
+        if (context instanceof OnConnectionSetup) {
+            mListener = (OnConnectionSetup) context;
         } else {
             throw new NullPointerException("OnConnectionSetup must be implemented");
         }

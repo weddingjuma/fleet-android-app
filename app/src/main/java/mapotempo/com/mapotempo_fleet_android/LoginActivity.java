@@ -1,5 +1,6 @@
 package mapotempo.com.mapotempo_fleet_android;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,11 +13,12 @@ import java.util.Date;
 import java.util.TimerTask;
 
 import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
+import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoginFragment.OnLoginFragmentImplementation {
+public class LoginActivity extends AppCompatActivity implements LoginFragment.OnLoginFragmentImplementation, ConnectionManager.OnConnectionSetup {
 
     private static final String sharedBaseName = "Mapotempo";
     private static final String userLoginKey = "UserLogin";
@@ -42,10 +44,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
             case VERIFY:
                 if (logs != null)
                     keepTraceOfConnectionLogsData(logs);
+
                 MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
                 mapotempoApplication.setManager(manager);
-                onBackPressed();
-                finish();
+                ConnectionManager.getInstance().askUserPreference(this, R.layout.user_data_pref);
                 break;
             case LOGIN_ERROR:
                 LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);
@@ -66,8 +68,19 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         editor.putString(userLoginKey, logs[0]);
         editor.putString(userPasswordKey, logs[1]);
         editor.putString(userDateKey, (new Date()).toString());
-
         editor.apply(); // Apply is async, while commit isn't.
+    }
+
+    @Override
+    public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
+        onBackPressed();
+        finish();
+    }
+
+    @Override
+    public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
+        onBackPressed();
+        finish();
     }
 }
 

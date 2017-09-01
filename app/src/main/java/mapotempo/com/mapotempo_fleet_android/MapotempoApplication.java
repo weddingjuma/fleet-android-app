@@ -1,13 +1,9 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
-import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
-
-public class MapotempoApplication extends Application implements ConnectionManager.OnConnectionSetup {
+public class MapotempoApplication extends Application {
 
     private MapotempoFleetManagerInterface iFleetManager;
 
@@ -28,28 +24,5 @@ public class MapotempoApplication extends Application implements ConnectionManag
             iFleetManager = manager;
             iFleetManager.onlineStatus(false); // Default is false, wait validation from user.
         }
-    }
-
-    public void setUserPref(Context context) {
-        ConnectionManager connectionManager = ConnectionManager.getInstance();
-        connectionManager.askUserPreference(context, this, R.layout.user_data_pref);
-    }
-
-    @Override
-    public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
-        iFleetManager.onlineStatus(false);
-        Activity activity = (Activity) context;
-
-        activity.onBackPressed();
-        activity.finish();
-    }
-
-    @Override
-    public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
-        iFleetManager.onlineStatus(true);
-        Activity activity = (Activity) context;
-
-        activity.onBackPressed();
-        activity.finish();
     }
 }
