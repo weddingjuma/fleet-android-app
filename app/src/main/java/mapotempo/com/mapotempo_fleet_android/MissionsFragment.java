@@ -14,14 +14,42 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
 import com.mapotempo.fleet.core.accessor.Access;
 import com.mapotempo.fleet.core.model.Mission;
-import com.mapotempo.fleet.core.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 /**
- * A fragment representing a list of Missions.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnMissionsInteractionListener}
+ * This fragment is responsible for display all missions assigned to the user currently connected.
+ * Each view displayed by this fragment is composed of 3 main UI elements :
+ * <ul>
+ * <li>The name </li>
+ * <li>The delivery date</li>
+ * <li>The delivery hour</li>
+ * </ul>
+ *
+ * <h3>Integration</h3>
+ * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.MissionContainerFragment"} </code>
+ * <p>
+ * This fragment require the implementation of {@link OnMissionsInteractionListener} directly in the Activity that hold the List Fragment.
+ * Then Override the {@link OnMissionsInteractionListener#onListMissionsInteraction(int)}
+ * which force to return an Android's click Listener. If you don't know about Event Listeners please check the documentation here : <a href="https://developer.android.com/reference/android/view/View.OnClickListener.html" target="_blank">Android Listener</a> <br>
+ * Feel free to put any logic inside the listener. Keep in mind that the position returned can be used to get the detailed view of the mission triggered by a click.
+ * </p>
+ *
+ * <b>Here is an example of usability: </b>
+ * <pre>
+ *     {@literal @Override}
+ *     public View.OnClickListener onListMissionsInteraction(final int position) {
+ *         View.OnClickListener onClick = new View.OnClickListener() {
+ *             {@literal @Override}
+ *             public void onClick(View v) {
+ *                 intent = new Intent(v.getContext(), YouNewActivity.class);
+ *                 intent.putExtra("mission_position", position);
+ *                 v.getContext().startActivity(intent);
+ *             }
+ *         }
+ *         return onClick;
+ *    }
+ * </pre>
  */
 public class MissionsFragment extends Fragment {
 
@@ -135,9 +163,7 @@ public class MissionsFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity
+     * This interface must be implemented by activities that contain {@link MissionsFragment}
      */
     public interface OnMissionsInteractionListener {
         /**

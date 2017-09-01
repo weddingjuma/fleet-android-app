@@ -21,7 +21,6 @@
             android:textColor="@color/colorWhite"
             android:textStyle="bold"
             android:textSize="22dp"
-            android:id="@+id/header_drawer_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/header_drawer_company"/>

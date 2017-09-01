@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.view.ViewPager;
 
 import mapotempo.com.mapotempo_fleet_android.R;
 

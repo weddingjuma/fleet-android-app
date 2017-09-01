@@ -13,7 +13,6 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/yes_no_action"
             android:text="@string/deletion"
             android:textSize="25dp"
             android:layout_width="match_parent"

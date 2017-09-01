@@ -9,7 +9,6 @@ import com.mapotempo.fleet.MapotempoFleetManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import java.util.Date;
-import java.util.Observable;
 import java.util.TimerTask;
 
 import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;

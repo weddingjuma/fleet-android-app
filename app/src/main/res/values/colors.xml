@@ -10,9 +10,7 @@
 
 
     <!-- BUTTONS -->
-    <color name="colorUpdate">#15b1ca</color>
     <color name="colorOrange">#ff7636</color>
-    <color name="colorChangeStatus">#8ac541</color>
     <color name="colorMapoGreen">#89c53f</color>
     <color name="colorRedDeletion">#c54147</color>
 

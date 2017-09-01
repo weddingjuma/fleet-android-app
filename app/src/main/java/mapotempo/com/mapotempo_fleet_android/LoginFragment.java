@@ -3,9 +3,6 @@ package mapotempo.com.mapotempo_fleet_android;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,8 +24,55 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
-import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
 
+
+/**
+ * Responsible for establish a connection with the library that allow you to get access to Mapotempo models. The fragment launch a connection attempt that give you, in some cases, a manager. The manager allow you to get access to the following entities :
+ * <ul>
+ * <li>Missions</li>
+ * <li>User</li>
+ * <li>Mission Status</li>
+ * <li>Company</li>
+ * </ul>
+ *
+ * <b>Integration</b>
+ * <p>
+ * <p>As a Fragment you must implement it in your XML file through the following line of code :
+ * <code>
+ * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.LoginFragment" />}
+ * </code>
+ * </p>
+ *
+ * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
+ *
+ * You will have to implement the {@link OnLoginFragmentImplementation#onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, TimerTask, String[], MapotempoFleetManager)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
+ *
+ * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
+ * </p>
+ *
+ * </b>Example:</b>
+ * <pre>
+ * public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs) {
+ *      task.cancel();
+ *
+ *      switch (status) {
+ *         case VERIFY:
+ *              if (logs != null)
+ *                  keepTraceOfConnectionLogsData(logs);
+ *              MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
+ *              mapotempoApplication.setManager(manager);
+ *              onBackPressed();
+ *              finish();
+ *              break;
+ *          case LOGIN_ERROR:
+ *              LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);
+ *              loginFragment.toogleLogginView(false);
+ *              AlertMessageHelper.errorAlert(this, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
+ *              break;
+ *      }
+ * }
+ * </pre>
+ */
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
     private String dataBaseUrl = "http://192.168.1.108:4984/db";
@@ -90,8 +134,6 @@ public class LoginFragment extends Fragment {
      * If none as been found in 5 seconds, the TimerTask restart the view.
      */
     private void attemptLogin() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        final MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
         final CheckBox checkbox = getActivity().findViewById(R.id.remember_logs);
         final Context context = getContext();
 

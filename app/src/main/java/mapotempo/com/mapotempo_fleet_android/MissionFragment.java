@@ -36,12 +36,38 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MissionFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * create an instance of this fragment.
+ * This fragment is a view detailed of a mission. it is working along side a <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html" target="_blank"><u>Android ViewPager</u></a>  that allow users to swipe left/right side to get the previous/next mission's view.
+ * Moreover this fragment provide the following functionality
+ * <ul>
+ * <li><b>Delete Mission</b>: Simply tag the current mission as deleted.</li>
+ * <li><b>Update Status</b>: Change the Status of the current mission. Status are mostly custom, directly pull from database.</li>
+ * <li><b>Go to Location</b>: An <a href="https://developer.android.com/reference/android/content/Intent.html" target="_blank"><u>Android Intent</u></a> which give the possibility to open a maps application in order to view the mission's geolocation from its lat/lng coordinates.</li>
+ * </ul>
+ *
+ * <h3>Integration</h3>
+ * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.MissionFragment"} </code>
+ * <p>
+ * This fragment require the implementation of {@link OnFragmentInteractionListener} directly in the Activity that hold the Detail Fragment.
+ * This involve the override of {@link OnFragmentInteractionListener#onSingleMissionInteraction(Mission)}. This interface is called when a modification has been done to a mission.
+ * </p>
+ * As we are using a <a href="https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html" target="_blank"><u>RecyclerView</u></a> to manage the list, you shall notify the alteration on this fragment through this method.
+ * <br><b>Example: </b>
+ * <code>
+ * <pre>
+ * {@literal @Override}
+ * public void onSingleMissionInteraction(Mission mission) {
+ *      MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+ *
+ *      if (missionsFragment != null)
+ *      missionsFragment.recyclerView.getAdapter().notifyDataSetChanged();
+ *
+ *      Do here whatever you need with the Mission object
+ * }
+ * </pre>
+ * </code>
+ *
  */
+
 public class MissionFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mInteraction;
@@ -278,12 +304,6 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
 //            displayViewData(mMission);
         }
     }
-
-    /**************************************************
-     *
-     * Utils
-     *
-     */
 
     private void currentMissionIsNotNull() {
         if (mMission == null)

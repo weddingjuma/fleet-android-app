@@ -3,7 +3,6 @@ package mapotempo.com.mapotempo_fleet_android;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.ViewGroup;
 
 import com.mapotempo.fleet.core.model.Mission;
 

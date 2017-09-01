@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
@@ -22,9 +21,41 @@ import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.List;
 
-
 /**
- * create an instance of this fragment.
+ * This fragment act as a manger for the {@link MissionFragment}.
+ * It is used to :
+ * <ul>
+ *     <li>Detect if a ViewPager must be used</li>
+ *     <li>Return the current view displayed</li>
+ *     <li>Provide the {@link Mission} object to {@link MissionFragment}</li>
+ * </ul>
+ *
+ * <h3>Integration</h3>
+ * First and foremost, it is needed to implement the fragment through XML using the following class :
+ * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.MissionContainerFragment"} <br>
+ * {@literal android:id="@+id/base_fragment"} <br>
+ * {@literal app:ViewStyle="SCROLLVIEW"} <br>
+ * {@literal android:layout_width="match_parent"} <br>
+ * {@literal android:layout_height="match_parent" />} <br>
+ * <p>
+ * It is Highly recommended to set up the enum "ViewStyle" to "SCROLLVIEW" in order to benefit of full features.
+ *
+ * This fragment require the implementation of {@link ContainerFragmentMission} directly in the Activity that hold the List Fragment.
+ * Then Override the {@link ContainerFragmentMission#wichViewIsTheCurrent(int)} is required to use this fragment.
+ * </p>
+ *
+ * <b>Here is an example of usability: </b>
+ * <pre>
+ * @Override
+ * public int wichViewIsTheCurrent(int position) {
+ *      MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+ *
+ *      if (missionsFragment != null)
+ *      missionsFragment.setCurrentMission(position);
+ *
+ *      return position;
+ *  }
+ * </pre>
  */
 public class MissionContainerFragment extends Fragment {
     private ViewPager mPager;

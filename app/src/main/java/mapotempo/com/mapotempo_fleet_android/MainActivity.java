@@ -1,6 +1,5 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.graphics.Color;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;

@@ -2,14 +2,7 @@ package mapotempo.com.mapotempo_fleet_android;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Handler;
-
-import com.couchbase.lite.android.AndroidContext;
-import com.mapotempo.fleet.MapotempoFleetManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;

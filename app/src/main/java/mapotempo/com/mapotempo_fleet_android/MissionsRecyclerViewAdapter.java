@@ -68,20 +68,6 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
         if (position == 0 && mCurrentPositionInView == 0)
             setCurrentMission(0);
-
-        checkMissionStatus(holder);
-    }
-
-    private void checkMissionStatus(final ViewHolder holder) {
-//        AppCompatImageButton checkBtn = holder.mView.findViewById(R.id.check_button);
-//        if (checkBtn == null) return;
-//
-//        checkBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.w("NOT IMPLEMENTED", "CHANGE MISSION STATUS IS NOT YET IMPLEMENTED");
-//            }
-//        });
     }
 
     public void setCurrentMission(int position) {
