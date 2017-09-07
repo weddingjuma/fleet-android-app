@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.mapotempo.fleet.MapotempoFleetManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import java.util.Date;
@@ -37,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
      * @param task A task which is in charge to stop the timer if no connection has been established.
      */
     @Override
-    public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs, MapotempoFleetManager manager) {
+    public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs, MapotempoFleetManagerInterface manager) {
         task.cancel();
 
         switch (status) {
@@ -54,9 +53,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
                 loginFragment.toogleLogginView(false);
                 AlertMessageHelper.errorAlert(this, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
                 break;
-            case TIMEOUT:
-                // NOT SUPPORTED YET
-                Log.w("NOT SUPPORTED", "TIMEOUT from callback onLogin is not yet implemented");
+            default:
                 break;
         }
     }

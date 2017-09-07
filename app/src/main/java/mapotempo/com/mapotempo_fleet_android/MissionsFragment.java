@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
 import com.mapotempo.fleet.core.accessor.Access;
 import com.mapotempo.fleet.core.model.Mission;
@@ -57,11 +59,11 @@ public class MissionsFragment extends Fragment {
     private MapotempoFleetManagerInterface mManager;
     private MissionsRecyclerViewAdapter mRecycler;
     private MissionAccessInterface iMissionAccess;
-    private List<Mission> mMissions = new ArrayList<>();
+    private List<MissionInterface> mMissions = new ArrayList<>();
     private int mColumnCount = 1;
-    private Access.ChangeListener<Mission> missionChangeListener = new Access.ChangeListener<Mission>() {
+    private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
         @Override
-        public void changed(final List<Mission> missions) {
+        public void changed(final List<MissionInterface> missions) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

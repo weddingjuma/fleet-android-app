@@ -4,6 +4,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ import java.util.List;
 class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
     private int mCount;
-    private List<Mission> mMissions;
+    private List<MissionInterface> mMissions;
 
-    public ScreenSlidePagerAdapter(android.support.v4.app.FragmentManager fm, int count, List<Mission> missions) {
+    public ScreenSlidePagerAdapter(android.support.v4.app.FragmentManager fm, int count, List<MissionInterface> missions) {
         super(fm);
         mCount = count;
         mMissions = new ArrayList<>();
@@ -49,7 +50,7 @@ class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    public void updateMissions(List<Mission> missions) {
+    public void updateMissions(List<MissionInterface> missions) {
         mMissions = missions;
         mCount = missions.size();
 

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
 import com.mapotempo.fleet.core.model.Mission;
 
@@ -61,7 +62,7 @@ public class MissionContainerFragment extends Fragment {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private MissionFragment fMission;
-    private List<Mission> mMissions;
+    private List<MissionInterface> mMissions;
     private MapotempoFleetManagerInterface mManager;
     private int mCount;
     private ContainerFragmentMission mListener;
@@ -174,7 +175,7 @@ public class MissionContainerFragment extends Fragment {
         mPagerAdapter.notifyDataSetChanged();
     }
 
-    public void refreshPagerData(List<Mission> missions) {
+    public void refreshPagerData(List<MissionInterface> missions) {
         mMissions = missions;
         ScreenSlidePagerAdapter screenSlidePagerAdapter = (ScreenSlidePagerAdapter) mPagerAdapter;
 

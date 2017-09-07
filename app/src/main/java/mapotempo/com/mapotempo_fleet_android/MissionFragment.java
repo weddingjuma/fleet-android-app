@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.core.base.MapotempoModelBase;
 import com.mapotempo.fleet.core.model.Mission;
 import com.mapotempo.fleet.core.model.submodel.Location;
@@ -71,7 +72,7 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
 public class MissionFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mInteraction;
-    private Mission mMission;
+    private MissionInterface mMission;
     private MapotempoModelBase.ChangeListener<Mission> mCallback = new MapotempoModelBase.ChangeListener<Mission>() {
         @Override
         public void changed(final Mission mission) {
@@ -87,7 +88,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
 
     public MissionFragment() { }
 
-    public static MissionFragment create(int pageNumber, Mission mission) {
+    public static MissionFragment create(int pageNumber, MissionInterface mission) {
         MissionFragment fragment = new MissionFragment();
         Bundle args = new Bundle();
 
@@ -154,7 +155,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
-    protected void displayViewData(Mission mission) {
+    protected void displayViewData(MissionInterface mission) {
         TextView name = getView().findViewById(R.id.name);
         TextView company = getView().findViewById(R.id.company);
         TextView details = getView().findViewById(R.id.details);
@@ -310,7 +311,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
             throw new RuntimeException("Mission is already deleted or is invalid");
     }
 
-    public void setMission(Mission mission) {
+    public void setMission(MissionInterface mission) {
         if (mission != null) {
             mMission = mission;
             mMission.addChangeListener(mCallback);
@@ -375,6 +376,6 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
          * Callback triggered when a modification has been done to a mission
          * @param mission a mission object from Mapotempo model Mission {@link Mission}
          */
-        void onSingleMissionInteraction(Mission mission);
+        void onSingleMissionInteraction(MissionInterface mission);
     }
 }

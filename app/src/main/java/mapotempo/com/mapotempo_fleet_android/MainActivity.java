@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.mapotempo.fleet.core.model.Mission;
+import com.mapotempo.fleet.api.model.MissionInterface;
 
 import mapotempo.com.mapotempo_fleet_android.utils.DrawerListAdapter;
 import mapotempo.com.mapotempo_fleet_android.utils.ListItemCustom;
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     }
 
     @Override
-    public void onSingleMissionInteraction(Mission mission) {
+    public void onSingleMissionInteraction(MissionInterface mission) {
         MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         MissionContainerFragment fragment = (MissionContainerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
 

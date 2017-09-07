@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.couchbase.lite.android.AndroidContext;
-import com.mapotempo.fleet.MapotempoFleetManager;
+import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import java.util.Timer;
@@ -45,7 +45,7 @@ import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
  *
  * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
  *
- * You will have to implement the {@link OnLoginFragmentImplementation#onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, TimerTask, String[], MapotempoFleetManager)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
+ * You will have to implement the {@link OnLoginFragmentImplementation#onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, TimerTask, String[], MapotempoFleetManagerInterface)}which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
  *
  * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
  * </p>
@@ -159,7 +159,7 @@ public class LoginFragment extends Fragment {
 
         MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
             @Override
-            public void connexion(final MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, final MapotempoFleetManager manager) {
+            public void connexion(final MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, final MapotempoFleetManagerInterface manager) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -178,7 +178,7 @@ public class LoginFragment extends Fragment {
         final Timer timer = new Timer();
         timer.schedule(timerTask, 5000);
 
-        MapotempoFleetManager.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
+        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, maxIp);
         hideCurrentKeyboard();
     }
 
@@ -221,7 +221,8 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFragmentImplementation {
-        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins, MapotempoFleetManager manager);
+        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins,
+                                           MapotempoFleetManagerInterface manager);
     }
 
     public class InvalidLoginException extends Exception {

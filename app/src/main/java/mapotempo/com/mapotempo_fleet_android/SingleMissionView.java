@@ -3,6 +3,7 @@ package mapotempo.com.mapotempo_fleet_android;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.core.model.Mission;
 
 public class SingleMissionView extends AppCompatActivity implements MissionFragment.OnFragmentInteractionListener, MissionContainerFragment.ContainerFragmentMission {
@@ -16,7 +17,7 @@ public class SingleMissionView extends AppCompatActivity implements MissionFragm
     }
 
     @Override
-    public void onSingleMissionInteraction(Mission mission) {
+    public void onSingleMissionInteraction(MissionInterface mission) {
         MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         MissionContainerFragment fragment = (MissionContainerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
 

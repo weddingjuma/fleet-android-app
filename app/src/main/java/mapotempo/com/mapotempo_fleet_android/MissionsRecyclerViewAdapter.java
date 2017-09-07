@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.view.ViewGroup;
 import android.view.View;
 
+import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.ArrayList;
@@ -30,12 +31,12 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
     private boolean orientLandscape;
 
     private int missionsCount = 0;
-    private List<Mission> mMissions;
+    private List<MissionInterface> mMissions;
 
 
     private int mCurrentPositionInView = 0;
 
-    public MissionsRecyclerViewAdapter(Context context, OnMissionsInteractionListener listener, List<Mission> missions) {
+    public MissionsRecyclerViewAdapter(Context context, OnMissionsInteractionListener listener, List<MissionInterface> missions) {
         mMissions = missions;
         missionsCount = missions.size();
         mContext = context;
@@ -51,7 +52,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Mission mission = mMissions.get(position);
+        final MissionInterface mission = mMissions.get(position);
 
         String missionDate = DateHelpers.parse(mission.getDeliveryDate(), DateHelpers.DateStyle.SHORTDATE);
         String missionHour = DateHelpers.parse(mission.getDeliveryDate(), DateHelpers.DateStyle.HOURMINUTES);
@@ -97,14 +98,14 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
         return missionsCount;
     }
 
-    public void notifyDataSyncHasChanged(List<Mission> missions) {
+    public void notifyDataSyncHasChanged(List<MissionInterface> missions) {
         mMissions = missions;
         missionsCount = missions.size();
         notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public Mission mItem;
+        public MissionInterface mItem;
         public final View mView;
         public final TextView mName;
         public final TextView mCompany;
