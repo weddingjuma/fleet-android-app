@@ -75,8 +75,8 @@ import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
  */
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
-    private String dataBaseUrl = "http://192.168.1.108:4984/db";
-    private String maxIp = "http://192.168.1.135:4984/db";
+      private String dataBaseUrl = "http://192.168.1.108:4984/db";
+    // private String dataBaseUrl = "http://192.168.1.135:4984/db";
 
     private String mLogin = null;
     private String mPassword = null;
@@ -178,7 +178,7 @@ public class LoginFragment extends Fragment {
         final Timer timer = new Timer();
         timer.schedule(timerTask, 5000);
 
-        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, maxIp);
+        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
         hideCurrentKeyboard();
     }
 

@@ -52,10 +52,25 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.+'
     testCompile 'junit:junit:4.12'
 }
-
+/*
 task generateJavaDoc(type: org.gradle.api.tasks.javadoc.Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     destinationDir = file("./src/documentation/")
     failOnError false
+}*/
+
+
+FileTree docFilesTree = fileTree(dir: 'src/main/doc-files')
+
+task copyJavaDocSupportFiles(type: Copy) {
+  from docFilesTree
+  into 'build/docs/javadoc/doc-files/'
+}
+
+task generateApiJavadocs(name: 'documentation', type: Javadoc, dependsOn: ['copyJavaDocSupportFiles']) {
+  source = android.sourceSets.main.java.srcDirs
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+  options.overview('src/main/overview.html')
+  failOnError true
 }
