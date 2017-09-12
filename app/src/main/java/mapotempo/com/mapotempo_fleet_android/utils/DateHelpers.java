@@ -1,8 +1,11 @@
 package mapotempo.com.mapotempo_fleet_android.utils;
 
+import android.text.TextUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.IllegalFormatException;
 
 public class DateHelpers {
 
@@ -13,40 +16,44 @@ public class DateHelpers {
     }
 
     private enum Days {
-        LUNDI(1, "Lundi"),
-        MARDI(2, "Mardi"),
-        MERCREDI(3, "Mercredi"),
-        JEUDI(4, "Jeudi"),
-        VENDREDI(5, "Vendredi"),
-        SAMEDI(6, "Samedi"),
-        DIMANCHE(7, "Dimanche");
+        MONDAY("Monday", "Lundi"),
+        TUESDAY("Tuesday", "Mardi"),
+        WEDNESDAY("Wednesday", "Mercredi"),
+        THURSDAY("Thursday", "Jeudi"),
+        FRIDAY("Friday", "Vendredi"),
+        SATURDAY("Saturday", "Samedi"),
+        SUNDAY("Sunday", "Dimanche");
 
-        private String mVal;
-        private int mIndex;
+        private String mEnglishTag;
 
-        Days(int index, String val) {
-            mVal = val;
-            mIndex = index;
+        private String mFrenchTag;
+
+        Days(String englishTag, String frenchTag) {
+          mEnglishTag = englishTag;
+          mFrenchTag = frenchTag;
         }
 
-        public static String getStringFromIndex(int i) {
-            String rlt = "";
-            for (DateHelpers.Days d : DateHelpers.Days.values()) {
-                if (d.getIndex() == i) {
-                    rlt = d.toString();
-                }
-            }
-
-            return rlt;
+        public static Days fromEnglishString(String englishTag) {
+          Days day = MONDAY;
+          try
+          {
+            day = Days.valueOf(englishTag.toUpperCase());
+          } catch (IllegalFormatException e) {
+            e.printStackTrace();
+          } finally
+          {
+            return day;
+          }
         }
 
-        private int getIndex() {
-            return mIndex;
+        public String getEnglishString()
+        {
+          return mEnglishTag;
         }
 
-        @Override
-        public String toString() {
-            return mVal;
+        public String getFrenchString()
+        {
+          return mFrenchTag;
         }
     }
 
@@ -108,8 +115,12 @@ public class DateHelpers {
         String date;
         String day;
 
-        formatter = new SimpleDateFormat("u");
-        day = Days.getStringFromIndex( Integer.parseInt( formatter.format(entryDate) ) );
+        formatter = new SimpleDateFormat("EEEE");
+        //day = Days.fromEnglishString( formatter.format(entryDate) ).getFrenchString();
+        day = formatter.format(entryDate);
+        // Uppecase the first char
+        if(day != null)
+            day = day.substring(0,1).toUpperCase() + day.substring(1).toLowerCase();
 
         formatter = new SimpleDateFormat("d");
         dayNumberInMonth = formatter.format(entryDate);
