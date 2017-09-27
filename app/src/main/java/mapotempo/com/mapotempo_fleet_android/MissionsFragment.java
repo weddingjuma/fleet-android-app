@@ -14,8 +14,6 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
-import com.mapotempo.fleet.core.accessor.Access;
-import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.ArrayList;
 import java.util.List;

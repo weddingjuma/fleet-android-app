@@ -54,8 +54,8 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final MissionInterface mission = mMissions.get(position);
 
-        String missionDate = DateHelpers.parse(mission.getDeliveryDate(), DateHelpers.DateStyle.SHORTDATE);
-        String missionHour = DateHelpers.parse(mission.getDeliveryDate(), DateHelpers.DateStyle.HOURMINUTES);
+        String missionDate = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.SHORTDATE);
+        String missionHour = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES);
 
         holder.mItem = mission;
         holder.mName.setText(mission.getName());

@@ -75,8 +75,8 @@ import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
  */
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
-      private String dataBaseUrl = "http://192.168.1.108:4984/db";
-    // private String dataBaseUrl = "http://192.168.1.135:4984/db";
+     // private String dataBaseUrl = "http://192.168.1.108:4984/db";
+    private String dataBaseUrl = "http://192.168.1.135:4984/db";
 
     private String mLogin = null;
     private String mPassword = null;
