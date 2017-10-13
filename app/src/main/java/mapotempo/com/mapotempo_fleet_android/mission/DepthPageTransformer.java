@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.mapotempo_fleet_android.mission;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

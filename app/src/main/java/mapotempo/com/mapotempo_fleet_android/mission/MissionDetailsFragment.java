@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.mapotempo_fleet_android.mission;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,14 +23,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.MapotempoModelBaseInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.MissionCommandInterface;
-import com.mapotempo.fleet.core.base.MapotempoModelBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
+import mapotempo.com.mapotempo_fleet_android.MissionActivity;
+import mapotempo.com.mapotempo_fleet_android.R;
 import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
 import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
 
@@ -45,7 +48,7 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
  * </ul>
  *
  * <h3>Integration</h3>
- * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.MissionFragment"} </code>
+ * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment"} </code>
  * <p>
  * This fragment require the implementation of {@link OnFragmentInteractionListener} directly in the Activity that hold the Detail Fragment.
  * This involve the override of {@link OnFragmentInteractionListener#onSingleMissionInteraction(MissionInterface)}. This interface is called when a modification has
@@ -69,11 +72,11 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
  *
  */
 
-public class MissionFragment extends Fragment implements View.OnClickListener {
+public class MissionDetailsFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mInteraction;
     private MissionInterface mMission;
-    private MapotempoModelBase.ChangeListener<MissionInterface> mCallback = new MapotempoModelBase.ChangeListener<MissionInterface>() {
+    private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final MissionInterface mission, final boolean delete) {
             getActivity().runOnUiThread(new Runnable() {
@@ -88,10 +91,10 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
         }
     };
 
-    public MissionFragment() { }
+    public MissionDetailsFragment() { }
 
-    public static MissionFragment create(int pageNumber, MissionInterface mission) {
-        MissionFragment fragment = new MissionFragment();
+    public static MissionDetailsFragment create(int pageNumber, MissionInterface mission) {
+        MissionDetailsFragment fragment = new MissionDetailsFragment();
         Bundle args = new Bundle();
 
         args.putInt("page", pageNumber);
@@ -300,7 +303,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     private void backToListActivity(Context context) {
         mInteraction.onSingleMissionInteraction(mMission);
 
-        if (context.getClass().equals(SingleMissionView.class)) {
+        if (context.getClass().equals(MissionActivity.class)) {
             // Silence is golden
             ((Activity) context).onBackPressed();
         } else {
@@ -378,7 +381,7 @@ public class MissionFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener {
         /**
          * Callback triggered when a modification has been done to a mission
-         * @param mission a mission object from Mapotempo model Mission {@link Mission}
+         * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
          */
         void onSingleMissionInteraction(MissionInterface mission);
     }

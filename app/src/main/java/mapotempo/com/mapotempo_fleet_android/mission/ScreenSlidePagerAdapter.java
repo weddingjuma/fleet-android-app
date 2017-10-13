@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.mapotempo_fleet_android.mission;
 
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -24,7 +24,7 @@ class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = MissionFragment.create(position, mMissions.get(position));
+        Fragment fragment = MissionDetailsFragment.create(position, mMissions.get(position));
         return fragment;
     }
 

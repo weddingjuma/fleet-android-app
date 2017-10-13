@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="MissionContainerFragment">
+    <declare-styleable name="MissionFragment">
         <attr name="ViewStyle" format="enum">
             <enum name="SCROLLVIEW" value="0"/>
             <enum name="SIMPLEVIEW" value="1"/>

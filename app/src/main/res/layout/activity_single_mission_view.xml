@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="mapotempo.com.mapotempo_fleet_android.SingleMissionView">
+    tools:context="mapotempo.com.mapotempo_fleet_android.MissionActivity">
 
-    <fragment class="mapotempo.com.mapotempo_fleet_android.MissionContainerFragment"
+    <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"
         android:id="@+id/base_fragment"
         app:ViewStyle="SCROLLVIEW"
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.mapotempo_fleet_android.login;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,7 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import mapotempo.com.mapotempo_fleet_android.R;
 import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
 
 
@@ -39,7 +40,7 @@ import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
  * <p>
  * <p>As a Fragment you must implement it in your XML file through the following line of code :
  * <code>
- * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.LoginFragment" />}
+ * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.login.LoginFragment" />}
  * </code>
  * </p>
  *

@@ -37,14 +37,14 @@
                 android:layout_height="match_parent"
                 android:layout_width="300dp">
 
-                <fragment class="mapotempo.com.mapotempo_fleet_android.MissionsFragment"
+                <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment"
                           android:id="@+id/listMission"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent" />
 
             </RelativeLayout>
 
-            <fragment class="mapotempo.com.mapotempo_fleet_android.MissionContainerFragment"
+            <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"
                 android:id="@+id/base_fragment"
                 app:ViewStyle="SCROLLVIEW"
                 android:layout_width="match_parent"

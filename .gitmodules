@@ -1,3 +1,0 @@
-[submodule "3party/mapotempo-fleet-java-client"]
-	path = 3party/mapotempo-fleet-java-client
-	url = https://github.com/fijemax/mapotempo-fleet-java-client.git

@@ -4,13 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import java.util.Date;
 import java.util.TimerTask;
 
+import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
+import mapotempo.com.mapotempo_fleet_android.R;
+import mapotempo.com.mapotempo_fleet_android.login.LoginFragment;
 import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
 import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
 
@@ -61,7 +63,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     private void keepTraceOfConnectionLogsData(String[] logs) {
         SharedPreferences sharedPreferences = getSharedPreferences(sharedBaseName, 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         editor.putString(userLoginKey, logs[0]);
         editor.putString(userPasswordKey, logs[1]);
         editor.putString(userDateKey, (new Date()).toString());

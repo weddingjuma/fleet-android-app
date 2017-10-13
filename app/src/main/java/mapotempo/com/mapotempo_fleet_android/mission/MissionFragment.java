@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.mapotempo_fleet_android.mission;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -22,18 +22,21 @@ import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.List;
 
+import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
+import mapotempo.com.mapotempo_fleet_android.R;
+
 /**
- * This fragment act as a manger for the {@link MissionFragment}.
+ * This fragment act as a manger for the {@link MissionDetailsFragment}.
  * It is used to :
  * <ul>
  *     <li>Detect if a ViewPager must be used</li>
  *     <li>Return the current view displayed</li>
- *     <li>Provide the {@link Mission} object to {@link MissionFragment}</li>
+ *     <li>Provide the {@link Mission} object to {@link MissionDetailsFragment}</li>
  * </ul>
  *
  * <h3>Integration</h3>
  * First and foremost, it is needed to implement the fragment through XML using the following class :
- * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.MissionContainerFragment"} <br>
+ * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"} <br>
  * {@literal android:id="@+id/base_fragment"} <br>
  * {@literal app:ViewStyle="SCROLLVIEW"} <br>
  * {@literal android:layout_width="match_parent"} <br>
@@ -58,10 +61,10 @@ import java.util.List;
  *  }
  * </pre>
  */
-public class MissionContainerFragment extends Fragment {
+public class MissionFragment extends Fragment {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-    private MissionFragment fMission;
+    private MissionDetailsFragment fMission;
     private List<MissionInterface> mMissions;
     private MapotempoFleetManagerInterface mManager;
     private int mCount;
@@ -90,7 +93,7 @@ public class MissionContainerFragment extends Fragment {
 
     private ViewStyle mViewStyle = ViewStyle.SIMPLEVIEW;
 
-    public MissionContainerFragment() {
+    public MissionFragment() {
     }
 
     @Override
@@ -108,6 +111,15 @@ public class MissionContainerFragment extends Fragment {
         MissionAccessInterface missionAccessInterface = mManager.getMissionAccess();
         mMissions = missionAccessInterface.getAll();
         mCount = mMissions.size();
+    }
+
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+
+        TypedArray attrCustom = context.obtainStyledAttributes(attrs, R.styleable.MissionFragment);
+        Integer v = attrCustom.getInteger(R.styleable.MissionFragment_ViewStyle, 1);
+        mViewStyle = ViewStyle.fromInt(v);
     }
 
     @Override
@@ -130,21 +142,12 @@ public class MissionContainerFragment extends Fragment {
             FragmentManager manager = getFragmentManager();
             FragmentTransaction fragmentTransaction = manager.beginTransaction();
 
-            fMission = new MissionFragment();
+            fMission = new MissionDetailsFragment();
             fragmentTransaction.add(R.id.mission_view_content, fMission);
             fragmentTransaction.commit();
         }
 
         return view;
-    }
-
-    @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
-
-        TypedArray attrCustom = context.obtainStyledAttributes(attrs, R.styleable.MissionContainerFragment);
-        Integer v = attrCustom.getInteger(R.styleable.MissionContainerFragment_ViewStyle, 1);
-        mViewStyle = ViewStyle.fromInt(v);
     }
 
     @Override

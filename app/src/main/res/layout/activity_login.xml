@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment class="mapotempo.com.mapotempo_fleet_android.LoginFragment"
+        <fragment class="mapotempo.com.mapotempo_fleet_android.login.LoginFragment"
                   android:id="@+id/hook_login_fragment"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"/>

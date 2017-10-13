@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.mapotempo_fleet_android.mission;
 
 import android.content.res.Configuration;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +16,8 @@ import com.mapotempo.fleet.core.model.Mission;
 import java.util.ArrayList;
 import java.util.List;
 
-import mapotempo.com.mapotempo_fleet_android.MissionsFragment.OnMissionsInteractionListener;
+import mapotempo.com.mapotempo_fleet_android.R;
+import mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment.OnMissionsInteractionListener;
 import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
 
 /**
@@ -32,7 +33,6 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     private int missionsCount = 0;
     private List<MissionInterface> mMissions;
-
 
     private int mCurrentPositionInView = 0;
 

@@ -1,5 +1,6 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.mapotempo_fleet_android.mission;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,10 @@ import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
+import mapotempo.com.mapotempo_fleet_android.R;
+
 /**
  * This fragment is responsible for display all missions assigned to the user currently connected.
  * Each view displayed by this fragment is composed of 3 main UI elements :
@@ -27,7 +32,7 @@ import java.util.List;
  * </ul>
  *
  * <h3>Integration</h3>
- * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.MissionContainerFragment"} </code>
+ * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"} </code>
  * <p>
  * This fragment require the implementation of {@link OnMissionsInteractionListener} directly in the Activity that hold the List Fragment.
  * Then Override the {@link OnMissionsInteractionListener#onListMissionsInteraction(int)}
@@ -59,13 +64,15 @@ public class MissionsFragment extends Fragment {
     private MissionAccessInterface iMissionAccess;
     private List<MissionInterface> mMissions = new ArrayList<>();
     private int mColumnCount = 1;
+    private FloatingActionButton mAddButton;
+
     private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final List<MissionInterface> missions) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    MissionContainerFragment singleFragment = (MissionContainerFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
+                    MissionFragment singleFragment = (MissionFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
 
                     mRecycler.notifyDataSyncHasChanged(missions);
 
@@ -76,7 +83,7 @@ public class MissionsFragment extends Fragment {
         }
     };
 
-    protected RecyclerView recyclerView;
+    public RecyclerView recyclerView;
 
     @Override
     public void onAttach(Context context) {
@@ -98,6 +105,7 @@ public class MissionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_missions_list, container, false);
         recyclerView = view.findViewById(R.id.recycler_view);
+        mAddButton = view.findViewById(R.id.add_mission);
 
         if (recyclerView instanceof RecyclerView) {
 
@@ -111,6 +119,68 @@ public class MissionsFragment extends Fragment {
             recyclerView.setAdapter(mRecycler);
         }
 
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                //TO NOTHING FOR THE MOMENT
+                /*
+                MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
+                TrackAccessInterface ta = app.getManager().getTrackAccess();
+                List<TrackInterface> lta = ta.getAll();
+                Collections.sort(lta, new Comparator<TrackInterface>() {
+                    @Override
+                    public int compare(TrackInterface trackInterface, TrackInterface t1)
+                    {
+                        Long compare = trackInterface.getDate().getTime() - t1.getDate().getTime();
+                        return compare.intValue();
+                    }
+                });
+                TrackInterface ti = ta.getNew();
+                ArrayList<LocationDetailsInterface> meguaLocationPool = new ArrayList<LocationDetailsInterface>();
+                for(TrackInterface t : lta) {
+                    List<LocationDetailsInterface> lld = t.getLocations();
+                    Location  loc1 = null;
+                    Location  loc2 = null;
+                    for(LocationDetailsInterface ld : lld) {
+                        LocationDetailsInterface new_ld = app.getManager().getSubmodelFactory().CreateNewLocationDetails(ld.getLat(), ld.getLon(),
+                            new Date(),
+                            0, 0, 0, 0, 0, "xx", "xx", "xx", "xx");
+                            meguaLocationPool.add(new_ld);
+
+                        if(loc1 != null)
+                        {
+                            loc2 = new Location("");
+                            loc2.setLatitude(new_ld.getLat());
+                            loc2.setLongitude(new_ld.getLon());
+                            float distanceInMeters = loc1.distanceTo(loc2);
+                            if(distanceInMeters < 400) {
+                                meguaLocationPool.add(new_ld);
+                                loc1 = loc2;
+                            }
+                        }
+                        else {
+                            meguaLocationPool.add(new_ld);
+                            loc1 = new Location("");
+                            loc1.setLatitude(new_ld.getLat());
+                            loc1.setLongitude(new_ld.getLon());
+                        }
+                    }
+                }
+
+                for(LocationDetailsInterface ld : meguaLocationPool) {
+                    Log.i("Track -> ", "(lat : " +  Double.toString(ld.getLat()) + "; lon : " + Double.toString(ld.getLon()) + ") date : " + ld.getDate()
+                        .getTime());
+                }
+
+
+                ti.setLocations(meguaLocationPool);
+                ti.setCompanyId("company_mapotempo");
+                ti.setOwnerId("static");
+                ti.setDate(new Date());
+                ti.save();*/
+            }
+        });
         return view;
     }
 

@@ -17,7 +17,7 @@ The Application's structure is fragments composed, through 3 principal views :
 
 #### **Integration**
 As a Fragment you must implement it in your XML file through the following line of code : 
- ```<fragment class="mapotempo.com.mapotempo_fleet_android.LoginFragment" /> ```
+ ```<fragment class="mapotempo.com.mapotempo_fleet_android.login.LoginFragment" /> ```
 
 This fragment require the implementation of  ``` public interface OnLoginFragmentImplementation {} ``` directly in the Activity that hold the Login Fragment. 
 
@@ -59,7 +59,7 @@ task.cancel();
 #### **Integration**
 First and foremost, it is needed to implement the fragment through XML using the following class : 
 ```
-<fragment class="mapotempo.com.mapotempo_fleet_android.MissionsFragment" />
+<fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment" />
 ```
 This fragment require the implementation of  ``` public interface OnMissionsInteractionListener {} ``` directly in the Activity that hold the List Fragment. 
 
@@ -93,7 +93,7 @@ Feel free to put any logic inside the listener. Keep in mind that the position r
 #### **Integration**
 As it is needed for all fragment, you must implement it inside your XML file using the following lines of code : 
 ```
-<fragment class="mapotempo.com.mapotempo_fleet_android.MissionContainerFragment"
+<fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"
         android:id="@+id/base_fragment"
         app:ViewStyle="SCROLLVIEW"
         android:layout_width="match_parent"
