@@ -1,57 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="mapotempo.com.mapotempo_fleet_android.MainActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context="mapotempo.com.mapotempo_fleet_android.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorGrey"
-        android:orientation="vertical" >
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/colorGrey"
+      android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="?attr/colorPrimary"
+          app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+      <RelativeLayout
+          android:layout_marginRight="3dp"
+          android:orientation="horizontal"
+          android:layout_height="match_parent"
+          android:layout_width="300dp">
+
+        <fragment
+            class="mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment"
+            android:id="@+id/listMission"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
+            android:layout_height="match_parent"/>
 
-            <RelativeLayout
-                android:layout_marginRight="3dp"
-                android:orientation="horizontal"
-                android:layout_height="match_parent"
-                android:layout_width="300dp">
+      </RelativeLayout>
 
-                <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment"
-                          android:id="@+id/listMission"
-                          android:layout_width="match_parent"
-                          android:layout_height="match_parent" />
-
-            </RelativeLayout>
-
-            <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"
-                android:id="@+id/base_fragment"
-                app:ViewStyle="SCROLLVIEW"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
+      <fragment
+          class="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment"
+          android:id="@+id/base_fragment"
+          app:ViewStyle="SCROLLVIEW"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
 
     </LinearLayout>
+
+  </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

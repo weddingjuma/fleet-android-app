@@ -59,7 +59,7 @@ task.cancel();
 #### **Integration**
 First and foremost, it is needed to implement the fragment through XML using the following class : 
 ```
-<fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment" />
+<fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment" />
 ```
 This fragment require the implementation of  ``` public interface OnMissionsInteractionListener {} ``` directly in the Activity that hold the List Fragment. 
 
@@ -93,7 +93,7 @@ Feel free to put any logic inside the listener. Keep in mind that the position r
 #### **Integration**
 As it is needed for all fragment, you must implement it inside your XML file using the following lines of code : 
 ```
-<fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"
+<fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment"
         android:id="@+id/base_fragment"
         app:ViewStyle="SCROLLVIEW"
         android:layout_width="match_parent"
@@ -108,10 +108,10 @@ As we are using a [RecyclerView](https://developer.android.com/reference/android
 ```
     @Override
     public void onSingleMissionInteraction(Mission mission) {
-        MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+        MissionsFragment missionsListFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
 
-        if (missionsFragment != null)
-            missionsFragment.recyclerView.getAdapter().notifyDataSetChanged();
+        if (missionsListFragment != null)
+            missionsListFragment.recyclerView.getAdapter().notifyDataSetChanged();
 
 		/* Do here whatever you need with the Mission object */
     }

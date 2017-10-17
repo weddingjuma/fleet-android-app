@@ -5,8 +5,8 @@
 <h1>The Mapotempo Fleet Android.</h1>
 <hr/>
 <p>
-    <img src="doc-files/mapotempo-fleet-android.png" style="display: block; margin: auto;"/>
-    <br/>
+    <img src="doc-files/mapotempo-fleet-android.png"
+         style="display: block; margin: auto;"/> <br/>
 </p>
 <h2>Description : </h2>
 <p>
@@ -16,50 +16,52 @@
 </p>
 <h2>{@link mapotempo.com.mapotempo_fleet_android.MapotempoApplication}: </h2>
 <p>
-  The {@link mapotempo.com.mapotempo_fleet_android.MapotempoApplication} is required in the application to provide and manage the
-  {@link com.mapotempo.fleet.core.MapotempoFleetManager}.
+    The {@link mapotempo.com.mapotempo_fleet_android.MapotempoApplication} is required in the
+    application to provide and manage the {@link
+    com.mapotempo.fleet.core.MapotempoFleetManager}.
 </p>
 <h2>{@link mapotempo.com.mapotempo_fleet_android.LoginActivity}: </h2>
 <p>
-  Contain a {@link mapotempo.com.mapotempo_fleet_android.LoginFragment}.
+    Contain a {@link mapotempo.com.mapotempo_fleet_android.LoginFragment}.
 </p>
 <h2>{@link mapotempo.com.mapotempo_fleet_android.LoginFragment}: </h2>
 <p>
-  <p>
-    Display and manage a login view.
-    </br>
-    <img src="doc-files/login.png" width="256"/>
-  </p>
-</p>
-<h2>{@link mapotempo.com.mapotempo_fleet_android.MainActivity}: </h2>
 <p>
-  The {@link mapotempo.com.mapotempo_fleet_android.MainActivity} use one or two fragments according to the device orientation.
-  <ul>
+    Display and manage a login view.</br><img src="doc-files/login.png"
+                                              width="256"/>
+</p></p><h2>{@link mapotempo.com.mapotempo_fleet_android.MainActivity}: </h2>
+<p>
+    The {@link mapotempo.com.mapotempo_fleet_android.MainActivity} use one or two fragments
+    according to the device orientation.
+<ul>
     <li>
-      <b>portrait:</b> single {@link mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment} fragment
-      </br>
-      <img src="doc-files/portrait.png" width="256"/>
+        <b>portrait:</b> single {@link
+        mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment} fragment</br><img
+            src="doc-files/portrait.png"
+            width="256"/>
     </li>
     <li>
-      <b>landscape:</b> both {@link mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment} and {@link
-      mapotempo.com.mapotempo_fleet_android.mission.MissionFragment} side by side fragments.
-      </br>
-      <img src="doc-files/landscape.png" height="256"/>
+        <b>landscape:</b> both {@link
+        mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment} and {@link
+        mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment} side by side
+        fragments.</br><img src="doc-files/landscape.png"
+                            height="256"/>
     </li>
 </ul>
-</p>
-<h2>{@link mapotempo.com.mapotempo_fleet_android.SingleMissionView}: </h2>
+</p><h2>{@link mapotempo.com.mapotempo_fleet_android.SingleMissionView}: </h2>
 <p>
-  The {@link mapotempo.com.mapotempo_fleet_android.MissionActivity} activity contain one {@link mapotempo.com.mapotempo_fleet_android.mission.MissionFragment}.
-  </br>
-  <img src="doc-files/details.png" height="256"/>
+    The {@link mapotempo.com.mapotempo_fleet_android.MissionActivity} activity contain
+    one {@link
+    mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment}.</br><img
+        src="doc-files/details.png"
+        height="256"/>
 </p>
 <h2>{@link mapotempo.com.mapotempo_fleet_android.MissionsFragment}: </h2>
 <p>
-  This fragment display all user missions.
+    This fragment display all user missions.
 </p>
 <h2>{@link mapotempo.com.mapotempo_fleet_android.MissionContainerFragment}: </h2>
 <p>
-  This fragment display mission details and provide update on them.
+    This fragment display mission details and provide update on them.
 </p>
 </body>

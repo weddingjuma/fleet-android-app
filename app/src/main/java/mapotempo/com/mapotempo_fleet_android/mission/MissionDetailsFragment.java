@@ -46,7 +46,7 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
  * <li><b>Update Status</b>: Change the Status of the current mission. Status are mostly custom, directly pull from database.</li>
  * <li><b>Go to Location</b>: An <a href="https://developer.android.com/reference/android/content/Intent.html" target="_blank"><u>Android Intent</u></a> which give the possibility to open a maps application in order to view the mission's geolocation from its lat/lng coordinates.</li>
  * </ul>
- *
+ * <p>
  * <h3>Integration</h3>
  * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment"} </code>
  * <p>
@@ -60,7 +60,7 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
  * <pre>
  * {@literal @Override}
  * public void onSingleMissionInteraction(MissionInterface mission) {
- *      MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+ *      MissionsListFragment missionsFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
  *
  *      if (missionsFragment != null)
  *      missionsFragment.recyclerView.getAdapter().notifyDataSetChanged();
@@ -69,12 +69,10 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
  * }
  * </pre>
  * </code>
- *
  */
 
 public class MissionDetailsFragment extends Fragment implements View.OnClickListener {
-
-    private OnFragmentInteractionListener mInteraction;
+    //private OnFragmentInteractionListener mInteraction;
     private MissionInterface mMission;
     private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
@@ -82,7 +80,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(!delete) {
+                    if (!delete) {
                         mMission = mission;
                         fillViewFromActivity();
                     }
@@ -91,7 +89,8 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         }
     };
 
-    public MissionDetailsFragment() { }
+    public MissionDetailsFragment() {
+    }
 
     public static MissionDetailsFragment create(int pageNumber, MissionInterface mission) {
         MissionDetailsFragment fragment = new MissionDetailsFragment();
@@ -119,12 +118,13 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+/*
         if (context instanceof OnFragmentInteractionListener) {
             mInteraction = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement BaseFragmentForSingleView");
         }
+*/
     }
 
     @Override
@@ -138,7 +138,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onDetach() {
         super.onDetach();
-        mInteraction = null;
+        //mInteraction = null;
 
     }
 
@@ -175,7 +175,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         name.setText(mission.getName());
         address.setText(mission.getAddress().toString());
         date.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.FULLDATE));
-        details.setText(details.getText());
+        details.setText(mission.getComment());
         company.setText(mission.getCompanyId());
         status.setText(mission.getStatus().getLabel().toUpperCase());
     }
@@ -185,12 +185,12 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
      */
 
     private void setButtonsBehaviors(View view) {
-//        Button update = view.findViewById(R.id.updateBtn);
+        //        Button update = view.findViewById(R.id.updateBtn);
         FloatingActionButton delete = view.findViewById(R.id.delete);
         FloatingActionButton status = view.findViewById(R.id.statusBtn);
         ImageButton location = view.findViewById(R.id.go_to_location);
 
-//        update.setOnClickListener(this);
+        //        update.setOnClickListener(this);
         delete.setOnClickListener(this);
         status.setOnClickListener(this);
         location.setOnClickListener(this);
@@ -301,13 +301,9 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     }
 
     private void backToListActivity(Context context) {
-        mInteraction.onSingleMissionInteraction(mMission);
-
+        //mInteraction.onSingleMissionInteraction(mMission);
         if (context.getClass().equals(MissionActivity.class)) {
-            // Silence is golden
             ((Activity) context).onBackPressed();
-        } else {
-//            displayViewData(mMission);
         }
     }
 
@@ -328,9 +324,9 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-//            case R.id.updateBtn:
-//                updateCurrentMission();
-//                break;
+            //            case R.id.updateBtn:
+            //                updateCurrentMission();
+            //                break;
             case R.id.delete:
                 initDeletionForCurrentMission();
                 break;
@@ -353,8 +349,6 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
                 if (deleteMission()) {
                     alert.dismiss();
                     backToListActivity(getContext());
-                } else {
-                    // Silence now;
                 }
             }
         });
@@ -381,6 +375,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     public interface OnFragmentInteractionListener {
         /**
          * Callback triggered when a modification has been done to a mission
+         *
          * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
          */
         void onSingleMissionInteraction(MissionInterface mission);

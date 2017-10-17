@@ -5,26 +5,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                                            xmlns:app="http://schemas.android.com/apk/res-auto"
-                                            xmlns:tools="http://schemas.android.com/tools"
-                                            android:id="@+id/recycler_view"
-                                            android:name="mapotempo.com.mapotempo_fleet_android.MissionsFragment"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            app:layoutManager="LinearLayoutManager"
-                                            tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment"
-                                            tools:listitem="@layout/fragment_missions" />
+  <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                                          xmlns:app="http://schemas.android.com/apk/res-auto"
+                                          xmlns:tools="http://schemas.android.com/tools"
+                                          android:id="@+id/recycler_view"
+                                          android:name="mapotempo.com.mapotempo_fleet_android.MissionsFragment"
+                                          android:layout_width="match_parent"
+                                          android:layout_height="match_parent"
+                                          app:layoutManager="LinearLayoutManager"
+                                          tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment"
+                                          tools:listitem="@layout/fragment_missions"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_mission"
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_add_black_24dp"
-        app:backgroundTint="@color/colorPrimaryHeaders"
-        android:tint="@color/colorWhite" />
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/add_mission"
+      android:layout_margin="16dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      android:src="@drawable/ic_add_black_24dp"
+      app:backgroundTint="@color/colorPrimaryHeaders"
+      android:tint="@color/colorWhite"/>
 
 </RelativeLayout>

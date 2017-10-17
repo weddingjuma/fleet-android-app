@@ -1,37 +1,34 @@
 package mapotempo.com.mapotempo_fleet_android;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.content.res.Configuration;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.ListView;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 
-import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
 
 import java.util.ArrayList;
 
-import mapotempo.com.mapotempo_fleet_android.mission.MissionFragment;
-import mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment;
-import mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment;
+import mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment;
+import mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment;
 import mapotempo.com.mapotempo_fleet_android.other.DrawerOnClickListener;
 import mapotempo.com.mapotempo_fleet_android.utils.DrawerListAdapter;
 import mapotempo.com.mapotempo_fleet_android.utils.ListItemCustom;
 
-public class MainActivity extends AppCompatActivity implements MissionsFragment.OnMissionsInteractionListener,
-                                                               MissionDetailsFragment.OnFragmentInteractionListener,
-                                                               MissionFragment.ContainerFragmentMission,
-                                                               LocationListener {
+public class MainActivity extends AppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
+        MissionsPagerFragment.OnMissionFocusListener,
+        LocationListener {
 
     private DrawerLayout mDrawerLayout;
 
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
 
     private void customerDrawerList() {
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        ListItemCustom[] drawerElements = new ListItemCustom[] {
+        ListItemCustom[] drawerElements = new ListItemCustom[]{
                 new ListItemCustom(R.drawable.ic_login_icon_24dp, "Connection", getResources().getColor(R.color.colorDeepBlue)),
                 new ListItemCustom(R.drawable.ic_about_black_24dp, "About", getResources().getColor(R.color.colorOrange)),
         };
@@ -83,23 +80,10 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     }
 
     @Override
-    public View.OnClickListener onListMissionsInteraction(final int position) {
-        View.OnClickListener onClick = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    MissionFragment fragment = (MissionFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-                    fragment.setCurrentItem(position);
-                } else {
-                    Intent intent = new Intent(v.getContext(), MissionActivity.class);
-                    intent.putExtra("mission_id", position);
-
-                    v.getContext().startActivity(intent);
-                }
-            }
-        };
-
-        return onClick;
+    @SuppressWarnings("MissingPermission")
+    protected void onStart() {
+        super.onStart();
+        LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
     }
 
     @Override
@@ -108,41 +92,39 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
         if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawers();
         }
+        refreshMissionListFragment();
+        refreshMissionsPagerFragment();
     }
 
     @Override
-    @SuppressWarnings("MissingPermission")
-    protected void onStart() {
-        super.onStart();
-        LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-        if (locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-            Log.i("GPS_PROVIDER", "OKKKKKKKKKK");
-        else
-            Log.i("GPS_PROVIDER", "FAIIIIIIIIIL");
-
-//        locMngr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    public void onMissionFocus(int position) {
+        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+        if (missionsListFragment != null)
+            missionsListFragment.setCurrentMission(position);
     }
 
     @Override
-    public void onSingleMissionInteraction(MissionInterface mission) {
-        MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
-        MissionFragment fragment = (MissionFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-
-        if (missionsFragment != null)
-            missionsFragment.recyclerView.getAdapter().notifyDataSetChanged();
-
-        if (fragment != null)
-            fragment.notifyDataChange();
+    public void onMissionSelected(final int position) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            MissionsPagerFragment fragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+            fragment.setCurrentItem(position);
+        } else {
+            Intent intent = new Intent(this, MissionActivity.class);
+            intent.putExtra("mission_id", position);
+            startActivity(intent);
+        }
     }
 
-    @Override
-    public int wichViewIsTheCurrent(int position) {
-        MissionsFragment missionsFragment = (MissionsFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+    private void refreshMissionListFragment() {
+        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+        if (missionsListFragment != null && missionsListFragment.isVisible())
+            missionsListFragment.recyclerView.getAdapter().notifyDataSetChanged();
+    }
 
-        if (missionsFragment != null)
-            missionsFragment.setCurrentMission(position);
-
-        return position;
+    private void refreshMissionsPagerFragment() {
+        MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+        if (missionsPagerFragment != null && missionsPagerFragment.isVisible())
+            missionsPagerFragment.notifyDataChange();
     }
 
     // ###################################
@@ -153,8 +135,7 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
     @Override
-    public void onLocationChanged(Location location)
-    {/*
+    public void onLocationChanged(Location location) {/*
         Log.i("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
         MapotempoApplication app = (MapotempoApplication) getApplicationContext();
         CurrentLocationInterface cl = app.getManager().getCurrentLocation();
@@ -207,21 +188,18 @@ public class MainActivity extends AppCompatActivity implements MissionsFragment.
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle)
-    {
+    public void onStatusChanged(String s, int i, Bundle bundle) {
         Log.i("onStatusChanged", s);
 
     }
 
     @Override
-    public void onProviderEnabled(String s)
-    {
+    public void onProviderEnabled(String s) {
         Log.i("onProviderEnabled", s);
     }
 
     @Override
-    public void onProviderDisabled(String s)
-    {
+    public void onProviderDisabled(String s) {
         Log.i("onProviderDisabled", s);
     }
 }

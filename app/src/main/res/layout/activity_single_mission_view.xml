@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="mapotempo.com.mapotempo_fleet_android.MissionActivity">
 
-    <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"
+    <fragment
+        class="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment"
         android:id="@+id/base_fragment"
         app:ViewStyle="SCROLLVIEW"
         android:layout_width="match_parent"

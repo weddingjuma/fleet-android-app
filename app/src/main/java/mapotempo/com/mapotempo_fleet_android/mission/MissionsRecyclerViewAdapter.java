@@ -1,14 +1,14 @@
 package mapotempo.com.mapotempo_fleet_android.mission;
 
-import android.content.res.Configuration;
-import android.support.v7.widget.RecyclerView;
-import android.widget.RelativeLayout;
-import android.view.LayoutInflater;
 import android.content.Context;
-import android.widget.TextView;
+import android.content.res.Configuration;
 import android.graphics.Color;
-import android.view.ViewGroup;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.core.model.Mission;
@@ -17,16 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mapotempo.com.mapotempo_fleet_android.R;
-import mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment.OnMissionsInteractionListener;
+import mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment.OnMissionSelectedListener;
 import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Mission} and makes a call to the
- * specified {@link MissionsFragment.OnMissionsInteractionListener}.
+ * specified {@link OnMissionSelectedListener}.
  */
 public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
 
-    private OnMissionsInteractionListener mListener;
+    private MissionsListFragment.OnMissionSelectedListener mListener;
     private Context mContext;
     private List<View> mListViews = new ArrayList<>();
     private boolean orientLandscape;
@@ -36,7 +36,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     private int mCurrentPositionInView = 0;
 
-    public MissionsRecyclerViewAdapter(Context context, OnMissionsInteractionListener listener, List<MissionInterface> missions) {
+    public MissionsRecyclerViewAdapter(Context context, OnMissionSelectedListener listener, List<MissionInterface> missions) {
         mMissions = missions;
         missionsCount = missions.size();
         mContext = context;
@@ -63,7 +63,12 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
         holder.mDelivery_date.setText(missionDate);
         holder.mDelivery_hour.setText(missionHour);
         holder.mStatus.setBackgroundColor(Color.parseColor("#" + mission.getStatus().getColor()));
-        holder.mView.setOnClickListener(mListener.onListMissionsInteraction(position));
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onMissionSelected(position);
+            }
+        });
 
         mListViews.add(holder.mView);
 
@@ -105,13 +110,13 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public MissionInterface mItem;
-        public final View mView;
-        public final TextView mName;
-        public final TextView mCompany;
-        public final RelativeLayout mStatus;
-        public final TextView mDelivery_hour;
-        public final TextView mDelivery_date;
+        MissionInterface mItem;
+        final View mView;
+        final TextView mName;
+        final TextView mCompany;
+        final RelativeLayout mStatus;
+        final TextView mDelivery_hour;
+        final TextView mDelivery_date;
 
         public ViewHolder(View view) {
             super(view);

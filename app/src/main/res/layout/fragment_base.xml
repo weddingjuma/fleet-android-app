@@ -2,15 +2,15 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment">
+             tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment">
 
-    <LinearLayout
-        android:id="@+id/mission_view_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+  <LinearLayout
+      android:id="@+id/mission_view_content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
 
-    </LinearLayout>
+  </LinearLayout>
 
-    <include layout="@layout/nav_menu_missions_slide" />
+  <include layout="@layout/nav_menu_missions_slide"/>
 </FrameLayout>

@@ -1,15 +1,15 @@
 package mapotempo.com.mapotempo_fleet_android.mission;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.content.Context;
-import android.view.ViewGroup;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
@@ -30,20 +30,20 @@ import mapotempo.com.mapotempo_fleet_android.R;
  * <li>The delivery date</li>
  * <li>The delivery hour</li>
  * </ul>
- *
- * <h3>Integration</h3>
- * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionFragment"} </code>
  * <p>
- * This fragment require the implementation of {@link OnMissionsInteractionListener} directly in the Activity that hold the List Fragment.
- * Then Override the {@link OnMissionsInteractionListener#onListMissionsInteraction(int)}
- * which force to return an Android's click Listener. If you don't know about Event Listeners please check the documentation here : <a href="https://developer.android.com/reference/android/view/View.OnClickListener.html" target="_blank">Android Listener</a> <br>
- * Feel free to put any logic inside the listener. Keep in mind that the position returned can be used to get the detailed view of the mission triggered by a click.
+ * <h3>Integration</h3>
+ * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment"} </code>
+ * <p>
+ * This fragment require the implementation of {@link OnMissionSelectedListener} directly in the Activity that hold the List Fragment.
+ * Then Override the {@link OnMissionSelectedListener#onMissionSelected(int)}
+ * which force to return an Android's onMissionFocus Listener. If you don't know about Event Listeners please check the documentation here : <a href="https://developer.android.com/reference/android/view/View.OnClickListener.html" target="_blank">Android Listener</a> <br>
+ * Feel free to put any logic inside the listener. Keep in mind that the position returned can be used to get the detailed view of the mission triggered by a onMissionFocus.
  * </p>
- *
+ * <p>
  * <b>Here is an example of usability: </b>
  * <pre>
  *     {@literal @Override}
- *     public View.OnClickListener onListMissionsInteraction(final int position) {
+ *     public View.OnClickListener onMissionSelected(final int position) {
  *         View.OnClickListener onClick = new View.OnClickListener() {
  *             {@literal @Override}
  *             public void onClick(View v) {
@@ -56,9 +56,9 @@ import mapotempo.com.mapotempo_fleet_android.R;
  *    }
  * </pre>
  */
-public class MissionsFragment extends Fragment {
+public class MissionsListFragment extends Fragment {
 
-    private OnMissionsInteractionListener mListener;
+    private OnMissionSelectedListener mListener;
     private MapotempoFleetManagerInterface mManager;
     private MissionsRecyclerViewAdapter mRecycler;
     private MissionAccessInterface iMissionAccess;
@@ -72,7 +72,7 @@ public class MissionsFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    MissionFragment singleFragment = (MissionFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
+                    MissionsPagerFragment singleFragment = (MissionsPagerFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
 
                     mRecycler.notifyDataSyncHasChanged(missions);
 
@@ -88,10 +88,10 @@ public class MissionsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnMissionsInteractionListener) {
-            mListener = (OnMissionsInteractionListener) context;
+        if (context instanceof OnMissionSelectedListener) {
+            mListener = (OnMissionSelectedListener) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement OnMissionsInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnMissionSelectedListener");
         }
     }
 
@@ -108,77 +108,25 @@ public class MissionsFragment extends Fragment {
         mAddButton = view.findViewById(R.id.add_mission);
 
         if (recyclerView instanceof RecyclerView) {
-
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
             }
 
-            mRecycler = new MissionsRecyclerViewAdapter(getContext(), mListener, mMissions);
+            mRecycler = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener() {
+                @Override
+                public void onMissionSelected(int position) {
+                    mListener.onMissionSelected(position);
+                }
+            }, mMissions);
             recyclerView.setAdapter(mRecycler);
         }
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                //TO NOTHING FOR THE MOMENT
-                /*
-                MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
-                TrackAccessInterface ta = app.getManager().getTrackAccess();
-                List<TrackInterface> lta = ta.getAll();
-                Collections.sort(lta, new Comparator<TrackInterface>() {
-                    @Override
-                    public int compare(TrackInterface trackInterface, TrackInterface t1)
-                    {
-                        Long compare = trackInterface.getDate().getTime() - t1.getDate().getTime();
-                        return compare.intValue();
-                    }
-                });
-                TrackInterface ti = ta.getNew();
-                ArrayList<LocationDetailsInterface> meguaLocationPool = new ArrayList<LocationDetailsInterface>();
-                for(TrackInterface t : lta) {
-                    List<LocationDetailsInterface> lld = t.getLocations();
-                    Location  loc1 = null;
-                    Location  loc2 = null;
-                    for(LocationDetailsInterface ld : lld) {
-                        LocationDetailsInterface new_ld = app.getManager().getSubmodelFactory().CreateNewLocationDetails(ld.getLat(), ld.getLon(),
-                            new Date(),
-                            0, 0, 0, 0, 0, "xx", "xx", "xx", "xx");
-                            meguaLocationPool.add(new_ld);
-
-                        if(loc1 != null)
-                        {
-                            loc2 = new Location("");
-                            loc2.setLatitude(new_ld.getLat());
-                            loc2.setLongitude(new_ld.getLon());
-                            float distanceInMeters = loc1.distanceTo(loc2);
-                            if(distanceInMeters < 400) {
-                                meguaLocationPool.add(new_ld);
-                                loc1 = loc2;
-                            }
-                        }
-                        else {
-                            meguaLocationPool.add(new_ld);
-                            loc1 = new Location("");
-                            loc1.setLatitude(new_ld.getLat());
-                            loc1.setLongitude(new_ld.getLon());
-                        }
-                    }
-                }
-
-                for(LocationDetailsInterface ld : meguaLocationPool) {
-                    Log.i("Track -> ", "(lat : " +  Double.toString(ld.getLat()) + "; lon : " + Double.toString(ld.getLon()) + ") date : " + ld.getDate()
-                        .getTime());
-                }
-
-
-                ti.setLocations(meguaLocationPool);
-                ti.setCompanyId("company_mapotempo");
-                ti.setOwnerId("static");
-                ti.setDate(new Date());
-                ti.save();*/
+            public void onClick(View view) {
+                // TODO
             }
         });
         return view;
@@ -211,7 +159,7 @@ public class MissionsFragment extends Fragment {
         mRecycler = null;
     }
 
-    public void setCurrentMission (int position) {
+    public void setCurrentMission(int position) {
         if (mRecycler != null)
             mRecycler.setCurrentMission(position);
     }
@@ -233,14 +181,15 @@ public class MissionsFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain {@link MissionsFragment}
+     * This interface must be implemented by activities that contain {@link MissionsListFragment}
      */
-    public interface OnMissionsInteractionListener {
+    public interface OnMissionSelectedListener {
         /**
-         * A Callback triggered when an item list is created. Use it to set a click listener to each of them.
+         * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
+         *
          * @param position return the item list position
          * @return View.OnClickListener
          */
-        View.OnClickListener onListMissionsInteraction(int position);
+        void onMissionSelected(int position);
     }
 }

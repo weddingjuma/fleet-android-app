@@ -7,55 +7,57 @@
                                         android:layout_height="match_parent"
                                         tools:context="mapotempo.com.mapotempo_fleet_android.MainActivity">
 
-    <FrameLayout
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/colorGrey"
+          android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorGrey"
-                android:orientation="vertical">
+          <android.support.v7.widget.Toolbar
+              android:id="@+id/toolbar"
+              android:layout_width="match_parent"
+              android:layout_height="?attr/actionBarSize"
+              android:background="?attr/colorPrimary"
+              app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-                <android.support.design.widget.AppBarLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/AppTheme.AppBarOverlay">
+        </android.support.design.widget.AppBarLayout>
 
-                    <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="?attr/colorPrimary"
-                        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <fragment
+            class="mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment"
+            android:id="@+id/listMission"
+            android:layout_marginTop="@dimen/content_margin"
+            android:layout_marginLeft="@dimen/content_margin"
+            android:layout_marginRight="@dimen/content_margin"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
 
-                </android.support.design.widget.AppBarLayout>
+      </LinearLayout>
+    </RelativeLayout>
+  </FrameLayout>
 
-                <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsFragment"
-                          android:id="@+id/listMission"
-                          android:layout_marginTop="@dimen/content_margin"
-                          android:layout_marginLeft="@dimen/content_margin"
-                          android:layout_marginRight="@dimen/content_margin"
-                          android:layout_height="match_parent"
-                          android:layout_width="match_parent" />
-
-            </LinearLayout>
-        </RelativeLayout>
-    </FrameLayout>
-
-    <!-- The navigation drawer -->
-    <ListView android:id="@+id/left_drawer"
-              android:layout_width="280dp"
-              android:layout_height="match_parent"
-              android:layout_gravity="start"
-              android:choiceMode="singleChoice"
-              android:divider="@android:color/transparent"
-              android:dividerHeight="0dp"
-              android:background="@color/colorWhite"/>
+  <!-- The navigation drawer -->
+  <ListView
+      android:id="@+id/left_drawer"
+      android:layout_width="280dp"
+      android:layout_height="match_parent"
+      android:layout_gravity="start"
+      android:choiceMode="singleChoice"
+      android:divider="@android:color/transparent"
+      android:dividerHeight="0dp"
+      android:background="@color/colorWhite"/>
 
 
 </android.support.v4.widget.DrawerLayout>
