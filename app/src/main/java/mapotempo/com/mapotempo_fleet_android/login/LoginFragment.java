@@ -35,7 +35,6 @@ import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
  * <li>Mission Status</li>
  * <li>Company</li>
  * </ul>
- *
  * <b>Integration</b>
  * <p>
  * <p>As a Fragment you must implement it in your XML file through the following line of code :
@@ -43,14 +42,11 @@ import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
  * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.login.LoginFragment" />}
  * </code>
  * </p>
- *
  * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
- *
  * You will have to implement the {@link OnLoginFragmentImplementation#onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, TimerTask, String[], MapotempoFleetManagerInterface)}which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
- *
+ * <p>
  * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
  * </p>
- *
  * </b>Example:</b>
  * <pre>
  * public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs) {
@@ -76,8 +72,6 @@ import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
  */
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
-     // private String dataBaseUrl = "http://192.168.1.108:4984/db";
-    private String dataBaseUrl = "http://192.168.1.135:4984/db";
 
     private String mLogin = null;
     private String mPassword = null;
@@ -89,7 +83,7 @@ public class LoginFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
         addButtonSubmit(view);
         return view;
     }
@@ -167,7 +161,7 @@ public class LoginFragment extends Fragment {
                         String[] logs = null;
 
                         if (checkbox.isChecked())
-                            logs = new String[] { mLogin, mPassword };
+                            logs = new String[]{mLogin, mPassword};
 
                         mListener.onLoginFragmentImplementation(status, timerTask, logs, manager);
                     }
@@ -179,12 +173,14 @@ public class LoginFragment extends Fragment {
         final Timer timer = new Timer();
         timer.schedule(timerTask, 5000);
 
-        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()),  mLogin, mPassword, onUserAvailable, dataBaseUrl);
+        String dataBaseUrl = getResources().getString(R.string.syncgateway_url);
+        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()), mLogin, mPassword, onUserAvailable, dataBaseUrl);
         hideCurrentKeyboard();
     }
 
     /**
      * Toggle the login form view.
+     *
      * @param active True: start spinner and kill form.
      */
     public void toogleLogginView(boolean active) {
