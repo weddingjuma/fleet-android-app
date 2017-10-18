@@ -25,8 +25,8 @@ import android.widget.TextView;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MapotempoModelBaseInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
-import com.mapotempo.fleet.api.model.submodel.MissionCommandInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,15 +238,16 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     private void setOnClickListenersForStatus(final AlertDialog alert, View view) {
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
         MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
-        List<MissionCommandInterface> missionStatusTypes = mMission.getStatus().getCommands();
-        ArrayList<MissionsStatusGeneric<LinearLayout, MissionCommandInterface>> viewListStatus = buildViewFor(missionStatusTypes, view);
+        List<MissionStatusActionInterface> missionStatusTypes = manager.getMissionStatusActionAccessInterface().getByPrevious(mMission.getStatus());
+        ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> viewListStatus = buildViewFor(missionStatusTypes, view);
 
         if (viewListStatus != null && viewListStatus.size() > 0) {
-            for (final MissionsStatusGeneric<LinearLayout, MissionCommandInterface> status : viewListStatus) {
+            for (final MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface> status : viewListStatus) {
                 status.getView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mMission.setStatus(status.getType().getMissionStatusType());
+                        // TODO
+                        mMission.setStatus(status.getType().getNextStatus());
                         mMission.save();
                         fillViewFromActivity();
 
@@ -257,19 +258,19 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         }
     }
 
-    private ArrayList<MissionsStatusGeneric<LinearLayout, MissionCommandInterface>> buildViewFor(List<MissionCommandInterface> missionStatusTypes, View view) {
-        ArrayList<MissionsStatusGeneric<LinearLayout, MissionCommandInterface>> statusViews = new ArrayList<>();
+    private ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> buildViewFor(List<MissionStatusActionInterface> missionStatusActions, View view) {
+        ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> statusViews = new ArrayList<>();
 
-        for (MissionCommandInterface missionStatusType : missionStatusTypes) {
+        for (MissionStatusActionInterface missionStatusType : missionStatusActions) {
             LinearLayout newLayout = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.single_status, null);
             LinearLayout layoutContainer = view.findViewById(R.id.status_container);
             TextView textViewLabel = newLayout.findViewById(R.id.status_label);
             ImageView imageViewIcon = newLayout.findViewById(R.id.icon);
-            MissionsStatusGeneric<LinearLayout, MissionCommandInterface> missionsStatusGeneric;
+            MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface> missionsStatusGeneric;
 
             String icon = null;
             String label = missionStatusType.getLabel();
-            String color = missionStatusType.getMissionStatusType().getColor();
+            String color = missionStatusType.getNextStatus().getColor();
 
             textViewLabel.setText(label);
             imageViewIcon.setColorFilter(Color.parseColor("#" + color));
