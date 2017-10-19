@@ -81,15 +81,14 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final MissionInterface mission, final boolean delete) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!delete) {
+            if (!delete)
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         mMission = mission;
                         fillViewFromActivity();
                     }
-                }
-            });
+                });
         }
     };
 

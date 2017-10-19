@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 
-import java.util.Date;
 import java.util.List;
 
 import mapotempo.com.mapotempo_fleet_android.R;
@@ -98,7 +97,6 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
         }
 
         void setMission(MissionInterface mission, final int position) {
-            Date d = mission.getDate();
             String missionDate = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.SHORTDATE);
             String missionHour = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES);
             mItem = mission;
