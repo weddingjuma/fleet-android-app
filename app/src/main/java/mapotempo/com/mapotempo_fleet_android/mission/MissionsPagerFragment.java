@@ -51,7 +51,7 @@ import mapotempo.com.mapotempo_fleet_android.R;
  *      MissionsListFragment missionsFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
  *
  *      if (missionsFragment != null)
- *      missionsFragment.setCurrentMission(position);
+ *      missionsFragment.setMissionFocus(position);
  *
  *      return position;
  *  }
@@ -63,15 +63,15 @@ public class MissionsPagerFragment extends Fragment {
     private OnMissionFocusListener mListener;
 
     public MissionsPagerFragment() {
-        System.out.print("tg");
     }
+
+    // ===================================
+    // ==  Android Fragment Life cycle  ==
+    // ===================================
 
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(context, attrs, savedInstanceState);
-        //        TypedArray attrCustom = context.obtainStyledAttributes(attrs, R.styleable.MissionsPagerFragment);
-        //        Integer v = attrCustom.getInteger(R.styleable.MissionPagerFragment_ViewStyle, 1);
-        //        mViewStyle = ViewStyle.fromInt(v);
     }
 
     @Override
@@ -112,6 +112,39 @@ public class MissionsPagerFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    // ==============
+    // ==  Public  ==
+    // ==============
+
+    public void notifyDataChange() {
+        mPagerAdapter.notifyDataSetChanged();
+    }
+
+    public void refreshPagerData(List<MissionInterface> missions) {
+        MissionPagerAdapter missionPagerAdapter = (MissionPagerAdapter) mPagerAdapter;
+
+        if (missionPagerAdapter != null)
+            missionPagerAdapter.updateMissions(missions);
+    }
+
+    public void setCurrentItem(int position) {
+        mViewPager.setCurrentItem(position, true);
+    }
+
+    public interface OnMissionFocusListener {
+        void onMissionFocus(int page);
+    }
+
+    // ===============
+    // ==  Private  ==
+    // ===============
+
     private void setPagerChangeListener() {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -136,27 +169,6 @@ public class MissionsPagerFragment extends Fragment {
                 mViewPager.setCurrentItem(position);
             }
         });
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public void notifyDataChange() {
-        mPagerAdapter.notifyDataSetChanged();
-    }
-
-    public void refreshPagerData(List<MissionInterface> missions) {
-        MissionPagerAdapter missionPagerAdapter = (MissionPagerAdapter) mPagerAdapter;
-
-        if (missionPagerAdapter != null)
-            missionPagerAdapter.updateMissions(missions);
-    }
-
-    public void setCurrentItem(int position) {
-        mViewPager.setCurrentItem(position, true);
     }
 
     private void setNextAndPreviousVisibility(View view) {
@@ -197,9 +209,5 @@ public class MissionsPagerFragment extends Fragment {
         } else {
             throw new RuntimeException("Button aren't settled in view");
         }
-    }
-
-    public interface OnMissionFocusListener {
-        void onMissionFocus(int page);
     }
 }

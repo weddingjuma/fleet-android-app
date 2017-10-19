@@ -2,16 +2,14 @@ package mapotempo.com.mapotempo_fleet_android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 
 import java.util.Date;
 import java.util.TimerTask;
 
-import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
-import mapotempo.com.mapotempo_fleet_android.R;
 import mapotempo.com.mapotempo_fleet_android.login.LoginFragment;
 import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
 import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
@@ -22,9 +20,16 @@ import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
 public class LoginActivity extends AppCompatActivity implements LoginFragment.OnLoginFragmentImplementation, ConnectionManager.OnConnectionSetup {
 
     private static final String sharedBaseName = "Mapotempo";
+
     private static final String userLoginKey = "UserLogin";
+
     private static final String userPasswordKey = "UserPassword";
+
     private static final String userDateKey = "UserDate";
+
+    // ===================================
+    // ==  Android Activity Life cycle  ==
+    // ===================================
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +37,31 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         setContentView(R.layout.activity_login);
     }
 
+    // =====================================================
+    // ==  ConnectionManager.OnConnectionSetup Interface  ==
+    // =====================================================
+
+    @Override
+    public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
+        onBackPressed();
+        finish();
+    }
+
+    @Override
+    public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
+        onBackPressed();
+        finish();
+    }
+
+    // =============================================================
+    // ==  LoginFragment.OnLoginFragmentImplementation Interface  ==
+    // =============================================================
+
     /**
      * An interface which is trigger when the connection has been processed.
+     *
      * @param status The current status of connection
-     * @param task A task which is in charge to stop the timer if no connection has been established.
+     * @param task   A task which is in charge to stop the timer if no connection has been established.
      */
     @Override
     public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs, MapotempoFleetManagerInterface manager) {
@@ -60,6 +86,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         }
     }
 
+    // ===============
+    // ==  Private  ==
+    // ===============
+
     private void keepTraceOfConnectionLogsData(String[] logs) {
         SharedPreferences sharedPreferences = getSharedPreferences(sharedBaseName, 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -67,18 +97,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         editor.putString(userPasswordKey, logs[1]);
         editor.putString(userDateKey, (new Date()).toString());
         editor.apply(); // Apply is async, while commit isn't.
-    }
-
-    @Override
-    public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
-        onBackPressed();
-        finish();
-    }
-
-    @Override
-    public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
-        onBackPressed();
-        finish();
     }
 }
 

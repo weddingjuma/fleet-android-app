@@ -60,12 +60,11 @@ public class MissionsListFragment extends Fragment {
 
     private OnMissionSelectedListener mListener;
     private MapotempoFleetManagerInterface mManager;
-    private MissionsRecyclerViewAdapter mRecycler;
+    private MissionsRecyclerViewAdapter mRecyclerAdapter;
     private MissionAccessInterface iMissionAccess;
     private List<MissionInterface> mMissions = new ArrayList<>();
     private int mColumnCount = 1;
     private FloatingActionButton mAddButton;
-
     private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final List<MissionInterface> missions) {
@@ -73,9 +72,7 @@ public class MissionsListFragment extends Fragment {
                 @Override
                 public void run() {
                     MissionsPagerFragment singleFragment = (MissionsPagerFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
-
-                    mRecycler.notifyDataSyncHasChanged(missions);
-
+                    mRecyclerAdapter.notifyDataSyncHasChanged(missions);
                     if (singleFragment != null)
                         singleFragment.refreshPagerData(missions);
                 }
@@ -83,7 +80,11 @@ public class MissionsListFragment extends Fragment {
         }
     };
 
-    public RecyclerView recyclerView;
+    public RecyclerView mRecyclerView;
+
+    // ===================================
+    // ==  Android Fragment Life cycle  ==
+    // ===================================
 
     @Override
     public void onAttach(Context context) {
@@ -104,23 +105,23 @@ public class MissionsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_missions_list, container, false);
-        recyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
         mAddButton = view.findViewById(R.id.add_mission);
 
-        if (recyclerView instanceof RecyclerView) {
+        if (mRecyclerView instanceof RecyclerView) {
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
             }
 
-            mRecycler = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener() {
+            mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener() {
                 @Override
                 public void onMissionSelected(int position) {
                     mListener.onMissionSelected(position);
                 }
             }, mMissions);
-            recyclerView.setAdapter(mRecycler);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +147,7 @@ public class MissionsListFragment extends Fragment {
 
         MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
         if (app.getManager() != null) {
-            mRecycler.notifyDataSyncHasChanged(app.getManager().getMissionAccess().getAll());
+            mRecyclerAdapter.notifyDataSyncHasChanged(app.getManager().getMissionAccess().getAll());
             if (iMissionAccess != null)
                 iMissionAccess.removeChangeListener(missionChangeListener);
             setManagerAndMissions();
@@ -156,13 +157,35 @@ public class MissionsListFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mRecycler = null;
+        mRecyclerAdapter = null;
     }
 
+    // ==============
+    // ==  Public  ==
+    // ==============
+
     public void setCurrentMission(int position) {
-        if (mRecycler != null)
-            mRecycler.setCurrentMission(position);
+        mRecyclerView.smoothScrollToPosition(position);
+        if (mRecyclerAdapter != null)
+            mRecyclerAdapter.setMissionFocus(position);
     }
+
+    /**
+     * This interface must be implemented by activities that contain {@link MissionsListFragment}
+     */
+    public interface OnMissionSelectedListener {
+        /**
+         * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
+         *
+         * @param position return the item list position
+         * @return View.OnClickListener
+         */
+        void onMissionSelected(int position);
+    }
+
+    // ===============
+    // ==  Private  ==
+    // ===============
 
     private void setManagerAndMissions() {
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getContext().getApplicationContext();
@@ -178,18 +201,5 @@ public class MissionsListFragment extends Fragment {
 
     private void attachCallBack(MissionAccessInterface iMissionAccess) {
         iMissionAccess.addChangeListener(missionChangeListener);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain {@link MissionsListFragment}
-     */
-    public interface OnMissionSelectedListener {
-        /**
-         * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
-         *
-         * @param position return the item list position
-         * @return View.OnClickListener
-         */
-        void onMissionSelected(int position);
     }
 }

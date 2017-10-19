@@ -81,12 +81,9 @@ public class LoginFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        addButtonSubmit(view);
-        return view;
-    }
+    // ===================================
+    // ==  Android Fragment Life cycle  ==
+    // ===================================
 
     @Override
     public void onAttach(Context context) {
@@ -99,10 +96,57 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        addButtonSubmit(view);
+        return view;
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+
+    // ==============
+    // ==  Public  ==
+    // ==============
+
+    /**
+     * Toggle the login form view.
+     *
+     * @param active True: start spinner and kill form.
+     */
+    public void toogleLogginView(boolean active) {
+        final ProgressBar spinner = getActivity().findViewById(R.id.login_progress);
+        final LinearLayout form = getActivity().findViewById(R.id.from_login_container);
+        final TextView textProgress = getActivity().findViewById(R.id.login_text_progress);
+
+        if (active) {
+            textProgress.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.VISIBLE);
+            form.setVisibility(View.INVISIBLE);
+        } else {
+            textProgress.setVisibility(View.GONE);
+            spinner.setVisibility(View.GONE);
+            form.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public interface OnLoginFragmentImplementation {
+        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins,
+                                           MapotempoFleetManagerInterface manager);
+    }
+
+    public class InvalidLoginException extends Exception {
+        public InvalidLoginException(String message) {
+            super(message);
+        }
+    }
+
+    // ===============
+    // ==  Private  ==
+    // ===============
 
     private void addButtonSubmit(View view) {
         final EditText mPasswordView = view.findViewById(R.id.password);
@@ -179,27 +223,6 @@ public class LoginFragment extends Fragment {
     }
 
     /**
-     * Toggle the login form view.
-     *
-     * @param active True: start spinner and kill form.
-     */
-    public void toogleLogginView(boolean active) {
-        final ProgressBar spinner = getActivity().findViewById(R.id.login_progress);
-        final LinearLayout form = getActivity().findViewById(R.id.from_login_container);
-        final TextView textProgress = getActivity().findViewById(R.id.login_text_progress);
-
-        if (active) {
-            textProgress.setVisibility(View.VISIBLE);
-            spinner.setVisibility(View.VISIBLE);
-            form.setVisibility(View.INVISIBLE);
-        } else {
-            textProgress.setVisibility(View.GONE);
-            spinner.setVisibility(View.GONE);
-            form.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
      * Private method called when the virtual android keyboard needs to be hidden.
      */
     private void hideCurrentKeyboard() {
@@ -214,17 +237,6 @@ public class LoginFragment extends Fragment {
     private void loginValid(String login, String password) throws InvalidLoginException {
         if ((login == null || password == null) || (login.isEmpty() || password.isEmpty())) {
             throw new InvalidLoginException("Connection login invalid");
-        }
-    }
-
-    public interface OnLoginFragmentImplementation {
-        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins,
-                                           MapotempoFleetManagerInterface manager);
-    }
-
-    public class InvalidLoginException extends Exception {
-        public InvalidLoginException(String message) {
-            super(message);
         }
     }
 }

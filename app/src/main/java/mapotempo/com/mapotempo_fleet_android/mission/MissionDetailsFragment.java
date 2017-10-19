@@ -63,7 +63,7 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
  *      MissionsListFragment missionsFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
  *
  *      if (missionsFragment != null)
- *      missionsFragment.recyclerView.getAdapter().notifyDataSetChanged();
+ *      missionsFragment.mRecyclerView.getAdapter().notifyDataSetChanged();
  *
  *      Do here whatever you need with the MissionInterface object
  * }
@@ -72,8 +72,12 @@ import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
  */
 
 public class MissionDetailsFragment extends Fragment implements View.OnClickListener {
-    //private OnFragmentInteractionListener mInteraction;
+
+    public MissionDetailsFragment() {
+    }
+
     private MissionInterface mMission;
+
     private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final MissionInterface mission, final boolean delete) {
@@ -89,18 +93,13 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         }
     };
 
-    public MissionDetailsFragment() {
-    }
+    // ===================================
+    // ==  Android Fragment Life cycle  ==
+    // ===================================
 
-    public static MissionDetailsFragment create(int pageNumber, MissionInterface mission) {
-        MissionDetailsFragment fragment = new MissionDetailsFragment();
-        Bundle args = new Bundle();
-
-        args.putInt("page", pageNumber);
-        fragment.setArguments(args);
-        fragment.setMission(mission);
-
-        return fragment;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     @Override
@@ -116,15 +115,9 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-/*
-        if (context instanceof OnFragmentInteractionListener) {
-            mInteraction = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement BaseFragmentForSingleView");
-        }
-*/
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        fillViewFromActivity();
     }
 
     @Override
@@ -138,8 +131,6 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     @Override
     public void onDetach() {
         super.onDetach();
-        //mInteraction = null;
-
     }
 
     @Override
@@ -147,10 +138,63 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         super.onDestroy();
     }
 
+    // ======================================
+    // ==  View.OnClickListener Interface  ==
+    // ======================================
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        fillViewFromActivity();
+    public void onClick(View view) {
+        switch (view.getId()) {
+            //            case R.id.updateBtn:
+            //                updateCurrentMission();
+            //                break;
+            case R.id.delete:
+                initDeletionForCurrentMission();
+                break;
+            case R.id.statusBtn:
+                changeStatusForCurrentMission();
+                break;
+            case R.id.go_to_location:
+                fakeUriLocation();
+                break;
+        }
+    }
+
+    // ==============
+    // ==  Public  ==
+    // ==============
+
+    public void setOnClickListenersForDeletion(View view, final AlertDialog alert) {
+        Button valid = view.findViewById(R.id.valid);
+        Button cancel = view.findViewById(R.id.cancel);
+
+        valid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (deleteMission()) {
+                    alert.dismiss();
+                    backToListActivity(getContext());
+                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alert.dismiss();
+            }
+        });
+    }
+
+    public static MissionDetailsFragment create(int pageNumber, MissionInterface mission) {
+        MissionDetailsFragment fragment = new MissionDetailsFragment();
+        Bundle args = new Bundle();
+
+        args.putInt("page", pageNumber);
+        fragment.setArguments(args);
+        fragment.setMission(mission);
+
+        return fragment;
     }
 
     public boolean fillViewFromActivity() {
@@ -159,6 +203,33 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         }
         return true;
     }
+
+    public void setMission(MissionInterface mission) {
+        if (mission != null) {
+            mMission = mission;
+            mMission.addChangeListener(mCallback);
+        } else {
+            throw new RuntimeException("Mission passed to constructor must not be null");
+        }
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity
+     */
+    public interface OnFragmentInteractionListener {
+        /**
+         * Callback triggered when a modification has been done to a mission
+         *
+         * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
+         */
+        void onSingleMissionInteraction(MissionInterface mission);
+    }
+
+    // =================
+    // ==  Protected  ==
+    // =================
 
     protected void displayViewData(MissionInterface mission) {
         TextView name = getView().findViewById(R.id.name);
@@ -180,25 +251,19 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         status.setText(mission.getStatus().getLabel().toUpperCase());
     }
 
-    /*****************************
-     * BUTTONS CLICK LISTENERS
-     */
+    // ===============
+    // ==  Private  ==
+    // ===============
 
     private void setButtonsBehaviors(View view) {
-        //        Button update = view.findViewById(R.id.updateBtn);
         FloatingActionButton delete = view.findViewById(R.id.delete);
         FloatingActionButton status = view.findViewById(R.id.statusBtn);
         ImageButton location = view.findViewById(R.id.go_to_location);
 
-        //        update.setOnClickListener(this);
         delete.setOnClickListener(this);
         status.setOnClickListener(this);
         location.setOnClickListener(this);
     }
-
-    /**********************************
-     * BUTTONS OPERATIONS
-     */
 
     private void updateCurrentMission() throws RuntimeException {
         currentMissionIsNotNull();
@@ -313,72 +378,9 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
             throw new RuntimeException("Mission is already deleted or is invalid");
     }
 
-    public void setMission(MissionInterface mission) {
-        if (mission != null) {
-            mMission = mission;
-            mMission.addChangeListener(mCallback);
-        } else {
-            throw new RuntimeException("Mission passed to constructor must not be null");
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            //            case R.id.updateBtn:
-            //                updateCurrentMission();
-            //                break;
-            case R.id.delete:
-                initDeletionForCurrentMission();
-                break;
-            case R.id.statusBtn:
-                changeStatusForCurrentMission();
-                break;
-            case R.id.go_to_location:
-                fakeUriLocation();
-                break;
-        }
-    }
-
-    public void setOnClickListenersForDeletion(View view, final AlertDialog alert) {
-        Button valid = view.findViewById(R.id.valid);
-        Button cancel = view.findViewById(R.id.cancel);
-
-        valid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (deleteMission()) {
-                    alert.dismiss();
-                    backToListActivity(getContext());
-                }
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alert.dismiss();
-            }
-        });
-    }
-
     private boolean deleteMission() {
         boolean del = mMission.delete();
         mMission = null;
         return del;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity
-     */
-    public interface OnFragmentInteractionListener {
-        /**
-         * Callback triggered when a modification has been done to a mission
-         *
-         * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
-         */
-        void onSingleMissionInteraction(MissionInterface mission);
     }
 }

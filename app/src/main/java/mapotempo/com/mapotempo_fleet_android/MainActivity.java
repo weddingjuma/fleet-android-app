@@ -2,7 +2,6 @@ package mapotempo.com.mapotempo_fleet_android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
 
     private DrawerLayout mDrawerLayout;
 
+    // ===================================
+    // ==  Android Activity Life cycle  ==
+    // ===================================
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,67 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         addDrawableHandler(toolbar);
+    }
+
+    @Override
+    @SuppressWarnings("MissingPermission")
+    protected void onStart() {
+        super.onStart();
+        LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+        }
+        refreshMissionListFragment();
+        refreshMissionsPagerFragment();
+    }
+
+    // ========================================
+    // ==  OnMissionFocusListener Interface  ==
+    // ========================================
+
+    @Override
+    public void onMissionFocus(int position) {
+        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+        if (missionsListFragment != null)
+            missionsListFragment.setCurrentMission(position);
+    }
+
+    // ===========================================
+    // ==  OnMissionSelectedListener Interface  ==
+    // ===========================================
+
+    @Override
+    public void onMissionSelected(final int position) {
+        MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+        if (missionsPagerFragment != null && missionsPagerFragment.isVisible()) {
+            MissionsPagerFragment fragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+            fragment.setCurrentItem(position);
+        } else {
+            Intent intent = new Intent(this, MissionActivity.class);
+            intent.putExtra("mission_id", position);
+            startActivity(intent);
+        }
+    }
+
+    // ===============
+    // ==  Private  ==
+    // ===============
+
+    private void refreshMissionListFragment() {
+        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
+        if (missionsListFragment != null && missionsListFragment.isVisible())
+            missionsListFragment.mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    private void refreshMissionsPagerFragment() {
+        MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+        if (missionsPagerFragment != null && missionsPagerFragment.isVisible())
+            missionsPagerFragment.notifyDataChange();
     }
 
     private void addDrawableHandler(Toolbar toolbar) {
@@ -77,54 +141,6 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         mDrawerList.setAdapter(new DrawerListAdapter(this, R.layout.drawer_layout_item_row, drawerElements));
         mDrawerList.setOnItemClickListener(new DrawerOnClickListener());
         mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_layout_header, null));
-    }
-
-    @Override
-    @SuppressWarnings("MissingPermission")
-    protected void onStart() {
-        super.onStart();
-        LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawers();
-        }
-        refreshMissionListFragment();
-        refreshMissionsPagerFragment();
-    }
-
-    @Override
-    public void onMissionFocus(int position) {
-        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
-        if (missionsListFragment != null)
-            missionsListFragment.setCurrentMission(position);
-    }
-
-    @Override
-    public void onMissionSelected(final int position) {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            MissionsPagerFragment fragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-            fragment.setCurrentItem(position);
-        } else {
-            Intent intent = new Intent(this, MissionActivity.class);
-            intent.putExtra("mission_id", position);
-            startActivity(intent);
-        }
-    }
-
-    private void refreshMissionListFragment() {
-        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
-        if (missionsListFragment != null && missionsListFragment.isVisible())
-            missionsListFragment.recyclerView.getAdapter().notifyDataSetChanged();
-    }
-
-    private void refreshMissionsPagerFragment() {
-        MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-        if (missionsPagerFragment != null && missionsPagerFragment.isVisible())
-            missionsPagerFragment.notifyDataChange();
     }
 
     // ###################################
@@ -190,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
         Log.i("onStatusChanged", s);
-
     }
 
     @Override
