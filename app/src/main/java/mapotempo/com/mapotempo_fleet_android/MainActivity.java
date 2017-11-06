@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -18,6 +20,7 @@ import android.widget.ListView;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment;
 import mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment;
@@ -51,6 +54,13 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     protected void onStart() {
         super.onStart();
         LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+        //LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+        //if (locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        if (locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            Log.i("GPS_PROVIDER", "OKKKKKKKKKK");
+        else
+            Log.i("GPS_PROVIDER", "FAIIIIIIIIIL");
+        locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
     }
 
     @Override
@@ -151,56 +161,50 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
     @Override
-    public void onLocationChanged(Location location) {/*
-        Log.i("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
+    @SuppressWarnings("MissingPermission")
+    public void onLocationChanged(Location location) {
+        Log.d("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
         MapotempoApplication app = (MapotempoApplication) getApplicationContext();
-        CurrentLocationInterface cl = app.getManager().getCurrentLocation();
-        if(cl != null) {
-            Log.i("onLocationChanged", "up mapotempo");
-            TelephonyManager telephonyManager = (TelephonyManager)(getSystemService((Context.TELEPHONY_SERVICE)));
-            GsmCellLocation gl =  (GsmCellLocation) telephonyManager.getCellLocation();
-            String networkOperator =  telephonyManager.getNetworkOperator();
+        if (app.getManager() != null) {
+            Integer cid = -1;
+            Integer lac = -1;
+            Integer mcc = -1;
+            Integer mnc = -1;
 
-            String cid = "cid";//Integer.toString(gl.getCid());
-            String lac = "lac";//Integer.toString(gl.getLac());
-            //Log.i("loc info", "psc : " + cl.getPsc());
-            String mcc = "mcc";//networkOperator.substring(0, 3);
-            String mnc = "mnc";//networkOperator.substring(3);
-            LocationDetailsInterface ld = app.getManager().getSubmodelFactory().CreateNewLocationDetails(location.getLatitude(), location.getLongitude(), new Date(),
-                location.getAccuracy(), location.getSpeed(), location.getBearing(), location.getAltitude(), 0, cid, lac, mcc, mnc);
-            cl.setLocation(ld);
-            cl.save();
+            Log.d("onLocationChanged", "up mapotempo");
+            TelephonyManager telephonyManager = (TelephonyManager) (getSystemService((Context.TELEPHONY_SERVICE)));
+            GsmCellLocation gl = (GsmCellLocation) telephonyManager.getCellLocation();
+            String networkOperator = telephonyManager.getNetworkOperator();
+
+            if (gl != null) {
+                cid = gl.getCid();
+                lac = gl.getLac();
+                //Log.i("loc info", "psc : " + cl.getPsc());
+            }
+            if (networkOperator != null) {
+                System.out.println(">>>>>>>>>>>" + networkOperator);
+                //mcc = Integer.parseInt(networkOperator.substring(0, 3));
+                //mnc = Integer.parseInt(networkOperator.substring(3));
+            }
+
+            LocationDetailsInterface ld = app.getManager().getSubmodelFactory().CreateNewLocationDetails(
+                    location.getLatitude(),
+                    location.getLongitude(),
+                    new Date(),
+                    location.getAccuracy(),
+                    location.getSpeed(),
+                    location.getBearing()
+                    , location.getAltitude(),
+                    0,
+                    cid,
+                    lac,
+                    mcc,
+                    mnc);
+            app.getManager().setCurrentLocationDetails(ld);
+
+            System.out.println("---------------------UP LOCATION---------------");
         }
-*/
-        /*
-        Log.i("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
-        MapotempoApplication app = (MapotempoApplication) getApplicationContext();
-        TelephonyManager telephonyManager = (TelephonyManager)(getSystemService((Context.TELEPHONY_SERVICE)));
-        GsmCellLocation cl =  (GsmCellLocation) telephonyManager.getCellLocation();
-        String networkOperator =  telephonyManager.getNetworkOperator();
 
-        String cid = Integer.toString(cl.getCid());
-        String lac = Integer.toString(cl.getLac());
-        //Log.i("loc info", "psc : " + cl.getPsc());
-        String mcc = networkOperator.substring(0, 3);
-        String mnc = networkOperator.substring(3);
-        LocationDetailsInterface ld = app.getManager().getSubmodelFactory().CreateNewLocationDetails(location.getLatitude(), location.getLongitude(), new Date(),
-            location.getAccuracy(), location.getSpeed(), location.getBearing(), location.getAltitude(), 0, cid, lac, mcc, mnc);
-        mLocationPool.add(ld);
-
-        Log.i("onLocationChanged", "" +mLocationPool.size());
-
-        if(mLocationPool.size() >= 20) {
-            Log.i("onLocationChanged", "emit");
-            TrackAccessInterface ta = app.getManager().getTrackAccess();
-            TrackInterface ti = ta.getNew();
-            ti.setLocations(mLocationPool);
-            ti.setCompanyId("company_mapotempo");
-            ti.setOwnerId("static");
-            ti.setDate(new Date());
-            ti.save();
-            mLocationPool = new ArrayList<LocationDetailsInterface>();
-        }*/
     }
 
     @Override

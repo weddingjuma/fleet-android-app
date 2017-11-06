@@ -31,7 +31,7 @@ public class MapotempoApplication extends Application {
                 iFleetManager.release();
 
             iFleetManager = manager;
-            iFleetManager.onlineStatus(false); // Default is false, wait validation from user.
+            //iFleetManager.onlineStatus(false); // Default is false, wait validation from user.
         }
     }
 }
