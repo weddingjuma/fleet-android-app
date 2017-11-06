@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -99,7 +98,6 @@ public class MissionsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setManagerAndMissions();
     }
 
     @Override
@@ -108,21 +106,14 @@ public class MissionsListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mAddButton = view.findViewById(R.id.add_mission);
 
-        if (mRecyclerView instanceof RecyclerView) {
-            if (mColumnCount <= 1) {
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            } else {
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener() {
+            @Override
+            public void onMissionSelected(int position) {
+                mListener.onMissionSelected(position);
             }
-
-            mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener() {
-                @Override
-                public void onMissionSelected(int position) {
-                    mListener.onMissionSelected(position);
-                }
-            }, mMissions);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
-        }
+        }, mMissions);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +122,12 @@ public class MissionsListFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setManagerAndMissions();
     }
 
     @Override
