@@ -104,7 +104,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
             mCompany.setText(mission.getCompanyId());
             mDelivery_date.setText(missionDate);
             mDelivery_hour.setText(missionHour);
-            mStatus.setBackgroundColor(Color.parseColor("#" + mission.getStatus().getColor()));
+            mStatus.setBackgroundColor(Color.parseColor(mission.getStatus().getColor()));
             mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

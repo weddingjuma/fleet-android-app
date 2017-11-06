@@ -239,7 +239,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         TextView address = getView().findViewById(R.id.delivery_adress);
         FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
 
-        int stateList = Color.parseColor("#" + mission.getStatus().getColor());
+        int stateList = Color.parseColor(mission.getStatus().getColor());
         statusBtn.setBackgroundTintList(ColorStateList.valueOf(stateList));
 
         name.setText(mission.getName());
@@ -292,7 +292,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         TextView status = view.findViewById(R.id.current_status);
 
         status.setText(mMission.getStatus().getLabel().toUpperCase());
-        status.setBackgroundColor(Color.parseColor("#" + mMission.getStatus().getColor()));
+        status.setBackgroundColor(Color.parseColor(mMission.getStatus().getColor()));
         alert.setView(view);
         alert.show();
 
@@ -337,7 +337,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
             String color = missionStatusType.getNextStatus().getColor();
 
             textViewLabel.setText(label);
-            imageViewIcon.setColorFilter(Color.parseColor("#" + color));
+            imageViewIcon.setColorFilter(Color.parseColor(color));
             layoutContainer.addView(newLayout);
 
             try {
@@ -354,13 +354,16 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     private void fakeUriLocation() {
         LocationInterface loc = mMission.getLocation();
 
-        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon());
+        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
 
         PackageManager packageManager = getActivity().getPackageManager();
         List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
         boolean isIntentSafe = (activities.size() > 0);
-
+        for (ResolveInfo ri : activities) {
+            System.out.print(ri.activityInfo.name);
+            System.out.print(ri.activityInfo.describeContents());
+        }
         if (isIntentSafe)
             startActivity(mapIntent);
     }
