@@ -45,6 +45,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mapotempo.com.mapotempo_fleet_android.MainActivity" />
         </activity>
+        <activity
+            android:name=".SignatureActivity"
+            android:parentActivityName=".MissionActivity"></activity>
     </application>
-
 </manifest>

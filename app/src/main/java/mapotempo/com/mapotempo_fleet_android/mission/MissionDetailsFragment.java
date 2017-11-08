@@ -34,6 +34,7 @@ import java.util.List;
 import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
 import mapotempo.com.mapotempo_fleet_android.MissionActivity;
 import mapotempo.com.mapotempo_fleet_android.R;
+import mapotempo.com.mapotempo_fleet_android.SignatureActivity;
 import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
 import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
 
@@ -156,6 +157,9 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
             case R.id.go_to_location:
                 fakeUriLocation();
                 break;
+            case R.id.signature:
+                goSignatureActivity(view.getContext());
+                break;
         }
     }
 
@@ -239,6 +243,20 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         TextView address = getView().findViewById(R.id.delivery_adress);
         FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
 
+        // ######### TEST #########
+        /*ImageView attachment = getView().findViewById(R.id.attachment);
+        Mission m = (Mission) mission;
+        Attachment a = m.getAttachment();
+        try {
+            if (a != null) {
+                InputStream is = a.getContent();
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                attachment.setImageBitmap(bitmap);
+            }
+        } catch (CouchbaseLiteException e) {
+            System.err.println(e);
+        }*/
+
         int stateList = Color.parseColor(mission.getStatus().getColor());
         statusBtn.setBackgroundTintList(ColorStateList.valueOf(stateList));
 
@@ -258,10 +276,12 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         FloatingActionButton delete = view.findViewById(R.id.delete);
         FloatingActionButton status = view.findViewById(R.id.statusBtn);
         ImageButton location = view.findViewById(R.id.go_to_location);
+        FloatingActionButton signature = view.findViewById(R.id.signature);
 
         delete.setOnClickListener(this);
         status.setOnClickListener(this);
         location.setOnClickListener(this);
+        signature.setOnClickListener(this);
     }
 
     private void updateCurrentMission() throws RuntimeException {
@@ -366,6 +386,12 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         }
         if (isIntentSafe)
             startActivity(mapIntent);
+    }
+
+    private void goSignatureActivity(Context context) {
+        Intent intent = new Intent(context, SignatureActivity.class);
+        intent.putExtra("mission_id", mMission.getId());
+        startActivity(intent);
     }
 
     private void backToListActivity(Context context) {

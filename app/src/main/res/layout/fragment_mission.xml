@@ -1,183 +1,196 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:orientation="vertical"
-            tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment">
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorWhite"
-        android:orientation="vertical">
-
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="125dp"
-          android:background="#f2f2f2"
-          android:paddingLeft="10dp"
-          android:paddingTop="25dp"
-          android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryHeaders"
-            android:textStyle="bold"
-            android:textSize="25dp"
-            android:layout_marginBottom="5dp"
-            android:text="Mission name"/>
-
-        <TextView
-            android:id="@+id/delivery_adress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text="@string/Fake_location"/>
-
-        <TextView
-            android:id="@+id/delivery_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text="@string/Fake_date"/>
-      </LinearLayout>
-
-      <LinearLayout
-          android:background="@color/colorWhite"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:padding="10dp"
-          android:layout_marginTop="2dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-          <TextView
-              android:text="STATUS"
-              android:textColor="@color/colorTinyGrey"
-              android:textSize="@dimen/textTinyHeaders"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"/>
-
-          <TextView
-              android:text="@string/Fake_status"
-              android:id="@+id/mission_status"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
-
-          <LinearLayout
-              android:layout_width="match_parent"
-              android:background="@color/colorTinyGrey"
-              android:layout_marginTop="5dp"
-              android:layout_height="0.1dp"/>
-
-          <LinearLayout
-              android:orientation="vertical"
-              android:layout_marginTop="20dp"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-
-            <TextView
-                android:text="COMPANY"
-                android:textColor="@color/colorTinyGrey"
-                android:textSize="@dimen/textTinyHeaders"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="@string/Fake_company"
-                android:id="@+id/company"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:background="@color/colorTinyGrey"
-                android:layout_marginTop="5dp"
-                android:layout_height="0.1dp"/>
+                android:layout_height="125dp"
+                android:background="#f2f2f2"
+                android:paddingLeft="10dp"
+                android:paddingTop="25dp"
+                android:orientation="vertical">
 
-          </LinearLayout>
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryHeaders"
+                    android:textStyle="bold"
+                    android:textSize="25dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="Mission name" />
 
+                <TextView
+                    android:id="@+id/delivery_adress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="@string/Fake_location" />
+
+                <TextView
+                    android:id="@+id/delivery_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="@string/Fake_date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_marginTop="2dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="STATUS"
+                        android:textColor="@color/colorTinyGrey"
+                        android:textSize="@dimen/textTinyHeaders"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="@string/Fake_status"
+                        android:id="@+id/mission_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:background="@color/colorTinyGrey"
+                        android:layout_marginTop="5dp"
+                        android:layout_height="0.1dp" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="COMPANY"
+                            android:textColor="@color/colorTinyGrey"
+                            android:textSize="@dimen/textTinyHeaders"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="@string/Fake_company"
+                            android:id="@+id/company"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:background="@color/colorTinyGrey"
+                            android:layout_marginTop="5dp"
+                            android:layout_height="0.1dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="DETAILS"
+                        android:textSize="@dimen/textTinyHeaders"
+                        android:textColor="@color/colorTinyGrey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="@string/Fake_details"
+                        android:id="@+id/details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:background="@color/colorTinyGrey"
+                        android:layout_marginTop="5dp"
+                        android:layout_height="0.1dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/signature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="170dp"
+            android:layout_marginTop="100dp"
+            android:clickable="true"
+            android:src="@drawable/ic_pencil_square_o_24dp"
+            android:tint="@color/colorWhite"
+            app:backgroundTint="@color/colorDeepBlue"
+            app:fabSize="mini" />
 
-          <TextView
-              android:text="DETAILS"
-              android:textSize="@dimen/textTinyHeaders"
-              android:textColor="@color/colorTinyGrey"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/go_to_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:tint="@color/colorWhite"
+            app:backgroundTint="@color/colorPrimaryHeaders"
+            app:fabSize="mini"
+            android:src="@drawable/ic_near_me_black_24dp" />
 
-          <TextView
-              android:text="@string/Fake_details"
-              android:id="@+id/details"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="70dp"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:tint="@color/colorWhite"
+            app:backgroundTint="@color/colorRedDeletion"
+            app:fabSize="mini"
+            android:src="@drawable/ic_delete_black_24dp" />
 
-          <LinearLayout
-              android:layout_width="match_parent"
-              android:background="@color/colorTinyGrey"
-              android:layout_marginTop="5dp"
-              android:layout_height="0.1dp"/>
-
-        </LinearLayout>
-
-      </LinearLayout>
-    </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/go_to_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true"
-        android:clickable="true"
-        android:tint="@color/colorWhite"
-        app:backgroundTint="@color/colorPrimaryHeaders"
-        app:fabSize="mini"
-        android:src="@drawable/ic_near_me_black_24dp"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginRight="70dp"
-        android:layout_alignParentRight="true"
-        android:clickable="true"
-        android:tint="@color/colorWhite"
-        app:backgroundTint="@color/colorRedDeletion"
-        app:fabSize="mini"
-        android:src="@drawable/ic_delete_black_24dp"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/statusBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginRight="125dp"
-        android:layout_alignParentRight="true"
-        android:clickable="true"
-        android:tint="@color/colorWhite"
-        app:backgroundTint="@color/colorOrange"
-        app:fabSize="mini"
-        android:src="@drawable/ic_test_status_icone_24dp"/>
-  </RelativeLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/statusBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="120dp"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:tint="@color/colorWhite"
+            app:backgroundTint="@color/colorOrange"
+            app:fabSize="mini"
+            android:src="@drawable/ic_test_status_icone_24dp" />
+    </RelativeLayout>
 </ScrollView>
