@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "mapotempo.com.mapotempo_fleet_android"
         minSdkVersion 15
@@ -38,7 +38,6 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -50,8 +49,10 @@ dependencies {
     compile 'com.android.support:design:26.+'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.android.support:recyclerview-v7:26.+'
+    compile 'com.github.gcacace:signature-pad:1.2.1'
     testCompile 'junit:junit:4.12'
 }
+
 /*
 task generateJavaDoc(type: org.gradle.api.tasks.javadoc.Javadoc) {
     source = android.sourceSets.main.java.srcDirs
@@ -60,17 +61,16 @@ task generateJavaDoc(type: org.gradle.api.tasks.javadoc.Javadoc) {
     failOnError false
 }*/
 
-
 FileTree docFilesTree = fileTree(dir: 'src/main/doc-files')
 
 task copyJavaDocSupportFiles(type: Copy) {
-  from docFilesTree
-  into 'build/docs/javadoc/doc-files/'
+    from docFilesTree
+    into 'build/docs/javadoc/doc-files/'
 }
 
 task generateApiJavadocs(name: 'documentation', type: Javadoc, dependsOn: ['copyJavaDocSupportFiles']) {
-  source = android.sourceSets.main.java.srcDirs
-  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-  options.overview('src/main/overview.html')
-  failOnError true
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    options.overview('src/main/overview.html')
+    failOnError true
 }
