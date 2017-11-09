@@ -1,6 +1,5 @@
 package mapotempo.com.mapotempo_fleet_android;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -77,7 +76,7 @@ public class SignatureActivity extends AppCompatActivity {
                     mMission.setAttachment("signature", "image/jpeg", bi);
                     mMission.save();
                     Toast.makeText(SignatureActivity.this, R.string.save_signature, Toast.LENGTH_SHORT).show();
-                    ((Activity) view.getContext()).onBackPressed();
+                    onBackPressed();
                 }
             }
         });
