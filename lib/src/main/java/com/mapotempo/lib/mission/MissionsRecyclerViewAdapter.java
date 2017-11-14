@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android.mission;
+package com.mapotempo.lib.mission;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,16 +10,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.lib.utils.DateHelpers;
 
 import java.util.List;
 
-import mapotempo.com.mapotempo_fleet_android.R;
-import mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment.OnMissionSelectedListener;
-import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
+import mapotempo.com.lib.R;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link MissionInterface} and makes a call to the
- * specified {@link OnMissionSelectedListener}.
+ * specified {@link com.mapotempo.lib.mission.MissionsListFragment.OnMissionSelectedListener}.
  */
 public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
 
@@ -32,7 +31,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
     // ==  Constructor  ==
     // ===================
 
-    public MissionsRecyclerViewAdapter(Context context, OnMissionSelectedListener listener, List<MissionInterface> missions) {
+    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<MissionInterface> missions) {
         mMissions = missions;
         missionsCount = missions.size();
         mListener = listener;

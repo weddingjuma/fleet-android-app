@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android.login;
+package com.mapotempo.lib.login;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,12 +19,12 @@ import android.widget.TextView;
 import com.couchbase.lite.android.AndroidContext;
 import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.utils.AlertMessageHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import mapotempo.com.mapotempo_fleet_android.R;
-import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
+import mapotempo.com.lib.R;
 
 
 /**
@@ -118,9 +118,9 @@ public class LoginFragment extends Fragment {
      * @param active True: start spinner and kill form.
      */
     public void toogleLogginView(boolean active) {
-        final ProgressBar spinner = getActivity().findViewById(R.id.login_progress);
-        final LinearLayout form = getActivity().findViewById(R.id.from_login_container);
-        final TextView textProgress = getActivity().findViewById(R.id.login_text_progress);
+        final ProgressBar spinner = getView().findViewById(R.id.login_progress);
+        final LinearLayout form = getView().findViewById(R.id.from_login_container);
+        final TextView textProgress = getView().findViewById(R.id.login_text_progress);
 
         if (active) {
             textProgress.setVisibility(View.VISIBLE);
@@ -198,7 +198,7 @@ public class LoginFragment extends Fragment {
 
         MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
             @Override
-            public void connexion(final MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, final MapotempoFleetManagerInterface manager) {
+            public void connexion(final Status status, final MapotempoFleetManagerInterface manager) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

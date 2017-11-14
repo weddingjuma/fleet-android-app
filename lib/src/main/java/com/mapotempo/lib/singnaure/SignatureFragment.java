@@ -1,9 +1,12 @@
-package mapotempo.com.mapotempo_fleet_android;
+package com.mapotempo.lib.singnaure;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -13,29 +16,51 @@ import com.mapotempo.fleet.api.model.MissionInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-/**
- * SignatureActivity.
- */
-public class SignatureActivity extends AppCompatActivity {
+import mapotempo.com.lib.R;
+
+public class SignatureFragment extends DialogFragment {
+
+    public static SignatureFragment newInstance() {
+        SignatureFragment f = new SignatureFragment();
+        return f;
+    }
+
+    public interface SignatureSaveListener {
+        boolean onSignatureSave(Bitmap signatureBitmap);
+    }
+
+    public void setSignatureSaveListener(SignatureSaveListener signatureSaveListener) {
+        mSignatureSaveListener = signatureSaveListener;
+    }
 
     private SignaturePad mSignaturePad;
     private Button mClearButton;
     private Button mSaveButton;
     private MissionInterface mMission = null;
+    private Context mContext = null;
+    private SignatureSaveListener mSignatureSaveListener = new SignatureSaveListener() {
+        @Override
+        public boolean onSignatureSave(Bitmap signatureBitmap) {
+            return true;
+        }
+    };
 
     // ===================================
-    // ==  Android Activity Life cycle  ==
+    // ==  Android Fragment Life cycle  ==
     // ===================================
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        final String mission_id = getIntent().getStringExtra("mission_id");
-        mMission = ((MapotempoApplication) getApplication()).getManager().getMissionAccess().get(mission_id);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
 
-        setContentView(R.layout.fragment_signature);
-
-        mSignaturePad = (SignaturePad) findViewById(R.id.signature_pad);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_signature, container, false);
+        mSignaturePad = v.findViewById(R.id.signature_pad);
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
             @Override
             public void onStartSigning() {
@@ -55,8 +80,8 @@ public class SignatureActivity extends AppCompatActivity {
             }
         });
 
-        mClearButton = (Button) findViewById(R.id.clear_button);
-        mSaveButton = (Button) findViewById(R.id.save_button);
+        mClearButton = v.findViewById(R.id.clear_button);
+        mSaveButton = v.findViewById(R.id.save_button);
 
         mClearButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,16 +94,11 @@ public class SignatureActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
-                if (mMission != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
-                    mMission.setAttachment("signature", "image/jpeg", bi);
-                    mMission.save();
-                    Toast.makeText(SignatureActivity.this, R.string.save_signature, Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+                if (mSignatureSaveListener.onSignatureSave(signatureBitmap)) {
+                    dismiss();
                 }
             }
         });
+        return v;
     }
 }

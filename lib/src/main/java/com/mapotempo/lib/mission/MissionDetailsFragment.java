@@ -1,18 +1,19 @@
-package mapotempo.com.mapotempo_fleet_android.mission;
+package com.mapotempo.lib.mission;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,22 +22,24 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MapotempoModelBaseInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
+import com.mapotempo.lib.MapotempoApplicationInterface;
+import com.mapotempo.lib.singnaure.SignatureFragment;
+import com.mapotempo.lib.utils.DateHelpers;
+import com.mapotempo.lib.utils.MissionsStatusGeneric;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
-import mapotempo.com.mapotempo_fleet_android.MissionActivity;
-import mapotempo.com.mapotempo_fleet_android.R;
-import mapotempo.com.mapotempo_fleet_android.SignatureActivity;
-import mapotempo.com.mapotempo_fleet_android.utils.DateHelpers;
-import mapotempo.com.mapotempo_fleet_android.utils.MissionsStatusGeneric;
+import mapotempo.com.lib.R;
 
 
 /**
@@ -79,6 +82,8 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
 
     private MissionInterface mMission;
 
+    private Context mContext;
+
     private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final MissionInterface mission, final boolean delete) {
@@ -99,12 +104,8 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onAttach(Context context) {
+        mContext = context;
         super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -144,22 +145,17 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            //            case R.id.updateBtn:
-            //                updateCurrentMission();
-            //                break;
-            case R.id.delete:
-                initDeletionForCurrentMission();
-                break;
-            case R.id.statusBtn:
-                changeStatusForCurrentMission();
-                break;
-            case R.id.go_to_location:
-                fakeUriLocation();
-                break;
-            case R.id.signature:
-                goSignatureActivity(view.getContext());
-                break;
+        int i = view.getId();
+        if (i == R.id.delete) {
+            initDeletionForCurrentMission();
+        } else if (i == R.id.statusBtn) {
+            changeStatusForCurrentMission();
+
+        } else if (i == R.id.go_to_location) {
+            fakeUriLocation();
+
+        } else if (i == R.id.signature) {
+            goSignatureActivity(view.getContext());
         }
     }
 
@@ -176,7 +172,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
             public void onClick(View view) {
                 if (deleteMission()) {
                     alert.dismiss();
-                    backToListActivity(getContext());
+                    backToListActivity(getActivity().getBaseContext());
                 }
             }
         });
@@ -291,7 +287,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     private void initDeletionForCurrentMission() throws RuntimeException {
         currentMissionIsNotNull();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         final AlertDialog alert = builder.create();
 
         LayoutInflater inflate = getActivity().getLayoutInflater();
@@ -304,7 +300,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
 
     private void changeStatusForCurrentMission() throws RuntimeException {
         currentMissionIsNotNull();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         final AlertDialog alert = builder.create();
 
         LayoutInflater inf = getActivity().getLayoutInflater();
@@ -320,7 +316,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     }
 
     private void setOnClickListenersForStatus(final AlertDialog alert, View view) {
-        MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
+        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
         List<MissionStatusActionInterface> missionStatusTypes = manager.getMissionStatusActionAccessInterface().getByPrevious(mMission.getStatus());
         ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> viewListStatus = buildViewFor(missionStatusTypes, view);
@@ -389,16 +385,44 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     }
 
     private void goSignatureActivity(Context context) {
-        Intent intent = new Intent(context, SignatureActivity.class);
-        intent.putExtra("mission_id", mMission.getId());
-        startActivity(intent);
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        SignatureFragment newFragment = SignatureFragment.newInstance();
+        newFragment.setSignatureSaveListener(new SignatureFragment.SignatureSaveListener() {
+            @Override
+            public boolean onSignatureSave(Bitmap signatureBitmap) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
+                mMission.setAttachment("signature", "image/jpeg", bi);
+                if(mMission.save()) {
+                    Toast.makeText(mContext, R.string.save_signature_success, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                else
+                    Toast.makeText(mContext, R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        newFragment.show(ft, "t");
     }
 
+
+
     private void backToListActivity(Context context) {
-        //mInteraction.onSingleMissionInteraction(mMission);
-        if (context.getClass().equals(MissionActivity.class)) {
+        // FIXME Reafactor this !
+        /*if (context.getClass().equals(MissionActivity.class)) {
             ((Activity) context).onBackPressed();
-        }
+        }*/
     }
 
     private void currentMissionIsNotNull() {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#283642</color>
+    <color name="colorPrimaryDark">#18242e</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorGrey">#EBEBEB</color>
+    <color name="colorDeepBlue">#15b1ca</color>
+    <color name="colorPrimaryHeaders">#00aa8d</color>
+
+
+    <!-- BUTTONS -->
+    <color name="colorOrange">#ff7636</color>
+    <color name="colorMapoGreen">#89c53f</color>
+    <color name="colorRedDeletion">#c54147</color>
+
+
+    <!-- TEXTS -->
+    <color name="colorTinyGrey">#bababa</color>
+</resources>

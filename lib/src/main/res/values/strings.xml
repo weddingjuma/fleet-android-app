@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">lib</string>
+
+    <!-- SINGLE MISSION FRAGMENT STRINGS -->
+    <string name="mission">Mission</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <!-- FAKE TEXT FOR DESIGN PURPOSE -->
+    <string name="Fake_details">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</string>
+    <string name="Fake_date">Wednesday, August 10 - 5:00PM</string>
+    <string name="Fake_location">3206 Timbercrest Road, CROSS TIMBERS 65634</string>
+    <string name="Fake_company">Mapotempo bis</string>
+    <string name="Fake_status">PENDING</string>
+    <string name="remember_me">Remember me</string>
+
+    <string name="deletion">Suppression</string>
+    <string name="sur_to_delete">Êtes-vous sur de vouloir supprimer la mission ?</string>
+    <string name="cancel">Annuler</string>
+    <string name="valid_suppression">Supprimer</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_login">Login</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Se connecter</string>
+    <string name="action_sign_in_short">Sign in</string>
+
+    <string name="login_message_notification_title_template">Login message: %1$s</string>
+    <string name="login_message_notification_placeholder_text_template">Error: %1$s</string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+
+    <!-- Strings related to alert dialogs -->
+    <string name="login_error_title">Sign in error</string>
+    <string name="login_error_short_text">Connection can\'t be established</string>
+    <string name="login_error_details">Either password and login doesn\'t match, please try again.</string>
+
+    <!-- USER DATA PREF -->
+    <string name="user_data_pref_title">Network Configuration</string>
+    <string name="user_data_description">In order to synchronize data from server to you mobile device, please tell us what kind of configuration must be used:</string>
+    <string name="user_data_only_wifi">Use only Wifi</string>
+    <string name="user_data_mobile_wifi">Use both Wifi/Mobile</string>
+
+    <string name="agreement">I agree the terms and conditions.</string>
+    <string name="clear_pad">Clear Pad</string>
+    <string name="save_signature">Save Signature</string>
+    <string name="save_signature_success">Save Signature Success</string>
+    <string name="save_signature_fail">Save Signature Fail</string>
+
+    <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
+    <string name="syncgateway_url">http://192.168.1.135:4984/db</string>
+    <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->
+</resources>

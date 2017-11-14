@@ -36,7 +36,7 @@
                 </android.support.design.widget.AppBarLayout>
 
                 <fragment
-                    class="mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment"
+                    class="com.mapotempo.lib.mission.MissionsListFragment"
                     android:id="@+id/listMission"
                     android:layout_marginTop="@dimen/content_margin"
                     android:layout_marginLeft="@dimen/content_margin"

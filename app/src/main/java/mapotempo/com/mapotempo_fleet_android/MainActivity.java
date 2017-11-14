@@ -18,12 +18,12 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
+import com.mapotempo.lib.mission.MissionsListFragment;
+import com.mapotempo.lib.mission.MissionsPagerFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment;
-import mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment;
 import mapotempo.com.mapotempo_fleet_android.other.DrawerOnClickListener;
 import mapotempo.com.mapotempo_fleet_android.utils.DrawerListAdapter;
 import mapotempo.com.mapotempo_fleet_android.utils.ListItemCustom;

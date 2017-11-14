@@ -27,29 +27,29 @@ public class ConnectionManager {
     private ConnectionManager() {
 
     }
-
-    public boolean isActiveWifi(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo networkTypeMobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        return networkTypeMobile.isConnectedOrConnecting();
-    }
-
-    public boolean isActiveMobile(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo networkTypeWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        return networkTypeWifi.isConnectedOrConnecting();
-    }
-
-    /**
-     * Call this method only if user already took a decision concerning data (Return NONE otherwise)
-     * Call {@link ConnectionManager#askUserPreference(Context, int)} to set data type
-     * @return void
-     */
-    public ConnectionType getConnectionType() {
-        return connectionType;
-    }
+//
+//    public boolean isActiveWifi(Context context) {
+//        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//        final NetworkInfo networkTypeMobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//
+//        return networkTypeMobile.isConnectedOrConnecting();
+//    }
+//
+//    public boolean isActiveMobile(Context context) {
+//        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//        final NetworkInfo networkTypeWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//
+//        return networkTypeWifi.isConnectedOrConnecting();
+//    }
+//
+//    /**
+//     * Call this method only if user already took a decision concerning data (Return NONE otherwise)
+//     * Call {@link ConnectionManager#askUserPreference(Context, int)} to set data type
+//     * @return void
+//     */
+//    public ConnectionType getConnectionType() {
+//        return connectionType;
+//    }
 
     /**
      * Call this method to ask user if he wants to use mobile data or only wifi.
@@ -112,7 +112,6 @@ public class ConnectionManager {
     public static ConnectionManager getInstance() {
         if (instance == null)
             instance = new ConnectionManager();
-
         return instance;
     }
 

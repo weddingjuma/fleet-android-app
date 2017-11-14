@@ -3,8 +3,9 @@ package mapotempo.com.mapotempo_fleet_android;
 import android.app.Application;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.MapotempoApplicationInterface;
 
-public class MapotempoApplication extends Application {
+public class MapotempoApplication extends Application implements MapotempoApplicationInterface {
 
     private MapotempoFleetManagerInterface iFleetManager;
 
@@ -21,10 +22,12 @@ public class MapotempoApplication extends Application {
     // ==  Public  ==
     // ==============
 
+    @Override
     public MapotempoFleetManagerInterface getManager() {
         return iFleetManager;
     }
 
+    @Override
     public void setManager(MapotempoFleetManagerInterface manager) {
         if (manager != null) {
             if (iFleetManager != null)

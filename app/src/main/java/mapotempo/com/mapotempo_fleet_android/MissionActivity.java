@@ -3,7 +3,7 @@ package mapotempo.com.mapotempo_fleet_android;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment;
+import com.mapotempo.lib.mission.MissionsPagerFragment;
 
 public class MissionActivity extends AppCompatActivity implements MissionsPagerFragment.OnMissionFocusListener {
 

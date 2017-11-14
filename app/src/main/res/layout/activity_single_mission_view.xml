@@ -7,7 +7,7 @@
     tools:context="mapotempo.com.mapotempo_fleet_android.MissionActivity">
 
     <fragment
-        class="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment"
+        class="com.mapotempo.lib.mission.MissionsPagerFragment"
         android:id="@+id/base_fragment"
         app:ViewStyle="SCROLLVIEW"
         android:layout_width="match_parent"

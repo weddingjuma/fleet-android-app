@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            debuggable true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven {
+        url "http://files.couchbase.com/maven2/"
+    }
+    google()
+}
+
+dependencies {
+    implementation 'com.mapotempo.fleet:mapotempo-fleet-java-client:1.0-SNAPSHOT'
+
+    implementation 'com.couchbase.lite:couchbase-lite-android:1.4.0'
+    implementation 'com.couchbase.lite:couchbase-lite-android-sqlcipher:+'
+    implementation 'com.android.support:support-annotations:+'
+    implementation 'com.android.support:appcompat-v7:26.+'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:26.+'
+    implementation 'com.android.support:support-v4:26.+'
+    implementation 'com.android.support:recyclerview-v7:26.+'
+
+    implementation 'com.github.gcacace:signature-pad:1.2.1'
+
+    androidTestImplementation 'junit:junit:4.12'
+}

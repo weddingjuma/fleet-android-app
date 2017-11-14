@@ -2,13 +2,33 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="mapotempo.com.mapotempo_fleet_android.login.LoginFragment">
+             tools:context="com.mapotempo.lib.login.LoginFragment">
 
     <LinearLayout
         android:id="@+id/from_login_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/login_text_progress"
+            android:layout_above="@+id/login_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTinyGrey"
+            android:textAlignment="center"
+            android:textSize="22dp"
+            android:visibility="gone"
+            android:text="Connection in progress..."/>
+
+        <ProgressBar
+            android:id="@+id/login_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

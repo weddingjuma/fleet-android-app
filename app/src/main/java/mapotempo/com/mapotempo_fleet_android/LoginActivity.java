@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.login.LoginFragment;
+import com.mapotempo.lib.utils.AlertMessageHelper;
 
 import java.util.Date;
 import java.util.TimerTask;
 
-import mapotempo.com.mapotempo_fleet_android.login.LoginFragment;
-import mapotempo.com.mapotempo_fleet_android.utils.AlertMessageHelper;
 import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
 
 /**

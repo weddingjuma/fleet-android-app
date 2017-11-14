@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android.mission;
+package com.mapotempo.lib.mission;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,12 +14,12 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
+import com.mapotempo.lib.MapotempoApplicationInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
-import mapotempo.com.mapotempo_fleet_android.R;
+import mapotempo.com.lib.R;
 
 /**
  * This fragment is responsible for display all missions assigned to the user currently connected.
@@ -70,10 +70,7 @@ public class MissionsListFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    MissionsPagerFragment singleFragment = (MissionsPagerFragment) getFragmentManager().findFragmentById(R.id.base_fragment);
                     mRecyclerAdapter.notifyDataSyncHasChanged(missions);
-                    if (singleFragment != null)
-                        singleFragment.refreshPagerData(missions);
                 }
             });
         }
@@ -142,7 +139,7 @@ public class MissionsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        MapotempoApplication app = (MapotempoApplication) getActivity().getApplicationContext();
+        MapotempoApplicationInterface app = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         if (app.getManager() != null) {
             mRecyclerAdapter.notifyDataSyncHasChanged(app.getManager().getMissionAccess().getAll());
             if (iMissionAccess != null)
@@ -185,7 +182,7 @@ public class MissionsListFragment extends Fragment {
     // ===============
 
     private void setManagerAndMissions() {
-        MapotempoApplication mapotempoApplication = (MapotempoApplication) getContext().getApplicationContext();
+        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getContext().getApplicationContext();
         if (mapotempoApplication.getManager() == null)
             return;
 

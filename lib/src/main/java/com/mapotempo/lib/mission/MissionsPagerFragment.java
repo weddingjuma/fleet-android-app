@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android.mission;
+package com.mapotempo.lib.mission;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,12 +14,13 @@ import android.widget.LinearLayout;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.core.model.Mission;
+import com.mapotempo.lib.MapotempoApplicationInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mapotempo.com.mapotempo_fleet_android.MapotempoApplication;
-import mapotempo.com.mapotempo_fleet_android.R;
+import mapotempo.com.lib.R;
+
 
 /**
  * This fragment act as a manger for the {@link MissionDetailsFragment}.
@@ -85,13 +86,13 @@ public class MissionsPagerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
+        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        MapotempoApplication mapotempoApplication = (MapotempoApplication) getActivity().getApplicationContext();
+        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         List<MissionInterface> missions = new ArrayList<>();
         if (mapotempoApplication.getManager() != null)
             missions = mapotempoApplication.getManager().getMissionAccess().getAll();

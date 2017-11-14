@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android.utils;
+package com.mapotempo.lib.utils;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import mapotempo.com.mapotempo_fleet_android.R;
+import mapotempo.com.lib.R;
 
 public class AlertMessageHelper {
 

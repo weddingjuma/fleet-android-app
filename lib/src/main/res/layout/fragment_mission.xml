@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment">
+    tools:context="com.mapotempo.lib.mission.MissionDetailsFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -13,7 +13,7 @@
                                           android:layout_width="match_parent"
                                           android:layout_height="match_parent"
                                           app:layoutManager="LinearLayoutManager"
-                                          tools:context="mapotempo.com.mapotempo_fleet_android.mission.MissionsListFragment"
+                                          tools:context="com.mapotempo.lib.mission.MissionsListFragment"
                                           tools:listitem="@layout/fragment_missions"/>
 
   <android.support.design.widget.FloatingActionButton
