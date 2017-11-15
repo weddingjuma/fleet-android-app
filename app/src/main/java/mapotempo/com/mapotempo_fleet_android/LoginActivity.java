@@ -1,6 +1,7 @@
 package mapotempo.com.mapotempo_fleet_android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -43,13 +44,15 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
 
     @Override
     public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
-        onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
     @Override
     public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
-        onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
@@ -66,7 +69,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     @Override
     public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs, MapotempoFleetManagerInterface manager) {
         task.cancel();
-
         switch (status) {
             case VERIFY:
                 if (logs != null)
