@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     private void customerDrawerList() {
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
         ListItemCustom[] drawerElements = new ListItemCustom[]{
-                new ListItemCustom(R.drawable.ic_login_icon_24dp, "Connection", getResources().getColor(R.color.colorDeepBlue)),
+                new ListItemCustom(R.drawable.ic_login_black_24dp, "Connection", getResources().getColor(R.color.colorDeepBlue)),
                 new ListItemCustom(R.drawable.ic_about_black_24dp, "About", getResources().getColor(R.color.colorOrange)),
         };
 

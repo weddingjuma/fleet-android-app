@@ -2,9 +2,12 @@ package com.mapotempo.lib.login;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +101,35 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        addButtonSubmit(view);
+        final EditText loginView = view.findViewById(R.id.login);
+        final EditText passwordView = view.findViewById(R.id.password);
+        final Button connexionButton = view.findViewById(R.id.login_sign_in_button);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Mapotempo", 0);
+
+        loginView.setText(sharedPreferences.getString("UserLogin", ""));
+        passwordView.setText(sharedPreferences.getString("UserPassword", ""));
+
+        connexionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLogin = loginView.getText().toString();
+                mPassword = passwordView.getText().toString();
+                attemptLogin();
+            }
+        });
+
+        final Button testButton = view.findViewById(R.id.login_sign_up_button);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uriUrl = Uri.parse(getString(R.string.mapotempo_url));
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                startActivity(launchBrowser);
+            }
+        });
+
+
+
         return view;
     }
 
@@ -118,19 +149,11 @@ public class LoginFragment extends Fragment {
      * @param active True: start spinner and kill form.
      */
     public void toogleLogginView(boolean active) {
-        final ProgressBar spinner = getView().findViewById(R.id.login_progress);
-        final LinearLayout form = getView().findViewById(R.id.from_login_container);
-        final TextView textProgress = getView().findViewById(R.id.login_text_progress);
-
-        if (active) {
-            textProgress.setVisibility(View.VISIBLE);
-            spinner.setVisibility(View.VISIBLE);
-            form.setVisibility(View.INVISIBLE);
-        } else {
-            textProgress.setVisibility(View.GONE);
-            spinner.setVisibility(View.GONE);
-            form.setVisibility(View.VISIBLE);
-        }
+        final LinearLayout progressLayout = getView().findViewById(R.id.login_progress_layout);
+        if (active)
+            progressLayout.setVisibility(View.VISIBLE);
+        else
+            progressLayout.setVisibility(View.GONE);
     }
 
     public interface OnLoginFragmentImplementation {
@@ -147,26 +170,6 @@ public class LoginFragment extends Fragment {
     // ===============
     // ==  Private  ==
     // ===============
-
-    private void addButtonSubmit(View view) {
-        final EditText mPasswordView = view.findViewById(R.id.password);
-        final EditText mLoginView = view.findViewById(R.id.login);
-        final Button button = view.findViewById(R.id.login_sign_in_button);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Mapotempo", 0);
-
-        mLoginView.setText(sharedPreferences.getString("UserLogin", ""));
-        mPasswordView.setText(sharedPreferences.getString("UserPassword", ""));
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mLogin = mLoginView.getText().toString();
-                mPassword = mPasswordView.getText().toString();
-
-                attemptLogin();
-            }
-        });
-    }
 
     /**
      * Try to get connection with existing database through the library.
