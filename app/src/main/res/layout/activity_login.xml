@@ -1,22 +1,14 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical"
-                tools:context="mapotempo.com.mapotempo_fleet_android.LoginActivity">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          tools:context="mapotempo.com.mapotempo_fleet_android.LoginActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType = "centerCrop"
-        android:src="@drawable/login_background"
-        android:alpha="0.32"/>
+        <fragment class="com.mapotempo.lib.login.LoginFragment"
+                    android:id="@+id/hook_login_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="gone"/>
 
-    <fragment class="com.mapotempo.lib.login.LoginFragment"
-              android:id="@+id/hook_login_fragment"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:visibility="gone"/>
-
-</RelativeLayout>
+</FrameLayout>

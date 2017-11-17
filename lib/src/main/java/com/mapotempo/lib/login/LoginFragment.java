@@ -101,14 +101,15 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        final EditText loginView = view.findViewById(R.id.login);
-        final EditText passwordView = view.findViewById(R.id.password);
-        final Button connexionButton = view.findViewById(R.id.login_sign_in_button);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Mapotempo", 0);
 
+        final EditText loginView = view.findViewById(R.id.login);
         loginView.setText(sharedPreferences.getString("UserLogin", ""));
+
+        final EditText passwordView = view.findViewById(R.id.password);
         passwordView.setText(sharedPreferences.getString("UserPassword", ""));
 
+        final Button connexionButton = view.findViewById(R.id.login_sign_in_button);
         connexionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,10 +151,15 @@ public class LoginFragment extends Fragment {
      */
     public void toogleLogginView(boolean active) {
         final LinearLayout progressLayout = getView().findViewById(R.id.login_progress_layout);
-        if (active)
+        final LinearLayout formLayout = getView().findViewById(R.id.login_form_layout);
+        if (active) {
+            formLayout.setVisibility(View.GONE);
             progressLayout.setVisibility(View.VISIBLE);
-        else
+        }
+        else {
+            formLayout.setVisibility(View.VISIBLE);
             progressLayout.setVisibility(View.GONE);
+        }
     }
 
     public interface OnLoginFragmentImplementation {

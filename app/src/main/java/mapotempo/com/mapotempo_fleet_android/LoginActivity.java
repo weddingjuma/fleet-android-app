@@ -74,9 +74,14 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
                 if (logs != null)
                     keepTraceOfConnectionLogsData(logs);
 
+                // ConnectionManager.getInstance().askUserPreference(this, R.layout.user_data_pref);
+
                 MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
                 mapotempoApplication.setManager(manager);
-                ConnectionManager.getInstance().askUserPreference(this, R.layout.user_data_pref);
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+
                 break;
             case LOGIN_ERROR:
                 LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);

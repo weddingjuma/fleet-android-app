@@ -27,6 +27,7 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Se connecter</string>
     <string name="action_sign_up">Demande d\'essai gratuit</string>
+    <string name="connexion_in_progress">Connexion en cours...</string>
     <string name="action_sign_in_short">Sign in</string>
 
     <string name="login_message_notification_title_template">Login message: %1$s</string>
@@ -53,6 +54,6 @@
     <string name="save_signature_fail">Save Signature Fail</string>
 
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
-    <string name="syncgateway_url">http://192.168.1.135:4984/db</string>
-    <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->
+    <!--<string name="syncgateway_url">http://192.168.1.135:4984/db</string>-->
+    <string name="syncgateway_url">http://192.168.94.234:4984/db</string>
 </resources>
