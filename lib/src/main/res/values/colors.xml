@@ -4,11 +4,11 @@
     <color name="colorPrimaryDark">#18242e</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFF</color>
-    <color name="colorGrey">#EBEBEB</color>
-    <color name="colorDarkGrey">#777777</color>
+    <color name="colorLightGrey">#EBEBEB</color>
+    <color name="colorGrey">#a5a5a5</color>
+    <color name="colorDarkGrey">#4f4f4f</color>
     <color name="colorDeepBlue">#15b1ca</color>
     <color name="colorPrimaryHeaders">#00aa8d</color>
-
 
     <!-- BUTTONS -->
     <color name="colorOrange">#ff7636</color>

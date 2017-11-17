@@ -14,17 +14,6 @@
                                           android:layout_height="match_parent"
                                           app:layoutManager="LinearLayoutManager"
                                           tools:context="com.mapotempo.lib.mission.MissionsListFragment"
-                                          tools:listitem="@layout/fragment_missions"/>
-
-  <android.support.design.widget.FloatingActionButton
-      android:id="@+id/add_mission"
-      android:layout_margin="16dp"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentBottom="true"
-      android:src="@drawable/ic_add_black_24dp"
-      app:backgroundTint="@color/colorPrimaryHeaders"
-      android:tint="@color/colorWhite"/>
+                                          tools:listitem="@layout/fragment_mission_adapter"/>
 
 </RelativeLayout>

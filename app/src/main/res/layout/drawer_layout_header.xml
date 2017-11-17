@@ -28,7 +28,7 @@
         <TextView
             android:text="mysupermail@company.com"
             android:id="@+id/header_drawer_company"
-            android:textColor="@color/colorGrey"
+            android:textColor="@color/colorLightGrey"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"

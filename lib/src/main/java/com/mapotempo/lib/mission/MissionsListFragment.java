@@ -63,7 +63,6 @@ public class MissionsListFragment extends Fragment {
     private MissionAccessInterface iMissionAccess;
     private List<MissionInterface> mMissions = new ArrayList<>();
     private int mColumnCount = 1;
-    private FloatingActionButton mAddButton;
     private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final List<MissionInterface> missions) {
@@ -101,8 +100,6 @@ public class MissionsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_missions_list, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        mAddButton = view.findViewById(R.id.add_mission);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener() {
             @Override
@@ -112,12 +109,6 @@ public class MissionsListFragment extends Fragment {
         }, mMissions);
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
-        mAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO
-            }
-        });
         return view;
     }
 

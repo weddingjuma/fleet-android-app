@@ -43,7 +43,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_missions, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_mission_adapter, parent, false);
         return new ViewHolder(view);
     }
 
@@ -80,7 +80,8 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
         MissionInterface mItem;
         final View mView;
         final TextView mName;
-        final TextView mCompany;
+        final TextView mListId;
+        final TextView mAddress;
         final RelativeLayout mStatus;
         final TextView mDelivery_hour;
         final TextView mDelivery_date;
@@ -89,7 +90,8 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
             super(view);
             mView = view;
             mName = view.findViewById(R.id.name);
-            mCompany = view.findViewById(R.id.company);
+            mListId = view.findViewById(R.id.list_id);
+            mAddress = view.findViewById(R.id.address);
             mStatus = view.findViewById(R.id.mission_status);
             mDelivery_hour = view.findViewById(R.id.delivery_hour);
             mDelivery_date = view.findViewById(R.id.delivery_date);
@@ -100,7 +102,8 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
             String missionHour = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES);
             mItem = mission;
             mName.setText(mission.getName());
-            mCompany.setText(mission.getCompanyId());
+            mListId.setText(Integer.toString(position));
+            mAddress.setText(mission.getAddress().toString());
             mDelivery_date.setText(missionDate);
             mDelivery_hour.setText(missionHour);
             mStatus.setBackgroundColor(Color.parseColor(mission.getStatus().getColor()));
