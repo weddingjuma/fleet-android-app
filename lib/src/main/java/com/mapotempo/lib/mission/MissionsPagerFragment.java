@@ -96,7 +96,7 @@ public class MissionsPagerFragment extends Fragment {
         if (mapotempoApplication.getManager() != null)
             missions = mapotempoApplication.getManager().getMissionAccess().getAll();
 
-        View view = inflater.inflate(R.layout.fragment_pager, container, false);
+        View view = inflater.inflate(R.layout.fragment_mission_pager, container, false);
         LinearLayout content = view.findViewById(R.id.mission_view_content);
 
         mPagerAdapter = new MissionPagerAdapter(getFragmentManager(), missions.size(), missions);
