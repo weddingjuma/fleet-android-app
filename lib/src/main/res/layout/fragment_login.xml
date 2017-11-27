@@ -147,22 +147,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/login_internal_vertical_margin"
-                android:background="@drawable/shape_login_button"
-                android:padding="16dp"
                 android:text="@string/action_sign_in"
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                style="@style/MapotempoTheme.LoginButton" />
 
             <Button
                 android:id="@+id/login_sign_up_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/login_internal_vertical_margin"
-                android:background="@drawable/shape_login_button"
-                android:padding="16dp"
                 android:text="@string/action_sign_up"
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold" />
+                style="@style/MapotempoTheme.LoginButton" />
 
         </LinearLayout>
 

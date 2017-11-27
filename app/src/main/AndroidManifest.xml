@@ -24,7 +24,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MapotempoTheme">
 
         <activity
             android:name=".LoginActivity"
@@ -45,19 +45,10 @@
         </activity>
 
         <activity
-            android:name=".MapActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
-
-        <activity
             android:name=".MissionActivity"
             android:parentActivityName=".MainActivity">
         </activity>
 
-        <activity
-            android:name=".TestActivity"
-            android:parentActivityName=".MissionActivity">
-        </activity>
-
+        PopupOverlay
     </application>
 </manifest>
