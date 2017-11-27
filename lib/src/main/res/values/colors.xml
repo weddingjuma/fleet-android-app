@@ -7,13 +7,12 @@
     <color name="colorLightGrey">#EBEBEB</color>
     <color name="colorGrey">#a5a5a5</color>
     <color name="colorDarkGrey">#4f4f4f</color>
-    <color name="colorDeepBlue">#15b1ca</color>
     <color name="colorPrimaryHeaders">#00aa8d</color>
+    <color name="colorDeepBlue">#15b1ca</color>
 
     <!-- BUTTONS -->
     <color name="colorOrange">#ff7636</color>
     <color name="colorMapoGreen">#89c53f</color>
-    <color name="colorMapoBlue">#13b0ca</color>
     <color name="colorRedDeletion">#c54147</color>
 
     <!-- TEXTS -->

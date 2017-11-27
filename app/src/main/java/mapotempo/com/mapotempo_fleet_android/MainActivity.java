@@ -13,11 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
@@ -149,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
         ListItemCustom[] drawerElements = new ListItemCustom[]{
                 new ListItemCustom(R.drawable.ic_login_black_24dp, "Connection", getResources().getColor(R.color.colorDeepBlue)),
-                new ListItemCustom(R.drawable.ic_about_black_24dp, "About", getResources().getColor(R.color.colorOrange)),
+                new ListItemCustom(R.drawable.ic_info_black_24dp, "About", getResources().getColor(R.color.colorOrange)),
         };
 
         mDrawerList.setAdapter(new DrawerListAdapter(this, R.layout.drawer_layout_item_row, drawerElements));

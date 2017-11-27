@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,8 +86,8 @@ public class MissionDetailsFragment extends Fragment {
     public MissionDetailsFragment() {
     }
 
-    private static final String COLOR_RED = "e55e5e";
-//    private static final String COLOR_GREEN = "56b881";
+    //    private static final String COLOR_RED = "e55e5e";
+    private static final String COLOR_GREEN = "56b881";
 //    private static final String COLOR_BLUE = "3887be";
 
     private MissionInterface mMission;
@@ -94,6 +95,8 @@ public class MissionDetailsFragment extends Fragment {
     private Context mContext;
 
     private ImageView mMapImageView;
+
+    private ProgressBar mMapImageLoader;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -167,6 +170,8 @@ public class MissionDetailsFragment extends Fragment {
         initActionButtons(view);
 
         mMapImageView = view.findViewById(R.id.mapImageView);
+
+        mMapImageLoader = view.findViewById(R.id.mapLoader);
 
         return view;
     }
@@ -272,7 +277,7 @@ public class MissionDetailsFragment extends Fragment {
                 StaticMarkerAnnotation marker = new StaticMarkerAnnotation.Builder()
                         .setName(com.mapbox.services.Constants.PIN_LARGE)
                         .setPosition(position)
-                        .setColor(COLOR_RED)
+                        .setColor(COLOR_GREEN)
                         .build();
 
                 MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
