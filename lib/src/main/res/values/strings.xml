@@ -6,23 +6,20 @@
     <string name="mapotempo_url">https://www.mapotempo.com/</string>
     <!-- SINGLE MISSION FRAGMENT STRINGS -->
 
-    <!-- TODO: Remove or change this placeholder text -->
-
-
     <!-- FAKE TEXT FOR DESIGN PURPOSE -->
     <string name="remember_me">Remember me</string>
 
-    <string name="deletion">Suppression</string>
-    <string name="sur_to_delete">Êtes-vous sur de vouloir supprimer la mission ?</string>
-    <string name="cancel">Annuler</string>
-    <string name="valid_suppression">Supprimer</string>
+    <string name="deletion">Deletion</string>
+    <string name="sur_to_delete">Are you sure you want to delete the mission?</string>
+    <string name="cancel">Cancel</string>
+    <string name="valid_suppression">Delete</string>
 
     <!-- Strings related to login -->
     <string name="prompt_login">Login</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Se connecter</string>
-    <string name="action_sign_up">Demande d\'essai gratuit</string>
-    <string name="connexion_in_progress">Connexion en cours...</string>
+    <string name="action_sign_in">Connexion</string>
+    <string name="action_sign_up">Free trial</string>
+    <string name="connexion_in_progress">Connexion in progress...</string>
     <string name="action_sign_in_short">Sign in</string>
 
     <!-- Strings related to alert dialogs -->
@@ -43,7 +40,7 @@
 
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.1.135:4984/db</string>-->
-    <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->
-    <string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>
+    <string name="syncgateway_url">http://192.168.94.234:4984/db</string>
+    <!--<string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>-->
 
 </resources>
