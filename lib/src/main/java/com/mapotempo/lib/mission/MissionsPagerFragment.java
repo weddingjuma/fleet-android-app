@@ -101,13 +101,10 @@ public class MissionsPagerFragment extends Fragment {
         mPagerAdapter = new MissionPagerAdapter(getFragmentManager(), missions.size(), missions);
         ViewPager viewPager = (ViewPager) getActivity().getLayoutInflater().inflate(R.layout.view_pager, null);
         mViewPager = viewPager.findViewById(R.id.mission_viewpager);
-
-        mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        // mViewPager.setPageTransformer(true, new DepthPageTransformer());
         setPagerChangeListener();
         content.addView(viewPager);
         mViewPager.setAdapter(mPagerAdapter);
-        setListenerForButtons(view);
-        setNextAndPreviousVisibility(view);
         return view;
     }
 
@@ -153,7 +150,6 @@ public class MissionsPagerFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 mListener.onMissionFocus(position);
-                setNextAndPreviousVisibility(getView());
             }
 
             @Override
@@ -168,45 +164,5 @@ public class MissionsPagerFragment extends Fragment {
                 mViewPager.setCurrentItem(position);
             }
         });
-    }
-
-    private void setNextAndPreviousVisibility(View view) {
-        int currentItem = mViewPager.getCurrentItem();
-        final Button next = view.findViewById(R.id.next_nav);
-        final Button prev = view.findViewById(R.id.previous_nav);
-
-        next.setVisibility(View.VISIBLE);
-        prev.setVisibility(View.VISIBLE);
-
-        if (currentItem == mPagerAdapter.getCount() - 1) {
-            next.setVisibility(View.INVISIBLE);
-        } else if (currentItem == 0) {
-            prev.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void setListenerForButtons(View view) {
-        final Button prev = view.findViewById(R.id.previous_nav);
-        final Button next = view.findViewById(R.id.next_nav);
-
-        if (prev != null && next != null) {
-            prev.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int currentItem = mViewPager.getCurrentItem();
-                    mViewPager.setCurrentItem(currentItem - 1);
-                }
-            });
-
-            next.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int currentItem = mViewPager.getCurrentItem();
-                    mViewPager.setCurrentItem(currentItem + 1);
-                }
-            });
-        } else {
-            throw new RuntimeException("Button aren't settled in view");
-        }
     }
 }

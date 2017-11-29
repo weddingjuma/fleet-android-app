@@ -2,16 +2,35 @@
 <resources>
     <!-- Base application theme. -->
     <style name="MapotempoTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorMapoBlue</item>
+        <!-- Base. -->
+        <item name="colorPrimaryBackground">@android:color/white</item>
+        <item name="colorMapoPrimary">@color/colorMapoBlue</item>
+        <item name="colorMapoSecondary">@color/colorMapoGreen</item>
 
+        <!-- Login Fragment. -->
         <item name="buttonLogin">@drawable/bg_login_button</item>
-        <item name="buttonLoginColor">@android:color/white</item>
+        <item name="buttonLoginTextColor">@android:color/white</item>
+
+        <!-- Mission List Fragment. -->
+        <item name="missionTextColorPrimary">@color/colorDarkGrey</item>
+        <item name="missionTextColorSecondary">@color/colorGrey</item>
+        <item name="missionTextColorTertiary">@color/colorLightGrey</item>
     </style>
 
     <style name="MapotempoTheme.Night" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorMapoBlue</item>
+        <!-- Base. -->
+        <item name="colorPrimaryBackground">@android:color/black</item>
+        <item name="colorMapoPrimary">@color/colorMapoGreen</item>
+        <item name="colorMapoSecondary">@color/colorMapoBlue</item>
 
+        <!-- Login Fragment. -->
         <item name="buttonLogin">@drawable/bg_login_button_night</item>
-        <item name="buttonLoginColor">@android:color/black</item>
+        <item name="buttonLoginTextColor">@android:color/black</item>
+
+        <!-- Mission List Fragment. -->
+        <item name="missionTextColorPrimary">@color/colorGrey</item>
+        <item name="missionTextColorSecondary">@color/colorLightGrey</item>
+        <item name="missionTextColorTertiary">@color/colorDarkGrey</item>
+
     </style>
 </resources>

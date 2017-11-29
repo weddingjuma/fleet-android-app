@@ -1,4 +1,4 @@
-package com.mapotempo.lib.mission;
+package com.mapotempo.lib.missions;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,9 +18,9 @@ import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link MissionInterface} and makes a call to the
- * specified {@link com.mapotempo.lib.mission.MissionsListFragment.OnMissionSelectedListener}.
+ * specified {@link MissionsListFragment.OnMissionSelectedListener}.
  */
-public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
+class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
 
     private MissionsListFragment.OnMissionSelectedListener mListener;
     private int missionsCount = 0;
@@ -42,7 +43,7 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_mission_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_missions_list_adapter, parent, false);
         return new ViewHolder(view);
     }
 
@@ -84,10 +85,12 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
         final RelativeLayout mStatus;
         final TextView mDelivery_hour;
         final TextView mDelivery_date;
+        final FrameLayout mSelected;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mSelected = view.findViewById(R.id.selected);
             mName = view.findViewById(R.id.name);
             mListId = view.findViewById(R.id.list_id);
             mAddress = view.findViewById(R.id.address);
@@ -116,9 +119,9 @@ public class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRe
 
         void setBackgroundFocus(boolean focus) {
             if (focus)
-                mView.setBackgroundColor(Color.parseColor("#e2ecfd"));
+                mSelected.setVisibility(View.VISIBLE);
             else
-                mView.setBackgroundColor(Color.WHITE);
+                mSelected.setVisibility(View.INVISIBLE);
         }
 
         @Override

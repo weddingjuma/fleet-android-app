@@ -2,13 +2,6 @@ package mapotempo.com.lib;
 
 import android.content.Context;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-
 /**
  * Instrumented test, which will execute on an Android device.
  *

@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<!-- This view require MapotempoTheme or MapotempoTheme_Night.
+    The theme is set in the corresponding fragment. -->
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:minHeight="@dimen/fragment_mission_adapter_height"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
-    android:orientation="horizontal"
-    android:layout_marginBottom="1dp">
+    android:background="?colorPrimaryBackground"
+    tools:theme="@style/MapotempoTheme">
+
+    <FrameLayout
+        android:id="@+id/selected"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?colorMapoSecondary"
+        android:alpha="0.2"
+        tools:background="@color/colorMapoBlue"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/fragment_mission_adapter_height"
+        android:baselineAligned="true"
+        android:orientation="horizontal"
+        android:layout_marginBottom="1dp">
 
         <RelativeLayout
             android:id="@+id/mission_status"
@@ -25,10 +41,11 @@
                 android:id="@+id/list_id"
                 android:layout_width="@dimen/fragment_mission_id_size"
                 android:layout_height="@dimen/fragment_mission_id_size"
-                android:layout_marginHorizontal="@dimen/fragment_mission_id_margin"
+                android:layout_marginRight="@dimen/fragment_mission_id_margin"
+                android:layout_marginLeft="@dimen/fragment_mission_id_margin"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/shape_round_background"
-                android:textColor="@color/colorGrey"
+                android:background="@drawable/bg_mission_details_id"
+                android:textColor="?missionTextColorPrimary"
                 android:textSize="@dimen/fragment_mission_id_text_size"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -39,7 +56,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1"
                 android:layout_gravity="center_vertical">
 
                 <TextView
@@ -48,6 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text=""
+                    android:textColor="?missionTextColorPrimary"
                     android:textSize="@dimen/fragment_mission_name_text_size"
                     android:textStyle="bold"
                     tools:text="Mission 1" />
@@ -60,20 +77,19 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="@dimen/fragment_mission_address_text_size"
                     android:text=""
-                    android:textColor="@color/colorGrey"
+                    android:textColor="?missionTextColorSecondary"
                     tools:text="Pépinière éco-créative, 9 Rue André Darbon, 33000 Bordeaux" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginHorizontal="@dimen/fragment_mission_calendar_margin"
+            android:layout_marginLeft="@dimen/fragment_mission_calendar_margin"
+            android:layout_marginRight="@dimen/fragment_mission_calendar_margin"
             android:layout_gravity="center_vertical|center_horizontal"
             android:orientation="vertical"
             android:layout_weight="0">
@@ -85,7 +101,7 @@
                 android:text=""
                 android:textSize="@dimen/fragment_mission_hour_text_size"
                 android:textStyle="bold"
-                android:textColor="@color/colorGrey"
+                android:textColor="?missionTextColorSecondary"
                 android:textAlignment="center"
                 tools:text="13h30"/>
 
@@ -96,9 +112,11 @@
                 android:text=""
                 android:textSize="@dimen/fragment_mission_date_text_size"
                 android:textStyle="bold"
-                android:textColor="@color/colorGrey"
+                android:textColor="?missionTextColorSecondary"
                 tools:text="27/11/2017" />
 
         </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

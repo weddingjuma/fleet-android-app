@@ -38,7 +38,7 @@
           android:layout_width="300dp">
 
         <fragment
-            class="com.mapotempo.lib.mission.MissionsListFragment"
+            class="com.mapotempo.lib.missions.MissionsListFragment"
             android:id="@+id/listMission"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

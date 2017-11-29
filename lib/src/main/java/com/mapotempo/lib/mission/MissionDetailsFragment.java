@@ -163,8 +163,6 @@ public class MissionDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
-
         View view = inflater.inflate(R.layout.fragment_mission, container, false);
 
         initBottomSheet(view);

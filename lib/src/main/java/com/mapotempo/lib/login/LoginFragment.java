@@ -96,7 +96,10 @@ public class LoginFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
+        Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
+        if(false)
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
+
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
         View view = localInflater.inflate(R.layout.fragment_login, container, true);

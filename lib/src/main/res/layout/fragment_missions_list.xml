@@ -13,7 +13,7 @@
                                           android:layout_width="match_parent"
                                           android:layout_height="match_parent"
                                           app:layoutManager="LinearLayoutManager"
-                                          tools:context="com.mapotempo.lib.mission.MissionsListFragment"
-                                          tools:listitem="@layout/fragment_mission_adapter"/>
+                                          tools:context="com.mapotempo.lib.missions.MissionsListFragment"
+                                          tools:listitem="@layout/fragment_missions_list_adapter"/>
 
 </RelativeLayout>

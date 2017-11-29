@@ -18,7 +18,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
-import com.mapotempo.lib.mission.MissionsListFragment;
+import com.mapotempo.lib.missions.MissionsListFragment;
 import com.mapotempo.lib.mission.MissionsPagerFragment;
 
 import java.util.ArrayList;
@@ -125,12 +125,12 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
 
                 public void onDrawerClosed(View view) {
                     supportInvalidateOptionsMenu();
-                    //drawerOpened = false;
+                    // drawerOpened = false;
                 }
 
                 public void onDrawerOpened(View drawerView) {
                     supportInvalidateOptionsMenu();
-                    //drawerOpened = true;
+                    // drawerOpened = true;
                 }
             };
 
@@ -145,13 +145,13 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     private void customerDrawerList() {
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
         ListItemCustom[] drawerElements = new ListItemCustom[]{
-                new ListItemCustom(R.drawable.ic_login_black_24dp, "Connection", getResources().getColor(R.color.colorDeepBlue)),
+                new ListItemCustom(R.drawable.ic_login_black_24dp, "Connection", getResources().getColor(R.color.colorMapoBlue)),
                 new ListItemCustom(R.drawable.ic_info_black_24dp, "About", getResources().getColor(R.color.colorOrange)),
         };
 
+        mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_layout_header, null));
         mDrawerList.setAdapter(new DrawerListAdapter(this, R.layout.drawer_layout_item_row, drawerElements));
         mDrawerList.setOnItemClickListener(new DrawerOnClickListener());
-        mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_layout_header, null));
     }
 
     // ###################################

@@ -74,28 +74,28 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/ic_check_black_24dp"
-                    android:background="@drawable/shape_action" />
+                    android:background="@drawable/bg_action_status" />
 
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/ic_pencil_square_o_24dp"
-                    android:background="@drawable/shape_action" />
+                    android:background="@drawable/bg_action_status" />
 
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/ic_location_on_black_24dp"
-                    android:background="@drawable/shape_action" />
+                    android:background="@drawable/bg_action_status" />
 
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/ic_test_status_icone_24dp"
-                    android:background="@drawable/shape_action" />
+                    android:background="@drawable/bg_action_status" />
 
             </LinearLayout>
 

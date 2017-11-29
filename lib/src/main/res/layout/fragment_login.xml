@@ -1,8 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This view require MapotempoTheme or MapotempoTheme_Night.
+    The theme is set in the corresponding fragment. -->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:theme="@style/MapotempoTheme">
 
     <ImageView
         android:layout_width="match_parent"
@@ -147,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/login_internal_vertical_margin"
                 android:text="@string/action_sign_in"
-                android:textColor="?buttonLoginColor"
+                android:textColor="?buttonLoginTextColor"
                 android:textStyle="bold"
                 android:background="?buttonLogin"/>
 
@@ -157,12 +161,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/login_internal_vertical_margin"
                 android:text="@string/action_sign_up"
-                android:textColor="?buttonLoginColor"
+                android:textColor="?buttonLoginTextColor"
                 android:textStyle="bold"
                 android:background="?buttonLogin" />
 
         </LinearLayout>
 
     </LinearLayout>
-</FrameLayout>
 
+</FrameLayout>

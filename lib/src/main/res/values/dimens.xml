@@ -15,13 +15,13 @@
     <!-- MISSION ADAPTER DIMENSION -->
     <dimen name="fragment_mission_adapter_height">100dp</dimen>
     <dimen name="fragment_mission_id_size">28dp</dimen>
-    <dimen name="fragment_mission_id_text_size">10dp</dimen>
+    <dimen name="fragment_mission_id_text_size">10sp</dimen>
     <dimen name="fragment_mission_id_margin">15dp</dimen>
-    <dimen name="fragment_mission_name_text_size">15dp</dimen>
-    <dimen name="fragment_mission_address_text_size">12dp</dimen>
+    <dimen name="fragment_mission_name_text_size">15sp</dimen>
+    <dimen name="fragment_mission_address_text_size">12sp</dimen>
     <dimen name="fragment_mission_address_margin_top">5dp</dimen>
     <dimen name="fragment_mission_calendar_margin">15dp</dimen>
-    <dimen name="fragment_mission_hour_text_size">20dp</dimen>
+    <dimen name="fragment_mission_hour_text_size">20sp</dimen>
     <dimen name="fragment_mission_date_text_size">12sp</dimen>
 
     <!-- MISSION ADAPTER DIMENSION -->
