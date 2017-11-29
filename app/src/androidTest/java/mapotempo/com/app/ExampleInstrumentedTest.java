@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package mapotempo.com.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,9 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mapotempo.com.lib">
-
-    <application
-        android:supportsRtl="true"
-        android:theme="@style/MapotempoTheme">
-
-    </application>
+    package="com.mapotempo.lib">
 </manifest>

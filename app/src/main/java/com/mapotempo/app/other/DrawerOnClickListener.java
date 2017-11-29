@@ -1,11 +1,11 @@
-package mapotempo.com.mapotempo_fleet_android.other;
+package com.mapotempo.app.other;
 
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import mapotempo.com.mapotempo_fleet_android.LoginActivity;
+import com.mapotempo.app.LoginActivity;
 
 public class DrawerOnClickListener implements ListView.OnItemClickListener {
 

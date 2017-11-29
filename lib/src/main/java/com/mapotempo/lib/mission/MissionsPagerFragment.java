@@ -14,11 +14,10 @@ import android.widget.LinearLayout;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
+import com.mapotempo.lib.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import mapotempo.com.lib.R;
 
 
 /**

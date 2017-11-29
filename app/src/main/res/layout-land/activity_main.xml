@@ -4,7 +4,7 @@
                                                  xmlns:tools="http://schemas.android.com/tools"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
-                                                 tools:context="mapotempo.com.mapotempo_fleet_android.MainActivity">
+                                                 tools:context="com.mapotempo.app.MainActivity">
 
   <LinearLayout
       android:layout_width="match_parent"

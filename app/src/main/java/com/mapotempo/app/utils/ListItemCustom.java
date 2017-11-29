@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android.utils;
+package com.mapotempo.app.utils;
 
 public class ListItemCustom {
     public int icon;

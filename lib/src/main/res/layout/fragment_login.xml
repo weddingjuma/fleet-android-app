@@ -132,7 +132,6 @@
 
             </LinearLayout>
 
-
             <CheckBox
                 android:id="@+id/remember_logs"
                 android:layout_width="wrap_content"
@@ -148,8 +147,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/login_internal_vertical_margin"
                 android:text="@string/action_sign_in"
+                android:textColor="?buttonLoginColor"
                 android:textStyle="bold"
-                style="@style/MapotempoTheme.LoginButton" />
+                android:background="?buttonLogin"/>
 
             <Button
                 android:id="@+id/login_sign_up_button"
@@ -157,7 +157,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/login_internal_vertical_margin"
                 android:text="@string/action_sign_up"
-                style="@style/MapotempoTheme.LoginButton" />
+                android:textColor="?buttonLoginColor"
+                android:textStyle="bold"
+                android:background="?buttonLogin" />
 
         </LinearLayout>
 

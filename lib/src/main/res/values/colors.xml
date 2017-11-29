@@ -13,6 +13,13 @@
     <!-- BUTTONS -->
     <color name="colorOrange">#ff7636</color>
     <color name="colorMapoGreen">#89c53f</color>
+    <color name="colorMapoGreenDark">#689630</color>
+    <color name="colorMapoGreenVeryDark">#4b6d21</color>
+
+    <color name="colorMapoBlue">#13b0ca</color>
+    <color name="colorMapoBlueDark">#0f8396</color>
+    <color name="colorMapoBlueVeryDark">#0a5966</color>
+
     <color name="colorRedDeletion">#c54147</color>
 
     <!-- TEXTS -->

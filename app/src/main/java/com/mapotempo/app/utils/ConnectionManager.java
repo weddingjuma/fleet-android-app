@@ -1,14 +1,12 @@
-package mapotempo.com.mapotempo_fleet_android.utils;
+package com.mapotempo.app.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 
-import mapotempo.com.mapotempo_fleet_android.R;
+import com.mapotempo.app.R;
 
 public class ConnectionManager {
 

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
-    <style name="MapotempoTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
+    <style name="MapotempoTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorMapoBlue</item>
 
-    <style name="MapotempoTheme.LoginButton">
-        <item name="android:background">@drawable/bg_login_button</item>
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:textStyle">bold</item>
+        <item name="buttonLogin">@drawable/bg_login_button</item>
+        <item name="buttonLoginColor">@android:color/white</item>
     </style>
 
+    <style name="MapotempoTheme.Night" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorMapoBlue</item>
+
+        <item name="buttonLogin">@drawable/bg_login_button_night</item>
+        <item name="buttonLoginColor">@android:color/black</item>
+    </style>
 </resources>

@@ -3,12 +3,11 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:orientation="vertical"
-          tools:context="mapotempo.com.mapotempo_fleet_android.LoginActivity">
+          tools:context="com.mapotempo.app.LoginActivity">
 
         <fragment class="com.mapotempo.lib.login.LoginFragment"
-                    android:id="@+id/hook_login_fragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:visibility="gone"/>
+            android:id="@+id/hook_login_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 </FrameLayout>

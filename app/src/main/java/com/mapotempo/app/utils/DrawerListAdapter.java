@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android.utils;
+package com.mapotempo.app.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import mapotempo.com.mapotempo_fleet_android.R;
+import com.mapotempo.app.R;
 
 public class DrawerListAdapter extends ArrayAdapter<ListItemCustom> {
     private final int layoutResourceId;

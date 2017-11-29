@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import mapotempo.com.lib.R;
+import com.mapotempo.lib.R;
 
 public class AlertMessageHelper {
 

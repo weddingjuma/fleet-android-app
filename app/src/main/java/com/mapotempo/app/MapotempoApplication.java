@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package com.mapotempo.app;
 
 import android.app.Application;
 

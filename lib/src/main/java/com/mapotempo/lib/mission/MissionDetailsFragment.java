@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
+import com.mapotempo.lib.R;
 import com.mapotempo.lib.singnature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.MissionsStatusGeneric;
@@ -45,9 +47,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import mapotempo.com.lib.R;
-
 
 /**
  * This fragment is a view detailed of a mission. it is working along side a <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html" target="_blank"><u>Android ViewPager</u></a>  that allow users to swipe left/right side to get the previous/next mission's view.
@@ -163,6 +162,8 @@ public class MissionDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
 
         View view = inflater.inflate(R.layout.fragment_mission, container, false);
 
@@ -306,6 +307,7 @@ public class MissionDetailsFragment extends Fragment {
         TextView duration = getView().findViewById(R.id.delivery_duration);
         duration.setText(getString(R.string.duration) + " : " + mission.getDuration());
 
+        // FIXME SPLIT ADDRESS
         TextView address = getView().findViewById(R.id.delivery_address);
         address.setText(mission.getAddress().toString());
 

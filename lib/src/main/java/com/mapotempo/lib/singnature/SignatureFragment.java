@@ -11,8 +11,7 @@ import android.widget.Button;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mapotempo.fleet.api.model.MissionInterface;
-
-import mapotempo.com.lib.R;
+import com.mapotempo.lib.R;
 
 public class SignatureFragment extends DialogFragment {
 

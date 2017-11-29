@@ -10,11 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.lib.R;
 import com.mapotempo.lib.utils.DateHelpers;
 
 import java.util.List;
-
-import mapotempo.com.lib.R;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link MissionInterface} and makes a call to the

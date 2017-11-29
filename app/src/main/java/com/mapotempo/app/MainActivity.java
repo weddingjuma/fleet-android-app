@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package com.mapotempo.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +24,9 @@ import com.mapotempo.lib.mission.MissionsPagerFragment;
 import java.util.ArrayList;
 import java.util.Date;
 
-import mapotempo.com.mapotempo_fleet_android.other.DrawerOnClickListener;
-import mapotempo.com.mapotempo_fleet_android.utils.DrawerListAdapter;
-import mapotempo.com.mapotempo_fleet_android.utils.ListItemCustom;
+import com.mapotempo.app.other.DrawerOnClickListener;
+import com.mapotempo.app.utils.DrawerListAdapter;
+import com.mapotempo.app.utils.ListItemCustom;
 
 public class MainActivity extends AppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
         MissionsPagerFragment.OnMissionFocusListener,
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
             Log.i("GPS_PROVIDER", "OKKKKKKKKKK");
         else
             Log.i("GPS_PROVIDER", "FAIIIIIIIIIL");
-        locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
+//        locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
     }
 
     @Override

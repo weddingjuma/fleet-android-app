@@ -1,4 +1,4 @@
-package mapotempo.com.mapotempo_fleet_android;
+package com.mapotempo.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import com.mapotempo.lib.utils.AlertMessageHelper;
 import java.util.Date;
 import java.util.TimerTask;
 
-import mapotempo.com.mapotempo_fleet_android.utils.ConnectionManager;
+import com.mapotempo.app.utils.ConnectionManager;
 
 /**
  * A login screen that offers login via email/password.
@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setTheme(R.style.AppTheme_Night);
     }
 
     // =====================================================

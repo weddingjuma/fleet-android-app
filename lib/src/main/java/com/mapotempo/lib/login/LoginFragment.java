@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,11 @@ import android.widget.LinearLayout;
 import com.couchbase.lite.android.AndroidContext;
 import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.R;
 import com.mapotempo.lib.utils.AlertMessageHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import mapotempo.com.lib.R;
-
 
 /**
  * Responsible for establish a connection with the library that allow you to get access to Mapotempo models. The fragment launch a connection attempt that give you, in some cases, a manager. The manager allow you to get access to the following entities :
@@ -97,7 +96,11 @@ public class LoginFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
+        View view = localInflater.inflate(R.layout.fragment_login, container, true);
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Mapotempo", 0);
 
         final EditText loginView = view.findViewById(R.id.login);

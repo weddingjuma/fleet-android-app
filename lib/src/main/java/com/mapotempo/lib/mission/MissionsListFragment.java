@@ -14,11 +14,10 @@ import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
+import com.mapotempo.lib.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import mapotempo.com.lib.R;
 
 /**
  * This fragment is responsible for display all missions assigned to the user currently connected.
