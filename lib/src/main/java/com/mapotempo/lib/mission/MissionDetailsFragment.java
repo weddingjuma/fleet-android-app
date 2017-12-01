@@ -14,6 +14,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,6 +113,8 @@ public class MissionDetailsFragment extends Fragment {
                 });
         }
     };
+
+    static int MAP_IMAGE_WIDTH_QUALITY = 500;
 
     // ==============
     // ==  Public  ==
@@ -279,16 +282,21 @@ public class MissionDetailsFragment extends Fragment {
                         .setColor(COLOR_GREEN)
                         .build();
 
+                int x = mMapImageView.getMeasuredWidth();;
+                int y = mMapImageView.getMeasuredHeight();
+                double ratio = (double) y / (double) x;
+                x = MAP_IMAGE_WIDTH_QUALITY;
+                y = (int) (x * ratio);
+                Log.d(this.getClass().getName(), "ratio : " + ratio + "x : " + x + " y : " + y);
                 MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
                         .setAccessToken(getString(R.string.mapbox_access_token))
                         .setStyleId(Constants.MAPBOX_STYLE_OUTDOORS)
                         .setStaticMarkerAnnotations(marker)
                         .setLat(mMission.getLocation().getLat()) // Image center Latitude
                         .setLon(mMission.getLocation().getLon()) // Image center longitude
-                        .setZoom(15)
-                        .setWidth(mMapImageView.getMeasuredWidth()) // Image width
-                        .setHeight(mMapImageView.getMeasuredHeight()) // Image height
-                        .setRetina(true) // Retina 2x image will be returned
+                        .setZoom(14)
+                        .setWidth(x) // Image width
+                        .setHeight(y) // Image height
                         .build();
 
                 Picasso.with(getActivity()).load(veniceStaticImage.getUrl().toString()).error(R.drawable.ic_logo_mapo_hd_1).into(mMapImageView);

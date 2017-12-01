@@ -146,7 +146,6 @@ public class DateHelpers {
         return formatter.format(entryDate);
     }
 
-
     /**
      * Parse a date depending on the format wanted.
      * @param entryDate The date to be parsed
