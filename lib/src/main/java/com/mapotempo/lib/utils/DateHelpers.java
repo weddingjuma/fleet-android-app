@@ -126,7 +126,7 @@ public class DateHelpers {
         formatter = new SimpleDateFormat("M");
         month = Months.getStringFromIndex( Integer.parseInt( formatter.format(entryDate) ) );
 
-        formatter = new SimpleDateFormat("yyyy '-' hh':'mm");
+        formatter = new SimpleDateFormat("yyyy '-' kk':'mm");
         date = day + " " + dayNumberInMonth + ", " + month + " " + formatter.format(entryDate);
 
         return date;
@@ -141,7 +141,7 @@ public class DateHelpers {
 
     private static String onlyHour(Date entryDate) {
         SimpleDateFormat formatter;
-        formatter = new SimpleDateFormat("hh':'mm");
+        formatter = new SimpleDateFormat("kk':'mm");
 
         return formatter.format(entryDate);
     }
