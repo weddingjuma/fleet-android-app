@@ -15,16 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/button_test"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:padding="0dp"
-                android:text="bottom sheet test"
-                android:textStyle="bold"
-                android:visibility="gone"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -48,9 +38,6 @@
                 <fragment
                     class="com.mapotempo.lib.missions.MissionsListFragment"
                     android:id="@+id/listMission"
-                    android:layout_marginTop="@dimen/content_margin"
-                    android:layout_marginLeft="@dimen/content_margin"
-                    android:layout_marginRight="@dimen/content_margin"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent" />
 
