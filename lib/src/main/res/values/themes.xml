@@ -11,6 +11,9 @@
         <item name="buttonLogin">@drawable/bg_login_button</item>
         <item name="buttonLoginTextColor">@android:color/white</item>
 
+        <!-- Main Menu List Fragment. -->
+        <item name="navItemBackground">@drawable/bg_nav_item</item>
+
         <!-- Mission List Fragment. -->
         <item name="missionTextColorPrimary">@color/colorDarkGrey</item>
         <item name="missionTextColorSecondary">@color/colorGrey</item>
@@ -26,6 +29,9 @@
         <!-- Login Fragment. -->
         <item name="buttonLogin">@drawable/bg_login_button_night</item>
         <item name="buttonLoginTextColor">@android:color/black</item>
+
+        <!-- Main Menu List Fragment. -->
+        <item name="navItemBackground">@drawable/bg_nav_item_night</item>
 
         <!-- Mission List Fragment. -->
         <item name="missionTextColorPrimary">@color/colorGrey</item>

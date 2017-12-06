@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="buttonLogin" format="reference"/>
+    <attr name="buttonLogin" format="reference" />
 
-    <attr name="colorMapoPrimary" format="reference"/>
-    <attr name="colorMapoSecondary" format="reference"/>
+    <attr name="colorMapoPrimary" format="reference" />
+    <attr name="colorMapoSecondary" format="reference" />
 
-    <attr name="buttonLoginTextColor" format="color"/>
-    <attr name="colorPrimaryBackground" format="color"/>
-    <attr name="colorSelected" format="color"/>
+    <attr name="buttonLoginTextColor" format="color" />
+    <attr name="colorPrimaryBackground" format="color" />
+    <attr name="colorSelected" format="color" />
 
-    <attr name="missionTextColorPrimary" format="color"/>
-    <attr name="missionTextColorSecondary" format="color"/>
-    <attr name="missionTextColorTertiary" format="color"/>
+    <attr name="navItemBackground" format="color" />
+
+    <attr name="missionTextColorPrimary" format="color" />
+    <attr name="missionTextColorSecondary" format="color" />
+    <attr name="missionTextColorTertiary" format="color" />
 
 </resources>
 

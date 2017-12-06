@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_menu"
+    android:clickable="true"
+    android:theme="@style/MapotempoTheme">
+
+    <group
+        android:id="@+id/group_geo"
+        android:clickable="true">
+
+        <item
+            android:id="@+id/map"
+            android:icon="@drawable/ic_map_black_24dp"
+            android:title=" Map" />
+
+        <item
+            android:id="@+id/tracking_status"
+            android:icon="@drawable/ic_tracking_black_24dp"
+            android:title="Tracking status"
+            app:actionLayout="@layout/switch_item" />
+
+    </group>
+
+    <group android:id="@+id/group_settings">
+
+        <item
+            android:id="@+id/setting"
+            android:enabled="true"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+
+        <item
+            android:id="@+id/help"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="Help" />
+
+    </group>
+
+    <group android:id="@+id/group_logout">
+
+        <item
+            android:id="@+id/sign_out"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:state_pressed="true"
+            android:title="Sign Out" />
+
+    </group>
+
+</menu>

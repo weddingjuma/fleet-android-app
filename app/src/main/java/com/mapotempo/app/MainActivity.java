@@ -15,40 +15,37 @@ import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
-import com.mapotempo.lib.missions.MissionsListFragment;
+import com.mapotempo.lib.menu.MainMenuFragment;
 import com.mapotempo.lib.mission.MissionsPagerFragment;
+import com.mapotempo.lib.missions.MissionsListFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.mapotempo.app.other.DrawerOnClickListener;
-import com.mapotempo.app.utils.DrawerListAdapter;
-import com.mapotempo.app.utils.ListItemCustom;
-
 public class MainActivity extends AppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
         MissionsPagerFragment.OnMissionFocusListener,
+        MainMenuFragment.OnMenuInteractionListener,
         LocationListener {
 
-    private DrawerLayout mDrawerLayout;
+    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
     // ===================================
     // ==  Android Activity Life cycle  ==
     // ===================================
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         addDrawableHandler(toolbar);
     }
-
 
     @Override
     @SuppressWarnings("MissingPermission")
@@ -102,6 +99,34 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         }
     }
 
+    // ===========================================
+    // ==  OnMenuInteractionListener Interface  ==
+    // ===========================================
+
+    @Override
+    public void onMap() {
+
+    }
+
+    @Override
+    public void onSettings() {
+
+    }
+
+    @Override
+    public void onHelp() {
+
+    }
+
+    @Override
+    public void onLogout() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
+        mapotempoApplication.setManager(null);
+        finish();
+    }
+
     // ===============
     // ==  Private  ==
     // ===============
@@ -125,33 +150,17 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
 
                 public void onDrawerClosed(View view) {
                     supportInvalidateOptionsMenu();
-                    // drawerOpened = false;
                 }
 
                 public void onDrawerOpened(View drawerView) {
                     supportInvalidateOptionsMenu();
-                    // drawerOpened = true;
                 }
             };
 
             mDrawerToggle.setDrawerIndicatorEnabled(true);
             mDrawerLayout.addDrawerListener(mDrawerToggle);
             mDrawerToggle.syncState();
-
-            customerDrawerList();
         }
-    }
-
-    private void customerDrawerList() {
-        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        ListItemCustom[] drawerElements = new ListItemCustom[]{
-                new ListItemCustom(R.drawable.ic_login_black_24dp, "Connection", getResources().getColor(R.color.colorMapoBlue)),
-                new ListItemCustom(R.drawable.ic_info_black_24dp, "About", getResources().getColor(R.color.colorOrange)),
-        };
-
-        mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_layout_header, null));
-        mDrawerList.setAdapter(new DrawerListAdapter(this, R.layout.drawer_layout_item_row, drawerElements));
-        mDrawerList.setOnItemClickListener(new DrawerOnClickListener());
     }
 
     // ###################################
@@ -159,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     // ##    LOCATION PROVIDER TEST     ##
     // ##                               ##
     // ###################################
-    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
     @Override
     @SuppressWarnings("MissingPermission")

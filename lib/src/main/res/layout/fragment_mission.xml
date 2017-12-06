@@ -1,8 +1,10 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bgLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.mapotempo.lib.mission.MissionDetailsFragment">
 
     <ScrollView
         android:id="@+id/scroll_box"
@@ -19,29 +21,29 @@
         android:id="@+id/go_to_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginRight="10dp"
         android:clickable="true"
+        android:padding="10dp"
         android:src="@drawable/ic_near_me_black_24dp"
         android:tint="@color/colorWhite"
-        app:layout_anchor="@id/mapContainer"
-        app:layout_anchorGravity="bottom|right|end"
         app:backgroundTint="@color/colorMapoGreen"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        app:layout_anchor="@id/mapContainer"
+        app:layout_anchorGravity="bottom|right|end" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginRight="75dp"
         android:clickable="true"
+        android:padding="10dp"
         android:src="@drawable/ic_check_black_24dp"
         android:tint="@color/colorWhite"
-        app:layout_anchor="@id/mapContainer"
-        app:layout_anchorGravity="bottom|right|end"
         app:backgroundTint="@color/colorMapoGreen"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        app:layout_anchor="@id/mapContainer"
+        app:layout_anchorGravity="bottom|right|end" />
 
     <RelativeLayout
         android:id="@+id/bottom_sheet"
@@ -73,29 +75,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_check_black_24dp"
-                    android:background="@drawable/bg_action_status" />
+                    android:background="@drawable/bg_action_status"
+                    android:src="@drawable/ic_check_black_24dp" />
 
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_pencil_square_o_24dp"
-                    android:background="@drawable/bg_action_status" />
+                    android:background="@drawable/bg_action_status"
+                    android:src="@drawable/ic_pencil_square_o_24dp" />
 
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_location_on_black_24dp"
-                    android:background="@drawable/bg_action_status" />
+                    android:background="@drawable/bg_action_status"
+                    android:src="@drawable/ic_location_on_black_24dp" />
 
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_test_status_icone_24dp"
-                    android:background="@drawable/bg_action_status" />
+                    android:background="@drawable/bg_action_status"
+                    android:src="@drawable/ic_test_status_icone_24dp" />
 
             </LinearLayout>
 

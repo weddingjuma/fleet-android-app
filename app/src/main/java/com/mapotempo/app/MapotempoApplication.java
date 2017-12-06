@@ -29,12 +29,10 @@ public class MapotempoApplication extends Application implements MapotempoApplic
 
     @Override
     public void setManager(MapotempoFleetManagerInterface manager) {
-        if (manager != null) {
-            if (iFleetManager != null)
-                iFleetManager.release();
+        if (iFleetManager != null)
+            iFleetManager.release();
 
-            iFleetManager = manager;
-            //iFleetManager.onlineStatus(false); // Default is false, wait validation from user.
-        }
+        iFleetManager = manager;
+        //iFleetManager.onlineStatus(false); // Default is false, wait validation from user.
     }
 }
