@@ -1,19 +1,12 @@
 package com.mapotempo.app;
 
-import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
-import android.telephony.gsm.GsmCellLocation;
-import android.util.Log;
 import android.view.View;
 
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
@@ -22,12 +15,11 @@ import com.mapotempo.lib.mission.MissionsPagerFragment;
 import com.mapotempo.lib.missions.MissionsListFragment;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
         MissionsPagerFragment.OnMissionFocusListener,
-        MainMenuFragment.OnMenuInteractionListener,
-        LocationListener {
+        MainMenuFragment.OnMenuInteractionListener
+        /* LocationListener */ {
 
     ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
@@ -51,14 +43,14 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     @SuppressWarnings("MissingPermission")
     protected void onStart() {
         super.onStart();
-        LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+        //LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
         //LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
         //if (locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-        if (locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            Log.i("GPS_PROVIDER", "OKKKKKKKKKK");
-        else
-            Log.i("GPS_PROVIDER", "FAIIIIIIIIIL");
-//        locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
+        //if (locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        //    Log.i("GPS_PROVIDER", "OKKKKKKKKKK");
+        //else
+        //Log.i("GPS_PROVIDER", "FAIIIIIIIIIL");
+        // locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
     }
 
     @Override
@@ -168,68 +160,68 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     // ##    LOCATION PROVIDER TEST     ##
     // ##                               ##
     // ###################################
-
-    @Override
-    @SuppressWarnings("MissingPermission")
-    public void onLocationChanged(Location location) {
-        Log.d("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
-        MapotempoApplication app = (MapotempoApplication) getApplicationContext();
-        if (app.getManager() != null) {
-            Integer cid = -1;
-            Integer lac = -1;
-            Integer mcc = -1;
-            Integer mnc = -1;
-
-            Log.d("onLocationChanged", "up mapotempo");
-            TelephonyManager telephonyManager = (TelephonyManager) (getSystemService((Context.TELEPHONY_SERVICE)));
-            GsmCellLocation gl = (GsmCellLocation) telephonyManager.getCellLocation();
-            String networkOperator = telephonyManager.getNetworkOperator();
-
-            if (gl != null) {
-                cid = gl.getCid();
-                lac = gl.getLac();
-                //Log.i("loc info", "psc : " + cl.getPsc());
-            }
-            if (networkOperator != null) {
-                System.out.println(">>>>>>>>>>>" + networkOperator);
-                //mcc = Integer.parseInt(networkOperator.substring(0, 3));
-                //mnc = Integer.parseInt(networkOperator.substring(3));
-            }
-
-            LocationDetailsInterface ld = app.getManager().getSubmodelFactory().CreateNewLocationDetails(
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    new Date(),
-                    location.getAccuracy(),
-                    location.getSpeed(),
-                    location.getBearing()
-                    , location.getAltitude(),
-                    0,
-                    cid,
-                    lac,
-                    mcc,
-                    mnc);
-            app.getManager().setCurrentLocationDetails(ld);
-
-            System.out.println("---------------------UP LOCATION---------------");
-        }
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-        Log.i("onStatusChanged", s);
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-        Log.i("onProviderEnabled", s);
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-        Log.i("onProviderDisabled", s);
-    }
+//
+//    @Override
+//    @SuppressWarnings("MissingPermission")
+//    public void onLocationChanged(Location location) {
+//        Log.d("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
+//        MapotempoApplication app = (MapotempoApplication) getApplicationContext();
+//        if (app.getManager() != null) {
+//            Integer cid = -1;
+//            Integer lac = -1;
+//            Integer mcc = -1;
+//            Integer mnc = -1;
+//
+//            Log.d("onLocationChanged", "up mapotempo");
+//            TelephonyManager telephonyManager = (TelephonyManager) (getSystemService((Context.TELEPHONY_SERVICE)));
+//            GsmCellLocation gl = (GsmCellLocation) telephonyManager.getCellLocation();
+//            String networkOperator = telephonyManager.getNetworkOperator();
+//
+//            if (gl != null) {
+//                cid = gl.getCid();
+//                lac = gl.getLac();
+//                //Log.i("loc info", "psc : " + cl.getPsc());
+//            }
+//            if (networkOperator != null) {
+//                System.out.println(">>>>>>>>>>>" + networkOperator);
+//                //mcc = Integer.parseInt(networkOperator.substring(0, 3));
+//                //mnc = Integer.parseInt(networkOperator.substring(3));
+//            }
+//
+//            LocationDetailsInterface ld = app.getManager().getSubmodelFactory().CreateNewLocationDetails(
+//                    location.getLatitude(),
+//                    location.getLongitude(),
+//                    new Date(),
+//                    location.getAccuracy(),
+//                    location.getSpeed(),
+//                    location.getBearing()
+//                    , location.getAltitude(),
+//                    0,
+//                    cid,
+//                    lac,
+//                    mcc,
+//                    mnc);
+//            app.getManager().setCurrentLocationDetails(ld);
+//
+//            System.out.println("---------------------UP LOCATION---------------");
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onStatusChanged(String s, int i, Bundle bundle) {
+//        Log.i("onStatusChanged", s);
+//    }
+//
+//    @Override
+//    public void onProviderEnabled(String s) {
+//        Log.i("onProviderEnabled", s);
+//    }
+//
+//    @Override
+//    public void onProviderDisabled(String s) {
+//        Log.i("onProviderDisabled", s);
+//    }
 }
 
 

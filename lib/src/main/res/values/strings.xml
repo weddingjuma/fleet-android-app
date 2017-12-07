@@ -28,7 +28,6 @@
     <string name="login_error_details">Either password and login doesn\'t match, please try again.</string>
 
     <!-- USER DATA PREF -->
-
     <string name="agreement">I agree the terms and conditions.</string>
     <string name="clear_pad">Clear Pad</string>
     <string name="save_signature">Save Signature</string>
@@ -40,7 +39,7 @@
 
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.1.135:4984/db</string>-->
-    <string name="syncgateway_url">http://192.168.94.234:4984/db</string>
-    <!--<string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>-->
+    <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->
+    <string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>
 
 </resources>
