@@ -43,7 +43,7 @@
     <string name="sign_out">Sign Out</string>
 
     <!-- Mission List -->
-    <string name="no_available_mission">No available mission</string>
+    <string name="no_available_mission">No missions available</string>
 
     <!-- Mission Detail -->
     <string name="duration">Duration</string>
