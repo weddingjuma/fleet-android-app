@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -282,7 +281,7 @@ public class MissionDetailsFragment extends Fragment {
                         .setColor(COLOR_GREEN)
                         .build();
 
-                int x = mMapImageView.getMeasuredWidth();;
+                int x = mMapImageView.getMeasuredWidth();
                 int y = mMapImageView.getMeasuredHeight();
                 double ratio = (double) y / (double) x;
                 x = MAP_IMAGE_WIDTH_QUALITY;
@@ -290,7 +289,7 @@ public class MissionDetailsFragment extends Fragment {
                 Log.d(this.getClass().getName(), "ratio : " + ratio + "x : " + x + " y : " + y);
                 MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
                         .setAccessToken(getString(R.string.mapbox_access_token))
-                        .setStyleId(Constants.MAPBOX_STYLE_OUTDOORS)
+                        .setStyleId(Constants.MAPBOX_STYLE_STREETS)
                         .setStaticMarkerAnnotations(marker)
                         .setLat(mMission.getLocation().getLat()) // Image center Latitude
                         .setLon(mMission.getLocation().getLon()) // Image center longitude
@@ -299,7 +298,7 @@ public class MissionDetailsFragment extends Fragment {
                         .setHeight(y) // Image height
                         .build();
 
-                Picasso.with(getActivity()).load(veniceStaticImage.getUrl().toString()).error(R.drawable.ic_logo_mapo_hd_1).into(mMapImageView);
+                Picasso.with(getActivity()).load(veniceStaticImage.getUrl().toString()).error(R.drawable.bg_world_mapbox_v10).into(mMapImageView);
                 return true;
             }
         });
@@ -315,7 +314,7 @@ public class MissionDetailsFragment extends Fragment {
 
         // FIXME SPLIT ADDRESS
         TextView address = getView().findViewById(R.id.delivery_address);
-        address.setText(mission.getAddress().toString());
+        address.setText(mission.getAddress().getStreet() + " \n" + mission.getAddress().getPostalcode() + " " + mission.getAddress().getCity());
 
         TextView commentView = getView().findViewById(R.id.comment);
         commentView.setText(mission.getComment());

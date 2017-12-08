@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This view require MapotempoTheme or MapotempoTheme_Night.
+<?xml version="1.0" encoding="utf-8"?><!-- This view require MapotempoTheme or MapotempoTheme_Night.
     The theme is set in the corresponding fragment. -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +13,7 @@
         android:layout_height="match_parent"
         android:background="?colorMapoSecondary"
         android:alpha="0.2"
-        tools:background="@color/colorMapoBlue"/>
+        tools:background="@color/colorMapoBlue" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +42,7 @@
                 android:layout_marginRight="@dimen/fragment_mission_id_margin"
                 android:layout_marginLeft="@dimen/fragment_mission_id_margin"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/bg_mission_details_id"
+                android:background="@drawable/bg_mission_id"
                 android:textColor="?missionTextColorPrimary"
                 android:textSize="@dimen/fragment_mission_id_text_size"
                 android:textStyle="bold"
@@ -103,7 +101,7 @@
                 android:textStyle="bold"
                 android:textColor="?missionTextColorSecondary"
                 android:textAlignment="center"
-                tools:text="13h30"/>
+                tools:text="13h30" />
 
             <TextView
                 android:id="@+id/delivery_date"
