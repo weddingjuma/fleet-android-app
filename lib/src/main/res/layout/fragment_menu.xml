@@ -7,4 +7,6 @@
     android:fitsSystemWindows="true"
     app:headerLayout="@layout/main_nav_header"
     app:itemBackground="?navItemBackground"
+    app:itemIconTint="@color/colorMapoBlueDark"
+    app:itemTextColor="@color/colorMapoBlueDark"
     app:menu="@menu/main_menu" />

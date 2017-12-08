@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     public void onMissionFocus(int position) {
         MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         if (missionsListFragment != null)
-            missionsListFragment.setCurrentMission(position);
+            missionsListFragment.missionFocus(position);
     }
 
     // ===========================================

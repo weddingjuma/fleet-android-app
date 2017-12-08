@@ -9,11 +9,11 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
-import com.mapotempo.fleet.api.model.accessor.MissionAccessInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 
@@ -56,25 +56,27 @@ import java.util.List;
  */
 public class MissionsListFragment extends Fragment {
 
+    public RecyclerView mRecyclerView;
+
     private OnMissionSelectedListener mListener;
-    private MapotempoFleetManagerInterface mManager;
+
     private MissionsRecyclerViewAdapter mRecyclerAdapter;
-    private MissionAccessInterface iMissionAccess;
+
     private List<MissionInterface> mMissions = new ArrayList<>();
-    private int mColumnCount = 1;
+
+    private FrameLayout mDefaultFrameLayout;
+
     private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final List<MissionInterface> missions) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mRecyclerAdapter.notifyDataSyncHasChanged(missions);
+                    setMissions(missions);
                 }
             });
         }
     };
-
-    public RecyclerView mRecyclerView;
 
     // ===================================
     // ==  Android Fragment Life cycle  ==
@@ -98,7 +100,7 @@ public class MissionsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
-        if(false)
+        if (false) // FIXME to finish when theme switch will be implemented
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
 
         View view = inflater.cloneInContext(contextThemeWrapper).inflate(R.layout.fragment_missions_list, container, false);
@@ -111,48 +113,34 @@ public class MissionsListFragment extends Fragment {
             }
         }, mMissions);
         mRecyclerView.setAdapter(mRecyclerAdapter);
-
+        mDefaultFrameLayout = view.findViewById(R.id.default_layout);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        setManagerAndMissions();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-        if (iMissionAccess != null)
-            iMissionAccess.removeChangeListener(missionChangeListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        MapotempoApplicationInterface app = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        if (app.getManager() != null) {
-            mRecyclerAdapter.notifyDataSyncHasChanged(app.getManager().getMissionAccess().getAll());
-            if (iMissionAccess != null)
-                iMissionAccess.removeChangeListener(missionChangeListener);
-            setManagerAndMissions();
+        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null) {
+            mapotempoFleetManagerInterface.getMissionAccess().addChangeListener(missionChangeListener);
+            setMissions(mapotempoFleetManagerInterface.getMissionAccess().getAll());
         }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mRecyclerAdapter = null;
+    public void onPause() {
+        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null) {
+            mapotempoFleetManagerInterface.getMissionAccess().removeChangeListener(missionChangeListener);
+        }
+        super.onPause();
     }
 
     // ==============
     // ==  Public  ==
     // ==============
 
-    public void setCurrentMission(int position) {
+    public void missionFocus(int position) {
         mRecyclerView.smoothScrollToPosition(position);
         if (mRecyclerAdapter != null)
             mRecyclerAdapter.setMissionFocus(position);
@@ -166,7 +154,6 @@ public class MissionsListFragment extends Fragment {
          * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
          *
          * @param position return the item list position
-         * @return View.OnClickListener
          */
         void onMissionSelected(int position);
     }
@@ -175,19 +162,14 @@ public class MissionsListFragment extends Fragment {
     // ==  Private  ==
     // ===============
 
-    private void setManagerAndMissions() {
-        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getContext().getApplicationContext();
-        if (mapotempoApplication.getManager() == null)
-            return;
-
-        mManager = mapotempoApplication.getManager();
-        iMissionAccess = mManager.getMissionAccess();
-        mMissions = iMissionAccess.getAll();
-
-        attachCallBack(iMissionAccess);
-    }
-
-    private void attachCallBack(MissionAccessInterface iMissionAccess) {
-        iMissionAccess.addChangeListener(missionChangeListener);
+    private void setMissions(List<MissionInterface> missions) {
+        mRecyclerAdapter.notifyDataSyncHasChanged(missions);
+        if (missions == null || missions.size() == 0) {
+            mDefaultFrameLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        } else {
+            mDefaultFrameLayout.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 }

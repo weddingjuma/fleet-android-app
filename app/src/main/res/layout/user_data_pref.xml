@@ -1,52 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:padding="5dp"
-              android:layout_gravity="center"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/user_data_pref_title"/>
+            android:text="@string/user_data_pref_title" />
 
-        <include layout="@layout/spacer_linear"/>
+        <include layout="@layout/spacer_linear" />
 
         <TextView
             style="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/user_data_description"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:text="@string/user_data_description" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/only_wifi"
-            android:layout_weight="1"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
-            android:text="@string/user_data_only_wifi"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/user_data_only_wifi" />
 
         <Button
             android:id="@+id/both_wifi_and_mobile"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-            android:textColor="@color/colorRedDeletion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/user_data_mobile_wifi"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:textColor="@color/colorRedDeletion" />
 
     </LinearLayout>
 

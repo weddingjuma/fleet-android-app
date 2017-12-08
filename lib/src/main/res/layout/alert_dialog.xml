@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:background="@color/colorLightGrey"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightGrey"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:background="@color/colorRedDeletion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorRedDeletion">
 
             <TextView
                 android:id="@+id/dialog_title"
-                android:text="Title"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:textColor="@color/colorWhite"
-                android:textAlignment="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Title"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="25dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <include layout="@layout/spacer_linear" />
 
         <LinearLayout
-            android:padding="10dp"
-            android:orientation="vertical"
-            android:background="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/dialog_message"
-                android:text="Error message"
-                android:textSize="10dp"
-                android:textColor="@color/colorOrange"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="Error message"
+                android:textColor="@color/colorOrange"
+                android:textSize="10dp" />
 
             <include layout="@layout/spacer_linear" />
 
             <TextView
                 android:id="@+id/dialog_details"
-                android:layout_marginTop="10dp"
-                android:text="details"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="details" />
         </LinearLayout>
     </LinearLayout>
 

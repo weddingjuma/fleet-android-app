@@ -104,7 +104,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
             String missionHour = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES);
             mItem = mission;
             mName.setText(mission.getName());
-            mListId.setText(Integer.toString(position));
+            mListId.setText(Integer.toString(position + 1));
             mAddress.setText(mission.getAddress().toString());
             mDelivery_date.setText(missionDate);
             mDelivery_hour.setText(missionHour);

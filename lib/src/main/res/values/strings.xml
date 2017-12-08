@@ -34,12 +34,23 @@
     <string name="save_signature_success">Save Signature Success</string>
     <string name="save_signature_fail">Save Signature Fail</string>
 
-    <!-- USER DATA PREF -->
+    <!-- Menu -->
+    <string name="map">Map</string>
+    <string name="tracking">Tracking</string>
+    <string name="synchronization">Synchronization</string>
+    <string name="settings">Settings</string>
+    <string name="help">Help</string>
+    <string name="sign_out">Sign Out</string>
+
+    <!-- Mission List -->
+    <string name="no_available_mission">No available mission</string>
+
+    <!-- Mission Detail -->
     <string name="duration">Duration</string>
 
+    <string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.1.135:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->
-    <string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>
 
 </resources>
