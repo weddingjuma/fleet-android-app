@@ -18,11 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,9 +83,9 @@ public class MissionDetailsFragment extends Fragment {
     public MissionDetailsFragment() {
     }
 
-    //    private static final String COLOR_RED = "e55e5e";
+    // private static final String COLOR_RED = "e55e5e";
     private static final String COLOR_GREEN = "56b881";
-//    private static final String COLOR_BLUE = "3887be";
+    // private static final String COLOR_BLUE = "3887be";
 
     private MissionInterface mMission;
 
@@ -95,7 +93,27 @@ public class MissionDetailsFragment extends Fragment {
 
     private ImageView mMapImageView;
 
-    private ProgressBar mMapImageLoader;
+    private TextView mMissionName;
+    private TextView mMissionReference;
+    private TextView mMissionStatusLabel;
+
+    private LinearLayout mLayoutDelivery;
+    private TextView mTextViewDeliveryStreet;
+    private TextView mTextViewDeliveryAddress;
+
+    private TextView mTextViewDate;
+    private TextView mTextViewDuration;
+
+    private LinearLayout mLayoutTimeWindows;
+    private LinearLayout mLayoutTimeWindowsContainer;
+
+    private LinearLayout mLayoutPhone;
+    private TextView mTextViewPhone;
+
+    private LinearLayout mLayoutComment;
+    private TextView mTextViewComment;
+
+    private ImageButton mNavigationAction;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -122,6 +140,7 @@ public class MissionDetailsFragment extends Fragment {
     public void fillViewFromActivity() {
         if (mMission != null) {
             fillViewData(mMission);
+            initNavigationAction(mMission);
         }
     }
 
@@ -167,25 +186,41 @@ public class MissionDetailsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_mission, container, false);
 
-        initBottomSheet(view);
-        initActionButtons(view);
-
+        // Map view
         mMapImageView = view.findViewById(R.id.mapImageView);
 
-        mMapImageLoader = view.findViewById(R.id.mapLoader);
+        // Header view
+        mMissionName = view.findViewById(R.id.name);
+        mMissionReference = view.findViewById(R.id.reference);
+        mMissionStatusLabel = view.findViewById(R.id.status_label);
 
-        return view;
-    }
+        // Location view
+        mLayoutDelivery = view.findViewById(R.id.delivery_address_layout);
+        mTextViewDeliveryStreet = view.findViewById(R.id.delivery_street);
+        mTextViewDeliveryAddress = view.findViewById(R.id.delivery_address);
 
-    @Override
-    public void setInitialSavedState(SavedState state) {
-        super.setInitialSavedState(state);
-    }
+        // Date view
+        mTextViewDate = view.findViewById(R.id.delivery_date);
+        mTextViewDuration = view.findViewById(R.id.delivery_duration);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        // TimeWindows view
+        mLayoutTimeWindows = view.findViewById(R.id.time_windows_layout);
+        mLayoutTimeWindowsContainer = view.findViewById(R.id.time_windows_container);
+
+        // Phone view
+        mLayoutPhone = view.findViewById(R.id.phone_layout);
+        mTextViewPhone = view.findViewById(R.id.phone);
+
+        // Comment view
+        mLayoutComment = view.findViewById(R.id.comment_layout);
+        mTextViewComment = view.findViewById(R.id.comment);
+
+        // Action button
+        mNavigationAction = view.findViewById(R.id.go_to_location);
+
         fillViewFromActivity();
+        initBottomSheet(view);
+        return view;
     }
 
     @Override
@@ -194,21 +229,6 @@ public class MissionDetailsFragment extends Fragment {
 
         if (mMission != null)
             mMission.removeChangeListener(mCallback);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     // ======================================
@@ -229,9 +249,9 @@ public class MissionDetailsFragment extends Fragment {
         void onSingleMissionInteraction(MissionInterface mission);
     }
 
-    // =================
-    // ==  Protected  ==
-    // =================
+    // ===============
+    // ==  Private  ==
+    // ===============
 
     private void initBottomSheet(View view) {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
@@ -239,13 +259,12 @@ public class MissionDetailsFragment extends Fragment {
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    private void initActionButtons(View view) {
-        ImageButton goToLocationButton = view.findViewById(R.id.go_to_location);
-        goToLocationButton.setOnClickListener(new View.OnClickListener() {
+    private void initNavigationAction(final MissionInterface mission) {
+        mNavigationAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mMission != null) {
-                    LocationInterface loc = mMission.getLocation();
+                    LocationInterface loc = mission.getLocation();
 
                     Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
@@ -264,7 +283,13 @@ public class MissionDetailsFragment extends Fragment {
         });
     }
 
-    protected void fillViewData(MissionInterface mission) {
+    private void fillViewData(MissionInterface mission) {
+        mapVisivilityManager();
+        detailsContentManager(mission);
+        detailsVisibilityManager();
+    }
+
+    private void mapVisivilityManager() {
         // Asynchronously fill the mapImageView when the widget is draw to recover dimensions.
         ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -302,71 +327,44 @@ public class MissionDetailsFragment extends Fragment {
                 return true;
             }
         });
-
-        TextView name = getView().findViewById(R.id.name);
-        name.setText(mission.getName());
-
-        TextView date = getView().findViewById(R.id.delivery_date);
-        date.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES));
-
-        TextView duration = getView().findViewById(R.id.delivery_duration);
-        duration.setText(getString(R.string.duration) + " : " + mission.getDuration());
-
-        // FIXME SPLIT ADDRESS
-        TextView address = getView().findViewById(R.id.delivery_address);
-        address.setText(mission.getAddress().getStreet() + " \n" + mission.getAddress().getPostalcode() + " " + mission.getAddress().getCity());
-
-        TextView commentView = getView().findViewById(R.id.comment);
-        commentView.setText(mission.getComment());
-
-        TextView phoneView = getView().findViewById(R.id.phone);
-        phoneView.setText(mission.getPhone());
-
-        LinearLayout timeWindowsLayout = getView().findViewById(R.id.time_windows_container);
-        timeWindowsLayout.removeAllViews();
-        for (TimeWindowsInterface tw : mMission.getTimeWindow()) {
-            TextView textView = new TextView(getContext());
-            textView.setText(DateHelpers.parse(tw.getStart(), DateHelpers.DateStyle.HOURMINUTES)
-                    + " - "
-                    + DateHelpers.parse(tw.getEnd(), DateHelpers.DateStyle.HOURMINUTES));
-            timeWindowsLayout.addView(textView);
-        }
-
-    /*FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
-        // TextView company = getView().findViewById(R.id.company);
-        // TextView details = getView().findViewById(R.id.details);
-        // TextView status = getView().findViewById(R.id.mission_status);
-        // TextView address = getView().findViewById(R.id.delivery_adress);
-        /*FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
-
-        int stateList = Color.parseColor(mission.getStatus().getColor());
-        statusBtn.setBackgroundTintList(ColorStateList.valueOf(stateList));
-
-        address.setText(mission.getAddress().toString());
-
-        details.setText(mission.getComment());
-        company.setText(mission.getCompanyId());
-        status.setText(mission.getStatus().getLabel().toUpperCase());*/
-
-
-        // ######### TEST #########
-        /*ImageView attachment = getView().findViewById(R.id.attachment);
-        Mission m = (Mission) mission;
-        Attachment a = m.getAttachment();
-        try {
-            if (a != null) {
-                InputStream is = a.getContent();
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-                attachment.setImageBitmap(bitmap);
-            }
-        } catch (CouchbaseLiteException e) {
-            System.err.println(e);
-        }*/
     }
 
-    // ===============
-    // ==  Private  ==
-    // ===============
+    private void detailsContentManager(MissionInterface mission) {
+        mMissionName.setText(mission.getName());
+        mMissionReference.setText(mission.getReference());
+
+        mTextViewDate.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES));
+        mTextViewDuration.setText(DateHelpers.FormatedHour(mission.getDuration()));
+
+        mTextViewDeliveryStreet.setText(String.format("%s", mission.getAddress().getStreet()));
+        mTextViewDeliveryAddress.setText(String.format("%s %s", mission.getAddress().getPostalcode(), mission.getAddress().getCity()));
+
+        mTextViewPhone.setText(mission.getPhone());
+
+        mTextViewComment.setText(mission.getComment());
+
+        mLayoutTimeWindowsContainer.removeAllViews();
+        for (TimeWindowsInterface tw : mMission.getTimeWindow()) {
+            TextView textView = new TextView(getContext());
+            String date = String.format("%s - %s", DateHelpers.parse(tw.getStart(), DateHelpers.DateStyle.HOURMINUTES), DateHelpers.parse(tw.getEnd(), DateHelpers.DateStyle.HOURMINUTES));
+            textView.setText(date);
+            mLayoutTimeWindowsContainer.addView(textView);
+        }
+    }
+
+    private void detailsVisibilityManager() {
+        mMissionReference.setVisibility(mMissionReference.getText().length() > 0 ? View.VISIBLE : View.GONE);
+        mTextViewDuration.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
+        mLayoutDelivery.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) || isEmptyTextView(mTextViewDeliveryStreet)) ? View.VISIBLE : View.GONE);
+        mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
+        mLayoutPhone.setVisibility(isEmptyTextView(mTextViewPhone) ? View.VISIBLE : View.GONE);
+        mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
+    }
+
+    private boolean isEmptyTextView(TextView textView) {
+        return textView.getText().toString().trim().length() > 0;
+    }
+
     private void goSignatureActivity(Context context) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
@@ -404,30 +402,6 @@ public class MissionDetailsFragment extends Fragment {
     // ###                TO REMOVE              ###
     // #############################################
     // #############################################
-
-    private boolean deleteMission() {
-        boolean del = mMission.delete();
-        mMission = null;
-        return del;
-    }
-
-    private void updateCurrentMission() throws RuntimeException {
-        currentMissionIsNotNull();
-    }
-
-    private void initDeletionForCurrentMission() throws RuntimeException {
-        currentMissionIsNotNull();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        final AlertDialog alert = builder.create();
-
-        LayoutInflater inflate = getActivity().getLayoutInflater();
-        View view = inflate.inflate(R.layout.yes_no_choice, null);
-
-        alert.setView(view);
-        alert.show();
-        setOnClickListenersForDeletion(view, alert);
-    }
 
     private void changeStatusForCurrentMission() throws RuntimeException {
         currentMissionIsNotNull();
@@ -497,35 +471,6 @@ public class MissionDetailsFragment extends Fragment {
         }
 
         return statusViews;
-    }
-
-    public void setOnClickListenersForDeletion(View view, final AlertDialog alert) {
-        Button valid = view.findViewById(R.id.valid);
-        Button cancel = view.findViewById(R.id.cancel);
-
-        valid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (deleteMission()) {
-                    alert.dismiss();
-                    backToListActivity(getActivity().getBaseContext());
-                }
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alert.dismiss();
-            }
-        });
-    }
-
-    private void backToListActivity(Context context) {
-        // FIXME Reafactor this !
-        /*if (context.getClass().equals(MissionActivity.class)) {
-            ((Activity) context).onBackPressed();
-        }*/
     }
 
     private void currentMissionIsNotNull() {

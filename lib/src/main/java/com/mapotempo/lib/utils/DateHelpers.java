@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.IllegalFormatException;
+import java.util.Locale;
 
 public class DateHelpers {
 
@@ -27,31 +28,27 @@ public class DateHelpers {
         private String mFrenchTag;
 
         Days(String englishTag, String frenchTag) {
-          mEnglishTag = englishTag;
-          mFrenchTag = frenchTag;
+            mEnglishTag = englishTag;
+            mFrenchTag = frenchTag;
         }
 
         public static Days fromEnglishString(String englishTag) {
-          Days day = MONDAY;
-          try
-          {
-            day = Days.valueOf(englishTag.toUpperCase());
-          } catch (IllegalFormatException e) {
-            e.printStackTrace();
-          } finally
-          {
-            return day;
-          }
+            Days day = MONDAY;
+            try {
+                day = Days.valueOf(englishTag.toUpperCase());
+            } catch (IllegalFormatException e) {
+                e.printStackTrace();
+            } finally {
+                return day;
+            }
         }
 
-        public String getEnglishString()
-        {
-          return mEnglishTag;
+        public String getEnglishString() {
+            return mEnglishTag;
         }
 
-        public String getFrenchString()
-        {
-          return mFrenchTag;
+        public String getFrenchString() {
+            return mFrenchTag;
         }
     }
 
@@ -100,7 +97,8 @@ public class DateHelpers {
     }
 
 
-    private DateHelpers() { }
+    private DateHelpers() {
+    }
 
 
     // #########################
@@ -117,14 +115,14 @@ public class DateHelpers {
         //day = Days.fromEnglishString( formatter.format(entryDate) ).getFrenchString();
         day = formatter.format(entryDate);
         // Uppecase the first char
-        if(day != null)
-            day = day.substring(0,1).toUpperCase() + day.substring(1).toLowerCase();
+        if (day != null)
+            day = day.substring(0, 1).toUpperCase() + day.substring(1).toLowerCase();
 
         formatter = new SimpleDateFormat("d");
         dayNumberInMonth = formatter.format(entryDate);
 
         formatter = new SimpleDateFormat("M");
-        month = Months.getStringFromIndex( Integer.parseInt( formatter.format(entryDate) ) );
+        month = Months.getStringFromIndex(Integer.parseInt(formatter.format(entryDate)));
 
         formatter = new SimpleDateFormat("yyyy '-' HH':'mm");
         date = day + " " + dayNumberInMonth + ", " + month + " " + formatter.format(entryDate);
@@ -148,8 +146,9 @@ public class DateHelpers {
 
     /**
      * Parse a date depending on the format wanted.
+     *
      * @param entryDate The date to be parsed
-     * @param format FULLDATE | SHORTDATE | HOURMINUTES
+     * @param format    FULLDATE | SHORTDATE | HOURMINUTES
      * @return
      */
     public static String parse(Date entryDate, DateStyle format) {
@@ -174,6 +173,7 @@ public class DateHelpers {
 
     /**
      * Build an array containing the date min and max from today's date.
+     *
      * @param timeToAdd number of day to add from current date
      * @return An array that contain 2 Date object, before(0) and after(1).
      */
@@ -192,6 +192,13 @@ public class DateHelpers {
         calendar.add(calendar.DATE, timeToAdd);
         Date furtherDate = calendar.getTime();
 
-        return new Date[] { currentDate, furtherDate };
+        return new Date[]{currentDate, furtherDate};
+    }
+
+    public static String FormatedHour(int totalSecs) {
+        int hours = totalSecs / 3600;
+        int minutes = (totalSecs % 3600) / 60;
+        int seconds = totalSecs % 60;
+        return String.format(Locale.ENGLISH, "%02dh%02dm%02ds", hours, minutes, seconds);
     }
 }
