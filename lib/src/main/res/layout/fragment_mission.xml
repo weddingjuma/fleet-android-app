@@ -17,39 +17,10 @@
 
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/go_to_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:clickable="true"
-        android:padding="10dp"
-        android:src="@drawable/ic_near_me_black_24dp"
-        android:tint="@android:color/white"
-        app:backgroundTint="@color/colorMapoGreen"
-        app:fabSize="normal"
-        app:layout_anchor="@id/mapContainer"
-        app:layout_anchorGravity="bottom|right|end" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="75dp"
-        android:clickable="true"
-        android:padding="10dp"
-        android:src="@drawable/ic_check_black_24dp"
-        android:tint="@android:color/white"
-        app:backgroundTint="@color/colorMapoGreen"
-        app:fabSize="normal"
-        app:layout_anchor="@id/mapContainer"
-        app:layout_anchorGravity="bottom|right|end" />
-
     <RelativeLayout
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
         app:behavior_hideable="false"
         app:behavior_peekHeight="50dp"
         app:elevation="4dp"
@@ -57,57 +28,81 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorDarkGrey" />
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:gravity="center">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
                 android:weightSum="4">
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_action_status"
-                    android:src="@drawable/ic_check_black_24dp" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_action_status"
-                    android:src="@drawable/ic_pencil_square_o_24dp" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_action_status"
-                    android:src="@drawable/ic_location_on_black_24dp" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_action_status"
-                    android:src="@drawable/ic_test_status_icone_24dp" />
 
             </LinearLayout>
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1" />
+
         </LinearLayout>
 
     </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_tracking_black_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@android:color/holo_purple"
+        app:fabSize="normal"
+        app:layout_anchor="@id/bottom_sheet"
+        app:layout_anchorGravity="end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="80dp"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_access_time_black_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/colorRedDeletion"
+        app:fabSize="normal"
+        app:layout_anchor="@id/bottom_sheet"
+        app:layout_anchorGravity="end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="150dp"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_pencil_square_o_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/colorOrange"
+        app:fabSize="normal"
+        app:layout_anchor="@id/bottom_sheet"
+        app:layout_anchorGravity="end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/more_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="220dp"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_more_horiz_black_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/colorGrey"
+        app:fabSize="normal"
+        app:layout_anchor="@id/bottom_sheet"
+        app:layout_anchorGravity="end" />
 
 </android.support.design.widget.CoordinatorLayout>
 

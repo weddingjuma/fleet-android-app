@@ -25,7 +25,8 @@
     <dimen name="fragment_mission_date_text_size">12sp</dimen>
 
     <!-- MISSION ADAPTER DIMENSION -->
-    <dimen name="fragment_mission_header_padding">20dp</dimen>
+    <dimen name="fragment_mission_header_padding_vertical">5dp</dimen>
+    <dimen name="fragment_mission_header_padding_horizontal">20dp</dimen>
     <dimen name="fragment_mission_body_title_size">20sp</dimen>
     <dimen name="fragment_mission_body_subtitle_size">18sp</dimen>
     <dimen name="fragment_mission_body_time_windows_size">17sp</dimen>

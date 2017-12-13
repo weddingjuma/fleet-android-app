@@ -47,6 +47,7 @@
 
     <!-- Mission Detail -->
     <string name="duration">"Duration : "</string>
+    <string name="start">"start"</string>
 
     <string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->

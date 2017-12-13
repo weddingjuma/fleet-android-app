@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -32,15 +33,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2"
-        android:padding="@dimen/fragment_mission_header_padding"
+        android:weightSum="10"
+        android:paddingLeft="@dimen/fragment_mission_header_padding_horizontal"
+        android:paddingRight="@dimen/fragment_mission_header_padding_horizontal"
+        android:paddingTop="@dimen/fragment_mission_header_padding_vertical"
+        android:paddingBottom="@dimen/fragment_mission_header_padding_vertical"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="8"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/name"
@@ -57,44 +62,55 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/fragment_mission_body_time_windows_size"
                 android:textAlignment="gravity"
-                android:text="Ref : H4DAZ456D"
                 tools:text="Ref : H4DAZ456D" />
 
-            <TextView
-                android:id="@+id/status_label"
+            <Button
+                android:id="@+id/navigation_launcher"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_time_windows_size"
-                android:text="Status : Livré"
-                tools:text="Status : Livré" />
+                android:layout_height="30dp"
+                android:drawableLeft="@drawable/ic_directions_black_24dp"
+                android:drawableTint="@android:color/white"
+                android:textColor="@android:color/white"
+                android:drawablePadding="15dp"
+                android:gravity="left|center"
+                android:height="60dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="25dp"
+                android:text="@string/start"
+                android:background="@drawable/bg_navigate_button" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical"
-            android:gravity="right|center">
+            android:layout_gravity="center">
 
-            <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/signature"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="10dp"-->
-            <!--android:clickable="true"-->
-            <!--android:src="@drawable/ic_check_black_24dp"-->
-            <!--android:tint="@color/colorWhite"-->
-            <!--app:backgroundTint="@color/colorMapoGreen"-->
-            <!--app:fabSize="mini" />-->
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:src="@drawable/ic_check_black_24dp"
+                android:tint="@android:color/white"
+                app:backgroundTint="@color/colorMapoGreen"
+                app:fabSize="mini" />
 
-            <!--<TextView-->
-            <!--android:id="@+id/status_label"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="@dimen/fragment_mission_body_title_size"-->
-            <!--android:textStyle="bold"-->
-            <!--android:text="Livré"-->
-            <!--tools:text="Livré" />-->
+            <TextView
+                android:id="@+id/status_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="@dimen/fragment_mission_body_title_size"
+                android:textStyle="bold"
+                android:text="Livré"
+                tools:text="Livré" />
 
         </LinearLayout>
 
@@ -162,7 +178,6 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_access_time_black_24dp" />
 
-
         <LinearLayout
             android:layout_weight="4"
             android:layout_width="0dp"
@@ -196,11 +211,10 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="@dimen/fragment_mission_body_detail_size"
                     tools:text="5h 10min 3s" />
+
             </LinearLayout>
 
-
         </LinearLayout>
-
 
     </LinearLayout>
 
@@ -231,14 +245,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_time_windows_size"
+                android:textSize="@dimen/fragment_mission_body_detail_size"
                 android:text="10:00-11:20"
                 tools:text="10:00-11:20" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_time_windows_size"
+                android:textSize="@dimen/fragment_mission_body_detail_size"
                 android:text="14:00-16:00"
                 tools:text="14:00-16:00" />
 
@@ -270,6 +284,7 @@
             android:layout_weight="4"
             android:layout_gravity="center_vertical|right"
             android:textSize="@dimen/fragment_mission_body_detail_size"
+            android:autoLink="phone"
             android:text="0605040302"
             tools:text="0605040302" />
 

@@ -1,23 +1,21 @@
 package com.mapotempo.lib.mission;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,22 +26,18 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
 import com.mapbox.services.commons.models.Position;
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MapotempoModelBaseInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
-import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.singnature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
-import com.mapotempo.lib.utils.MissionsStatusGeneric;
+import com.mapotempo.lib.utils.PhoneNumberHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,9 +77,7 @@ public class MissionDetailsFragment extends Fragment {
     public MissionDetailsFragment() {
     }
 
-    // private static final String COLOR_RED = "e55e5e";
     private static final String COLOR_GREEN = "56b881";
-    // private static final String COLOR_BLUE = "3887be";
 
     private MissionInterface mMission;
 
@@ -113,7 +105,8 @@ public class MissionDetailsFragment extends Fragment {
     private LinearLayout mLayoutComment;
     private TextView mTextViewComment;
 
-    private ImageButton mNavigationAction;
+    private Button mNavigationAction;
+    private ImageButton mStatusMoreAction;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -216,11 +209,17 @@ public class MissionDetailsFragment extends Fragment {
         mTextViewComment = view.findViewById(R.id.comment);
 
         // Action button
-        mNavigationAction = view.findViewById(R.id.go_to_location);
+        mNavigationAction = view.findViewById(R.id.navigation_launcher);
+        mStatusMoreAction = view.findViewById(R.id.more_action);
 
-        fillViewFromActivity();
-        initBottomSheet(view);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        fillViewFromActivity();
+        initBottomSheet(getView());
     }
 
     @Override
@@ -257,6 +256,12 @@ public class MissionDetailsFragment extends Fragment {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        mStatusMoreAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
     }
 
     private void initNavigationAction(final MissionInterface mission) {
@@ -311,7 +316,6 @@ public class MissionDetailsFragment extends Fragment {
                 double ratio = (double) y / (double) x;
                 x = MAP_IMAGE_WIDTH_QUALITY;
                 y = (int) (x * ratio);
-                Log.d(this.getClass().getName(), "ratio : " + ratio + "x : " + x + " y : " + y);
                 MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
                         .setAccessToken(getString(R.string.mapbox_access_token))
                         .setStyleId(Constants.MAPBOX_STYLE_STREETS)
@@ -331,6 +335,7 @@ public class MissionDetailsFragment extends Fragment {
 
     private void detailsContentManager(MissionInterface mission) {
         mMissionName.setText(mission.getName());
+        System.out.println(mission.getReference());
         mMissionReference.setText(mission.getReference());
 
         mTextViewDate.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES));
@@ -339,13 +344,13 @@ public class MissionDetailsFragment extends Fragment {
         mTextViewDeliveryStreet.setText(String.format("%s", mission.getAddress().getStreet()));
         mTextViewDeliveryAddress.setText(String.format("%s %s", mission.getAddress().getPostalcode(), mission.getAddress().getCity()));
 
-        mTextViewPhone.setText(mission.getPhone());
+        mTextViewPhone.setText(PhoneNumberHelper.intenationalPhoneNumber(mission.getPhone()));
 
         mTextViewComment.setText(mission.getComment());
 
         mLayoutTimeWindowsContainer.removeAllViews();
         for (TimeWindowsInterface tw : mMission.getTimeWindow()) {
-            TextView textView = new TextView(getContext());
+            TextView textView = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.time_windows_text_view, null);
             String date = String.format("%s - %s", DateHelpers.parse(tw.getStart(), DateHelpers.DateStyle.HOURMINUTES), DateHelpers.parse(tw.getEnd(), DateHelpers.DateStyle.HOURMINUTES));
             textView.setText(date);
             mLayoutTimeWindowsContainer.addView(textView);
@@ -353,7 +358,7 @@ public class MissionDetailsFragment extends Fragment {
     }
 
     private void detailsVisibilityManager() {
-        mMissionReference.setVisibility(mMissionReference.getText().length() > 0 ? View.VISIBLE : View.GONE);
+        mMissionReference.setVisibility(isEmptyTextView(mMissionReference) ? View.VISIBLE : View.GONE);
         mTextViewDuration.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
         mLayoutDelivery.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) || isEmptyTextView(mTextViewDeliveryStreet)) ? View.VISIBLE : View.GONE);
         mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
@@ -365,7 +370,7 @@ public class MissionDetailsFragment extends Fragment {
         return textView.getText().toString().trim().length() > 0;
     }
 
-    private void goSignatureActivity(Context context) {
+    private void goSignatureFragment(Context context) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
@@ -395,86 +400,86 @@ public class MissionDetailsFragment extends Fragment {
         });
         newFragment.show(ft, "t");
     }
-
-
-    // #############################################
-    // #############################################
-    // ###                TO REMOVE              ###
-    // #############################################
-    // #############################################
-
-    private void changeStatusForCurrentMission() throws RuntimeException {
-        currentMissionIsNotNull();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        final AlertDialog alert = builder.create();
-
-        LayoutInflater inf = getActivity().getLayoutInflater();
-        View view = inf.inflate(R.layout.change_status, null);
-        TextView status = view.findViewById(R.id.current_status);
-
-        status.setText(mMission.getStatus().getLabel().toUpperCase());
-        status.setBackgroundColor(Color.parseColor(mMission.getStatus().getColor()));
-        alert.setView(view);
-        alert.show();
-
-        setOnClickListenersForStatus(alert, view);
-    }
-
-
-    private void setOnClickListenersForStatus(final AlertDialog alert, View view) {
-        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
-        List<MissionStatusActionInterface> missionStatusTypes = manager.getMissionStatusActionAccessInterface().getByPrevious(mMission.getStatus());
-        ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> viewListStatus = buildViewFor(missionStatusTypes, view);
-
-        if (viewListStatus != null && viewListStatus.size() > 0) {
-            for (final MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface> status : viewListStatus) {
-                status.getView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // TODO
-                        mMission.setStatus(status.getType().getNextStatus());
-                        mMission.save();
-                        fillViewFromActivity();
-
-                        alert.dismiss();
-                    }
-                });
-            }
-        }
-    }
-
-    private ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> buildViewFor(List<MissionStatusActionInterface> missionStatusActions, View view) {
-        ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> statusViews = new ArrayList<>();
-
-        for (MissionStatusActionInterface missionStatusType : missionStatusActions) {
-            LinearLayout newLayout = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.single_status, null);
-            LinearLayout layoutContainer = view.findViewById(R.id.status_container);
-            TextView textViewLabel = newLayout.findViewById(R.id.status_label);
-            ImageView imageViewIcon = newLayout.findViewById(R.id.icon);
-            MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface> missionsStatusGeneric;
-
-            String icon = null;
-            String label = missionStatusType.getLabel();
-            String color = missionStatusType.getNextStatus().getColor();
-
-            textViewLabel.setText(label);
-            imageViewIcon.setColorFilter(Color.parseColor(color));
-            layoutContainer.addView(newLayout);
-
-            try {
-                missionsStatusGeneric = new MissionsStatusGeneric(newLayout, missionStatusType);
-                statusViews.add(missionsStatusGeneric);
-            } catch (NullPointerException e) {
-                e.getStackTrace();
-            }
-        }
-
-        return statusViews;
-    }
-
-    private void currentMissionIsNotNull() {
-        if (mMission == null)
-            throw new RuntimeException("Mission is already deleted or is invalid");
-    }
 }
+
+// #############################################
+// #############################################
+// ###                TO REMOVE              ###
+// #############################################
+// #############################################
+//
+//    private void changeStatusForCurrentMission() throws RuntimeException {
+//        currentMissionIsNotNull();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//        final AlertDialog alert = builder.create();
+//
+//        LayoutInflater inf = getActivity().getLayoutInflater();
+//        View view = inf.inflate(R.layout.change_status, null);
+//        TextView status = view.findViewById(R.id.current_status);
+//
+//        status.setText(mMission.getStatus().getLabel().toUpperCase());
+//        status.setBackgroundColor(Color.parseColor(mMission.getStatus().getColor()));
+//        alert.setView(view);
+//        alert.show();
+//
+//        setOnClickListenersForStatus(alert, view);
+//    }
+//
+//
+//    private void setOnClickListenersForStatus(final AlertDialog alert, View view) {
+//        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+//        MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
+//        List<MissionStatusActionInterface> missionStatusTypes = manager.getMissionStatusActionAccessInterface().getByPrevious(mMission.getStatus());
+//        ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> viewListStatus = buildViewFor(missionStatusTypes, view);
+//
+//        if (viewListStatus != null && viewListStatus.size() > 0) {
+//            for (final MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface> status : viewListStatus) {
+//                status.getView().setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        // TODO
+//                        mMission.setStatus(status.getType().getNextStatus());
+//                        mMission.save();
+//                        fillViewFromActivity();
+//
+//                        alert.dismiss();
+//                    }
+//                });
+//            }
+//        }
+//    }
+//
+//    private ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> buildViewFor(List<MissionStatusActionInterface> missionStatusActions, View view) {
+//        ArrayList<MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface>> statusViews = new ArrayList<>();
+//
+//        for (MissionStatusActionInterface missionStatusType : missionStatusActions) {
+//            LinearLayout newLayout = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.single_status, null);
+//            LinearLayout layoutContainer = view.findViewById(R.id.status_container);
+//            TextView textViewLabel = newLayout.findViewById(R.id.status_label);
+//            ImageView imageViewIcon = newLayout.findViewById(R.id.icon);
+//            MissionsStatusGeneric<LinearLayout, MissionStatusActionInterface> missionsStatusGeneric;
+//
+//            String icon = null;
+//            String label = missionStatusType.getLabel();
+//            String color = missionStatusType.getNextStatus().getColor();
+//
+//            textViewLabel.setText(label);
+//            imageViewIcon.setColorFilter(Color.parseColor(color));
+//            layoutContainer.addView(newLayout);
+//
+//            try {
+//                missionsStatusGeneric = new MissionsStatusGeneric(newLayout, missionStatusType);
+//                statusViews.add(missionsStatusGeneric);
+//            } catch (NullPointerException e) {
+//                e.getStackTrace();
+//            }
+//        }
+//
+//        return statusViews;
+//    }
+//
+//    private void currentMissionIsNotNull() {
+//        if (mMission == null)
+//            throw new RuntimeException("Mission is already deleted or is invalid");
+//    }
+//}
