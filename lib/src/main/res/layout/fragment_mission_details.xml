@@ -184,16 +184,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/delivery_date"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|right"
-                android:textSize="@dimen/fragment_mission_body_detail_size"
-                tools:text="8:30" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/fragment_mission_body_detail_size"
+                    android:text="@string/arrival_time" />
+
+                <TextView
+                    android:id="@+id/delivery_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:textSize="@dimen/fragment_mission_body_detail_size"
+                    tools:text="8:30" />
+
+            </LinearLayout>
 
             <LinearLayout
-                android:layout_weight="4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">

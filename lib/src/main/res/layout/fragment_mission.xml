@@ -94,5 +94,3 @@
         app:layout_anchorGravity="bottom|left" />
 
 </android.support.design.widget.CoordinatorLayout>
-
-

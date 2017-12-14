@@ -199,6 +199,17 @@ public class DateHelpers {
         int hours = totalSecs / 3600;
         int minutes = (totalSecs % 3600) / 60;
         int seconds = totalSecs % 60;
-        return String.format(Locale.ENGLISH, "%02dh%02dm%02ds", hours, minutes, seconds);
+        if (hours > 0 && minutes == 0 && seconds == 0)
+            return String.format(Locale.ENGLISH, "%dh", hours);
+        else if (hours > 0 && seconds == 0)
+            return String.format(Locale.ENGLISH, "%dh %dm", hours, minutes);
+        else if (hours > 0)
+            return String.format(Locale.ENGLISH, "%dh %dm %ds", hours, minutes, seconds);
+        else if (minutes > 0 && seconds == 0)
+            return String.format(Locale.ENGLISH, "%dm", minutes);
+        else if (minutes > 0)
+            return String.format(Locale.ENGLISH, "%dh %dm %ds", hours, minutes, seconds);
+        else
+            return String.format(Locale.ENGLISH, "%ds", seconds);
     }
 }
