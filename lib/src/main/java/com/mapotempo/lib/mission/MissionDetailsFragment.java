@@ -7,8 +7,10 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -16,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -106,7 +107,12 @@ public class MissionDetailsFragment extends Fragment {
     private TextView mTextViewComment;
 
     private Button mNavigationAction;
-    private ImageButton mStatusMoreAction;
+    private FloatingActionButton mStatusCurrent;
+    private FloatingActionButton mStatusFirstAction;
+    private FloatingActionButton mStatusSecondAction;
+    private FloatingActionButton mStatusThirdAction;
+    private FloatingActionButton mStatusMoreAction;
+
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -210,6 +216,10 @@ public class MissionDetailsFragment extends Fragment {
 
         // Action button
         mNavigationAction = view.findViewById(R.id.navigation_launcher);
+        mStatusCurrent = view.findViewById(R.id.status);
+        mStatusFirstAction = view.findViewById(R.id.first_action);
+        mStatusSecondAction = view.findViewById(R.id.second_action);
+        mStatusThirdAction = view.findViewById(R.id.third_action);
         mStatusMoreAction = view.findViewById(R.id.more_action);
 
         return view;
@@ -256,12 +266,40 @@ public class MissionDetailsFragment extends Fragment {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        mStatusMoreAction.setOnClickListener(new View.OnClickListener() {
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        mStatusFirstAction.show();
+                        mStatusSecondAction.show();
+                        mStatusThirdAction.show();
+                        mStatusMoreAction.show();
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        mStatusFirstAction.hide();
+                        mStatusSecondAction.hide();
+                        mStatusThirdAction.hide();
+                        mStatusMoreAction.hide();
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
-        });
+        };
+        mStatusMoreAction.setOnClickListener(listener);
+        mStatusCurrent.setOnClickListener(listener);
     }
 
     private void initNavigationAction(final MissionInterface mission) {
