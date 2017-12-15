@@ -32,7 +32,6 @@
         app:elevation="4dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -49,7 +48,7 @@
         android:src="@drawable/ic_tracking_black_24dp"
         android:tint="@android:color/white"
         app:backgroundTint="@android:color/holo_purple"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:useCompatPadding="true"
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|end" />
@@ -62,7 +61,7 @@
         android:src="@drawable/ic_access_time_black_24dp"
         android:tint="@android:color/white"
         app:backgroundTint="@color/colorMapoBlueDark"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:useCompatPadding="true"
         app:layout_anchor="@id/first_action"
         app:layout_anchorGravity="bottom|left" />
@@ -75,7 +74,7 @@
         android:src="@drawable/ic_pencil_square_o_24dp"
         android:tint="@android:color/white"
         app:backgroundTint="@color/colorOrange"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:useCompatPadding="true"
         app:layout_anchor="@id/second_action"
         app:layout_anchorGravity="bottom|left" />
@@ -88,7 +87,7 @@
         android:src="@drawable/ic_more_horiz_black_24dp"
         android:tint="@android:color/white"
         app:backgroundTint="@color/colorGrey"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:useCompatPadding="true"
         app:layout_anchor="@id/third_action"
         app:layout_anchorGravity="bottom|left" />
