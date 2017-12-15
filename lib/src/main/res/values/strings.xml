@@ -9,11 +9,6 @@
     <!-- FAKE TEXT FOR DESIGN PURPOSE -->
     <string name="remember_me">Remember me</string>
 
-    <string name="deletion">Deletion</string>
-    <string name="sur_to_delete">Are you sure you want to delete the mission?</string>
-    <string name="cancel">Cancel</string>
-    <string name="valid_suppression">Delete</string>
-
     <!-- Strings related to login -->
     <string name="prompt_login">Login</string>
     <string name="prompt_password">Password</string>
