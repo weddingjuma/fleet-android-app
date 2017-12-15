@@ -18,7 +18,7 @@
             android:id="@+id/tracking_status"
             android:icon="@drawable/ic_tracking_black_24dp"
             android:title="@string/tracking"
-            app:actionLayout="@layout/switch_item" />
+            app:actionLayout="@layout/switch_tracking_item" />
 
     </group>
 
