@@ -43,7 +43,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
+            android:layout_weight="7"
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
@@ -86,7 +86,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:orientation="vertical"
             android:layout_gravity="center">
 
@@ -97,9 +97,9 @@
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
                 android:clickable="true"
-                android:src="@drawable/ic_check_black_24dp"
+                android:src="@drawable/ic_to_do_black_24dp"
                 android:tint="@android:color/white"
-                app:backgroundTint="@color/colorMapoGreen"
+                app:backgroundTint="@android:color/holo_blue_dark"
                 app:fabSize="mini" />
 
             <TextView
@@ -109,8 +109,8 @@
                 android:layout_gravity="center"
                 android:textSize="@dimen/fragment_mission_body_title_size"
                 android:textStyle="bold"
-                android:text="Livré"
-                tools:text="Livré" />
+                android:text="To do"
+                tools:text="To do" />
 
         </LinearLayout>
 

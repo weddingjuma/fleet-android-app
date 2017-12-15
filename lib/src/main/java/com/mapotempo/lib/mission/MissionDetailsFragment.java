@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -113,6 +115,40 @@ public class MissionDetailsFragment extends Fragment {
     private FloatingActionButton mStatusThirdAction;
     private FloatingActionButton mStatusMoreAction;
 
+    // DUMMY STATUS LIBELLE
+    private String mfirstSatusLibelle = "Completed";
+    private String mSecondSatusLibelle = "Pending";
+    private String mThirdSatusLibelle = "Uncompleted";
+
+    // DUMMY STATUS ACTION
+    View.OnClickListener mListenerDummyAction = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FloatingActionButton clickedActionButton = (FloatingActionButton) v;
+
+            Drawable currentDrawable = mStatusCurrent.getDrawable();
+            ColorStateList currentColors = mStatusCurrent.getBackgroundTintList();
+            mStatusCurrent.setImageDrawable(clickedActionButton.getDrawable());
+            mStatusCurrent.setBackgroundTintList(clickedActionButton.getBackgroundTintList());
+            clickedActionButton.setImageDrawable(currentDrawable);
+            clickedActionButton.setBackgroundTintList(currentColors);
+
+            int i = v.getId();
+            if (i == R.id.first_action) {
+                String currentLibelle = mMissionStatusLabel.getText().toString();
+                mMissionStatusLabel.setText(mfirstSatusLibelle);
+                mfirstSatusLibelle = currentLibelle;
+            } else if (i == R.id.second_action) {
+                String currentLibelle = mMissionStatusLabel.getText().toString();
+                mMissionStatusLabel.setText(mSecondSatusLibelle);
+                mSecondSatusLibelle = currentLibelle;
+            } else if (i == R.id.third_action) {
+                String currentLibelle = mMissionStatusLabel.getText().toString();
+                mMissionStatusLabel.setText(mThirdSatusLibelle);
+                mThirdSatusLibelle = currentLibelle;
+            }
+        }
+    };
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -292,14 +328,18 @@ public class MissionDetailsFragment extends Fragment {
             }
         });
 
-        View.OnClickListener listener = new View.OnClickListener() {
+        View.OnClickListener listenerMore = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         };
-        mStatusMoreAction.setOnClickListener(listener);
-        mStatusCurrent.setOnClickListener(listener);
+        mStatusMoreAction.setOnClickListener(listenerMore);
+        mStatusCurrent.setOnClickListener(listenerMore);
+
+        mStatusFirstAction.setOnClickListener(mListenerDummyAction);
+        mStatusSecondAction.setOnClickListener(mListenerDummyAction);
+        mStatusThirdAction.setOnClickListener(mListenerDummyAction);
     }
 
     private void initNavigationAction(final MissionInterface mission) {
