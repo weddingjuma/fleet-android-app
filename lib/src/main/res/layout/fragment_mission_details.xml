@@ -97,7 +97,7 @@
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
                 android:clickable="true"
-                android:src="@drawable/ic_to_do_black_24dp"
+                android:src="@drawable/ic_status_to_do_black_24dp"
                 android:tint="@android:color/white"
                 app:backgroundTint="@android:color/holo_blue_dark"
                 app:fabSize="mini" />
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="@dimen/fragment_mission_body_title_size"
+                android:textSize="@dimen/fragment_mission_date_text_size"
                 android:textStyle="bold"
                 android:text="To do"
                 tools:text="To do" />
