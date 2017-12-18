@@ -28,9 +28,12 @@ import java.util.Date;
 
 public class TrackingSwitchFragment extends Fragment implements LocationListener {
 
-    SwitchCompat mSwitchTracking;
+    static final int UPDATE_TIME = 20000;
+    static final int UPDATE_DISTANCE = 10;
 
-    MapotempoApplicationInterface mMapotempoApplicationInterface;
+    private SwitchCompat mSwitchTracking;
+
+    private MapotempoApplicationInterface mMapotempoApplicationInterface;
 
     // ===================================
     // ==  Android Fragment Life cycle  ==
@@ -152,7 +155,7 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
         boolean test = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         if (hook_status && test) {
             Log.d(getClass().getName(), "hooked the location listener");
-            locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
+            locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
         } else {
             Log.d(getClass().getName(), "unhooked the location listener");
             locMngr.removeUpdates(this);
