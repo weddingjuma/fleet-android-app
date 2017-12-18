@@ -25,10 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapbox.services.Constants;
-import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
-import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
-import com.mapbox.services.commons.models.Position;
 import com.mapotempo.fleet.api.model.MapotempoModelBaseInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
@@ -37,6 +33,7 @@ import com.mapotempo.lib.R;
 import com.mapotempo.lib.singnature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
+import com.mapotempo.lib.utils.StaticMapURLHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
@@ -117,8 +114,8 @@ public class MissionDetailsFragment extends Fragment {
 
     // DUMMY STATUS LIBELLE
     private String mfirstSatusLibelle = "Completed";
-    private String mSecondSatusLibelle = "Pending";
-    private String mThirdSatusLibelle = "Uncompleted";
+    private String mSecondSatusLibelle = "Uncompleted";
+    private String mThirdSatusLibelle = "Pending";
 
     // DUMMY STATUS ACTION
     View.OnClickListener mListenerDummyAction = new View.OnClickListener() {
@@ -146,6 +143,10 @@ public class MissionDetailsFragment extends Fragment {
                 String currentLibelle = mMissionStatusLabel.getText().toString();
                 mMissionStatusLabel.setText(mThirdSatusLibelle);
                 mThirdSatusLibelle = currentLibelle;
+            }
+
+            if (mMissionStatusLabel.getText() == "Completed") {
+                goSignatureFragment(getContext());
             }
         }
     };
@@ -373,39 +374,56 @@ public class MissionDetailsFragment extends Fragment {
     }
 
     private void mapVisivilityManager() {
-        // Asynchronously fill the mapImageView when the widget is draw to recover dimensions.
+        // Asynchronously fill the mapImageView when the widget is draw to retrieve dimensions.
         ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
                 mMapImageView.getViewTreeObserver().removeOnPreDrawListener(this);
-
-                Position position = Position.fromCoordinates(
-                        mMission.getLocation().getLon(),
-                        mMission.getLocation().getLat());
-
-                StaticMarkerAnnotation marker = new StaticMarkerAnnotation.Builder()
-                        .setName(com.mapbox.services.Constants.PIN_LARGE)
-                        .setPosition(position)
-                        .setColor(COLOR_GREEN)
-                        .build();
 
                 int x = mMapImageView.getMeasuredWidth();
                 int y = mMapImageView.getMeasuredHeight();
                 double ratio = (double) y / (double) x;
                 x = MAP_IMAGE_WIDTH_QUALITY;
                 y = (int) (x * ratio);
-                MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
-                        .setAccessToken(getString(R.string.mapbox_access_token))
-                        .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-                        .setStaticMarkerAnnotations(marker)
-                        .setLat(mMission.getLocation().getLat()) // Image center Latitude
-                        .setLon(mMission.getLocation().getLon()) // Image center longitude
-                        .setZoom(14)
-                        .setWidth(x) // Image width
-                        .setHeight(y) // Image height
-                        .build();
 
-                Picasso.with(getActivity()).load(veniceStaticImage.getUrl().toString()).error(R.drawable.bg_world_mapbox_v10).into(mMapImageView);
+//                ##############################################
+//                #             REMOVE  MAPBOX                 #
+//                ##############################################
+//
+//                Position position = Position.fromCoordinates(
+//                        mMission.getLocation().getLon(),
+//                        mMission.getLocation().getLat());
+//
+//                StaticMarkerAnnotation marker = new StaticMarkerAnnotation.Builder()
+//                        .setName(com.mapbox.services.Constants.PIN_LARGE)
+//                        .setPosition(position)
+//                        .setColor(COLOR_GREEN)
+//                        .build();
+//
+//
+//                MapboxStaticImage staticImage = new MapboxStaticImage.Builder()
+//                        .setAccessToken(getString(R.string.mapbox_access_token))
+//                        .setStyleId(Constants.MAPBOX_STYLE_STREETS)
+//                        .setStaticMarkerAnnotations(marker)
+//                        .setLat(mMission.getLocation().getLat()) // Image center Latitude
+//                        .setLon(mMission.getLocation().getLon()) // Image center longitude
+//                        .setZoom(14)
+//                        .setWidth(x) // Image width
+//                        .setHeight(y) // Image height
+//                        .build();
+//                Picasso.with(getActivity()).load(staticImage.getUrl().toString()).error(R.drawable.bg_world_mapbox_v10).into(mMapImageView);
+
+                String MapUrl = new StaticMapURLHelper.TileHostingURLBuilder()
+                        .setBaseURL(getString(R.string.tilehosting_base_url))
+                        .setKey(getString(R.string.tilehosting_access_token))
+                        .setLat(mMission.getLocation().getLat())
+                        .setLon(mMission.getLocation().getLon())
+                        .setWidth(x)
+                        .setHeight(y)
+                        .setZoom(14)
+                        .Build();
+
+                Picasso.with(getActivity()).load(MapUrl).error(R.drawable.bg_world_mapbox_v10).into(mMapImageView);
                 return true;
             }
         });
@@ -413,7 +431,6 @@ public class MissionDetailsFragment extends Fragment {
 
     private void detailsContentManager(MissionInterface mission) {
         mMissionName.setText(mission.getName());
-        System.out.println(mission.getReference());
         mMissionReference.setText(mission.getReference());
 
         mTextViewDate.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES));

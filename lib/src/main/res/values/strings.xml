@@ -1,5 +1,7 @@
 <resources>
     <string name="mapbox_access_token"></string>
+    <string name="tilehosting_base_url">https://maps.tilehosting.com</string>
+    <string name="tilehosting_access_token">LLRxrAW8qh4LHSzTw6qo</string>
 
     <string name="app_name">lib</string>
 
