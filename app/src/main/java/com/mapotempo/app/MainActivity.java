@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     private void refreshMissionListFragment() {
         MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         if (missionsListFragment != null && missionsListFragment.isVisible())
-            missionsListFragment.mRecyclerView.getAdapter().notifyDataSetChanged();
+            missionsListFragment.notifyDataChange();
     }
 
     private void refreshMissionsPagerFragment() {

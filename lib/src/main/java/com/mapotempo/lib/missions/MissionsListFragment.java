@@ -56,7 +56,7 @@ import java.util.List;
  */
 public class MissionsListFragment extends Fragment {
 
-    public RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private OnMissionSelectedListener mListener;
 
@@ -139,6 +139,10 @@ public class MissionsListFragment extends Fragment {
     // ==============
     // ==  Public  ==
     // ==============
+
+    public void notifyDataChange() {
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
 
     public void missionFocus(int position) {
         mRecyclerView.smoothScrollToPosition(position);

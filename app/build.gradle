@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '26.0.3'
     defaultConfig {
         applicationId "mapotempo.com.mapotempo_fleet_android"
         minSdkVersion 15
@@ -43,14 +43,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.mapotempo.fleet:mapotempo-fleet-java-client:1.0-SNAPSHOT'
-    compile 'com.couchbase.lite:couchbase-lite-android:1.4.1'
-    compile 'com.couchbase.lite:couchbase-lite-android-sqlcipher:+'
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:26.+'
-    compile 'com.android.support:support-v4:26.+'
-    compile 'com.android.support:recyclerview-v7:26.+'
+    implementation 'com.android.support:appcompat-v7:26.+'
+    implementation 'com.mapotempo.fleet:mapotempo-fleet-java-client:1.0-SNAPSHOT'
 
     testCompile 'junit:junit:4.12'
 }
