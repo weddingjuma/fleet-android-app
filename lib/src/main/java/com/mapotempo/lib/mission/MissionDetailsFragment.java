@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.mapotempo.lib.singnature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
 import com.mapotempo.lib.utils.StaticMapURLHelper;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
@@ -52,8 +54,8 @@ import java.util.List;
  * <h3>Integration</h3>
  * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment"} </code>
  * <p>
- * This fragment require the implementation of {@link OnFragmentInteractionListener} directly in the Activity that hold the Detail Fragment.
- * This involve the override of {@link OnFragmentInteractionListener#onSingleMissionInteraction(MissionInterface)}. This interface is called when a modification has
+ * This fragment require the implementation of {@link OnMissionDetailsFragmentListener} directly in the Activity that hold the Detail Fragment.
+ * This involve the override of {@link OnMissionDetailsFragmentListener#onMapImageViewClick)}. This interface is called when a modification has
  * been done to a mission.
  * </p>
  * As we are using a <a href="https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html" target="_blank"><u>RecyclerView</u></a> to manage the list, you shall notify the alteration on this fragment through this method.
@@ -81,9 +83,9 @@ public class MissionDetailsFragment extends Fragment {
 
     private MissionInterface mMission;
 
-    private Context mContext;
-
+    private ProgressBar mMapLoader;
     private ImageView mMapImageView;
+    private ImageView mMapMarker;
 
     private TextView mMissionName;
     private TextView mMissionReference;
@@ -112,12 +114,37 @@ public class MissionDetailsFragment extends Fragment {
     private FloatingActionButton mStatusThirdAction;
     private FloatingActionButton mStatusMoreAction;
 
-    // DUMMY STATUS LIBELLE
+    private BottomSheetBehavior mBottomSheetBehavior;
+
+    private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
+        @Override
+        public void changed(final MissionInterface mission, final boolean delete) {
+            if (!delete)
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMission = mission;
+                        fillViewFromActivity();
+                    }
+                });
+        }
+    };
+
+    private MissionDetailsFragment.OnMissionDetailsFragmentListener mListener;
+
+    static int MAP_IMAGE_WIDTH_QUALITY = 500;
+
+    // ==============================================
+    // ==            DUMMY SECTION !!              ==
+    // == Simule le changement de status pour le   ==
+    // == Cette partie sera à supprimer en même    ==
+    // == temp quel l'implémentation réel du       ==
+    // == du management des status.                ==
+    // ==============================================
     private String mfirstSatusLibelle = "Completed";
     private String mSecondSatusLibelle = "Uncompleted";
     private String mThirdSatusLibelle = "Pending";
 
-    // DUMMY STATUS ACTION
     View.OnClickListener mListenerDummyAction = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -150,24 +177,6 @@ public class MissionDetailsFragment extends Fragment {
             }
         }
     };
-
-    private BottomSheetBehavior mBottomSheetBehavior;
-
-    private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
-        @Override
-        public void changed(final MissionInterface mission, final boolean delete) {
-            if (!delete)
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMission = mission;
-                        fillViewFromActivity();
-                    }
-                });
-        }
-    };
-
-    static int MAP_IMAGE_WIDTH_QUALITY = 500;
 
     // ==============
     // ==  Public  ==
@@ -206,13 +215,14 @@ public class MissionDetailsFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        mContext = context;
         super.onAttach(context);
+        mListener = (MissionDetailsFragment.OnMissionDetailsFragmentListener) context;
+        if (mListener == null)
+            throw new RuntimeException("You must implement OnMissionFocusListener Interface");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
     }
 
@@ -224,6 +234,8 @@ public class MissionDetailsFragment extends Fragment {
 
         // Map view
         mMapImageView = view.findViewById(R.id.mapImageView);
+        mMapLoader = view.findViewById(R.id.mapLoader);
+        mMapMarker = view.findViewById(R.id.mapMarker);
 
         // Header view
         mMissionName = view.findViewById(R.id.name);
@@ -259,6 +271,13 @@ public class MissionDetailsFragment extends Fragment {
         mStatusThirdAction = view.findViewById(R.id.third_action);
         mStatusMoreAction = view.findViewById(R.id.more_action);
 
+        mMapImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onMapImageViewClick(mMission);
+            }
+        });
+
         return view;
     }
 
@@ -275,24 +294,6 @@ public class MissionDetailsFragment extends Fragment {
 
         if (mMission != null)
             mMission.removeChangeListener(mCallback);
-    }
-
-    // ======================================
-    // ==  View.OnClickListener Interface  ==
-    // ======================================
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity
-     */
-    public interface OnFragmentInteractionListener {
-        /**
-         * Callback triggered when a modification has been done to a mission
-         *
-         * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
-         */
-        void onSingleMissionInteraction(MissionInterface mission);
     }
 
     // ===============
@@ -380,38 +381,17 @@ public class MissionDetailsFragment extends Fragment {
             public boolean onPreDraw() {
                 mMapImageView.getViewTreeObserver().removeOnPreDrawListener(this);
 
+                // Init visibility
+                mMapLoader.setVisibility(View.VISIBLE);
+                mMapImageView.setVisibility(View.GONE);
+                mMapMarker.setVisibility(View.GONE);
+
+                // Prepare Request
                 int x = mMapImageView.getMeasuredWidth();
                 int y = mMapImageView.getMeasuredHeight();
                 double ratio = (double) y / (double) x;
                 x = MAP_IMAGE_WIDTH_QUALITY;
                 y = (int) (x * ratio);
-
-//                ##############################################
-//                #             REMOVE  MAPBOX                 #
-//                ##############################################
-//
-//                Position position = Position.fromCoordinates(
-//                        mMission.getLocation().getLon(),
-//                        mMission.getLocation().getLat());
-//
-//                StaticMarkerAnnotation marker = new StaticMarkerAnnotation.Builder()
-//                        .setName(com.mapbox.services.Constants.PIN_LARGE)
-//                        .setPosition(position)
-//                        .setColor(COLOR_GREEN)
-//                        .build();
-//
-//
-//                MapboxStaticImage staticImage = new MapboxStaticImage.Builder()
-//                        .setAccessToken(getString(R.string.mapbox_access_token))
-//                        .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-//                        .setStaticMarkerAnnotations(marker)
-//                        .setLat(mMission.getLocation().getLat()) // Image center Latitude
-//                        .setLon(mMission.getLocation().getLon()) // Image center longitude
-//                        .setZoom(14)
-//                        .setWidth(x) // Image width
-//                        .setHeight(y) // Image height
-//                        .build();
-//                Picasso.with(getActivity()).load(staticImage.getUrl().toString()).error(R.drawable.bg_world_mapbox_v10).into(mMapImageView);
 
                 String MapUrl = new StaticMapURLHelper.TileHostingURLBuilder()
                         .setBaseURL(getString(R.string.tilehosting_base_url))
@@ -420,10 +400,29 @@ public class MissionDetailsFragment extends Fragment {
                         .setLon(mMission.getLocation().getLon())
                         .setWidth(x)
                         .setHeight(y)
-                        .setZoom(14)
+                        .setZoom(18)
                         .Build();
 
-                Picasso.with(getActivity()).load(MapUrl).error(R.drawable.bg_world_mapbox_v10).into(mMapImageView);
+                // Init request with Picasso
+                Picasso.with(getActivity())
+                        .load(MapUrl)
+                        .error(R.drawable.bg_world_mapbox_v10)
+                        .into(mMapImageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                mMapLoader.setVisibility(View.GONE);
+                                mMapImageView.setVisibility(View.VISIBLE);
+                                mMapMarker.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onError() {
+                                mMapLoader.setVisibility(View.GONE);
+                                mMapImageView.setVisibility(View.VISIBLE);
+                                mMapMarker.setVisibility(View.GONE);
+                            }
+                        });
+
                 return true;
             }
         });
@@ -486,14 +485,29 @@ public class MissionDetailsFragment extends Fragment {
                 ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
                 mMission.setAttachment("signature", "image/jpeg", bi);
                 if (mMission.save()) {
-                    Toast.makeText(mContext, R.string.save_signature_success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.save_signature_success, Toast.LENGTH_SHORT).show();
                     return true;
                 } else
-                    Toast.makeText(mContext, R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
         newFragment.show(ft, "t");
+    }
+
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity
+     */
+    public interface OnMissionDetailsFragmentListener {
+        /**
+         * Callback triggered when a modification has been done to a mission
+         *
+         * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
+         */
+        void onMapImageViewClick(MissionInterface mission);
     }
 }
 

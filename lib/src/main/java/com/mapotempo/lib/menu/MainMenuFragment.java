@@ -54,6 +54,13 @@ public class MainMenuFragment extends Fragment {
             }
         });
 
+        mMenu.findItem(R.id.map).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                mListener.onMap();
+                return true;
+            }
+        });
         return view;
     }
 

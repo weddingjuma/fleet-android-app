@@ -7,20 +7,17 @@ import android.support.v7.widget.Toolbar;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.mission.MissionDetailsFragment;
-import com.mapotempo.lib.mission.MissionsPagerFragment;
 
-public class MissionActivity extends AppCompatActivity implements
-        MissionsPagerFragment.OnMissionFocusListener,
-        MissionDetailsFragment.OnMissionDetailsFragmentListener {
+public class MapActivity extends AppCompatActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mission_activity);
+        setContentView(R.layout.map_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.mission);
+        getSupportActionBar().setTitle(R.string.map);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -32,17 +29,10 @@ public class MissionActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onMissionFocus(int position) {
-    }
-
-
-    // ==================================================
-    // ==  OnMissionDetailsFragmentListener Interface  ==
-    // ==================================================
-    @Override
     public void onMapImageViewClick(MissionInterface mission) {
         Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra("mission_id", mission.getId());
         startActivity(intent);
     }
 }
+
+

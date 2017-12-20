@@ -26,6 +26,14 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop" />
 
+        <ImageView
+            android:id="@+id/mapMarker"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:paddingTop="25dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_location_on_black_24dp"
+            android:tint="@color/colorMapoGreen" />
     </FrameLayout>
 
     <!-- MISSION HEADER -->

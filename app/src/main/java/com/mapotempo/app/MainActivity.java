@@ -9,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
 import com.mapotempo.lib.menu.MainMenuFragment;
+import com.mapotempo.lib.mission.MissionDetailsFragment;
 import com.mapotempo.lib.mission.MissionsPagerFragment;
 import com.mapotempo.lib.missions.MissionsListFragment;
 
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
         MissionsPagerFragment.OnMissionFocusListener,
+        MissionDetailsFragment.OnMissionDetailsFragmentListener,
         MainMenuFragment.OnMenuInteractionListener
         /* LocationListener */ {
 
@@ -82,12 +85,23 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         }
     }
 
+    // ==================================================
+    // ==  OnMissionDetailsFragmentListener Interface  ==
+    // ==================================================
+    @Override
+    public void onMapImageViewClick(MissionInterface mission) {
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
+    }
+
     // ===========================================
     // ==  OnMenuInteractionListener Interface  ==
     // ===========================================
 
     @Override
     public void onMap() {
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
     }
 
     @Override

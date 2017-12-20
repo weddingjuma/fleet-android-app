@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">Mapotempo Mobile</string>
 
-    <!-- SINGLE MISSION FRAGMENT STRINGS -->
+    <!-- SINGLE MISSION ACIVITY STRINGS -->
     <string name="mission">Mission</string>
+
+    <!-- SINGLE MAP ACIVITY STRINGS -->
+    <string name="map">Map</string>
 
     <!-- USER DATA PREF -->
     <string name="user_data_pref_title">Network Configuration</string>
