@@ -15,11 +15,16 @@ import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.api.model.accessor.AccessInterface;
+import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 
@@ -30,9 +35,25 @@ public class MapMissionsFragment extends Fragment {
 
     private MapView mMapView;
 
+    private static final String ZOOM_IN = "zoom_in";
+
+    private static final String ZOOM_OUT = "zoom_out";
+
     private FloatingActionButton mZoomIn;
 
     private FloatingActionButton mZoomOut;
+
+    private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
+        @Override
+        public void changed(final List<MissionInterface> missions) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setMissions(missions, false);
+                }
+            });
+        }
+    };
 
     // ===================================
     // ==  Android Fragment Life cycle  ==
@@ -59,24 +80,25 @@ public class MapMissionsFragment extends Fragment {
                 mMapView.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(MapboxMap mapboxMap) {
-                        double offset = 0.1;
-                        if (v.getTag().equals("in"))
+                        double offset = 1;
+                        if (v.getTag().equals(ZOOM_IN))
                             offset = -offset;
                         CameraPosition lastCameraPosition = mapboxMap.getCameraPosition();
                         CameraPosition cameraPosition = new CameraPosition.Builder(lastCameraPosition)
                                 .zoom(lastCameraPosition.zoom + offset)
                                 .build();
-                        mapboxMap.setCameraPosition(cameraPosition);
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                        mapboxMap.animateCamera(cameraUpdate);
                     }
                 });
             }
         };
 
         mZoomIn = view.findViewById(R.id.zoom_in);
-        mZoomIn.setTag("in");
-        mZoomIn.setOnClickListener(onClickListener);
         mZoomOut = view.findViewById(R.id.zoom_out);
-        mZoomOut.setTag("out");
+        mZoomIn.setTag(ZOOM_IN);
+        mZoomOut.setTag(ZOOM_OUT);
+        mZoomIn.setOnClickListener(onClickListener);
         mZoomOut.setOnClickListener(onClickListener);
 
         return view;
@@ -91,62 +113,11 @@ public class MapMissionsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
-                double latAverage = 0, lonAverage = 0;
-                MissionInterface missionFocus = null;
-
-                // Draw marker
-                IconFactory mIconFactory = IconFactory.getInstance(getActivity());
-                Icon icon = mIconFactory.fromResource(R.drawable.ic_map_marker);
-                List<MissionInterface> missions = mapotempoApplication.getManager().getMissionAccess().getAll();
-                for (MissionInterface mission : missions) {
-                    latAverage += mission.getLocation().getLat();
-                    lonAverage += mission.getLocation().getLon();
-                    mapboxMap.addMarker(new MarkerViewOptions()
-                            .icon(icon)
-                            .position(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()))
-                    );
-                    if (mission.getId().equals(mission_id)) {
-                        missionFocus = mission;
-                    }
-                }
-
-                // Draw path
-                List<LatLng> polygonPath = new ArrayList<>();
-                for (MissionInterface mission : missions) {
-                    polygonPath.add(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()));
-                }
-                mapboxMap.addPolyline(new PolylineOptions()
-                        .width(0.5F)
-                        .addAll(polygonPath)
-                        .color(Color.BLACK));
-
-                // Set position
-                int zoom = 12;
-                LatLng latLng;
-                if (missionFocus != null) {
-                    zoom = 17;
-                    latLng = new LatLng(missionFocus.getLocation().getLat(), missionFocus.getLocation().getLon());
-                } else if (latAverage != 0 && lonAverage != 0) {
-                    latAverage = latAverage / missions.size();
-                    lonAverage = lonAverage / missions.size();
-                    latLng = new LatLng(latAverage, lonAverage);
-                } else {
-                    zoom = 5;
-                    latLng = new LatLng(43, 1);
-                }
-
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(latLng)
-                        .zoom(zoom)
-                        .build();
-                mapboxMap.setCameraPosition(cameraPosition);
-            }
-        });
+        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null) {
+            mapotempoFleetManagerInterface.getMissionAccess().addChangeListener(missionChangeListener);
+            setMissions(mapotempoFleetManagerInterface.getMissionAccess().getAll(), true);
+        }
         mMapView.onResume();
     }
 
@@ -154,6 +125,10 @@ public class MapMissionsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mMapView.onPause();
+        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null) {
+            mapotempoFleetManagerInterface.getMissionAccess().removeChangeListener(missionChangeListener);
+        }
     }
 
     @Override
@@ -178,5 +153,59 @@ public class MapMissionsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+    }
+    // ===============
+    // ==  Private  ==
+    // ===============
+
+    private void setMissions(final List<MissionInterface> missions, final boolean updateLocation) {
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(MapboxMap mapboxMap) {
+                mapboxMap.clear();
+                final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
+                MissionInterface missionFocus = null;
+
+                // Draw marker
+                IconFactory mIconFactory = IconFactory.getInstance(getActivity());
+                Icon icon = mIconFactory.fromResource(R.drawable.ic_map_marker);
+                for (MissionInterface mission : missions) {
+                    mapboxMap.addMarker(new MarkerViewOptions()
+                            .icon(icon)
+                            .position(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()))
+                    );
+                    if (mission.getId().equals(mission_id)) {
+                        missionFocus = mission;
+                    }
+                }
+
+                // Draw path
+                List<LatLng> polygonPath = new ArrayList<>();
+                for (MissionInterface mission : missions) {
+                    polygonPath.add(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()));
+                }
+                mapboxMap.addPolyline(new PolylineOptions()
+                        .width(0.5F)
+                        .addAll(polygonPath)
+                        .color(Color.BLACK));
+
+                // Set zoom and position
+                if (updateLocation) {
+                    final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+                    LocationDetailsInterface locationDetailsInterface = mapotempoApplication.getManager().getCurrentLocationDetails();
+                    int zoom = missionFocus != null ? 14 : 5;
+                    LatLng latLng = (missionFocus != null ?
+                            new LatLng(missionFocus.getLocation().getLat(), missionFocus.getLocation().getLon()) :
+                            new LatLng(locationDetailsInterface.getLat(), locationDetailsInterface.getLon()));
+
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(latLng)
+                            .zoom(zoom)
+                            .build();
+
+                    mapboxMap.setCameraPosition(cameraPosition);
+                }
+            }
+        });
     }
 }
