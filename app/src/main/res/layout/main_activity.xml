@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorMapoBlue"
-            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/HeaderTheme"
             app:title="Mapotempo" />
 
         <fragment

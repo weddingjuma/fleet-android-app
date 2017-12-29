@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
-
-import com.mapotempo.app.R;
 
 public class ConnectionManager {
 
@@ -51,6 +48,7 @@ public class ConnectionManager {
 
     /**
      * Call this method to ask user if he wants to use mobile data or only wifi.
+     *
      * @param context
      * @param viewToInflate the View.xml to inflate must contain ([Button] id: only_wifi, [Button] id: both_wifi_and_mobile
      */
@@ -72,30 +70,8 @@ public class ConnectionManager {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
 
-        setButtonEvents(view, alert);
         alert.setView(view);
         alert.show();
-    }
-
-    public void setButtonEvents(View buttonEventsView, final AlertDialog alertDialog) {
-        Button wifi = buttonEventsView.findViewById(R.id.only_wifi);
-        Button both = buttonEventsView.findViewById(R.id.both_wifi_and_mobile);
-
-        wifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onSelectedDataProviderWifi(connectionType, mContext);
-                alertDialog.dismiss();
-            }
-        });
-
-        both.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onSelectedDataProviderBoth(connectionType, mContext);
-                alertDialog.dismiss();
-            }
-        });
     }
 
     private void setUserPreference(boolean value) {
@@ -105,6 +81,7 @@ public class ConnectionManager {
     /**
      * Singleton class that hold user preferences about data pull method.
      * call {@link ConnectionManager#setUserPreference(boolean)} to set them up.
+     *
      * @return
      */
     public static ConnectionManager getInstance() {
@@ -115,6 +92,7 @@ public class ConnectionManager {
 
     public interface OnConnectionSetup {
         void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context);
+
         void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context);
     }
 }
