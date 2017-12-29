@@ -13,8 +13,6 @@ import com.mapotempo.lib.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private ListPreference mNightMode;
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings, rootKey);
