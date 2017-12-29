@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.api.model.UserPreferenceInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
@@ -101,6 +102,12 @@ public class MapMissionsFragment extends Fragment {
         mZoomIn.setOnClickListener(onClickListener);
         mZoomOut.setOnClickListener(onClickListener);
 
+        boolean display_zoom = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager().getUserPreference().getBoolPreference(UserPreferenceInterface.Preference.MAP_DISPLAY_ZOOM_BUTTON);
+        if (!display_zoom) {
+            mZoomIn.setVisibility(View.GONE);
+            mZoomOut.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
@@ -118,6 +125,12 @@ public class MapMissionsFragment extends Fragment {
             mapotempoFleetManagerInterface.getMissionAccess().addChangeListener(missionChangeListener);
             setMissions(mapotempoFleetManagerInterface.getMissionAccess().getAll(), true);
         }
+
+        boolean display_position = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager().getUserPreference().getBoolPreference(UserPreferenceInterface.Preference.MAP_CURRENT_POSITION);
+        if (display_position) {
+            setCurrentPosition(mapotempoFleetManagerInterface.getCurrentLocationDetails());
+        }
+
         mMapView.onResume();
     }
 
@@ -205,6 +218,19 @@ public class MapMissionsFragment extends Fragment {
 
                     mapboxMap.setCameraPosition(cameraPosition);
                 }
+            }
+        });
+    }
+
+    private void setCurrentPosition(final LocationDetailsInterface locationDetailsInterface) {
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(MapboxMap mapboxMap) {
+                IconFactory mIconFactory = IconFactory.getInstance(getActivity());
+                Icon icon = mIconFactory.fromResource(R.drawable.ic_current_location);
+                mapboxMap.addMarker(new MarkerViewOptions()
+                        .icon(icon)
+                        .position(new LatLng(locationDetailsInterface.getLat(), locationDetailsInterface.getLon())));
             }
         });
     }
