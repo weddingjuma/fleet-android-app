@@ -97,7 +97,7 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
-        if(false)
+        if (false)
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
 
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
@@ -156,8 +156,7 @@ public class LoginFragment extends Fragment {
         if (active) {
             formLayout.setVisibility(View.GONE);
             progressLayout.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             formLayout.setVisibility(View.VISIBLE);
             progressLayout.setVisibility(View.GONE);
         }

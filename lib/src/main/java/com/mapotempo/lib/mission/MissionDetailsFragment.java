@@ -31,7 +31,7 @@ import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.singnature.SignatureFragment;
+import com.mapotempo.lib.signature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
 import com.mapotempo.lib.utils.StaticMapURLHelper;

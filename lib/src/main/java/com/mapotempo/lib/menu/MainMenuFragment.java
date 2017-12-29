@@ -1,6 +1,8 @@
 package com.mapotempo.lib.menu;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -61,6 +63,24 @@ public class MainMenuFragment extends Fragment {
                 return true;
             }
         });
+
+        mMenu.findItem(R.id.setting).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                mListener.onSettings();
+                return true;
+            }
+        });
+
+        mMenu.findItem(R.id.help).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Uri uriUrl = Uri.parse(getString(R.string.mapotempo_help_url));
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                startActivity(launchBrowser);
+                return true;
+            }
+        });
         return view;
     }
 
@@ -73,11 +93,10 @@ public class MainMenuFragment extends Fragment {
 
         void onSettings();
 
-        void onHelp();
-
         boolean onTracking(boolean tracking_status);
 
         void onLogout();
 
     }
 }
+

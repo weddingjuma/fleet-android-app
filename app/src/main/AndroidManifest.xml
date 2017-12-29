@@ -33,5 +33,7 @@
 
         <activity android:name=".MapActivity" />
 
+        <activity android:name=".SettingsActivity" />
+
     </application>
 </manifest>

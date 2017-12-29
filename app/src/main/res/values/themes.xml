@@ -6,8 +6,6 @@
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorMapoBlue</item>
         <item name="colorPrimaryDark">@color/colorMapoBlueDark</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
     <style name="AppTheme.Night" parent="MapotempoTheme.Night">
@@ -15,8 +13,6 @@
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorMapoBlue</item>
         <item name="colorPrimaryDark">@color/colorMapoBlueDark</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
 </resources>

@@ -106,16 +106,13 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
 
     @Override
     public void onSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public boolean onTracking(boolean tracking_status) {
         return tracking_status;
-    }
-
-    @Override
-    public void onHelp() {
-
     }
 
     @Override

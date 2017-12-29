@@ -1,4 +1,4 @@
-package com.mapotempo.lib.singnature;
+package com.mapotempo.lib.signature;
 
 import android.content.Context;
 import android.graphics.Bitmap;

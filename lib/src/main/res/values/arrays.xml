@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- FIXME Respect mapotempo fleet enum order -->
+    <integer-array name="night_mode_choise">
+        <item>@string/automatic</item>
+        <item>@string/night</item>
+        <item>@string/day</item>
+    </integer-array>
+
+    <string-array name="night_mode_choise_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+</resources>

@@ -9,4 +9,4 @@
     app:itemBackground="?navItemBackground"
     app:itemIconTint="@color/colorMapoBlueDark"
     app:itemTextColor="@color/colorMapoBlueDark"
-    app:menu="@menu/main_menu" />
+    app:menu="@menu/menu_main" />
