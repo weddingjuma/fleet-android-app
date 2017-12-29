@@ -24,11 +24,11 @@
 
     <group android:id="@+id/group_settings">
 
-        <item
-            android:id="@+id/sync"
-            android:icon="@drawable/ic_sync_black_24dp"
-            android:title="@string/synchronization"
-            app:actionLayout="@layout/switch_item" />
+        <!--<item-->
+        <!--android:id="@+id/sync"-->
+        <!--android:icon="@drawable/ic_sync_black_24dp"-->
+        <!--android:title="@string/synchronization"-->
+        <!--app:actionLayout="@layout/switch_item" />-->
 
         <item
             android:id="@+id/setting"
