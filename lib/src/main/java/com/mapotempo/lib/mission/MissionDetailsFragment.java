@@ -37,6 +37,7 @@ import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.actions.ActionsListFragment;
 import com.mapotempo.lib.signature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
@@ -137,6 +138,8 @@ public class MissionDetailsFragment extends Fragment {
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
+    private ActionsListFragment mActionFragment;
+
     private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final MissionInterface mission, final boolean delete) {
@@ -164,6 +167,7 @@ public class MissionDetailsFragment extends Fragment {
             fillViewData(mMission);
             initNavigationAction(mMission);
             initMainActionButtons(mMission);
+            initActionButtons(mMission);
         }
     }
 
@@ -287,13 +291,8 @@ public class MissionDetailsFragment extends Fragment {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
-                        initMainActionButtons(mMission);
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        mStatusFirstAction.hide();
-                        mStatusSecondAction.hide();
-                        mStatusThirdAction.hide();
-                        mStatusMoreAction.hide();
                         break;
                 }
 
@@ -466,13 +465,35 @@ public class MissionDetailsFragment extends Fragment {
         newFragment.show(ft, "t");
     }
 
+    private void initActionButtons(final MissionInterface mission) {
+        final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+        MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
+        List<MissionStatusActionInterface> actions = manager.getMissionStatusActionAccessInterface().getByPrevious(mission.getStatus());
+        ActionsListFragment fragment = (ActionsListFragment) getChildFragmentManager().findFragmentById(R.id.actions_fragment);
+        if (fragment != null) {
+            fragment.setActions(actions);
+            fragment.setOnActionSelectedListener(new ActionsListFragment.OnMissionActionSelectedListener() {
+                @Override
+                public void onMissionActionSelected(MissionStatusTypeInterface newStatus) {
+                    mission.setStatus(newStatus);
+                    mission.save();
+                    initMainActionButtons(mission);
+                    initActionButtons(mMission);
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            });
+        }
+    }
+
     private void initMainActionButtons(final MissionInterface mission) {
+        // Current status
         MissionStatusTypeInterface statusType = mission.getStatus();
-        Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(statusType.getSVGPath(), new BitmapDrawable());
+        Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(statusType.getSVGPath(), "#ffffff", new BitmapDrawable());
         mStatusCurrent.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(statusType.getColor())));
         mStatusCurrent.setImageDrawable(drawable);
         mMissionStatusLabel.setText(statusType.getLabel());
 
+        // Next actions
         int idx = 0;
         FloatingActionButton floatingActionButtonArray[] = {mStatusFirstAction, mStatusSecondAction, mStatusThirdAction};
         final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
@@ -482,9 +503,9 @@ public class MissionDetailsFragment extends Fragment {
         for (FloatingActionButton button : floatingActionButtonArray) {
             if (idx < actions.size()) {
                 final MissionStatusActionInterface action = actions.get(idx);
-                Drawable d = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), new BitmapDrawable());
+                Drawable d = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), "#ffffff", new BitmapDrawable());
                 button.setImageDrawable(d);
-                button.setVisibility(View.VISIBLE);
+                button.show();
                 button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(action.getNextStatus().getColor())));
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -492,6 +513,7 @@ public class MissionDetailsFragment extends Fragment {
                         mission.setStatus(action.getNextStatus());
                         mission.save();
                         initMainActionButtons(mission);
+                        initActionButtons(mMission);
                     }
                 });
             } else

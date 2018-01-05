@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?bg_action_detail_item"
+    android:minWidth="500dp"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/action_recycler_view"
+        android:name="mapotempo.com.app.MissionsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?colorPrimaryBackground"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="com.mapotempo.lib.actions.ActionsListFragment"
+        tools:listitem="@layout/fragment_actions_list_adapter" />
+
+</LinearLayout>

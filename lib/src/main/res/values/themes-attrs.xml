@@ -15,6 +15,8 @@
     <attr name="missionTextColorSecondary" format="color" />
     <attr name="missionTextColorTertiary" format="color" />
 
+    <attr name="bg_action_detail_item" format="reference" />
+
 </resources>
 
 

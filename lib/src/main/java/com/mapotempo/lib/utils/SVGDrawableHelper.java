@@ -16,7 +16,10 @@ public class SVGDrawableHelper {
     private static final String viewBox = "0 0 612 612";
 
     @Nullable
-    public static Drawable getDrawableFromSVGPath(String svg_path, Drawable defaultDrawable) {
+    public static Drawable getDrawableFromSVGPath(String svg_path, String color, Drawable defaultDrawable) {
+        if (color == null)
+            color = "#FFFFFF";
+
         try {
             String test = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
                     "<!-- Created with Inkscape (http://www.inkscape.org/) -->\n" +
@@ -25,7 +28,7 @@ public class SVGDrawableHelper {
                     "   viewBox=\"" + viewBox + "\"\n" +
                     "   version=\"1.1\"\n>" +
                     "   <path d=\"" + svg_path + "\"\n " +
-                    "       fill=\"red\" stroke-width=\"3\" />\n" +
+                    "       fill=\"" + color + "\" stroke-width=\"3\" />\n" +
                     "</svg>";
 
             SVG svg = SVG.getFromString(test);

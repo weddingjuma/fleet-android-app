@@ -19,6 +19,9 @@
         <item name="missionTextColorSecondary">@color/colorGrey</item>
         <item name="missionTextColorTertiary">@color/colorLightGrey</item>
 
+        <!-- Action List Fragment. -->
+        <item name="bg_action_detail_item">@drawable/bg_action_detail_item</item>
+
     </style>
 
     <style name="MapotempoTheme.Night" parent="MapotempoThemeBase">
@@ -39,6 +42,8 @@
         <item name="missionTextColorSecondary">@color/colorLightGrey</item>
         <item name="missionTextColorTertiary">@color/colorDarkGrey</item>
 
+        <!-- Action List Fragment. -->
+        <item name="bg_action_detail_item">@drawable/bg_action_detail_item_night</item>
 
     </style>
 
