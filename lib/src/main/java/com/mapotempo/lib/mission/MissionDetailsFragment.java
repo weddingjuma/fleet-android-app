@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,14 +28,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MapotempoModelBaseInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
+import com.mapotempo.fleet.api.model.MissionStatusTypeInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
+import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.signature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
+import com.mapotempo.lib.utils.SVGDrawableHelper;
 import com.mapotempo.lib.utils.StaticMapURLHelper;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -77,6 +84,20 @@ import java.util.List;
 public class MissionDetailsFragment extends Fragment {
 
     public MissionDetailsFragment() {
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity
+     */
+    public interface OnMissionDetailsFragmentListener {
+        /**
+         * Callback triggered when a modification has been done to a mission
+         *
+         * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
+         */
+        void onMapImageViewClick(MissionInterface mission);
     }
 
     private static final String COLOR_GREEN = "56b881";
@@ -134,50 +155,6 @@ public class MissionDetailsFragment extends Fragment {
 
     static int MAP_IMAGE_WIDTH_QUALITY = 500;
 
-    // ==============================================
-    // ==            DUMMY SECTION !!              ==
-    // == Simule le changement de status pour le   ==
-    // == Cette partie sera à supprimer en même    ==
-    // == temp quel l'implémentation réel du       ==
-    // == du management des status.                ==
-    // ==============================================
-    private String mfirstSatusLibelle = "Completed";
-    private String mSecondSatusLibelle = "Uncompleted";
-    private String mThirdSatusLibelle = "Pending";
-
-    View.OnClickListener mListenerDummyAction = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            FloatingActionButton clickedActionButton = (FloatingActionButton) v;
-
-            Drawable currentDrawable = mStatusCurrent.getDrawable();
-            ColorStateList currentColors = mStatusCurrent.getBackgroundTintList();
-            mStatusCurrent.setImageDrawable(clickedActionButton.getDrawable());
-            mStatusCurrent.setBackgroundTintList(clickedActionButton.getBackgroundTintList());
-            clickedActionButton.setImageDrawable(currentDrawable);
-            clickedActionButton.setBackgroundTintList(currentColors);
-
-            int i = v.getId();
-            if (i == R.id.first_action) {
-                String currentLibelle = mMissionStatusLabel.getText().toString();
-                mMissionStatusLabel.setText(mfirstSatusLibelle);
-                mfirstSatusLibelle = currentLibelle;
-            } else if (i == R.id.second_action) {
-                String currentLibelle = mMissionStatusLabel.getText().toString();
-                mMissionStatusLabel.setText(mSecondSatusLibelle);
-                mSecondSatusLibelle = currentLibelle;
-            } else if (i == R.id.third_action) {
-                String currentLibelle = mMissionStatusLabel.getText().toString();
-                mMissionStatusLabel.setText(mThirdSatusLibelle);
-                mThirdSatusLibelle = currentLibelle;
-            }
-
-            if (mMissionStatusLabel.getText() == "Completed") {
-                goSignatureFragment(getContext());
-            }
-        }
-    };
-
     // ==============
     // ==  Public  ==
     // ==============
@@ -186,6 +163,7 @@ public class MissionDetailsFragment extends Fragment {
         if (mMission != null) {
             fillViewData(mMission);
             initNavigationAction(mMission);
+            initMainActionButtons(mMission);
         }
     }
 
@@ -309,10 +287,7 @@ public class MissionDetailsFragment extends Fragment {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
-                        mStatusFirstAction.show();
-                        mStatusSecondAction.show();
-                        mStatusThirdAction.show();
-                        mStatusMoreAction.show();
+                        initMainActionButtons(mMission);
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
                         mStatusFirstAction.hide();
@@ -338,10 +313,6 @@ public class MissionDetailsFragment extends Fragment {
         };
         mStatusMoreAction.setOnClickListener(listenerMore);
         mStatusCurrent.setOnClickListener(listenerMore);
-
-        mStatusFirstAction.setOnClickListener(mListenerDummyAction);
-        mStatusSecondAction.setOnClickListener(mListenerDummyAction);
-        mStatusThirdAction.setOnClickListener(mListenerDummyAction);
     }
 
     private void initNavigationAction(final MissionInterface mission) {
@@ -495,19 +466,43 @@ public class MissionDetailsFragment extends Fragment {
         newFragment.show(ft, "t");
     }
 
+    private void initMainActionButtons(final MissionInterface mission) {
+        MissionStatusTypeInterface statusType = mission.getStatus();
+        Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(statusType.getSVGPath(), new BitmapDrawable());
+        mStatusCurrent.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(statusType.getColor())));
+        mStatusCurrent.setImageDrawable(drawable);
+        mMissionStatusLabel.setText(statusType.getLabel());
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity
-     */
-    public interface OnMissionDetailsFragmentListener {
-        /**
-         * Callback triggered when a modification has been done to a mission
-         *
-         * @param mission a mission object from Mapotempo model Mission {@link MissionInterface}
-         */
-        void onMapImageViewClick(MissionInterface mission);
+        int idx = 0;
+        FloatingActionButton floatingActionButtonArray[] = {mStatusFirstAction, mStatusSecondAction, mStatusThirdAction};
+        final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+        MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
+        List<MissionStatusActionInterface> actions = manager.getMissionStatusActionAccessInterface().getByPrevious(mission.getStatus());
+
+        for (FloatingActionButton button : floatingActionButtonArray) {
+            if (idx < actions.size()) {
+                final MissionStatusActionInterface action = actions.get(idx);
+                Drawable d = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), new BitmapDrawable());
+                button.setImageDrawable(d);
+                button.setVisibility(View.VISIBLE);
+                button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(action.getNextStatus().getColor())));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mission.setStatus(action.getNextStatus());
+                        mission.save();
+                        initMainActionButtons(mission);
+                    }
+                });
+            } else
+                button.setVisibility(View.GONE);
+            idx++;
+        }
+
+        if (actions.size() < 3)
+            mStatusMoreAction.setVisibility(View.GONE);
+        else
+            mStatusMoreAction.setVisibility(View.VISIBLE);
     }
 }
 
