@@ -96,7 +96,8 @@ class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerVie
             Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), "#FFFFFF", d);
             mIcon.setImageDrawable(drawable);
             mIcon.setBackgroundColor(Color.parseColor(action.getNextStatus().getColor()));
-            mDescription.setText(action.getLabel());
+            // FIXME dispaly status label for now
+            mDescription.setText(action.getNextStatus().getLabel());
         }
     }
 }
