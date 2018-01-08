@@ -72,6 +72,8 @@
     <string name="map_settings">Map settings</string>
     <string name="map_zoom_button">"Map zoom button"</string>
     <string name="map_current_position">"Map current position"</string>
+
+    <string name="syncgateway_url">http://mobile.fleet.beta.mapotempo.com:4984/db</string>
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.1.135:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->

@@ -535,7 +535,7 @@ public class MissionDetailsFragment extends Fragment {
             idx++;
         }
 
-        if (actions.size() < 3)
+        if (actions.size() <= 3)
             mStatusMoreAction.setVisibility(View.GONE);
         else
             mStatusMoreAction.setVisibility(View.VISIBLE);

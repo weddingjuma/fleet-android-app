@@ -13,7 +13,7 @@ public class SVGDrawableHelper {
 
     private static final int BITMAP_HEIGHT = 64;
 
-    private static final String viewBox = "0 0 612 612";
+    private static final String viewBox = "0 0 128 128";
 
     @Nullable
     public static Drawable getDrawableFromSVGPath(String svg_path, String color, Drawable defaultDrawable) {

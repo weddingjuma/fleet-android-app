@@ -42,13 +42,13 @@ import java.util.TimerTask;
  * </code>
  * </p>
  * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
- * You will have to implement the {@link OnLoginFragmentImplementation#onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, TimerTask, String[], MapotempoFleetManagerInterface)}which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
+ * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, TimerTask, MapotempoFleetManagerInterface)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
  * <p>
  * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
  * </p>
  * </b>Example:</b>
  * <pre>
- * public void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs) {
+ * public void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] logs) {
  *      task.cancel();
  *
  *      switch (status) {
@@ -72,13 +72,23 @@ import java.util.TimerTask;
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
 
-    private String mLogin = null;
-    private String mPassword = null;
     private MapotempoFleetManagerInterface iFleetManager = null;
+
+    private EditText mLoginView;
+
+    private EditText mPasswordView;
 
     public LoginFragment() {
         // Required empty public constructor
     }
+
+    private static final String SHARED_BASE_NAME = "Mapotempo";
+
+    private static final String USER_LOGIN_KEY = "UserLogin";
+
+    private static final String USER_PASSWORD_KEY = "UserPassword";
+
+    private static final String AUTO_LOGIN = "AutoLogin";
 
     // ===================================
     // ==  Android Fragment Life cycle  ==
@@ -104,20 +114,18 @@ public class LoginFragment extends Fragment {
 
         View view = localInflater.inflate(R.layout.fragment_login, container, true);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Mapotempo", 0);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_BASE_NAME, 0);
 
-        final EditText loginView = view.findViewById(R.id.login);
-        loginView.setText(sharedPreferences.getString("UserLogin", ""));
+        mLoginView = view.findViewById(R.id.login);
+        mLoginView.setText(sharedPreferences.getString(USER_LOGIN_KEY, ""));
 
-        final EditText passwordView = view.findViewById(R.id.password);
-        passwordView.setText(sharedPreferences.getString("UserPassword", ""));
+        mPasswordView = view.findViewById(R.id.password);
+        mPasswordView.setText(sharedPreferences.getString(USER_PASSWORD_KEY, ""));
 
         final Button connexionButton = view.findViewById(R.id.login_sign_in_button);
         connexionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLogin = loginView.getText().toString();
-                mPassword = passwordView.getText().toString();
                 attemptLogin();
             }
         });
@@ -133,6 +141,15 @@ public class LoginFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        boolean l = getActivity().getSharedPreferences(SHARED_BASE_NAME, 0).getBoolean(AUTO_LOGIN, false);
+        if (l) {
+            attemptLogin();
+        }
     }
 
     @Override
@@ -163,8 +180,8 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFragmentImplementation {
-        void onLoginFragmentImplementation(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, String[] loggins,
-                                           MapotempoFleetManagerInterface manager);
+        void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task,
+                     MapotempoFleetManagerInterface manager);
     }
 
     public class InvalidLoginException extends Exception {
@@ -182,11 +199,13 @@ public class LoginFragment extends Fragment {
      * If none as been found in 5 seconds, the TimerTask restart the view.
      */
     private void attemptLogin() {
-        final CheckBox checkbox = getActivity().findViewById(R.id.remember_logs);
+        final String login = mLoginView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+
         final Context context = getContext();
 
         try {
-            loginValid(mLogin, mPassword);
+            loginValid(login, password);
         } catch (InvalidLoginException e) {
             e.getStackTrace();
             return;
@@ -211,12 +230,8 @@ public class LoginFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String[] logs = null;
 
-                        if (checkbox.isChecked())
-                            logs = new String[]{mLogin, mPassword};
-
-                        mListener.onLoginFragmentImplementation(status, timerTask, logs, manager);
+                        mListener.onLogin(status, timerTask, manager);
                     }
                 });
             }
@@ -227,8 +242,18 @@ public class LoginFragment extends Fragment {
         timer.schedule(timerTask, 5000);
 
         String dataBaseUrl = getResources().getString(R.string.syncgateway_url);
-        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()), mLogin, mPassword, onUserAvailable, dataBaseUrl);
+        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()), login, password, onUserAvailable, dataBaseUrl);
         hideCurrentKeyboard();
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_BASE_NAME, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_LOGIN_KEY, login);
+        editor.putString(USER_PASSWORD_KEY, password);
+        editor.apply(); // Apply is async, while commit isn't.
+
+        final CheckBox checkbox = getActivity().findViewById(R.id.remember_logs);
+
+        autoLoginConfiguration(getActivity(), checkbox.isChecked());
     }
 
     /**
@@ -247,5 +272,12 @@ public class LoginFragment extends Fragment {
         if ((login == null || password == null) || (login.isEmpty() || password.isEmpty())) {
             throw new InvalidLoginException("Connection login invalid");
         }
+    }
+
+    public static void autoLoginConfiguration(Activity activity, boolean status) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(SHARED_BASE_NAME, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(AUTO_LOGIN, status);
+        editor.apply();
     }
 }
