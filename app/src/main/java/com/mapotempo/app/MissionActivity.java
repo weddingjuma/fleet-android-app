@@ -35,6 +35,16 @@ public class MissionActivity extends AppCompatActivity implements
     public void onMissionFocus(int position) {
     }
 
+    @Override
+    public void onBackPressed() {
+        MissionsPagerFragment missionDetailsFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+        boolean handle = false;
+        if (missionDetailsFragment != null)
+            handle = missionDetailsFragment.onBackPressed();
+
+        if (!handle)
+            super.onBackPressed();
+    }
 
     // ==================================================
     // ==  OnMissionDetailsFragmentListener Interface  ==

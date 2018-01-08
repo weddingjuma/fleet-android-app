@@ -4,17 +4,21 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class MissionPagerAdapter extends FragmentStatePagerAdapter {
 
     private int mCount;
     private List<MissionInterface> mMissions;
+    private Map<Integer, MissionDetailsFragment> mPageReferenceMap = new HashMap<>();
 
     public MissionPagerAdapter(FragmentManager fm, int count, List<MissionInterface> missions) {
         super(fm);
@@ -23,10 +27,21 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter {
         mMissions = missions;
     }
 
+    public MissionDetailsFragment getFragment(int position) {
+        return mPageReferenceMap.get(position);
+    }
+
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = MissionDetailsFragment.create(position, mMissions.get(position));
+        MissionDetailsFragment fragment = MissionDetailsFragment.create(position, mMissions.get(position));
+        mPageReferenceMap.put(position, fragment);
         return fragment;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
+        mPageReferenceMap.remove(position);
     }
 
     @Override

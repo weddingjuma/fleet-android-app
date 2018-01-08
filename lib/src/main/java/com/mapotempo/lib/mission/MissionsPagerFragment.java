@@ -3,13 +3,11 @@ package com.mapotempo.lib.mission;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
@@ -58,7 +56,7 @@ import java.util.List;
  */
 public class MissionsPagerFragment extends Fragment {
     private ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
+    private MissionPagerAdapter mPagerAdapter;
     private OnMissionFocusListener mListener;
 
     public MissionsPagerFragment() {
@@ -135,6 +133,13 @@ public class MissionsPagerFragment extends Fragment {
 
     public interface OnMissionFocusListener {
         void onMissionFocus(int page);
+    }
+
+    public boolean onBackPressed() {
+        MissionDetailsFragment missionDetailsFragment = mPagerAdapter.getFragment(mViewPager.getCurrentItem());
+        if (missionDetailsFragment != null)
+            return missionDetailsFragment.onBackPressed();
+        return false;
     }
 
     // ===============

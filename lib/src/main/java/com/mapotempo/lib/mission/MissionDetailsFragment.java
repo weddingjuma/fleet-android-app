@@ -191,6 +191,14 @@ public class MissionDetailsFragment extends Fragment {
         return fragment;
     }
 
+    public boolean onBackPressed() {
+        if (BottomSheetBehavior.STATE_COLLAPSED != mBottomSheetBehavior.getState()) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            return true;
+        }
+        return false;
+    }
+
     // ===================================
     // ==  Android Fragment Life cycle  ==
     // ===================================
@@ -307,11 +315,17 @@ public class MissionDetailsFragment extends Fragment {
         View.OnClickListener listenerMore = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+                MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
+                List<MissionStatusActionInterface> actions = manager.getMissionStatusActionAccessInterface().getByPrevious(mMission.getStatus());
+                if (actions.size() > 0)
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         };
         mStatusMoreAction.setOnClickListener(listenerMore);
         mStatusCurrent.setOnClickListener(listenerMore);
+
+
     }
 
     private void initNavigationAction(final MissionInterface mission) {
