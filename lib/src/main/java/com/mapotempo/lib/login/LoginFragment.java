@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -140,6 +141,16 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        // Auto Login configuration
+        final CheckBox checkbox = view.findViewById(R.id.remember_logs);
+        checkbox.setChecked(sharedPreferences.getBoolean(AUTO_LOGIN, false));
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                autoLoginConfiguration(getActivity(), isChecked);
+            }
+        });
+
         return view;
     }
 
@@ -250,10 +261,6 @@ public class LoginFragment extends Fragment {
         editor.putString(USER_LOGIN_KEY, login);
         editor.putString(USER_PASSWORD_KEY, password);
         editor.apply(); // Apply is async, while commit isn't.
-
-        final CheckBox checkbox = getActivity().findViewById(R.id.remember_logs);
-
-        autoLoginConfiguration(getActivity(), checkbox.isChecked());
     }
 
     /**
