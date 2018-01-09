@@ -1,0 +1,53 @@
+<resources>
+    <!-- Strings related to login -->
+    <string name="prompt_login">Login</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Connexion</string>
+    <string name="action_sign_up">Essaie gratuit</string>
+    <string name="connexion_in_progress">Connexion in cours...</string>
+    <string name="remember_me">Se souvenir de moi</string>
+
+    <!-- Strings related to alert dialogs -->
+    <string name="login_error_title">Erreur de connexion</string>
+    <string name="login_error_short_text">La connexion ne peut pas être établie</string>
+    <string name="login_error_details">Votre mot de passe ou login est invalide, essayez de nouveau.</string>
+
+    <!-- USER DATA PREF -->
+    <string name="agreement">J\'accepte les termes et conditions.</string>
+    <string name="clear_pad">Effacer</string>
+    <string name="save_signature">Sauvegarder la signature</string>
+    <string name="save_signature_success">La signature a été sauvegardé avec succès</string>
+    <string name="save_signature_fail">La signature n'a pas été sauvé</string>
+
+    <!-- Menu -->
+    <string name="map">Carte</string>
+    <string name="tracking">Suivi</string>
+    <string name="settings">Paramètres</string>
+    <string name="help">Aide</string>
+    <string name="sign_out">Déconnexion</string>
+    <string name="explaination_location_permission">Cette autorisation est requise pour activer le suivi de l'emplacement</string>
+    <string name="disabled_permission">Vous avez désactivé la permission</string>
+
+    <!-- Mission List -->
+    <string name="no_available_mission">Aucune mission disponible</string>
+
+    <!-- Mission Detail -->
+    <string name="arrival_time">"Heure d'arrivée : "</string>
+    <string name="visit_duration">"Durée de la visite: "</string>
+    <string name="start">"départ"</string>
+
+    <!-- Settings -->
+    <string name="profil">Profil</string>
+    <string name="general_settings">Paramêtre généraux</string>
+    <string name="night_mode">"Mode nuit"</string>
+    <string name="mobile_data">"Donnée mobile"</string>
+    <string name="night">"Nuit"</string>
+    <string name="day">"Jours"</string>
+    <string name="automatic">"Automatique"</string>
+    <string name="automatic_data_update">"Mise à jours automatique des données"</string>
+    <string name="data_settings">Parametre des données</string>
+    <string name="map_settings">Parametre de la carte</string>
+    <string name="map_zoom_button">"Bouton de zoom de la carte"</string>
+    <string name="map_current_position">"Position courrante sur la carte"</string>
+
+</resources>
