@@ -17,6 +17,7 @@
     <string name="action_sign_up">Free trial</string>
     <string name="connexion_in_progress">Connexion in progress...</string>
     <string name="remember_me">Remember me</string>
+    <string name="advanced_login_parameter">Advanced login parameter</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Sign in error</string>
@@ -68,7 +69,9 @@
     <string name="map_zoom_button">"Map zoom button"</string>
     <string name="map_current_position">"Map current position"</string>
 
-    <string name="syncgateway_url">http://mobile.fleet.beta.mapotempo.com:4984/db</string>
+    <string name="default_syncgateway_url">http://mobile.fleet.beta.mapotempo.com</string>
+    <string name="default_syncgateway_port">4984</string>
+    <string name="default_syncgateway_db">db</string>
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.1.135:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->

@@ -1,11 +1,12 @@
 <resources>
     <!-- Strings related to login -->
-    <string name="prompt_login">Login</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_login">Utilisateur</string>
+    <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Connexion</string>
     <string name="action_sign_up">Essaie gratuit</string>
     <string name="connexion_in_progress">Connexion in cours...</string>
     <string name="remember_me">Se souvenir de moi</string>
+    <string name="advanced_login_parameter">Parametre de connexion avancé</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Erreur de connexion</string>
