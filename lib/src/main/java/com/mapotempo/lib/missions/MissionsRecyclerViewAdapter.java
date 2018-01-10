@@ -105,7 +105,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
             mItem = mission;
             mName.setText(mission.getName());
             mListId.setText(Integer.toString(position + 1));
-            mAddress.setText(mission.getAddress().toString());
+            mAddress.setText(String.format("%s %s %s", mission.getAddress().getStreet(), mission.getAddress().getPostalcode(), mission.getAddress().getCity()));
             mDelivery_date.setText(missionDate);
             mDelivery_hour.setText(missionHour);
             mStatus.setBackgroundColor(Color.parseColor(mission.getStatus().getColor()));
