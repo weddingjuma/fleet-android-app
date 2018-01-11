@@ -1,5 +1,7 @@
 package com.mapotempo.lib.settings;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
@@ -41,6 +43,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 UserPreferenceInterface userPreferenceInterface = getUserPreferenceInterface();
                 userPreferenceInterface.setBoolPreference(UserPreferenceInterface.Preference.MOBILE_DATA_USAGE, (Boolean) newValue);
                 userPreferenceInterface.save();
+
+                // Enable manager if network data actif
+                final ConnectivityManager connMgr = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                if (mobile != null && mobile.isConnected() && (Boolean) newValue == true) {
+                    final MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+                    mapotempoFleetManagerInterface.onlineStatus(true);
+                } else if (wifi != null && !wifi.isConnected() && (Boolean) newValue == false) {
+                    final MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+                    mapotempoFleetManagerInterface.onlineStatus(false);
+                }
                 return true;
             }
         });

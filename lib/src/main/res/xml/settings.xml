@@ -3,9 +3,9 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <Preference
-        android:title="@string/profil"
-        android:order="1" />
+    <!--<Preference-->
+    <!--android:title="@string/profil"-->
+    <!--android:order="1" />-->
 
     <android.support.v7.preference.PreferenceCategory
         android:title="@string/general_settings"
@@ -16,17 +16,17 @@
             android:title="@string/mobile_data"
             android:order="1" />
 
-        <ListPreference
-            android:key="@string/pref_night_mode"
-            android:title="@string/night_mode"
-            android:entries="@array/night_mode_choise"
-            android:entryValues="@array/night_mode_choise_values"
-            android:order="2" />
+        <!--<ListPreference-->
+        <!--android:key="@string/pref_night_mode"-->
+        <!--android:title="@string/night_mode"-->
+        <!--android:entries="@array/night_mode_choise"-->
+        <!--android:entryValues="@array/night_mode_choise_values"-->
+        <!--android:order="2" />-->
 
-        <SwitchPreferenceCompat
-            android:key="@string/pref_automatic_data_update"
-            android:title="@string/automatic_data_update"
-            android:order="3" />
+        <!--<SwitchPreferenceCompat-->
+        <!--android:key="@string/pref_automatic_data_update"-->
+        <!--android:title="@string/automatic_data_update"-->
+        <!--android:order="3" />-->
 
     </android.support.v7.preference.PreferenceCategory>
 

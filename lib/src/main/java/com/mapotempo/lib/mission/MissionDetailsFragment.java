@@ -271,11 +271,6 @@ public class MissionDetailsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
     //
     @Override
     public void onResume() {
