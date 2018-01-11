@@ -60,6 +60,7 @@
     <string name="general_settings">General settings</string>
     <string name="night_mode">"Night mode"</string>
     <string name="mobile_data">"Mobile data"</string>
+    <string name="mobile_data_entry">"Synchronise only on wifi connexion"</string>
     <string name="night">"Night"</string>
     <string name="day">"Day"</string>
     <string name="automatic">"Automatic"</string>
