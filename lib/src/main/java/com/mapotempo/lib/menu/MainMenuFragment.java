@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.login.LoginPrefManager;
 
 public class MainMenuFragment extends Fragment {
 
@@ -51,6 +52,8 @@ public class MainMenuFragment extends Fragment {
         mLogoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                LoginPrefManager loginPrefManager = new LoginPrefManager(getActivity());
+                loginPrefManager.setAutoLoginPref(false);
                 mListener.onLogout();
                 return false;
             }

@@ -3,7 +3,6 @@ package com.mapotempo.lib.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -81,6 +80,8 @@ public class LoginFragment extends Fragment {
 
     private EditText mPasswordView;
 
+    private LoginPrefManager mLoginPrefManager;
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -106,16 +107,15 @@ public class LoginFragment extends Fragment {
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
 
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
-
         View view = localInflater.inflate(R.layout.fragment_login, container, true);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginPref.SHARED_BASE_NAME, 0);
+        mLoginPrefManager = new LoginPrefManager(getActivity());
 
         mLoginView = view.findViewById(R.id.login);
-        mLoginView.setText(sharedPreferences.getString(LoginPref.USER_LOGIN_KEY, ""));
+        mLoginView.setText(mLoginPrefManager.getLoginPref());
 
         mPasswordView = view.findViewById(R.id.password);
-        mPasswordView.setText(sharedPreferences.getString(LoginPref.USER_PASSWORD_KEY, ""));
+        mPasswordView.setText(mLoginPrefManager.getPasswordPref());
 
         final Button connexionButton = view.findViewById(R.id.login_sign_in_button);
         connexionButton.setOnClickListener(new View.OnClickListener() {
@@ -137,11 +137,11 @@ public class LoginFragment extends Fragment {
 
         // Auto Login configuration
         final CheckBox checkbox = view.findViewById(R.id.remember_logs);
-        checkbox.setChecked(sharedPreferences.getBoolean(LoginPref.AUTO_LOGIN, false));
+        checkbox.setChecked(mLoginPrefManager.getAutoLoginPref());
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                autoLoginConfiguration(getActivity(), isChecked);
+                mLoginPrefManager.setAutoLoginPref(isChecked);
             }
         });
 
@@ -168,8 +168,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        boolean l = getActivity().getSharedPreferences(LoginPref.SHARED_BASE_NAME, 0).getBoolean(LoginPref.AUTO_LOGIN, false);
-        if (l) {
+        if (mLoginPrefManager.getAutoLoginPref()) {
             attemptLogin();
         }
     }
@@ -221,12 +220,9 @@ public class LoginFragment extends Fragment {
      * If none as been found in 5 seconds, the TimerTask restart the view.
      */
     private void attemptLogin() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginPref.SHARED_BASE_NAME, 0);
-
         final String login = mLoginView.getText().toString();
         final String password = mPasswordView.getText().toString();
 
-        final Context context = getContext();
 
         try {
             loginValid(login, password);
@@ -242,7 +238,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void run() {
                         toogleLogginView(false);
-                        AlertMessageHelper.errorAlert(context, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
+                        AlertMessageHelper.errorAlert(getContext(), null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
                     }
                 });
             }
@@ -265,19 +261,12 @@ public class LoginFragment extends Fragment {
         final Timer timer = new Timer();
         timer.schedule(timerTask, 5000);
 
-        String dataBaseUrl = sharedPreferences.getString(LoginPref.URL_CONFIGURATION, null) != null ? sharedPreferences.getString(LoginPref.URL_CONFIGURATION, null) : getResources().getString(R.string.default_syncgateway_url);
-        String dataBasePort = sharedPreferences.getString(LoginPref.PORT_CONFIGURATION, null) != null ? sharedPreferences.getString(LoginPref.PORT_CONFIGURATION, null) : getResources().getString(R.string.default_syncgateway_port);
-        String dataBaseDB = sharedPreferences.getString(LoginPref.DB_CONFIGURATION, null) != null ? sharedPreferences.getString(LoginPref.DB_CONFIGURATION, null) : getResources().getString(R.string.default_syncgateway_db);
+        String fullUrl = mLoginPrefManager.getUrlPref();
 
-        String fullUrl = String.format("%s:%s/%s", dataBaseUrl, dataBasePort, dataBaseDB);
-
-        ManagerFactory.getManager(new AndroidContext(context.getApplicationContext()), login, password, onUserAvailable, fullUrl);
+        ManagerFactory.getManager(new AndroidContext(getContext().getApplicationContext()), login, password, onUserAvailable, fullUrl);
         hideCurrentKeyboard();
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(LoginPref.USER_LOGIN_KEY, login);
-        editor.putString(LoginPref.USER_PASSWORD_KEY, password);
-        editor.apply(); // Apply is async, while commit isn't.
+        mLoginPrefManager.setLoginPasswordPref(login, password);
     }
 
     /**
@@ -296,22 +285,6 @@ public class LoginFragment extends Fragment {
         if ((login == null || password == null) || (login.isEmpty() || password.isEmpty())) {
             throw new InvalidLoginException("Connection login invalid");
         }
-    }
-
-    public static void serverLoginConfiguration(Activity activity, String url, String port, String db) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(LoginPref.SHARED_BASE_NAME, 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(LoginPref.URL_CONFIGURATION, url);
-        editor.putString(LoginPref.PORT_CONFIGURATION, port);
-        editor.putString(LoginPref.DB_CONFIGURATION, db);
-        editor.apply();
-    }
-
-    public static void autoLoginConfiguration(Activity activity, boolean status) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(LoginPref.SHARED_BASE_NAME, 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(LoginPref.AUTO_LOGIN, status);
-        editor.apply();
     }
 }
 

@@ -2,7 +2,6 @@ package com.mapotempo.lib.login;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -18,13 +17,13 @@ import com.mapotempo.lib.R;
 
 public class AdvancedLoginFragment extends DialogFragment {
 
-    Button mDefaultButton;
+    private Button mDefaultButton;
 
-    Button mValidateButton;
+    private Button mValidateButton;
 
-    EditText mEditPort;
+    private EditText mEditUrl;
 
-    EditText mEditUrl;
+    private LoginPrefManager mLoginPrefManager;
 
     public static AdvancedLoginFragment newInstance() {
         AdvancedLoginFragment f = new AdvancedLoginFragment();
@@ -38,8 +37,6 @@ public class AdvancedLoginFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginPref.SHARED_BASE_NAME, 0);
-
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
         if (false) // TODO
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
@@ -47,19 +44,17 @@ public class AdvancedLoginFragment extends DialogFragment {
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         View v = localInflater.inflate(R.layout.fragment_advanced_login, container, false);
 
-        String dataBaseUrl = sharedPreferences.getString(LoginPref.URL_CONFIGURATION, null) != null ? sharedPreferences.getString(LoginPref.URL_CONFIGURATION, null) : getResources().getString(R.string.default_syncgateway_url);
+        mLoginPrefManager = new LoginPrefManager(getActivity());
+
+        String dataBaseUrl = mLoginPrefManager.getUrlPref();
         mEditUrl = v.findViewById(R.id.edit_url);
         mEditUrl.setText(dataBaseUrl);
-
-        String dataBasePort = sharedPreferences.getString(LoginPref.PORT_CONFIGURATION, null) != null ? sharedPreferences.getString(LoginPref.PORT_CONFIGURATION, null) : getResources().getString(R.string.default_syncgateway_port);
-        mEditPort = v.findViewById(R.id.edit_port);
-        mEditPort.setText(dataBasePort);
 
         mDefaultButton = v.findViewById(R.id.default_button);
         mDefaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginFragment.serverLoginConfiguration(getActivity(), null, null, null);
+                mLoginPrefManager.resetUrlPref();
                 getDialog().dismiss();
             }
         });
@@ -68,7 +63,7 @@ public class AdvancedLoginFragment extends DialogFragment {
         mValidateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginFragment.serverLoginConfiguration(getActivity(), mEditUrl.getText().toString(), mEditPort.getText().toString(), "db");
+                mLoginPrefManager.setUrlPref(mEditUrl.getText().toString());
                 getDialog().dismiss();
             }
         });

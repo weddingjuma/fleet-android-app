@@ -11,7 +11,6 @@ import android.view.View;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
-import com.mapotempo.lib.login.LoginFragment;
 import com.mapotempo.lib.menu.MainMenuFragment;
 import com.mapotempo.lib.mission.MissionDetailsFragment;
 import com.mapotempo.lib.mission.MissionsPagerFragment;
@@ -122,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         startActivity(intent);
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
         mapotempoApplication.setManager(null);
-        LoginFragment.autoLoginConfiguration(this, false);
         finish();
     }
 

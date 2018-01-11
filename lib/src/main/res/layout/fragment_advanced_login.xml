@@ -42,34 +42,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/login_internal_vertical_margin"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_weight="1"
-            android:text="port :" />
-
-        <EditText
-            android:id="@+id/edit_port"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:inputType="number"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/colorPrimaryDark"
-            android:textColorHighlight="@color/colorDarkGrey"
-            android:textColorHint="@color/colorDarkGrey" />
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/default_button"
         android:layout_width="match_parent"
