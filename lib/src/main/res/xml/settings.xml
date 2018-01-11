@@ -30,20 +30,22 @@
 
     </android.support.v7.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
-        android:title="@string/map_settings"
-        android:order="3">
+    <!--Uncomment this to enable map option-->
 
-        <SwitchPreferenceCompat
-            android:key="@string/pref_map_zoom_button"
-            android:title="@string/map_zoom_button"
-            android:order="1" />
+    <!--<android.support.v7.preference.PreferenceCategory-->
+    <!--android:title="@string/map_settings"-->
+    <!--android:order="3">-->
 
-        <SwitchPreferenceCompat
-            android:key="@string/pref_map_current_position"
-            android:title="@string/map_current_position"
-            android:order="2" />
+    <!--<SwitchPreferenceCompat-->
+    <!--android:key="@string/pref_map_zoom_button"-->
+    <!--android:title="@string/map_zoom_button"-->
+    <!--android:order="1" />-->
 
-    </android.support.v7.preference.PreferenceCategory>
+    <!--<SwitchPreferenceCompat-->
+    <!--android:key="@string/pref_map_current_position"-->
+    <!--android:title="@string/map_current_position"-->
+    <!--android:order="2" />-->
+
+    <!--</android.support.v7.preference.PreferenceCategory>-->
 
 </android.support.v7.preference.PreferenceScreen>
