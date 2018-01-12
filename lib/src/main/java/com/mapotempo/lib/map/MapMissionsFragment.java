@@ -177,25 +177,25 @@ public class MapMissionsFragment extends Fragment {
             public void onMapReady(MapboxMap mapboxMap) {
                 mapboxMap.clear();
                 final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
-                MissionInterface missionFocus = null;
 
                 // Draw marker
                 IconFactory mIconFactory = IconFactory.getInstance(getActivity());
                 Icon icon = mIconFactory.fromResource(R.drawable.ic_map_marker);
                 for (MissionInterface mission : missions) {
-                    mapboxMap.addMarker(new MarkerViewOptions()
-                            .icon(icon)
-                            .position(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()))
-                    );
-                    if (mission.getId().equals(mission_id)) {
-                        missionFocus = mission;
+                    if (mission.getLocation().isValide()) {
+                        mapboxMap.addMarker(new MarkerViewOptions()
+                                .icon(icon)
+                                .position(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()))
+                        );
                     }
                 }
 
                 // Draw path
                 List<LatLng> polygonPath = new ArrayList<>();
                 for (MissionInterface mission : missions) {
-                    polygonPath.add(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()));
+                    if (mission.getLocation().isValide()) {
+                        polygonPath.add(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()));
+                    }
                 }
                 mapboxMap.addPolyline(new PolylineOptions()
                         .width(0.5F)
@@ -206,10 +206,10 @@ public class MapMissionsFragment extends Fragment {
                 if (updateLocation) {
                     final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
                     LocationDetailsInterface locationDetailsInterface = mapotempoApplication.getManager().getCurrentLocationDetails();
-                    int zoom = missionFocus != null ? 14 : 5;
-                    LatLng latLng = (missionFocus != null ?
-                            new LatLng(missionFocus.getLocation().getLat(), missionFocus.getLocation().getLon()) :
-                            new LatLng(locationDetailsInterface.getLat(), locationDetailsInterface.getLon()));
+                    _InternalLocation bestLocation = new _InternalLocation(locationDetailsInterface, missions, mission_id);
+
+                    int zoom = bestLocation.mZoom;
+                    LatLng latLng = new LatLng(bestLocation.mLat, bestLocation.mLon);
 
                     CameraPosition cameraPosition = new CameraPosition.Builder()
                             .target(latLng)
@@ -223,15 +223,52 @@ public class MapMissionsFragment extends Fragment {
     }
 
     private void setCurrentPosition(final LocationDetailsInterface locationDetailsInterface) {
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                IconFactory mIconFactory = IconFactory.getInstance(getActivity());
-                Icon icon = mIconFactory.fromResource(R.drawable.ic_current_location);
-                mapboxMap.addMarker(new MarkerViewOptions()
-                        .icon(icon)
-                        .position(new LatLng(locationDetailsInterface.getLat(), locationDetailsInterface.getLon())));
+        if (locationDetailsInterface.isValide()) {
+            mMapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(MapboxMap mapboxMap) {
+                    IconFactory mIconFactory = IconFactory.getInstance(getActivity());
+                    Icon icon = mIconFactory.fromResource(R.drawable.ic_current_location);
+                    mapboxMap.addMarker(new MarkerViewOptions()
+                            .icon(icon)
+                            .position(new LatLng(locationDetailsInterface.getLat(), locationDetailsInterface.getLon())));
+                }
+            });
+        }
+    }
+
+    private class _InternalLocation {
+        public int mZoom;
+        public double mLat = 0.0, mLon = 0.0;
+        private boolean mValide = false;
+
+        public _InternalLocation(LocationDetailsInterface userLocation, List<MissionInterface> missions, String missionId) {
+            int count = 0;
+            for (MissionInterface mission : missions) {
+                if (mission.getLocation().isValide()) {
+                    mValide = true;
+                    count++;
+                    mLat += userLocation.getLat();
+                    mLon += userLocation.getLon();
+                    if (mission.getId().equals(missionId)) {
+                        mLat = mission.getLocation().getLat();
+                        mLon = mission.getLocation().getLon();
+                        mZoom = 15;
+                        return;
+                    }
+                }
             }
-        });
+            if (!mValide && userLocation.isValide()) {
+                mLat = userLocation.getLat();
+                mLon = userLocation.getLon();
+                mZoom = 7;
+                mValide = true;
+                return;
+            } else if (mValide) {
+                mLat = mLat / count;
+                mLon = mLon / count;
+                mZoom = 10;
+            }
+        }
     }
 }

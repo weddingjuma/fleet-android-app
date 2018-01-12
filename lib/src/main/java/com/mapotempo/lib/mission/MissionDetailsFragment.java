@@ -336,18 +336,21 @@ public class MissionDetailsFragment extends Fragment {
                 if (mMission != null) {
                     LocationInterface loc = mission.getLocation();
 
-                    Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
+                    // Check lat/lon object
+                    if (loc.isValide()) {
+                        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
 
-                    PackageManager packageManager = getActivity().getPackageManager();
-                    List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
-                    boolean isIntentSafe = (activities.size() > 0);
-                    for (ResolveInfo ri : activities) {
-                        System.out.print(ri.activityInfo.name);
-                        System.out.print(ri.activityInfo.describeContents());
+                        PackageManager packageManager = getActivity().getPackageManager();
+                        List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
+                        boolean isIntentSafe = (activities.size() > 0);
+                        for (ResolveInfo ri : activities) {
+                            System.out.print(ri.activityInfo.name);
+                            System.out.print(ri.activityInfo.describeContents());
+                        }
+                        if (isIntentSafe)
+                            startActivity(mapIntent);
                     }
-                    if (isIntentSafe)
-                        startActivity(mapIntent);
                 }
             }
         });
@@ -361,56 +364,58 @@ public class MissionDetailsFragment extends Fragment {
 
     private void mapVisivilityManager() {
         // Asynchronously fill the mapImageView when the widget is draw to retrieve dimensions.
-        ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
-        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            public boolean onPreDraw() {
-                mMapImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+        if (mMission.getLocation().isValide()) {
+            ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    mMapImageView.getViewTreeObserver().removeOnPreDrawListener(this);
 
-                // Init visibility
-                mMapLoader.setVisibility(View.VISIBLE);
-                mMapImageView.setVisibility(View.GONE);
-                mMapMarker.setVisibility(View.GONE);
+                    // Init visibility
+                    mMapLoader.setVisibility(View.VISIBLE);
+                    mMapImageView.setVisibility(View.GONE);
+                    mMapMarker.setVisibility(View.GONE);
 
-                // Prepare Request
-                int x = mMapImageView.getMeasuredWidth();
-                int y = mMapImageView.getMeasuredHeight();
-                double ratio = (double) y / (double) x;
-                x = MAP_IMAGE_WIDTH_QUALITY;
-                y = (int) (x * ratio);
+                    // Prepare Request
+                    int x = mMapImageView.getMeasuredWidth();
+                    int y = mMapImageView.getMeasuredHeight();
+                    double ratio = (double) y / (double) x;
+                    x = MAP_IMAGE_WIDTH_QUALITY;
+                    y = (int) (x * ratio);
 
-                String MapUrl = new StaticMapURLHelper.TileHostingURLBuilder()
-                        .setBaseURL(getString(R.string.tilehosting_base_url))
-                        .setKey(getString(R.string.tilehosting_access_token))
-                        .setLat(mMission.getLocation().getLat())
-                        .setLon(mMission.getLocation().getLon())
-                        .setWidth(x)
-                        .setHeight(y)
-                        .setZoom(18)
-                        .Build();
+                    String MapUrl = new StaticMapURLHelper.TileHostingURLBuilder()
+                            .setBaseURL(getString(R.string.tilehosting_base_url))
+                            .setKey(getString(R.string.tilehosting_access_token))
+                            .setLat(mMission.getLocation().getLat())
+                            .setLon(mMission.getLocation().getLon())
+                            .setWidth(x)
+                            .setHeight(y)
+                            .setZoom(18)
+                            .Build();
 
-                // Init request with Picasso
-                Picasso.with(getActivity())
-                        .load(MapUrl)
-                        .error(R.drawable.bg_world_mapbox_v10)
-                        .into(mMapImageView, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                mMapLoader.setVisibility(View.GONE);
-                                mMapImageView.setVisibility(View.VISIBLE);
-                                mMapMarker.setVisibility(View.VISIBLE);
-                            }
+                    // Init request with Picasso
+                    Picasso.with(getActivity())
+                            .load(MapUrl)
+                            .error(R.drawable.bg_world_mapbox_v10)
+                            .into(mMapImageView, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    mMapLoader.setVisibility(View.GONE);
+                                    mMapImageView.setVisibility(View.VISIBLE);
+                                    mMapMarker.setVisibility(View.VISIBLE);
+                                }
 
-                            @Override
-                            public void onError() {
-                                mMapLoader.setVisibility(View.GONE);
-                                mMapImageView.setVisibility(View.VISIBLE);
-                                mMapMarker.setVisibility(View.GONE);
-                            }
-                        });
+                                @Override
+                                public void onError() {
+                                    mMapLoader.setVisibility(View.GONE);
+                                    mMapImageView.setVisibility(View.VISIBLE);
+                                    mMapMarker.setVisibility(View.GONE);
+                                }
+                            });
 
-                return true;
-            }
-        });
+                    return true;
+                }
+            });
+        }
     }
 
     private void detailsContentManager(MissionInterface mission) {
