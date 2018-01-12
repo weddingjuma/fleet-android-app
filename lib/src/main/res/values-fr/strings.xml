@@ -1,4 +1,8 @@
 <resources>
+    <!-- MAPOTEMPO URL -->
+    <string name="mapotempo_url">https://www.mapotempo.com/essai-gratuit-mapotempo-web/</string>
+    <string name="mapotempo_help_url">https://www.mapotempo.com/contact-support/</string>
+
     <!-- Strings related to login -->
     <string name="prompt_login">Utilisateur</string>
     <string name="prompt_password">Mot de passe</string>
