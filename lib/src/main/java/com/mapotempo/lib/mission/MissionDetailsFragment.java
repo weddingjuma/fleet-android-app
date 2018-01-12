@@ -116,6 +116,7 @@ public class MissionDetailsFragment extends Fragment {
     private LinearLayout mLayoutDelivery;
     private TextView mTextViewDeliveryStreet;
     private TextView mTextViewDeliveryAddress;
+    private TextView mTextViewDeliveryAddressDetails;
 
     private TextView mTextViewDate;
     private TextView mTextViewDuration;
@@ -236,6 +237,7 @@ public class MissionDetailsFragment extends Fragment {
         mLayoutDelivery = view.findViewById(R.id.delivery_address_layout);
         mTextViewDeliveryStreet = view.findViewById(R.id.delivery_street);
         mTextViewDeliveryAddress = view.findViewById(R.id.delivery_address);
+        mTextViewDeliveryAddressDetails = view.findViewById(R.id.delivery_address_details);
 
         // Date view
         mTextViewDate = view.findViewById(R.id.delivery_date);
@@ -427,6 +429,7 @@ public class MissionDetailsFragment extends Fragment {
 
         mTextViewDeliveryStreet.setText(String.format("%s", mission.getAddress().getStreet()));
         mTextViewDeliveryAddress.setText(String.format("%s %s", mission.getAddress().getPostalcode(), mission.getAddress().getCity()));
+        mTextViewDeliveryAddressDetails.setText(mission.getAddress().getDetail());
 
         mTextViewPhone.setText(PhoneNumberHelper.intenationalPhoneNumber(mission.getPhone()));
 
@@ -444,7 +447,10 @@ public class MissionDetailsFragment extends Fragment {
     private void detailsVisibilityManager() {
         mMissionReference.setVisibility(isEmptyTextView(mMissionReference) ? View.VISIBLE : View.GONE);
         mTextViewDuration.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
-        mLayoutDelivery.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) || isEmptyTextView(mTextViewDeliveryStreet)) ? View.VISIBLE : View.GONE);
+        mLayoutDelivery.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) || isEmptyTextView(mTextViewDeliveryStreet) || isEmptyTextView(mTextViewDeliveryAddressDetails)) ? View.VISIBLE : View.GONE);
+        mTextViewDeliveryStreet.setVisibility(isEmptyTextView(mTextViewDeliveryStreet) ? View.VISIBLE : View.GONE);
+        mTextViewDeliveryAddress.setVisibility(isEmptyTextView(mTextViewDeliveryAddress) ? View.VISIBLE : View.GONE);
+        mTextViewDeliveryAddressDetails.setVisibility(isEmptyTextView(mTextViewDeliveryAddressDetails) ? View.VISIBLE : View.GONE);
         mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
         mLayoutPhone.setVisibility(isEmptyTextView(mTextViewPhone) ? View.VISIBLE : View.GONE);
         mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
