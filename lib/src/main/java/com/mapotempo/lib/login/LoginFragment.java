@@ -165,9 +165,10 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         if (mLoginPrefManager.getAutoLoginPref()) {
             attemptLogin();
         }

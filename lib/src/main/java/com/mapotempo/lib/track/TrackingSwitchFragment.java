@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mapotempo.fleet.api.model.UserPreferenceInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
@@ -56,9 +57,11 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
                 } else {
                     hookLocationListener(mSwitchTracking.isChecked());
                 }
+                UserPreferenceInterface up = mMapotempoApplicationInterface.getManager().getUserPreference();
+                up.setBoolPreference(UserPreferenceInterface.Preference.TRACKING_ENABLE, mSwitchTracking.isChecked());
+                up.save();
             }
         });
-
         return mSwitchTracking;
     }
 
@@ -80,6 +83,16 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mMapotempoApplicationInterface = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+        boolean check = (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                && mMapotempoApplicationInterface.getManager().getUserPreference().getBoolPreference(UserPreferenceInterface.Preference.TRACKING_ENABLE);
+        mSwitchTracking.setChecked(check);
+        hookLocationListener(check);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hookLocationListener(false);
     }
 
     // ==================================
