@@ -248,8 +248,8 @@ public class MapMissionsFragment extends Fragment {
                 if (mission.getLocation().isValide()) {
                     mValide = true;
                     count++;
-                    mLat += userLocation.getLat();
-                    mLon += userLocation.getLon();
+                    mLat += mission.getLocation().getLat();
+                    mLon += mission.getLocation().getLon();
                     if (mission.getId().equals(missionId)) {
                         mLat = mission.getLocation().getLat();
                         mLon = mission.getLocation().getLon();
