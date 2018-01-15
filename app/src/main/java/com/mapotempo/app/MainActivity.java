@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     // ===================================
     private DrawerLayout mDrawerLayout;
 
+    private ConnexionReceiver mConnexionReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,42 +49,17 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         addDrawableHandler(toolbar);
-
-        // Wifi / Data manager connexion status
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                MapotempoFleetManagerInterface manager = ((MapotempoApplication) getApplicationContext()).getManager();
-
-                final ConnectivityManager connMgr = (ConnectivityManager) context
-                        .getSystemService(Context.CONNECTIVITY_SERVICE);
-
-                final android.net.NetworkInfo wifi = connMgr
-                        .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                final android.net.NetworkInfo mobile = connMgr
-                        .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-                if (wifi != null && wifi.isConnected()) {
-                    Log.d(">>>>>>>>>>>>> " + intent.getAction(), "wifi");
-                    manager.onlineStatus(true);
-                } else if (mobile != null && mobile.isConnected()) {
-                    Log.d(">>>>>>>>>>>>> " + intent.getAction(), "data");
-                    boolean status = manager.getUserPreference().getBoolPreference(UserPreferenceInterface.Preference.MOBILE_DATA_USAGE);
-                    manager.onlineStatus(status);
-                } else {
-                    Log.d(">>>>>>>>>>>>> " + intent.getAction(), "network down");
-                    ((MapotempoApplication) getApplicationContext()).getManager().onlineStatus(false);
-                }
-            }
-        }, intentFilter);
+        mConnexionReceiver = new ConnexionReceiver();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        // Wifi / Data manager connexion status
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mConnexionReceiver, intentFilter);
+
     }
 
     @Override
@@ -93,6 +70,12 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         }
         refreshMissionListFragment();
         refreshMissionsPagerFragment();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mConnexionReceiver);
     }
 
     // ========================================
@@ -197,4 +180,33 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
             mDrawerToggle.syncState();
         }
     }
+
+    private class ConnexionReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            MapotempoFleetManagerInterface manager = ((MapotempoApplication) getApplicationContext()).getManager();
+
+            final ConnectivityManager connMgr = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            final android.net.NetworkInfo wifi = connMgr
+                    .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+            final android.net.NetworkInfo mobile = connMgr
+                    .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (wifi != null && wifi.isConnected()) {
+                Log.d(">>>>>>>>>>>>> " + intent.getAction(), "wifi");
+                manager.onlineStatus(true);
+            } else if (mobile != null && mobile.isConnected()) {
+                Log.d(">>>>>>>>>>>>> " + intent.getAction(), "data");
+                boolean status = manager.getUserPreference().getBoolPreference(UserPreferenceInterface.Preference.MOBILE_DATA_USAGE);
+                manager.onlineStatus(status);
+            } else {
+                Log.d(">>>>>>>>>>>>> " + intent.getAction(), "network down");
+                ((MapotempoApplication) getApplicationContext()).getManager().onlineStatus(false);
+            }
+        }
+    }
+
 }
