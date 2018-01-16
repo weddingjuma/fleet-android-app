@@ -18,6 +18,7 @@
     <string name="connexion_in_progress">Connexion in progress...</string>
     <string name="remember_me">Remember me</string>
     <string name="advanced_login_parameter">Advanced login parameter</string>
+    <string name="invalid_login_format">The login format is invalid, check spaces.</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Sign in error</string>

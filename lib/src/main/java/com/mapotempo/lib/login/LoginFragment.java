@@ -18,7 +18,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.couchbase.lite.Manager;
 import com.couchbase.lite.android.AndroidContext;
 import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
@@ -224,6 +226,10 @@ public class LoginFragment extends Fragment {
         final String login = mLoginView.getText().toString();
         final String password = mPasswordView.getText().toString();
 
+        if (!Manager.isValidDatabaseName(login)) {
+            Toast.makeText(getContext(), R.string.invalid_login_format, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         try {
             loginValid(login, password);
