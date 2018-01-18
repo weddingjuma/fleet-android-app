@@ -43,15 +43,15 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/default_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Default" />
-
-    <Button
         android:id="@+id/validate_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="valider" />
+
+    <Button
+        android:id="@+id/default_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Default" />
 
 </LinearLayout>
