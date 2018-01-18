@@ -2,6 +2,7 @@ package com.mapotempo.lib.mission;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -55,9 +56,16 @@ import java.util.List;
  * </pre>
  */
 public class MissionsPagerFragment extends Fragment {
+
+    private static final String CURRENT_POSITION = "current_position";
+
     private ViewPager mViewPager;
+
     private MissionPagerAdapter mPagerAdapter;
+
     private OnMissionFocusListener mListener;
+
+    private int mCurrentPosition = 0;
 
     public MissionsPagerFragment() {
     }
@@ -80,10 +88,14 @@ public class MissionsPagerFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
 
+        // Get extra argument and savedInstanceStae can override it.
+        mCurrentPosition = getActivity().getIntent().getIntExtra("mission_id", 0);
+        if (savedInstanceState != null) {
+            mCurrentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0);
+        }
     }
 
     @Override
@@ -103,13 +115,21 @@ public class MissionsPagerFragment extends Fragment {
         setPagerChangeListener();
         content.addView(viewPager);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setCurrentItem(mCurrentPosition, false);
         return view;
     }
+
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_POSITION, mCurrentPosition);
     }
 
     // ==============
@@ -155,18 +175,11 @@ public class MissionsPagerFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 mListener.onMissionFocus(position);
+                mCurrentPosition = position;
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-            }
-        });
-
-        final int position = getActivity().getIntent().getIntExtra("mission_id", 0);
-        mViewPager.post(new Runnable() {
-            @Override
-            public void run() {
-                mViewPager.setCurrentItem(position);
             }
         });
     }
