@@ -208,8 +208,11 @@ public class DateHelpers {
         else if (minutes > 0 && seconds == 0)
             return String.format(Locale.ENGLISH, "%dm", minutes);
         else if (minutes > 0)
-            return String.format(Locale.ENGLISH, "%dh %dm %ds", hours, minutes, seconds);
-        else
+            return String.format(Locale.ENGLISH, "%dm %ds", hours, minutes, seconds);
+        else if (seconds > 0)
             return String.format(Locale.ENGLISH, "%ds", seconds);
+        else
+            return "";
+
     }
 }
