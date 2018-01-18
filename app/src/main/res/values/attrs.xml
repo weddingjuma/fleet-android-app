@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <declare-styleable name="MissionsPagerFragment">
-    <attr name="ViewStyle" format="enum">
-      <enum name="SCROLLVIEW" value="0"/>
-      <enum name="SIMPLEVIEW" value="1"/>
-    </attr>
-  </declare-styleable>
-</resources>

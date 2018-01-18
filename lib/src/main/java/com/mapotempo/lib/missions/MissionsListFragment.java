@@ -1,10 +1,12 @@
 package com.mapotempo.lib.missions;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,9 +80,24 @@ public class MissionsListFragment extends Fragment {
         }
     };
 
+    private ListBehavior mBehavior = ListBehavior.FOCUS;
+
     // ===================================
     // ==  Android Fragment Life cycle  ==
     // ===================================
+
+
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MissionsListFragment);
+
+        CharSequence behaviorType = a.getText(R.styleable.MissionsListFragment_ViewStyle);
+        if (behaviorType != null) {
+            mBehavior = ListBehavior.fromInteger(Integer.parseInt(behaviorType.toString()));
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -111,9 +128,10 @@ public class MissionsListFragment extends Fragment {
             public void onMissionSelected(int position) {
                 mListener.onMissionSelected(position);
             }
-        }, mMissions);
+        }, mMissions, mBehavior);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mDefaultFrameLayout = view.findViewById(R.id.default_layout);
+
         return view;
     }
 

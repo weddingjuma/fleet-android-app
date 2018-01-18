@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorMapoBlue"
-            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/HeaderTheme"
             app:title="Mapotempo" />
 
         <LinearLayout
@@ -33,16 +33,15 @@
                 class="com.mapotempo.lib.missions.MissionsListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
-
+                android:layout_weight="1"
+                app:ViewStyle="FOCUS" />
 
             <fragment
                 android:id="@+id/base_fragment"
                 class="com.mapotempo.lib.mission.MissionsPagerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:ViewStyle="SCROLLVIEW" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 

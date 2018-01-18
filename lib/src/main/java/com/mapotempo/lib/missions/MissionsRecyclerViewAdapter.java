@@ -23,18 +23,24 @@ import java.util.List;
 class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
 
     private MissionsListFragment.OnMissionSelectedListener mListener;
+
     private int missionsCount = 0;
+
     private List<MissionInterface> mMissions;
+
     private int mMissionFocus = 0;
+
+    private ListBehavior mBehavior = ListBehavior.FOCUS;
 
     // ===================
     // ==  Constructor  ==
     // ===================
 
-    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<MissionInterface> missions) {
+    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<MissionInterface> missions, ListBehavior behavior) {
         mMissions = missions;
         missionsCount = missions.size();
         mListener = listener;
+        mBehavior = behavior;
     }
 
     // ======================================
@@ -118,7 +124,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
         }
 
         void setBackgroundFocus(boolean focus) {
-            if (focus)
+            if (focus && mBehavior == ListBehavior.FOCUS)
                 mSelected.setVisibility(View.VISIBLE);
             else
                 mSelected.setVisibility(View.INVISIBLE);
