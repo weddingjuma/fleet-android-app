@@ -7,7 +7,7 @@
     <string name="prompt_login">Utilisateur</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Connexion</string>
-    <string name="action_sign_up">Essaie gratuit</string>
+    <string name="action_sign_up">Essai gratuit</string>
     <string name="connexion_in_progress">Connexion in cours...</string>
     <string name="remember_me">Se souvenir de moi</string>
     <string name="advanced_login_parameter">Parametre de connexion avancé</string>
@@ -22,8 +22,8 @@
     <string name="agreement">J\'accepte les termes et conditions.</string>
     <string name="clear_pad">Effacer</string>
     <string name="save_signature">Sauvegarder la signature</string>
-    <string name="save_signature_success">La signature a été sauvegardé avec succès</string>
-    <string name="save_signature_fail">La signature n'a pas été sauvé</string>
+    <string name="save_signature_success">La signature a été sauvegardée avec succès</string>
+    <string name="save_signature_fail">La signature n'a pas été sauvegardée</string>
 
     <!-- Menu -->
     <string name="map">Carte</string>
@@ -44,7 +44,7 @@
 
     <!-- Settings -->
     <string name="profil">Profil</string>
-    <string name="general_settings">Paramêtre généraux</string>
+    <string name="general_settings">Paramêtres généraux</string>
     <string name="night_mode">"Mode nuit"</string>
     <string name="mobile_data">"Donnée mobile"</string>
     <string name="mobile_data_entry">"Autoriser la synchronisation sur donnée mobile"</string>
