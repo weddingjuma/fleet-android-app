@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -100,16 +101,15 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
     // ==================================
 
     @Override
-
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(@NonNull Location location) {
         Log.d("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
+
         if (mMapotempoApplicationInterface != null && mMapotempoApplicationInterface.getManager() != null) {
             Integer cid = -1;
             Integer lac = -1;
             Integer mcc = -1;
             Integer mnc = -1;
 
-            Log.i("onLocationChanged", "up mapotempo " + location);
 //            TelephonyManager telephonyManager = (TelephonyManager) (getActivity().getSystemService((Context.TELEPHONY_SERVICE)));
 //             GsmCellLocation gl = (GsmCellLocation) telephonyManager.getCellLocation();
 //            String networkOperator = telephonyManager.getNetworkOperator();
@@ -138,9 +138,10 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
                     lac,
                     mcc,
                     mnc);
+
             mMapotempoApplicationInterface.getManager().setCurrentLocationDetails(ld);
 
-            System.out.println("---------------------UP LOCATION---------------");
+            Log.d(getClass().getName(), "---------------------UP LOCATION---------------");
         }
     }
 
@@ -168,7 +169,10 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
         boolean test = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         if (hook_status && test) {
             Log.d(getClass().getName(), "hooked the location listener");
-            locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
+            if (locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
+            if (locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+                locMngr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
         } else {
             Log.d(getClass().getName(), "unhooked the location listener");
             locMngr.removeUpdates(this);
