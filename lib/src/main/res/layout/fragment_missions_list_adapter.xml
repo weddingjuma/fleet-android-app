@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorPrimaryBackground"
+    android:background="@drawable/bg_missions_list_item"
     tools:theme="@style/MapotempoTheme">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_missions_list_item_seperator"
+        android:alpha="0.2"
+        tools:background="@drawable/bg_missions_list_item" />
 
     <FrameLayout
         android:id="@+id/selected"
@@ -20,12 +27,11 @@
         android:layout_height="wrap_content"
         android:minHeight="@dimen/fragment_mission_adapter_height"
         android:baselineAligned="true"
-        android:orientation="horizontal"
-        android:layout_marginBottom="1dp">
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/mission_status"
-            android:layout_width="6dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
             android:background="@color/colorOrange"
             android:layout_weight="0" />
