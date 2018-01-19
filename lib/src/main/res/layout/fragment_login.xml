@@ -80,7 +80,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginRight="12dp"
-                    android:src="@drawable/ic_login_black_24dp"
+                    android:src="@drawable/ic_email_black_24dp"
                     android:tint="@color/colorDarkGrey" />
 
                 <android.support.design.widget.TextInputLayout
@@ -93,7 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_login"
-                        android:inputType="textPersonName"
+                        android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/colorPrimaryDark"

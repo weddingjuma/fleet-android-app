@@ -11,7 +11,7 @@
     <string name="mapotempo_help_url">https://www.mapotempo.com/en/contact-support-2/</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_login">Login</string>
+    <string name="prompt_login">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Connexion</string>
     <string name="action_sign_up">Free trial</string>
