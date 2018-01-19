@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_missions_list_item_seperator"
+        android:background="@drawable/bg_item_seperator"
         android:alpha="0.2"
         tools:background="@drawable/bg_missions_list_item" />
 
