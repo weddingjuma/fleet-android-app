@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -10,11 +10,34 @@
         android:scaleType="centerCrop"
         android:src="@drawable/bg_city" />
 
-    <TextView
-        android:id="@+id/user_name_header"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        tools:text="username" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:padding="10dp"
+        android:background="#80FFFFFF">
 
+        <TextView
+            android:id="@+id/user_name_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textSize="25dp"
+            android:textColor="@color/colorMapoBlue"
+            android:textStyle="bold"
+            tools:text="Maxime" />
+
+        <TextView
+            android:id="@+id/user_email_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="left|center"
+            android:textSize="15dp"
+            android:textColor="@color/colorMapoBlue"
+            android:textStyle="italic"
+            tools:text="admin@mapotempo.com" />
+
+    </LinearLayout>
 </FrameLayout>

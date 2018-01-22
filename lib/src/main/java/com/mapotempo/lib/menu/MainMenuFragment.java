@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
@@ -20,6 +21,10 @@ import com.mapotempo.lib.login.LoginPrefManager;
 public class MainMenuFragment extends Fragment {
 
     private MainMenuFragment.OnMenuInteractionListener mListener;
+
+    TextView mUserName;
+
+    TextView mUserEmail;
 
     Menu mMenu;
 
@@ -46,6 +51,12 @@ public class MainMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         NavigationView view = (NavigationView) inflater.inflate(R.layout.fragment_menu, container, false);
+
+        View header = view.getHeaderView(0);
+        mUserName = header.findViewById(R.id.user_name_header);
+        mUserEmail = header.findViewById(R.id.user_email_header);
+        mUserName.setText(mapotempoApplication.getManager().getUser().getUserName());
+        mUserEmail.setText(mapotempoApplication.getManager().getUser().getUserEmail());
 
         mMenu = view.getMenu();
         mLogoutItem = mMenu.findItem(R.id.sign_out);

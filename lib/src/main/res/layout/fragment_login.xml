@@ -99,6 +99,7 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:textColorHighlight="@color/colorDarkGrey"
                         android:textColorHint="@color/colorDarkGrey" />
+
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
