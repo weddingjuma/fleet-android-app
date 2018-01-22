@@ -261,7 +261,7 @@ public class LoginFragment extends Fragment {
         final Timer timer = new Timer();
         timer.schedule(timerTask, 5000);
 
-        String fullUrl = mLoginPrefManager.getUrlPref();
+        String fullUrl = mLoginPrefManager.getFullURL();
 
         ManagerFactory.getManager(new AndroidContext(getContext().getApplicationContext()), login, password, onUserAvailable, fullUrl);
         hideCurrentKeyboard();

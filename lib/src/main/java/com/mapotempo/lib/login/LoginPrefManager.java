@@ -31,8 +31,13 @@ public class LoginPrefManager {
     // ==  URL Builder  ==
     // ===================
 
+    public String getFullURL() {
+        return String.format("%s:%s/%s", getUrlPref(), getPortPref(), getDBPref());
+    }
+
+
     public String getUrlPref() {
-        String default_url = mContext.getResources().getString(R.string.default_syncgateway_url);
+        String default_url = mContext.getResources().getString(R.string.default_syncgateway_url_default);
         return mSharedPreference.getString(LoginPrefManager.URL_CONFIGURATION, default_url);
     }
 
@@ -46,6 +51,14 @@ public class LoginPrefManager {
         SharedPreferences.Editor editor = mSharedPreference.edit();
         editor.remove(LoginPrefManager.URL_CONFIGURATION);
         editor.apply();
+    }
+
+    public String getPortPref() {
+        return mContext.getResources().getString(R.string.default_syncgateway_port_default);
+    }
+
+    public String getDBPref() {
+        return mContext.getResources().getString(R.string.default_syncgateway_db_default);
     }
 
     // ==================
