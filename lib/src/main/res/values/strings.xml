@@ -45,9 +45,10 @@
     <string name="no_available_mission">No missions available</string>
 
     <!-- Mission Detail -->
-    <string name="arrival_time">"Arrival time : "</string>
-    <string name="visit_duration">"Visit duration : "</string>
-    <string name="start">"start"</string>
+    <string name="planned">"Planned: "</string>
+    <string name="visit_duration">"Visit duration: "</string>
+    <string name="time_windows">"Time Windows"</string>
+    <string name="directions">"directions"</string>
 
     <!--  Prefs -->
     <string name="pref_night_mode" translatable="false">NightMode</string>
@@ -71,7 +72,14 @@
     <string name="map_zoom_button">"Map zoom button"</string>
     <string name="map_current_position">"Map current position"</string>
 
-    https://mobile.fleet.mapotempo.com:4984/db
+    <!-- Time -->
+    <string name="hour">hour</string>
+    <string name="minute">minute</string>
+    <string name="second">second</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
+    <string name="seconds">seconds</string>
+
     <string name="default_syncgateway_url_default">https://mobile.fleet.mapotempo.com</string>
     <string name="default_syncgateway_port_default">4984</string>
     <string name="default_syncgateway_db_default">db</string>

@@ -1,5 +1,9 @@
 package com.mapotempo.lib.utils;
 
+import android.content.Context;
+
+import com.mapotempo.lib.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -195,22 +199,25 @@ public class DateHelpers {
         return new Date[]{currentDate, furtherDate};
     }
 
-    public static String FormatedHour(int totalSecs) {
+    public static String FormatedHour(Context context, int totalSecs) {
         int hours = totalSecs / 3600;
         int minutes = (totalSecs % 3600) / 60;
         int seconds = totalSecs % 60;
         if (hours > 0 && minutes == 0 && seconds == 0)
-            return String.format(Locale.ENGLISH, "%dh", hours);
+            return String.format(Locale.ENGLISH, "%d %s", hours, (hours > 1 ? context.getString(R.string.hours) :
+                    context.getString(R.string.hour)));
         else if (hours > 0 && seconds == 0)
             return String.format(Locale.ENGLISH, "%dh %dm", hours, minutes);
         else if (hours > 0)
             return String.format(Locale.ENGLISH, "%dh %dm %ds", hours, minutes, seconds);
         else if (minutes > 0 && seconds == 0)
-            return String.format(Locale.ENGLISH, "%dm", minutes);
+            return String.format(Locale.ENGLISH, "%d %s", minutes, (minutes > 1 ? context.getString(R.string.minutes) :
+                    context.getString(R.string.minute)));
         else if (minutes > 0)
             return String.format(Locale.ENGLISH, "%dm %ds", hours, minutes, seconds);
         else if (seconds > 0)
-            return String.format(Locale.ENGLISH, "%ds", seconds);
+            return String.format(Locale.ENGLISH, "%d %s", seconds, (seconds > 1 ? context.getString(R.string.seconds) :
+                    context.getString(R.string.second)));
         else
             return "";
 

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:theme="@style/MapotempoTheme">
 
     <!-- MAP FRAGMENT -->
 
@@ -86,14 +87,14 @@
                 android:layout_marginBottom="8dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="25dp"
-                android:text="@string/start"
+                android:text="@string/directions"
                 android:background="@drawable/bg_navigate_button" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="3"
             android:orientation="vertical"
             android:layout_gravity="center">
@@ -157,6 +158,14 @@
                 tools:text="Pépinière éco-créative, 9 Rue André Darbon" />
 
             <TextView
+                android:id="@+id/delivery_address_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/fragment_mission_body_detail_size"
+                tools:text="sonner à la porte" />
+
+            <TextView
                 android:id="@+id/delivery_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -165,14 +174,12 @@
                 tools:text="33000" />
 
             <TextView
-                android:id="@+id/delivery_address_details"
+                android:id="@+id/delivery_country"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="10dp"
                 android:textSize="@dimen/fragment_mission_body_detail_size"
-                android:textStyle="italic"
-                tools:text="sonner à la porte" />
+                tools:text="33000" />
 
         </LinearLayout>
 
@@ -187,7 +194,6 @@
         android:paddingBottom="@dimen/fragment_mission_body_element_padding"
         android:weightSum="5"
         android:background="@drawable/bg_mission_detail_item">
-
 
         <ImageView
             android:layout_width="0dp"
@@ -205,40 +211,67 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:weightSum="4"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
                     android:textSize="@dimen/fragment_mission_body_detail_size"
-                    android:text="@string/arrival_time" />
+                    android:gravity="center_vertical"
+                    android:text="@string/planned" />
 
-                <TextView
-                    android:id="@+id/delivery_date"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:textSize="@dimen/fragment_mission_body_detail_size"
-                    tools:text="8:30" />
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/delivery_planned_hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="@dimen/fragment_mission_body_detail_size"
+                        tools:text="8:30" />
+
+
+                    <TextView
+                        android:id="@+id/delivery_planned_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="@dimen/fragment_mission_body_sub_detail_size"
+                        android:text="18/01/2018"
+                        tools:text="18/01/2018" />
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/delivery_duration_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:paddingTop="@dimen/fragment_mission_body_element_padding"
+                android:weightSum="4"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/fragment_mission_body_detail_size"
                     android:text="@string/visit_duration" />
 
                 <TextView
                     android:id="@+id/delivery_duration"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_horizontal"
                     android:textSize="@dimen/fragment_mission_body_detail_size"
                     tools:text="5h 10min 3s" />
 
@@ -258,6 +291,7 @@
         android:weightSum="5"
         android:background="@drawable/bg_mission_detail_item">
 
+
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -266,25 +300,44 @@
             android:src="@drawable/ic_timelapse_black_24dp" />
 
         <LinearLayout
-            android:id="@+id/time_windows_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:orientation="vertical">
+            android:weightSum="4"
+            android:orientation="horizontal">
+
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/fragment_mission_body_detail_size"
-                android:text="10:00-11:20"
-                tools:text="10:00-11:20" />
+                android:text="@string/time_windows"
+                tools:text="@string/time_windows" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/time_windows_container"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_detail_size"
-                android:text="14:00-16:00"
-                tools:text="14:00-16:00" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/fragment_mission_body_detail_size"
+                    android:text="10:00-11:20"
+                    tools:text="10:00-11:20" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/fragment_mission_body_detail_size"
+                    android:text="14:00-16:00"
+                    tools:text="14:00-16:00" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -342,6 +395,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
+            android:layout_marginRight="10dp"
             android:textSize="@dimen/fragment_mission_body_detail_size"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 

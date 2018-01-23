@@ -29,6 +29,7 @@
     <dimen name="fragment_mission_body_subtitle_size">18sp</dimen>
     <dimen name="fragment_mission_body_time_windows_size">17sp</dimen>
     <dimen name="fragment_mission_body_detail_size">18sp</dimen>
+    <dimen name="fragment_mission_body_sub_detail_size">10sp</dimen>
     <dimen name="fragment_mission_body_element_padding">15dp</dimen>
 
     <!-- MAP DIMENSION -->

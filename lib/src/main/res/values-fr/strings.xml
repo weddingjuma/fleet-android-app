@@ -11,7 +11,7 @@
     <string name="connexion_in_progress">Connexion in cours...</string>
     <string name="remember_me">Se souvenir de moi</string>
     <string name="advanced_login_parameter">Parametre de connexion avancé</string>
-    <string name="c">Le format de login est invalide, vérifier les espaces.</string>
+    <string name="invalid_login_format">Le format de login est invalide, vérifier les espaces.</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Erreur de connexion</string>
@@ -38,9 +38,10 @@
     <string name="no_available_mission">Aucune mission disponible</string>
 
     <!-- Mission Detail -->
-    <string name="arrival_time">"Heure d'arrivée : "</string>
-    <string name="visit_duration">"Durée de la visite: "</string>
-    <string name="start">"départ"</string>
+    <string name="planned">"Planifié : "</string>
+    <string name="visit_duration">"Durée de la visite : "</string>
+    <string name="time_windows">"Plage horaire"</string>
+    <string name="directions">"itinéraire"</string>
 
     <!-- Settings -->
     <string name="profil">Profil</string>
@@ -56,5 +57,13 @@
     <string name="map_settings">Parametre de la carte</string>
     <string name="map_zoom_button">"Bouton de zoom de la carte"</string>
     <string name="map_current_position">"Position courrante sur la carte"</string>
+
+    <!-- Time -->
+    <string name="hour">heure</string>
+    <string name="minute">minute</string>
+    <string name="second">seconde</string>
+    <string name="hours">heures</string>
+    <string name="minutes">minutes</string>
+    <string name="seconds">secondes</string>
 
 </resources>
