@@ -214,7 +214,7 @@ public class DateHelpers {
             return String.format(Locale.ENGLISH, "%d %s", minutes, (minutes > 1 ? context.getString(R.string.minutes) :
                     context.getString(R.string.minute)));
         else if (minutes > 0)
-            return String.format(Locale.ENGLISH, "%dm %ds", hours, minutes, seconds);
+            return String.format(Locale.ENGLISH, "%dm %ds", minutes, seconds);
         else if (seconds > 0)
             return String.format(Locale.ENGLISH, "%d %s", seconds, (seconds > 1 ? context.getString(R.string.seconds) :
                     context.getString(R.string.second)));
