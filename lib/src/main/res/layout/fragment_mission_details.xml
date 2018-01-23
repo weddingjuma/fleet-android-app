@@ -132,6 +132,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingRight="@dimen/fragment_mission_body_element_padding"
         android:paddingTop="@dimen/fragment_mission_body_element_padding"
         android:paddingBottom="@dimen/fragment_mission_body_element_padding"
         android:weightSum="5"
@@ -190,6 +191,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingRight="@dimen/fragment_mission_body_element_padding"
         android:paddingTop="@dimen/fragment_mission_body_element_padding"
         android:paddingBottom="@dimen/fragment_mission_body_element_padding"
         android:weightSum="5"
@@ -286,6 +288,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingRight="@dimen/fragment_mission_body_element_padding"
         android:paddingTop="@dimen/fragment_mission_body_element_padding"
         android:paddingBottom="@dimen/fragment_mission_body_element_padding"
         android:weightSum="5"
@@ -348,6 +351,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingRight="@dimen/fragment_mission_body_element_padding"
         android:paddingTop="@dimen/fragment_mission_body_element_padding"
         android:paddingBottom="@dimen/fragment_mission_body_element_padding"
         android:weightSum="5"
@@ -374,10 +378,12 @@
     </LinearLayout>
 
     <LinearLayout
+
         android:id="@+id/comment_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingRight="@dimen/fragment_mission_body_element_padding"
         android:paddingTop="@dimen/fragment_mission_body_element_padding"
         android:paddingBottom="@dimen/fragment_mission_body_element_padding"
         android:weightSum="5"
@@ -395,7 +401,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:layout_marginRight="10dp"
             android:textSize="@dimen/fragment_mission_body_detail_size"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 

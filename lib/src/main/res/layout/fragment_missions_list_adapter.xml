@@ -73,7 +73,7 @@
                     android:textStyle="bold"
                     tools:text="Mission 1" />
 
-                <TextView
+                <com.mapotempo.lib.view.autogone.TextViewAG
                     android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
