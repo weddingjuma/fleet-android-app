@@ -8,7 +8,7 @@
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Connexion</string>
     <string name="action_sign_up">Essai gratuit</string>
-    <string name="connexion_in_progress">Connexion in cours...</string>
+    <string name="connexion_in_progress">Connexion en cours...</string>
     <string name="remember_me">Se souvenir de moi</string>
     <string name="advanced_login_parameter">Parametre de connexion avancé</string>
     <string name="invalid_login_format">Le format de login est invalide, vérifier les espaces.</string>

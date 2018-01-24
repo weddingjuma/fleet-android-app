@@ -15,7 +15,7 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Connexion</string>
     <string name="action_sign_up">Free trial</string>
-    <string name="connexion_in_progress">Connexion in progress...</string>
+    <string name="connexion_in_progress">Connection in progress...</string>
     <string name="remember_me">Remember me</string>
     <string name="advanced_login_parameter">Advanced login parameter</string>
     <string name="invalid_login_format">The login format is invalid, check spaces.</string>
