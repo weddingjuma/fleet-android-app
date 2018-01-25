@@ -1,19 +1,29 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'MapotempoKey'
+            keyPassword '654321'
+            storeFile file('/home/maxime/fleet-key-store-2.jks')
+            storePassword '123456'
+        }
+    }
+
     compileSdkVersion 26
     buildToolsVersion '26.0.3'
     defaultConfig {
         applicationId "mapotempo.com.mapotempo_fleet_android"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 9
+        versionCode 10
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
