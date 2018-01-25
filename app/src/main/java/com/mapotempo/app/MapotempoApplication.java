@@ -1,6 +1,7 @@
 package com.mapotempo.app;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
@@ -41,8 +42,11 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     }
 
     private void tryInitSentry() {
-        // Use the Sentry DSN (client key) from the Project Settings page on Sentry
-        String sentryDsn = getString(R.string.sentry_config);
-        Sentry.init(sentryDsn, new AndroidSentryClientFactory(this));
+        if (!BuildConfig.DEBUG) {
+            Log.d(getClass().getName(), "PRODUCTION MODE sentry initialisation");
+            // Use the Sentry DSN (client key) from the Project Settings page on Sentry
+            String sentryDsn = getString(R.string.sentry_config);
+            Sentry.init(sentryDsn, new AndroidSentryClientFactory(this));
+        }
     }
 }
