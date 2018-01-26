@@ -152,35 +152,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/delivery_street"
+                android:id="@+id/delivery_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/fragment_mission_body_subtitle_size"
-                tools:text="Pépinière éco-créative, 9 Rue André Darbon" />
-
-            <TextView
-                android:id="@+id/delivery_address_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="@dimen/fragment_mission_body_detail_size"
-                tools:text="sonner à la porte" />
-
-            <TextView
-                android:id="@+id/delivery_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="@dimen/fragment_mission_body_detail_size"
-                tools:text="33000" />
-
-            <TextView
-                android:id="@+id/delivery_country"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="@dimen/fragment_mission_body_detail_size"
-                tools:text="33000" />
+                tools:text="Pépinière éco-créative, 9 Rue André Darbon\nSonner à la porte\n33000 Bordeaux\nFrance" />
 
         </LinearLayout>
 

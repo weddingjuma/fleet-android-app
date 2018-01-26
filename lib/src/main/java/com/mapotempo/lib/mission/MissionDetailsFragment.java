@@ -113,16 +113,13 @@ public class MissionDetailsFragment extends Fragment {
     private TextView mMissionReference;
     private TextView mMissionStatusLabel;
 
-    private LinearLayout mLayoutDelivery;
-    private TextView mTextViewDeliveryStreet;
+    private LinearLayout mLayoutDeliveryAddress;
     private TextView mTextViewDeliveryAddress;
-    private TextView mTextViewDeliveryCountry;
-    private TextView mTextViewDeliveryAddressDetails;
 
     private TextView mTextViewHours;
     private TextView mTextViewDate;
     private TextView mTextViewDuration;
-    private LinearLayout mTextViewDurationLayout;
+    private LinearLayout mLayoutTextViewDuration;
 
     private LinearLayout mLayoutTimeWindows;
     private LinearLayout mLayoutTimeWindowsContainer;
@@ -237,17 +234,14 @@ public class MissionDetailsFragment extends Fragment {
         mMissionStatusLabel = view.findViewById(R.id.status_label);
 
         // Location view
-        mLayoutDelivery = view.findViewById(R.id.delivery_address_layout);
-        mTextViewDeliveryStreet = view.findViewById(R.id.delivery_street);
+        mLayoutDeliveryAddress = view.findViewById(R.id.delivery_address_layout);
         mTextViewDeliveryAddress = view.findViewById(R.id.delivery_address);
-        mTextViewDeliveryCountry = view.findViewById(R.id.delivery_country);
-        mTextViewDeliveryAddressDetails = view.findViewById(R.id.delivery_address_details);
 
         // Date view
         mTextViewHours = view.findViewById(R.id.delivery_planned_hours);
         mTextViewDate = view.findViewById(R.id.delivery_planned_date);
         mTextViewDuration = view.findViewById(R.id.delivery_duration);
-        mTextViewDurationLayout = view.findViewById(R.id.delivery_duration_layout);
+        mLayoutTextViewDuration = view.findViewById(R.id.delivery_duration_layout);
 
         // TimeWindows view
         mLayoutTimeWindows = view.findViewById(R.id.time_windows_layout);
@@ -434,10 +428,13 @@ public class MissionDetailsFragment extends Fragment {
         mTextViewDate.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.SHORTDATE));
         mTextViewDuration.setText(DateHelpers.FormatedHour(getContext(), mission.getDuration()));
 
-        mTextViewDeliveryStreet.setText(String.format("%s", mission.getAddress().getStreet()));
-        mTextViewDeliveryAddress.setText(String.format("%s %s", mission.getAddress().getPostalcode(), mission.getAddress().getCity()));
-        mTextViewDeliveryCountry.setText(mission.getAddress().getCountry());
-        mTextViewDeliveryAddressDetails.setText(mission.getAddress().getDetail());
+        String fullAdress = String.format("%s\n%s\n%s %s\n%s",
+                mission.getAddress().getStreet(),
+                mission.getAddress().getDetail(),
+                mission.getAddress().getPostalcode(),
+                mission.getAddress().getCity(),
+                mission.getAddress().getCountry()).trim();
+        mTextViewDeliveryAddress.setText(fullAdress);
 
         mTextViewPhone.setText(PhoneNumberHelper.intenationalPhoneNumber(mission.getPhone()));
 
@@ -454,12 +451,8 @@ public class MissionDetailsFragment extends Fragment {
 
     private void detailsVisibilityManager() {
         mMissionReference.setVisibility(isEmptyTextView(mMissionReference) ? View.VISIBLE : View.GONE);
-        mTextViewDurationLayout.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
-        mLayoutDelivery.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) || isEmptyTextView(mTextViewDeliveryStreet) || isEmptyTextView(mTextViewDeliveryAddressDetails)) ? View.VISIBLE : View.GONE);
-        mTextViewDeliveryStreet.setVisibility(isEmptyTextView(mTextViewDeliveryStreet) ? View.VISIBLE : View.GONE);
-        mTextViewDeliveryAddress.setVisibility(isEmptyTextView(mTextViewDeliveryAddress) ? View.VISIBLE : View.GONE);
-        mTextViewDeliveryCountry.setVisibility(isEmptyTextView(mTextViewDeliveryCountry) ? View.VISIBLE : View.GONE);
-        mTextViewDeliveryAddressDetails.setVisibility(isEmptyTextView(mTextViewDeliveryAddressDetails) ? View.VISIBLE : View.GONE);
+        mLayoutTextViewDuration.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
+        mLayoutDeliveryAddress.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) ? View.VISIBLE : View.GONE));
         mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
         mLayoutPhone.setVisibility(isEmptyTextView(mTextViewPhone) ? View.VISIBLE : View.GONE);
         mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
