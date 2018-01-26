@@ -57,8 +57,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.+'
     implementation 'com.mapotempo.fleet:mapotempo-fleet-java-client:1.0-SNAPSHOT'
 
-    implementation 'io.sentry:sentry-android:1.6.4'
-
     testCompile 'junit:junit:4.12'
 }
 
