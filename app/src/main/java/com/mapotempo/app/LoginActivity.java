@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     // ===================================
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         setTheme(R.style.AppTheme_Night);

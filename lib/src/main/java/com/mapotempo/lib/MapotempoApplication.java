@@ -3,7 +3,10 @@ package com.mapotempo.lib;
 import android.app.Application;
 import android.util.Log;
 
+import com.couchbase.lite.android.AndroidContext;
+import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.fragments.login.LoginPrefManager;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
@@ -12,10 +15,12 @@ public class MapotempoApplication extends Application implements MapotempoApplic
 
     private MapotempoFleetManagerInterface iFleetManager;
 
-    private final MapotempoFleetManagerInterface.OnServerConnexionVerify mOnUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
+    private LoginPrefManager mLoginPrefManager;
+
+    private MapotempoFleetManagerInterface.OnServerConnexionVerify mOnServerConnexionVerify = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
         @Override
-        public void connexion(final Status status, final MapotempoFleetManagerInterface manager) {
-            iFleetManager = manager;
+        public void connexion(Status status, MapotempoFleetManagerInterface mapotempoFleetManagerInterface) {
+            iFleetManager = mapotempoFleetManagerInterface;
         }
     };
 
@@ -27,6 +32,9 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     public void onCreate() {
         super.onCreate();
         initSentry();
+
+        mLoginPrefManager = new LoginPrefManager(this);
+        tryToInitLastSession();
     }
 
     // ==============
@@ -56,5 +64,13 @@ public class MapotempoApplication extends Application implements MapotempoApplic
             String sentryDsn = getString(R.string.sentry_config);
             Sentry.init(sentryDsn, new AndroidSentryClientFactory(this));
         }
+    }
+
+    private void tryToInitLastSession() {
+        ManagerFactory.getManager(new AndroidContext(this.getApplicationContext()),
+                mLoginPrefManager.getLoginPref(),
+                mLoginPrefManager.getPasswordPref(),
+                mOnServerConnexionVerify,
+                mLoginPrefManager.getFullURL());
     }
 }

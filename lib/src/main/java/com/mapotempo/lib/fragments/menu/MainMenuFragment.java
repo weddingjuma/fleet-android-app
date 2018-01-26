@@ -49,6 +49,8 @@ public class MainMenuFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         NavigationView view = (NavigationView) inflater.inflate(R.layout.fragment_menu, container, false);
 
