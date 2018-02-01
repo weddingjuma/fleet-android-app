@@ -30,8 +30,8 @@ import java.util.Date;
 
 public class TrackingSwitchFragment extends Fragment implements LocationListener {
 
-    static final int UPDATE_TIME = 20000;
-    static final int UPDATE_DISTANCE = 10;
+    static final int UPDATE_TIME = 5 * 60000;
+    static final int UPDATE_DISTANCE = 150;
 
     private SwitchCompat mSwitchTracking;
 
