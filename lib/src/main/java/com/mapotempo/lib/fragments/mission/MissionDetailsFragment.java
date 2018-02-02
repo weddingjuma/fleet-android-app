@@ -43,6 +43,7 @@ import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
 import com.mapotempo.lib.utils.SVGDrawableHelper;
 import com.mapotempo.lib.utils.StaticMapURLHelper;
+import com.mapotempo.lib.view.action.MissionActionPanel;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -111,7 +112,6 @@ public class MissionDetailsFragment extends Fragment {
 
     private TextView mMissionName;
     private TextView mMissionReference;
-    private TextView mMissionStatusLabel;
 
     private LinearLayout mLayoutDeliveryAddress;
     private TextView mTextViewDeliveryAddress;
@@ -131,7 +131,7 @@ public class MissionDetailsFragment extends Fragment {
     private TextView mTextViewComment;
 
     private Button mNavigationAction;
-    private FloatingActionButton mStatusCurrent;
+    private MissionActionPanel mStatusCurrent;
     private FloatingActionButton mStatusFirstAction;
     private FloatingActionButton mStatusSecondAction;
     private FloatingActionButton mStatusThirdAction;
@@ -231,7 +231,7 @@ public class MissionDetailsFragment extends Fragment {
         // Header view
         mMissionName = view.findViewById(R.id.name);
         mMissionReference = view.findViewById(R.id.reference);
-        mMissionStatusLabel = view.findViewById(R.id.status_label);
+        mStatusCurrent = view.findViewById(R.id.status);
 
         // Location view
         mLayoutDeliveryAddress = view.findViewById(R.id.delivery_address_layout);
@@ -257,7 +257,6 @@ public class MissionDetailsFragment extends Fragment {
 
         // Action button
         mNavigationAction = view.findViewById(R.id.navigation_launcher);
-        mStatusCurrent = view.findViewById(R.id.status);
         mStatusFirstAction = view.findViewById(R.id.first_action);
         mStatusSecondAction = view.findViewById(R.id.second_action);
         mStatusThirdAction = view.findViewById(R.id.third_action);
@@ -327,8 +326,6 @@ public class MissionDetailsFragment extends Fragment {
         };
         mStatusMoreAction.setOnClickListener(listenerMore);
         mStatusCurrent.setOnClickListener(listenerMore);
-
-
     }
 
     private void initNavigationAction(final MissionInterface mission) {
@@ -434,6 +431,7 @@ public class MissionDetailsFragment extends Fragment {
                 mission.getAddress().getPostalcode(),
                 mission.getAddress().getCity(),
                 mission.getAddress().getCountry()).trim();
+
         mTextViewDeliveryAddress.setText(fullAdress);
 
         mTextViewPhone.setText(PhoneNumberHelper.intenationalPhoneNumber(mission.getPhone()));
@@ -517,9 +515,9 @@ public class MissionDetailsFragment extends Fragment {
         // Current status
         MissionStatusTypeInterface statusType = mission.getStatus();
         Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(statusType.getSVGPath(), "#ffffff", new BitmapDrawable());
-        mStatusCurrent.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(statusType.getColor())));
+        mStatusCurrent.setBackgroundColor(Color.parseColor(statusType.getColor()));
         mStatusCurrent.setImageDrawable(drawable);
-        mMissionStatusLabel.setText(statusType.getLabel());
+        mStatusCurrent.setText(statusType.getLabel());
 
         // Next actions
         int idx = 0;

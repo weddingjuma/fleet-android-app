@@ -8,14 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 import com.mapotempo.lib.utils.SVGDrawableHelper;
+import com.mapotempo.lib.view.action.MissionActionPanel;
 
 import java.util.List;
 
@@ -28,6 +27,7 @@ class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerVie
     private ActionsListFragment.OnMissionActionSelectedListener mListener;
     private int mActionsCount = 0;
     private List<MissionStatusActionInterface> mActions;
+    private Context mContext;
 
     // ===================
     // ==  Constructor  ==
@@ -37,6 +37,7 @@ class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerVie
         mActions = actions;
         mActionsCount = actions.size();
         mListener = listener;
+        mContext = context;
     }
 
     // ======================================
@@ -72,17 +73,12 @@ class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerVie
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         MissionStatusActionInterface mItem;
-        final View mView;
-        final ImageView mIcon;
-        final TextView mDescription;
+        final MissionActionPanel mActionView;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIcon = view.findViewById(R.id.icon_view);
-            mDescription = view.findViewById(R.id.description_view);
-
-            mView.setOnClickListener(new View.OnClickListener() {
+            mActionView = view.findViewById(R.id.status_panel);
+            mActionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mListener.onMissionActionSelected(mItem.getNextStatus());
@@ -94,10 +90,9 @@ class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerVie
             mItem = mActions.get(position);
             Drawable d = new BitmapDrawable();
             Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), "#FFFFFF", d);
-            mIcon.setImageDrawable(drawable);
-            mIcon.setBackgroundColor(Color.parseColor(action.getNextStatus().getColor()));
-            // FIXME dispaly status label for now
-            mDescription.setText(action.getNextStatus().getLabel());
+            mActionView.setImageDrawable(drawable);
+            mActionView.setText(action.getNextStatus().getLabel());
+            mActionView.setBackgroundColor(Color.parseColor(action.getNextStatus().getColor()));
         }
     }
 }
