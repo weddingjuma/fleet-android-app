@@ -2,17 +2,20 @@ package com.mapotempo.lib.fragments.missions;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.utils.DateHelpers;
+import com.mapotempo.lib.utils.SVGDrawableHelper;
+import com.mapotempo.lib.view.action.MissionActionPanel;
 
 import java.util.List;
 
@@ -88,10 +91,10 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
         final TextView mName;
         final TextView mListId;
         final TextView mAddress;
-        final RelativeLayout mStatus;
         final TextView mDelivery_hour;
         final TextView mDelivery_date;
         final FrameLayout mSelected;
+        final MissionActionPanel mMissionActionPanel;
 
         public ViewHolder(View view) {
             super(view);
@@ -100,9 +103,9 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
             mName = view.findViewById(R.id.name);
             mListId = view.findViewById(R.id.list_id);
             mAddress = view.findViewById(R.id.address);
-            mStatus = view.findViewById(R.id.mission_status);
             mDelivery_hour = view.findViewById(R.id.delivery_hour);
             mDelivery_date = view.findViewById(R.id.delivery_date);
+            mMissionActionPanel = view.findViewById(R.id.status_panel);
         }
 
         void setMission(MissionInterface mission, final int position) {
@@ -114,7 +117,10 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
             mAddress.setText(String.format("%s %s %s", mission.getAddress().getStreet(), mission.getAddress().getPostalcode(), mission.getAddress().getCity()));
             mDelivery_date.setText(missionDate);
             mDelivery_hour.setText(missionHour);
-            mStatus.setBackgroundColor(Color.parseColor(mission.getStatus().getColor()));
+            mMissionActionPanel.setBackgroundColor(Color.parseColor(mission.getStatus().getColor()));
+            Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(mission.getStatus().getSVGPath(), "#ffffff", new BitmapDrawable());
+            mMissionActionPanel.setImageDrawable(drawable);
+
             mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

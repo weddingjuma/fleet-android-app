@@ -10,6 +10,9 @@
     <dimen name="logo_vertical_margin_top">24dp</dimen>
     <dimen name="logo_vertical_margin_bottom">24dp</dimen>
 
+    <!-- VIEW DIMENSION -->
+    <dimen name="view_mission_action_status_padding">12dp</dimen>
+
     <!-- MISSION ADAPTER DIMENSION -->
     <dimen name="fragment_mission_adapter_height">100dp</dimen>
     <dimen name="fragment_mission_id_size">28dp</dimen>

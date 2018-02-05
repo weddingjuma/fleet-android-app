@@ -6,4 +6,8 @@
             <enum name="SIMPLE" value="1" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="MissionActionPanel">
+        <attr name="showLabel" format="boolean" />
+    </declare-styleable>
 </resources>

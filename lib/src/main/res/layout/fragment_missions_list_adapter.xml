@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="@dimen/fragment_mission_adapter_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_missions_list_item"
     tools:theme="@style/MapotempoTheme">
 
@@ -26,52 +28,67 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/fragment_mission_adapter_height"
-        android:baselineAligned="true"
         android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/mission_status"
-            android:layout_width="10dp"
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/mission_status"-->
+        <!--android:layout_width="10dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@color/colorOrange"-->
+        <!--android:layout_weight="0" />-->
+
+        <com.mapotempo.lib.view.action.MissionActionPanel
+            android:id="@+id/status_panel"
+            app:showLabel="false"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:background="@color/colorOrange"
-            android:layout_weight="0" />
+            android:padding="@dimen/view_mission_action_status_padding"
+            tools:background="@android:color/holo_orange_dark" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/list_id"
-                android:layout_width="@dimen/fragment_mission_id_size"
-                android:layout_height="@dimen/fragment_mission_id_size"
-                android:layout_marginRight="@dimen/fragment_mission_id_margin"
-                android:layout_marginLeft="@dimen/fragment_mission_id_margin"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/bg_mission_id"
-                android:textColor="?missionTextColorPrimary"
-                android:textSize="@dimen/fragment_mission_id_text_size"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:text=""
-                tools:text="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:padding="@dimen/view_mission_action_status_padding"
                 android:layout_gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/name"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text=""
-                    android:textColor="?missionTextColorPrimary"
-                    android:textSize="@dimen/fragment_mission_name_text_size"
-                    android:textStyle="bold"
-                    tools:text="Mission 1" />
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/list_id"
+                        android:layout_width="@dimen/fragment_mission_id_size"
+                        android:layout_height="@dimen/fragment_mission_id_size"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_mission_id"
+                        android:textColor="?missionTextColorPrimary"
+                        android:textSize="@dimen/fragment_mission_id_text_size"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:text=""
+                        tools:text="1" />
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text=""
+                        android:textColor="?missionTextColorPrimary"
+                        android:textSize="@dimen/fragment_mission_name_text_size"
+                        android:textStyle="bold"
+                        tools:text="Mission 1" />
+
+                </LinearLayout>
 
                 <com.mapotempo.lib.view.autogone.TextViewAG
                     android:id="@+id/address"
