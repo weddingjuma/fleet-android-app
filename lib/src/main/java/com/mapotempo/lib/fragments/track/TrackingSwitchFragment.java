@@ -1,7 +1,9 @@
 package com.mapotempo.lib.fragments.track;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -36,6 +38,8 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
     private SwitchCompat mSwitchTracking;
 
     private MapotempoApplicationInterface mMapotempoApplicationInterface;
+
+    private LocationManager mLocMngr;
 
     // ===================================
     // ==  Android Fragment Life cycle  ==
@@ -83,6 +87,8 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initLocationManager();
+
         mMapotempoApplicationInterface = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         boolean check = (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 && mMapotempoApplicationInterface.getManager().getUserPreference().getBoolPreference(UserPreferenceInterface.Preference.TRACKING_ENABLE);
@@ -164,18 +170,43 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
     // ===============
     // ==  Private  ==
     // ===============
+    private void initLocationManager() {
+        mLocMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+
+        if (!mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && !mLocMngr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+            dialog.setTitle(R.string.enable_location_services);
+            dialog.setMessage(R.string.location_is_disabled_long_text);
+            dialog.setPositiveButton(R.string.connection_settings, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    getContext().startActivity(myIntent);
+                }
+            });
+            dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                }
+            });
+            dialog.show();
+        }
+    }
+
     private void hookLocationListener(boolean hook_status) {
-        LocationManager locMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
         boolean test = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         if (hook_status && test) {
             Log.d(getClass().getName(), "hooked the location listener");
-            if (locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
-            if (locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-                locMngr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
+
+            if (mLocMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                mLocMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
+            if (mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+                mLocMngr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
         } else {
             Log.d(getClass().getName(), "unhooked the location listener");
-            locMngr.removeUpdates(this);
+            mLocMngr.removeUpdates(this);
         }
     }
 
@@ -194,7 +225,7 @@ public class TrackingSwitchFragment extends Fragment implements LocationListener
     private void explain() {
         askForPermission();
 
-        Snackbar.make(getView(), R.string.explaination_location_permission, Snackbar.LENGTH_LONG).setAction("Activer", new View.OnClickListener() {
+        Snackbar.make(getView(), R.string.explaination_location_permission, Snackbar.LENGTH_LONG).setAction(R.string.Activate, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 askForPermission();

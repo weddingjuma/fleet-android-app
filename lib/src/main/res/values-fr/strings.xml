@@ -31,6 +31,13 @@
     <string name="settings">Paramètres</string>
     <string name="help">Aide</string>
     <string name="sign_out">Déconnexion</string>
+
+    <!-- Location/Tracknig -->
+    <string name="Activate">Activer</string>
+    <string name="enable_location_services">Veuillez activer les services de localisation.</string>
+    <string name="location_is_disabled_long_text">Tous les services de localisation de cet appareil sont désactivés, ou ils le sont pour cette aplication. Veuillez les activer dans les paramètres.</string>
+    <string name="connection_settings">Paramètres de connexion.</string>
+    <string name="close">Fermer</string>
     <string name="explaination_location_permission">Cette autorisation est requise pour activer le suivi de l'emplacement</string>
     <string name="disabled_permission">Vous avez désactivé la permission</string>
 
