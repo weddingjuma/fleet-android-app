@@ -7,7 +7,7 @@
     <string name="pref_map_current_position" translatable="false">CurrentPosition</string>
 
     <!--  MAP CONFIG -->
-    <string name="mapbox_access_token"></string>
+    <string name="mapbox_access_token_dummy">pk.mapox-token-dummy</string>
     <string name="tilehosting_base_url">https://maps.tilehosting.com</string>
     <string name="tilehosting_access_token"></string>
 
