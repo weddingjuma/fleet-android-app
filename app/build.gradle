@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        debug {
-            keyAlias 'MapotempoKey'
-            keyPassword '654321'
-            storeFile file('/home/maxime/fleet-key-store-2.jks')
-            storePassword '123456'
+        fleetDebug {
+            storeFile file('debug.keystore')
+            storePassword '12345678'
+            keyAlias 'debug'
+            keyPassword '12345678'
         }
     }
 
@@ -22,8 +22,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.fleetDebug
+            applicationIdSuffix '.debug'
+            minifyEnabled false
+        }
+
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.fleetDebug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
