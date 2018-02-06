@@ -13,7 +13,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.3'
     defaultConfig {
-        applicationId "mapotempo.com.mapotempo_fleet_android"
+        applicationId "com.mapotempo.mapotempo_fleet_android"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 12
