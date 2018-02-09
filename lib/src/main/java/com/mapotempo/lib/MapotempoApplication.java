@@ -77,8 +77,9 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     // ===============
 
     private void initSentry() {
+        Log.i(getClass().getName(), "PRODUCTION MODE : " + !BuildConfig.DEBUG);
         if (!BuildConfig.DEBUG) {
-            Log.d(getClass().getName(), "PRODUCTION MODE sentry initialisation");
+            Log.i(getClass().getName(), "sentry initialisation");
             // Use the Sentry DSN (client key) from the Project Settings page on Sentry
             String sentryDsn = getString(R.string.sentry_config);
             Sentry.init(sentryDsn, new AndroidSentryClientFactory(this));
