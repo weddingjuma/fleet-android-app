@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="mapotempo.com.mapotempo_fleet_android">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -8,13 +9,13 @@
     <!--    <uses-permission android:name="android.permission.READ_CONTACTS"/>-->
     <!--    <uses-permission android:name="android.permission.VIBRATE"/>-->
 
+    <uses-permission android:name="android.permission.LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
     <uses-permission android:name="android.permission.INTERNET" />
-
 
     <application
         android:name=".MapotempoApplication"
@@ -44,12 +45,17 @@
         </activity>
 
         <activity
+            android:name=".MapActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
+        <activity
             android:name=".MissionActivity"
             android:parentActivityName=".MainActivity">
         </activity>
 
         <activity
-            android:name=".SignatureActivity"
+            android:name=".TestActivity"
             android:parentActivityName=".MissionActivity">
         </activity>
 

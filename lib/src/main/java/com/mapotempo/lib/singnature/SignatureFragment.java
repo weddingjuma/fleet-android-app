@@ -1,4 +1,4 @@
-package com.mapotempo.lib.singnaure;
+package com.mapotempo.lib.singnature;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,13 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mapotempo.fleet.api.model.MissionInterface;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 import mapotempo.com.lib.R;
 

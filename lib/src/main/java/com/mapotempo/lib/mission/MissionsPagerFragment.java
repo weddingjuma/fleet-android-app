@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.core.model.Mission;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import mapotempo.com.lib.R;
  * <ul>
  * <li>Detect if a ViewPager must be used</li>
  * <li>Return the current view displayed</li>
- * <li>Provide the {@link Mission} object to {@link MissionDetailsFragment}</li>
+ * <li>Provide the {@link MissionInterface} object to {@link MissionDetailsFragment}</li>
  * </ul>
  * <p>
  * <h3>Integration</h3>
@@ -97,7 +96,7 @@ public class MissionsPagerFragment extends Fragment {
         if (mapotempoApplication.getManager() != null)
             missions = mapotempoApplication.getManager().getMissionAccess().getAll();
 
-        View view = inflater.inflate(R.layout.fragment_base, container, false);
+        View view = inflater.inflate(R.layout.fragment_pager, container, false);
         LinearLayout content = view.findViewById(R.id.mission_view_content);
 
         mPagerAdapter = new MissionPagerAdapter(getFragmentManager(), missions.size(), missions);

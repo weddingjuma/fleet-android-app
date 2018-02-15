@@ -5,18 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,15 +24,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapbox.services.Constants;
+import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
+import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
+import com.mapbox.services.commons.models.Position;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MapotempoModelBaseInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
+import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
-import com.mapotempo.lib.singnaure.SignatureFragment;
+import com.mapotempo.lib.singnature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.MissionsStatusGeneric;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -74,15 +80,22 @@ import mapotempo.com.lib.R;
  * </pre>
  * </code>
  */
-
-public class MissionDetailsFragment extends Fragment implements View.OnClickListener {
+public class MissionDetailsFragment extends Fragment {
 
     public MissionDetailsFragment() {
     }
 
+    private static final String COLOR_RED = "e55e5e";
+//    private static final String COLOR_GREEN = "56b881";
+//    private static final String COLOR_BLUE = "3887be";
+
     private MissionInterface mMission;
 
     private Context mContext;
+
+    private ImageView mMapImageView;
+
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
@@ -98,6 +111,36 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         }
     };
 
+    // ==============
+    // ==  Public  ==
+    // ==============
+
+    public void fillViewFromActivity() {
+        if (mMission != null) {
+            fillViewData(mMission);
+        }
+    }
+
+    public void setMission(MissionInterface mission) {
+        if (mission != null) {
+            mMission = mission;
+            mMission.addChangeListener(mCallback);
+        } else {
+            throw new RuntimeException("Mission passed to constructor must not be null");
+        }
+    }
+
+    public static MissionDetailsFragment create(int pageNumber, MissionInterface mission) {
+        MissionDetailsFragment fragment = new MissionDetailsFragment();
+        Bundle args = new Bundle();
+
+        args.putInt("page", pageNumber);
+        fragment.setArguments(args);
+        fragment.setMission(mission);
+
+        return fragment;
+    }
+
     // ===================================
     // ==  Android Fragment Life cycle  ==
     // ===================================
@@ -109,10 +152,28 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         View view = inflater.inflate(R.layout.fragment_mission, container, false);
-        setButtonsBehaviors(view);
+
+        initBottomSheet(view);
+        initActionButtons(view);
+
+        mMapImageView = view.findViewById(R.id.mapImageView);
+
         return view;
+    }
+
+    @Override
+    public void setInitialSavedState(SavedState state) {
+        super.setInitialSavedState(state);
     }
 
     @Override
@@ -139,78 +200,14 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         super.onDestroy();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     // ======================================
     // ==  View.OnClickListener Interface  ==
     // ======================================
-
-    @Override
-    public void onClick(View view) {
-        int i = view.getId();
-        if (i == R.id.delete) {
-            initDeletionForCurrentMission();
-        } else if (i == R.id.statusBtn) {
-            changeStatusForCurrentMission();
-
-        } else if (i == R.id.go_to_location) {
-            fakeUriLocation();
-
-        } else if (i == R.id.signature) {
-            goSignatureActivity(view.getContext());
-        }
-    }
-
-    // ==============
-    // ==  Public  ==
-    // ==============
-
-    public void setOnClickListenersForDeletion(View view, final AlertDialog alert) {
-        Button valid = view.findViewById(R.id.valid);
-        Button cancel = view.findViewById(R.id.cancel);
-
-        valid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (deleteMission()) {
-                    alert.dismiss();
-                    backToListActivity(getActivity().getBaseContext());
-                }
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alert.dismiss();
-            }
-        });
-    }
-
-    public static MissionDetailsFragment create(int pageNumber, MissionInterface mission) {
-        MissionDetailsFragment fragment = new MissionDetailsFragment();
-        Bundle args = new Bundle();
-
-        args.putInt("page", pageNumber);
-        fragment.setArguments(args);
-        fragment.setMission(mission);
-
-        return fragment;
-    }
-
-    public boolean fillViewFromActivity() {
-        if (mMission != null) {
-            displayViewData(mMission);
-        }
-        return true;
-    }
-
-    public void setMission(MissionInterface mission) {
-        if (mission != null) {
-            mMission = mission;
-            mMission.addChangeListener(mCallback);
-        } else {
-            throw new RuntimeException("Mission passed to constructor must not be null");
-        }
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -230,14 +227,115 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     // ==  Protected  ==
     // =================
 
-    protected void displayViewData(MissionInterface mission) {
+    private void initBottomSheet(View view) {
+        View bottomSheet = view.findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    private void initActionButtons(View view) {
+        ImageButton goToLocationButton = view.findViewById(R.id.go_to_location);
+        goToLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMission != null) {
+                    LocationInterface loc = mMission.getLocation();
+
+                    Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
+
+                    PackageManager packageManager = getActivity().getPackageManager();
+                    List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
+                    boolean isIntentSafe = (activities.size() > 0);
+                    for (ResolveInfo ri : activities) {
+                        System.out.print(ri.activityInfo.name);
+                        System.out.print(ri.activityInfo.describeContents());
+                    }
+                    if (isIntentSafe)
+                        startActivity(mapIntent);
+                }
+            }
+        });
+    }
+
+    protected void fillViewData(MissionInterface mission) {
+        // Asynchronously fill the mapImageView when the widget is draw to recover dimensions.
+        ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                mMapImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                Position position = Position.fromCoordinates(
+                        mMission.getLocation().getLon(),
+                        mMission.getLocation().getLat());
+
+                StaticMarkerAnnotation marker = new StaticMarkerAnnotation.Builder()
+                        .setName(com.mapbox.services.Constants.PIN_LARGE)
+                        .setPosition(position)
+                        .setColor(COLOR_RED)
+                        .build();
+
+                MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
+                        .setAccessToken(getString(R.string.mapbox_access_token))
+                        .setStyleId(Constants.MAPBOX_STYLE_OUTDOORS)
+                        .setStaticMarkerAnnotations(marker)
+                        .setLat(mMission.getLocation().getLat()) // Image center Latitude
+                        .setLon(mMission.getLocation().getLon()) // Image center longitude
+                        .setZoom(15)
+                        .setWidth(mMapImageView.getMeasuredWidth()) // Image width
+                        .setHeight(mMapImageView.getMeasuredHeight()) // Image height
+                        .setRetina(true) // Retina 2x image will be returned
+                        .build();
+
+                Picasso.with(getActivity()).load(veniceStaticImage.getUrl().toString()).error(R.drawable.ic_logo_mapo_hd_1).into(mMapImageView);
+                return true;
+            }
+        });
+
         TextView name = getView().findViewById(R.id.name);
-        TextView company = getView().findViewById(R.id.company);
-        TextView details = getView().findViewById(R.id.details);
-        TextView status = getView().findViewById(R.id.mission_status);
+        name.setText(mission.getName());
+
         TextView date = getView().findViewById(R.id.delivery_date);
-        TextView address = getView().findViewById(R.id.delivery_adress);
-        FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
+        date.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES));
+
+        TextView duration = getView().findViewById(R.id.delivery_duration);
+        duration.setText(getString(R.string.duration) + " : " + mission.getDuration());
+
+        TextView address = getView().findViewById(R.id.delivery_address);
+        address.setText(mission.getAddress().toString());
+
+        TextView commentView = getView().findViewById(R.id.comment);
+        commentView.setText(mission.getComment());
+
+        TextView phoneView = getView().findViewById(R.id.phone);
+        phoneView.setText(mission.getPhone());
+
+        LinearLayout timeWindowsLayout = getView().findViewById(R.id.time_windows_container);
+        timeWindowsLayout.removeAllViews();
+        for (TimeWindowsInterface tw : mMission.getTimeWindow()) {
+            TextView textView = new TextView(getContext());
+            textView.setText(DateHelpers.parse(tw.getStart(), DateHelpers.DateStyle.HOURMINUTES)
+                    + " - "
+                    + DateHelpers.parse(tw.getEnd(), DateHelpers.DateStyle.HOURMINUTES));
+            timeWindowsLayout.addView(textView);
+        }
+
+    /*FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
+        // TextView company = getView().findViewById(R.id.company);
+        // TextView details = getView().findViewById(R.id.details);
+        // TextView status = getView().findViewById(R.id.mission_status);
+        // TextView address = getView().findViewById(R.id.delivery_adress);
+        /*FloatingActionButton statusBtn = getView().findViewById(R.id.statusBtn);
+
+        int stateList = Color.parseColor(mission.getStatus().getColor());
+        statusBtn.setBackgroundTintList(ColorStateList.valueOf(stateList));
+
+        address.setText(mission.getAddress().toString());
+
+        details.setText(mission.getComment());
+        company.setText(mission.getCompanyId());
+        status.setText(mission.getStatus().getLabel().toUpperCase());*/
+
 
         // ######### TEST #########
         /*ImageView attachment = getView().findViewById(R.id.attachment);
@@ -252,32 +350,53 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         } catch (CouchbaseLiteException e) {
             System.err.println(e);
         }*/
-
-        int stateList = Color.parseColor(mission.getStatus().getColor());
-        statusBtn.setBackgroundTintList(ColorStateList.valueOf(stateList));
-
-        name.setText(mission.getName());
-        address.setText(mission.getAddress().toString());
-        date.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.FULLDATE));
-        details.setText(mission.getComment());
-        company.setText(mission.getCompanyId());
-        status.setText(mission.getStatus().getLabel().toUpperCase());
     }
 
     // ===============
     // ==  Private  ==
     // ===============
+    private void goSignatureActivity(Context context) {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
 
-    private void setButtonsBehaviors(View view) {
-        FloatingActionButton delete = view.findViewById(R.id.delete);
-        FloatingActionButton status = view.findViewById(R.id.statusBtn);
-        ImageButton location = view.findViewById(R.id.go_to_location);
-        FloatingActionButton signature = view.findViewById(R.id.signature);
+        // Create and show the dialog.
+        SignatureFragment newFragment = SignatureFragment.newInstance();
+        newFragment.setSignatureSaveListener(new SignatureFragment.SignatureSaveListener() {
+            @Override
+            public boolean onSignatureSave(Bitmap signatureBitmap) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
+                mMission.setAttachment("signature", "image/jpeg", bi);
+                if (mMission.save()) {
+                    Toast.makeText(mContext, R.string.save_signature_success, Toast.LENGTH_SHORT).show();
+                    return true;
+                } else
+                    Toast.makeText(mContext, R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        newFragment.show(ft, "t");
+    }
 
-        delete.setOnClickListener(this);
-        status.setOnClickListener(this);
-        location.setOnClickListener(this);
-        signature.setOnClickListener(this);
+
+    // #############################################
+    // #############################################
+    // ###                TO REMOVE              ###
+    // #############################################
+    // #############################################
+
+    private boolean deleteMission() {
+        boolean del = mMission.delete();
+        mMission = null;
+        return del;
     }
 
     private void updateCurrentMission() throws RuntimeException {
@@ -314,6 +433,7 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
 
         setOnClickListenersForStatus(alert, view);
     }
+
 
     private void setOnClickListenersForStatus(final AlertDialog alert, View view) {
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
@@ -367,56 +487,27 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
         return statusViews;
     }
 
-    private void fakeUriLocation() {
-        LocationInterface loc = mMission.getLocation();
+    public void setOnClickListenersForDeletion(View view, final AlertDialog alert) {
+        Button valid = view.findViewById(R.id.valid);
+        Button cancel = view.findViewById(R.id.cancel);
 
-        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
-
-        PackageManager packageManager = getActivity().getPackageManager();
-        List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
-        boolean isIntentSafe = (activities.size() > 0);
-        for (ResolveInfo ri : activities) {
-            System.out.print(ri.activityInfo.name);
-            System.out.print(ri.activityInfo.describeContents());
-        }
-        if (isIntentSafe)
-            startActivity(mapIntent);
-    }
-
-    private void goSignatureActivity(Context context) {
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        SignatureFragment newFragment = SignatureFragment.newInstance();
-        newFragment.setSignatureSaveListener(new SignatureFragment.SignatureSaveListener() {
+        valid.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onSignatureSave(Bitmap signatureBitmap) {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
-                mMission.setAttachment("signature", "image/jpeg", bi);
-                if(mMission.save()) {
-                    Toast.makeText(mContext, R.string.save_signature_success, Toast.LENGTH_SHORT).show();
-                    return true;
+            public void onClick(View view) {
+                if (deleteMission()) {
+                    alert.dismiss();
+                    backToListActivity(getActivity().getBaseContext());
                 }
-                else
-                    Toast.makeText(mContext, R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
-                return false;
             }
         });
-        newFragment.show(ft, "t");
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alert.dismiss();
+            }
+        });
     }
-
-
 
     private void backToListActivity(Context context) {
         // FIXME Reafactor this !
@@ -428,11 +519,5 @@ public class MissionDetailsFragment extends Fragment implements View.OnClickList
     private void currentMissionIsNotNull() {
         if (mMission == null)
             throw new RuntimeException("Mission is already deleted or is invalid");
-    }
-
-    private boolean deleteMission() {
-        boolean del = mMission.delete();
-        mMission = null;
-        return del;
     }
 }

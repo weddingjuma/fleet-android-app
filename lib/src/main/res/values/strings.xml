@@ -1,4 +1,6 @@
 <resources>
+    <string name="mapbox_access_token"></string>
+
     <string name="app_name">lib</string>
 
     <string name="mapotempo_url">https://www.mapotempo.com/</string>
@@ -10,7 +12,6 @@
 
     <!-- FAKE TEXT FOR DESIGN PURPOSE -->
     <string name="Fake_details">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</string>
-    <string name="Fake_date">Wednesday, August 10 - 5:00PM</string>
     <string name="Fake_location">3206 Timbercrest Road, CROSS TIMBERS 65634</string>
     <string name="Fake_company">Mapotempo bis</string>
     <string name="Fake_status">PENDING</string>
@@ -53,7 +54,12 @@
     <string name="save_signature_success">Save Signature Success</string>
     <string name="save_signature_fail">Save Signature Fail</string>
 
+    <!-- USER DATA PREF -->
+    <string name="duration">Duration</string>
+
     <!--<string name="syncgateway_url">http://192.168.1.108:4984/db</string>-->
     <!--<string name="syncgateway_url">http://192.168.1.135:4984/db</string>-->
-    <string name="syncgateway_url">http://192.168.94.234:4984/db</string>
+    <!--<string name="syncgateway_url">http://192.168.94.234:4984/db</string>-->
+    <string name="syncgateway_url">http://fleet.beta.mapotempo.com:4984/db</string>
+
 </resources>

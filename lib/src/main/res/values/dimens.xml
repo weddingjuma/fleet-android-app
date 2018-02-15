@@ -26,6 +26,16 @@
     <dimen name="fragment_mission_address_margin_top">5dp</dimen>
     <dimen name="fragment_mission_calendar_margin">15dp</dimen>
     <dimen name="fragment_mission_hour_text_size">20dp</dimen>
-    <dimen name="fragment_mission_date_text_size">12dp</dimen>
+    <dimen name="fragment_mission_date_text_size">12sp</dimen>
+
+    <!-- MISSION ADAPTER DIMENSION -->
+    <dimen name="fragment_mission_header_padding">20dp</dimen>
+    <dimen name="fragment_mission_body_icon_size">40sp</dimen>
+    <dimen name="fragment_mission_body_title_size">20sp</dimen>
+    <dimen name="fragment_mission_body_subtitle_size">18sp</dimen>
+    <dimen name="fragment_mission_body_time_windows_size">17sp</dimen>
+    <dimen name="fragment_mission_body_detail_size">18sp</dimen>
+    <dimen name="fragment_mission_body_element_padding">15dp</dimen>
+    <dimen name="fragment_mission_body_element_margin">15dp</dimen>
 
 </resources>

@@ -13,8 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
         getSupportActionBar().setHomeButtonEnabled(true);
         addDrawableHandler(toolbar);
     }
+
 
     @Override
     @SuppressWarnings("MissingPermission")
