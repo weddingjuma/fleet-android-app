@@ -1,4 +1,4 @@
-package com.mapotempo.lib.actions;
+package com.mapotempo.lib.fragments.actions;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.missions.MissionsListFragment;
+import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 import com.mapotempo.lib.utils.SVGDrawableHelper;
 
 import java.util.List;

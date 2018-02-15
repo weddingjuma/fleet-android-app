@@ -1,4 +1,4 @@
-package com.mapotempo.lib.mission;
+package com.mapotempo.lib.fragments.mission;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,8 +37,8 @@ import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.actions.ActionsListFragment;
-import com.mapotempo.lib.signature.SignatureFragment;
+import com.mapotempo.lib.fragments.actions.ActionsListFragment;
+import com.mapotempo.lib.fragments.signature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
 import com.mapotempo.lib.utils.SVGDrawableHelper;

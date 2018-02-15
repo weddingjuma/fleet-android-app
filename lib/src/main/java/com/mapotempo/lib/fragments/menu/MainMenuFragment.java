@@ -1,4 +1,4 @@
-package com.mapotempo.lib.menu;
+package com.mapotempo.lib.fragments.menu;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.login.LoginPrefManager;
+import com.mapotempo.lib.fragments.login.LoginPrefManager;
 
 public class MainMenuFragment extends Fragment {
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:theme="@style/MapotempoTheme"
-    tools:context="com.mapotempo.lib.mission.MissionDetailsFragment">
+    tools:context=".fragments.mission.MissionDetailsFragment">
 
     <ScrollView
         android:id="@+id/scroll_box"
@@ -95,7 +95,7 @@
         android:translationZ="8dp">
 
         <fragment
-            class="com.mapotempo.lib.actions.ActionsListFragment"
+            class="com.mapotempo.lib.fragments.actions.ActionsListFragment"
             android:id="@+id/actions_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

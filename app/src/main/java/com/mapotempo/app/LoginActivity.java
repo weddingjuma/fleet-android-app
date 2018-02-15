@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.app.utils.ConnectionManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
-import com.mapotempo.lib.login.LoginFragment;
+import com.mapotempo.lib.fragments.login.LoginFragment;
 import com.mapotempo.lib.utils.AlertMessageHelper;
 
 import java.util.TimerTask;

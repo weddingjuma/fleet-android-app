@@ -1,4 +1,4 @@
-package com.mapotempo.lib.mission;
+package com.mapotempo.lib.fragments.mission;
 
 import android.content.Context;
 import android.os.Bundle;

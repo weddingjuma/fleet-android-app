@@ -1,13 +1,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="vertical"
-          tools:context="com.mapotempo.app.LoginActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mapotempo.app.LoginActivity">
 
-        <fragment class="com.mapotempo.lib.login.LoginFragment"
-            android:id="@+id/hook_login_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <fragment
+        class="com.mapotempo.lib.fragments.login.LoginFragment"
+        android:id="@+id/hook_login_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

@@ -34,7 +34,7 @@
         android:visibility="visible"
         android:background="?colorPrimaryBackground"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.mapotempo.lib.missions.MissionsListFragment"
+        tools:context=".fragments.missions.MissionsListFragment"
         tools:listitem="@layout/fragment_missions_list_adapter" />
 
 </FrameLayout>

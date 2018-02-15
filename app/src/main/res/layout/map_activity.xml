@@ -18,7 +18,7 @@
             android:theme="@style/HeaderTheme" />
 
         <fragment
-            class="com.mapotempo.lib.map.MapMissionsFragment"
+            class="com.mapotempo.lib.fragments.map.MapMissionsFragment"
             android:id="@+id/hook_login_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

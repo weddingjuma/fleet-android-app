@@ -1,4 +1,4 @@
-package com.mapotempo.lib.missions;
+package com.mapotempo.lib.fragments.missions;
 
 import android.content.Context;
 import android.graphics.Color;

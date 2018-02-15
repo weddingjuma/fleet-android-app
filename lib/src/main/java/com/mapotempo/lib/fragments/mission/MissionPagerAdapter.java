@@ -1,4 +1,4 @@
-package com.mapotempo.lib.mission;
+package com.mapotempo.lib.fragments.mission;
 
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;

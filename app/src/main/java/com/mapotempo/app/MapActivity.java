@@ -2,13 +2,12 @@ package com.mapotempo.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.lib.mission.MissionDetailsFragment;
+import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 
-public class MapActivity extends AppCompatActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
+public class MapActivity extends BaseMapotempoAppCompatActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

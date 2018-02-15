@@ -1,4 +1,4 @@
-package com.mapotempo.lib.actions;
+package com.mapotempo.lib.fragments.actions;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.fleet.api.model.MissionStatusTypeInterface;
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.missions.MissionsListFragment;
+import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 
 import java.util.ArrayList;
 import java.util.List;

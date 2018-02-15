@@ -1,4 +1,4 @@
-package com.mapotempo.lib.settings;
+package com.mapotempo.lib.fragments.settings;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

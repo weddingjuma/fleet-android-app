@@ -24,7 +24,7 @@
 
         <fragment
             android:id="@+id/listMission"
-            class="com.mapotempo.lib.missions.MissionsListFragment"
+            class="com.mapotempo.lib.fragments.missions.MissionsListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:ViewStyle="SIMPLE" />
@@ -34,7 +34,7 @@
     <!-- The navigation drawer -->
     <fragment
         android:id="@+id/left_drawer"
-        class="com.mapotempo.lib.menu.MainMenuFragment"
+        class="com.mapotempo.lib.fragments.menu.MainMenuFragment"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />

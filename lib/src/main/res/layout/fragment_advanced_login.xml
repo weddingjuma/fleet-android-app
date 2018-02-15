@@ -7,7 +7,7 @@
     android:minWidth="300dp"
     android:orientation="vertical"
     tools:theme="@style/MapotempoTheme"
-    tools:context="com.mapotempo.lib.login.LoginFragment">
+    tools:context=".fragments.login.LoginFragment">
 
     <TextView
         android:layout_width="match_parent"

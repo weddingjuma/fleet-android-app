@@ -30,7 +30,7 @@
 
             <fragment
                 android:id="@+id/listMission"
-                class="com.mapotempo.lib.missions.MissionsListFragment"
+                class="com.mapotempo.lib.fragments.missions.MissionsListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -38,7 +38,7 @@
 
             <fragment
                 android:id="@+id/base_fragment"
-                class="com.mapotempo.lib.mission.MissionsPagerFragment"
+                class="com.mapotempo.lib.fragments.mission.MissionsPagerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -50,7 +50,7 @@
     <!--The navigation drawer-->
     <fragment
         android:id="@+id/left_drawer"
-        class="com.mapotempo.lib.menu.MainMenuFragment"
+        class="com.mapotempo.lib.fragments.menu.MainMenuFragment"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />

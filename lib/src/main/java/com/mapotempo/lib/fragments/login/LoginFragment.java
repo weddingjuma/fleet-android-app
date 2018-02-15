@@ -1,4 +1,4 @@
-package com.mapotempo.lib.login;
+package com.mapotempo.lib.fragments.login;
 
 import android.app.Activity;
 import android.content.Context;

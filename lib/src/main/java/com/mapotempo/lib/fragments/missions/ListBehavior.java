@@ -1,4 +1,4 @@
-package com.mapotempo.lib.missions;
+package com.mapotempo.lib.fragments.missions;
 
 public enum ListBehavior {
     FOCUS("FOCUS"),

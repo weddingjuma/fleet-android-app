@@ -1,4 +1,4 @@
-package com.mapotempo.lib.track;
+package com.mapotempo.lib.fragments.track;
 
 import android.Manifest;
 import android.content.Context;

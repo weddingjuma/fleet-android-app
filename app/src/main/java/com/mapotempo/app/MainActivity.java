@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -18,14 +17,14 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.UserPreferenceInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
-import com.mapotempo.lib.menu.MainMenuFragment;
-import com.mapotempo.lib.mission.MissionDetailsFragment;
-import com.mapotempo.lib.mission.MissionsPagerFragment;
-import com.mapotempo.lib.missions.MissionsListFragment;
+import com.mapotempo.lib.fragments.menu.MainMenuFragment;
+import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
+import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
+import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
+public class MainActivity extends BaseMapotempoAppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
         MissionsPagerFragment.OnMissionFocusListener,
         MissionDetailsFragment.OnMissionDetailsFragmentListener,
         MainMenuFragment.OnMenuInteractionListener

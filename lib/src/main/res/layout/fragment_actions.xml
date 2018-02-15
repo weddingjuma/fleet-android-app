@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:background="?colorPrimaryBackground"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.mapotempo.lib.actions.ActionsListFragment"
+        tools:context=".fragments.actions.ActionsListFragment"
         tools:listitem="@layout/fragment_actions_list_adapter" />
 
 </LinearLayout>

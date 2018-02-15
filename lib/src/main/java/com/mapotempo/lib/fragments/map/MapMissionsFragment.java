@@ -1,4 +1,4 @@
-package com.mapotempo.lib.map;
+package com.mapotempo.lib.fragments.map;
 
 import android.graphics.Color;
 import android.os.Bundle;

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/switcherFragment"
-        class="com.mapotempo.lib.track.TrackingSwitchFragment"
+        class="com.mapotempo.lib.fragments.track.TrackingSwitchFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

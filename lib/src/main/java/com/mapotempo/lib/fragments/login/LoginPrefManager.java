@@ -1,6 +1,5 @@
-package com.mapotempo.lib.login;
+package com.mapotempo.lib.fragments.login;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -22,9 +21,9 @@ public class LoginPrefManager {
 
     private static final String URL_CONFIGURATION = "UrlConf";
 
-    public LoginPrefManager(Activity activity) {
-        mContext = activity;
-        mSharedPreference = activity.getSharedPreferences(LoginPrefManager.SHARED_BASE_NAME, 0);
+    public LoginPrefManager(Context context) {
+        mContext = context;
+        mSharedPreference = context.getSharedPreferences(LoginPrefManager.SHARED_BASE_NAME, 0);
     }
 
     // ===================

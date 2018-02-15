@@ -1,4 +1,4 @@
-package com.mapotempo.lib.signature;
+package com.mapotempo.lib.fragments.signature;
 
 import android.content.Context;
 import android.graphics.Bitmap;
