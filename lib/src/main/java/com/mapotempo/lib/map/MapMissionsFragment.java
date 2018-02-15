@@ -70,7 +70,7 @@ public class MapMissionsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Mapbox.getInstance(getContext(), getString(R.string.mapbox_access_token));
+        Mapbox.getInstance(getContext(), getString(R.string.mapbox_access_token_dummy));
         if (savedInstanceState != null) {
             mIsInitCameraPosition = savedInstanceState.getBoolean(CAMERA_POSITION);
         }
@@ -81,7 +81,7 @@ public class MapMissionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         mMapView = view.findViewById(R.id.mapView);
-        mMapView.setStyleUrl("https://maps.tilehosting.com/styles/basic/style.json?key=LLRxrAW8qh4LHSzTw6qo");
+        mMapView.setStyleUrl(getString(R.string.tilehosting_base_url) + "/styles/basic/style.json?key=" + getString(R.string.tilehosting_access_token));
         mMapView.onCreate(savedInstanceState);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {

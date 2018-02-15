@@ -37,7 +37,7 @@ public class LoginPrefManager {
 
 
     public String getUrlPref() {
-        String default_url = mContext.getResources().getString(R.string.default_syncgateway_url_default);
+        String default_url = mContext.getResources().getString(R.string.default_fleet_url_default);
         return mSharedPreference.getString(LoginPrefManager.URL_CONFIGURATION, default_url);
     }
 
@@ -54,11 +54,11 @@ public class LoginPrefManager {
     }
 
     public String getPortPref() {
-        return mContext.getResources().getString(R.string.default_syncgateway_port_default);
+        return mContext.getResources().getString(R.string.default_fleet_port_default);
     }
 
     public String getDBPref() {
-        return mContext.getResources().getString(R.string.default_syncgateway_db_default);
+        return mContext.getResources().getString(R.string.default_fleet_db_default);
     }
 
     // ==================
