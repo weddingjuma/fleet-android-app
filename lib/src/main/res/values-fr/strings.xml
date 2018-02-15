@@ -23,7 +23,7 @@
     <string name="clear_pad">Effacer</string>
     <string name="save_signature">Sauvegarder la signature</string>
     <string name="save_signature_success">La signature a été sauvegardée avec succès</string>
-    <string name="save_signature_fail">La signature n'a pas été sauvegardée</string>
+    <string name="save_signature_fail">La signature n\'a pas été sauvegardée</string>
 
     <!-- Menu -->
     <string name="map">Carte</string>
@@ -38,7 +38,7 @@
     <string name="location_is_disabled_long_text">Tous les services de localisation de cet appareil sont désactivés, ou ils le sont pour cette aplication. Veuillez les activer dans les paramètres.</string>
     <string name="connection_settings">Paramètres de connexion.</string>
     <string name="close">Fermer</string>
-    <string name="explaination_location_permission">Cette autorisation est requise pour activer le suivi de l'emplacement</string>
+    <string name="explaination_location_permission">Cette autorisation est requise pour activer le suivi de l\'emplacement</string>
     <string name="disabled_permission">Vous avez désactivé la permission</string>
 
     <!-- Mission List -->
