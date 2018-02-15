@@ -22,7 +22,6 @@ package com.mapotempo.lib.fragments.mission;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -33,6 +32,7 @@ import android.widget.LinearLayout;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +74,7 @@ import java.util.List;
  *  }
  * </pre>
  */
-public class MissionsPagerFragment extends Fragment {
+public class MissionsPagerFragment extends MapotempoBaseFragment {
 
     private static final String CURRENT_POSITION = "current_position";
 

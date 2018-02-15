@@ -28,11 +28,11 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.UserPreferenceInterface;
@@ -44,7 +44,7 @@ import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MissionsListFragment.OnMissionSelectedListener,
+public class MainActivity extends MapotempoBaseActivity implements MissionsListFragment.OnMissionSelectedListener,
         MissionsPagerFragment.OnMissionFocusListener,
         MissionDetailsFragment.OnMissionDetailsFragmentListener,
         MainMenuFragment.OnMenuInteractionListener
@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements MissionsListFragm
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);

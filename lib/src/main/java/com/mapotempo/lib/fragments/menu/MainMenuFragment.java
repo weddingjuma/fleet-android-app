@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,9 +34,10 @@ import android.widget.TextView;
 
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.fragments.login.LoginPrefManager;
 
-public class MainMenuFragment extends Fragment {
+public class MainMenuFragment extends MapotempoBaseFragment {
 
     private MainMenuFragment.OnMenuInteractionListener mListener;
 

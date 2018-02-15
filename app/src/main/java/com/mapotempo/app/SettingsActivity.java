@@ -20,10 +20,11 @@
 package com.mapotempo.app;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class SettingsActivity extends AppCompatActivity {
+import com.mapotempo.app.base.MapotempoBaseActivity;
+
+public class SettingsActivity extends MapotempoBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

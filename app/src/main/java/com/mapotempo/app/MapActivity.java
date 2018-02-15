@@ -21,13 +21,13 @@ package com.mapotempo.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 
-public class MapActivity extends AppCompatActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
+public class MapActivity extends MapotempoBaseActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

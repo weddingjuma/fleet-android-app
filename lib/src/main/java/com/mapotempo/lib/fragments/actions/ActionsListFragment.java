@@ -21,7 +21,6 @@ package com.mapotempo.lib.fragments.actions;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -31,12 +30,13 @@ import android.view.ViewGroup;
 import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
 import com.mapotempo.fleet.api.model.MissionStatusTypeInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionsListFragment extends Fragment {
+public class ActionsListFragment extends MapotempoBaseFragment {
 
     private RecyclerView mRecyclerView;
 

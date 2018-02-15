@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,11 +45,12 @@ import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapMissionsFragment extends Fragment {
+public class MapMissionsFragment extends MapotempoBaseFragment {
 
     @Nullable
     private Bundle mBundle;

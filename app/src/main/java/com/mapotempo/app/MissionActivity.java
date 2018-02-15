@@ -21,14 +21,14 @@ package com.mapotempo.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
 
-public class MissionActivity extends AppCompatActivity implements
+public class MissionActivity extends MapotempoBaseActivity implements
         MissionsPagerFragment.OnMissionFocusListener,
         MissionDetailsFragment.OnMissionDetailsFragmentListener {
 

@@ -22,7 +22,6 @@ package com.mapotempo.lib.fragments.missions;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -37,6 +36,7 @@ import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ import java.util.List;
  *    }
  * </pre>
  */
-public class MissionsListFragment extends Fragment {
+public class MissionsListFragment extends MapotempoBaseFragment {
 
     private RecyclerView mRecyclerView;
 
@@ -105,7 +105,6 @@ public class MissionsListFragment extends Fragment {
     // ==  Android Fragment Life cycle  ==
     // ===================================
 
-
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(context, attrs, savedInstanceState);
@@ -126,11 +125,6 @@ public class MissionsListFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString() + " must implement OnMissionSelectedListener");
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override

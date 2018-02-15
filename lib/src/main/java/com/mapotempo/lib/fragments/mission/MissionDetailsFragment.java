@@ -57,6 +57,7 @@ import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.actions.ActionsListFragment;
+import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.fragments.signature.SignatureFragment;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
@@ -102,7 +103,7 @@ import java.util.List;
  * </pre>
  * </code>
  */
-public class MissionDetailsFragment extends Fragment {
+public class MissionDetailsFragment extends MapotempoBaseFragment {
 
     public MissionDetailsFragment() {
     }

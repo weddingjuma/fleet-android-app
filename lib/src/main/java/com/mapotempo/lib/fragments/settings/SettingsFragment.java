@@ -24,15 +24,15 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.UserPreferenceInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.fragments.base.MapotempoBaseSettingsFragment;
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends MapotempoBaseSettingsFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ContextThemeWrapper;
@@ -186,8 +187,8 @@ public class LoginFragment extends Fragment {
 
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (mLoginPrefManager.getAutoLoginPref()) {
             attemptLogin();
         }
@@ -266,13 +267,7 @@ public class LoginFragment extends Fragment {
         MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
             @Override
             public void connexion(final Status status, final MapotempoFleetManagerInterface manager) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        mListener.onLogin(status, timerTask, manager);
-                    }
-                });
+                mListener.onLogin(status, timerTask, manager);
             }
         };
         toogleLogginView(true);

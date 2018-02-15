@@ -22,7 +22,6 @@ package com.mapotempo.lib.fragments.signature;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,9 @@ import android.widget.Button;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.R;
+import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
-public class SignatureFragment extends DialogFragment {
+public class SignatureFragment extends MapotempoBaseDialogFragment {
 
     public static SignatureFragment newInstance() {
         SignatureFragment f = new SignatureFragment();
