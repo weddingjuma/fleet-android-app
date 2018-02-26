@@ -70,6 +70,7 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import com.mapotempo.lib.utils.AddressHelper;
 
 /**
  * This fragment is a view detailed of a mission. it is working along side a <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html" target="_blank"><u>Android ViewPager</u></a>  that allow users to swipe left/right side to get the previous/next mission's view.
@@ -445,12 +446,12 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mTextViewDate.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.SHORTDATE));
         mTextViewDuration.setText(DateHelpers.FormatedHour(getContext(), mission.getDuration()));
 
-        String fullAdress = String.format("%s\n%s\n%s %s\n%s",
-                mission.getAddress().getStreet(),
-                mission.getAddress().getDetail(),
-                mission.getAddress().getPostalcode(),
-                mission.getAddress().getCity(),
-                mission.getAddress().getCountry()).trim();
+        String fullAdress = String.format("%s%s%s %s%s",
+            AddressHelper.addBackDashIfNonNull(mission.getAddress().getStreet(), ""),
+            AddressHelper.addBackDashIfNonNull(mission.getAddress().getDetail(), ""),
+            mission.getAddress().getPostalcode(),
+            AddressHelper.addBackDashIfNonNull(mission.getAddress().getCity(), ""),
+            mission.getAddress().getCountry()).trim();
 
         mTextViewDeliveryAddress.setText(fullAdress);
 
