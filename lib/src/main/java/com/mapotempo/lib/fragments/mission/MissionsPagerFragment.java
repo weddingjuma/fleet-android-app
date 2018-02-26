@@ -129,6 +129,7 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
 
         mPagerAdapter = new MissionPagerAdapter(getFragmentManager(), missions.size(), missions);
         ViewPager viewPager = (ViewPager) getActivity().getLayoutInflater().inflate(R.layout.view_pager, null);
+        viewPager.setPageTransformer(true, new MissionsPagerBorderTransformer());
         mViewPager = viewPager.findViewById(R.id.mission_viewpager);
         // mViewPager.setPageTransformer(true, new DepthPageTransformer());
         setPagerChangeListener();
