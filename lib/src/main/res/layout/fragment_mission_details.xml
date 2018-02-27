@@ -138,7 +138,7 @@
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/ic_navigation_black_24dp"
+            android:src="@drawable/ic_navigation_black_72dp"
             android:tint="@color/colorMapoBlueDark"
             />
 
