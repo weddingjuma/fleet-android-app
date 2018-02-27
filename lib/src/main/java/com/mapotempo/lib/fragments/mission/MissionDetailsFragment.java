@@ -151,7 +151,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     private LinearLayout mLayoutComment;
     private TextView mTextViewComment;
 
-    private Button mNavigationAction;
+    private LinearLayout mNavigationAction;
     private MissionActionPanel mStatusCurrent;
     private FloatingActionButton mStatusFirstAction;
     private FloatingActionButton mStatusSecondAction;
@@ -277,7 +277,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mTextViewComment = view.findViewById(R.id.comment);
 
         // Action button
-        mNavigationAction = view.findViewById(R.id.navigation_launcher);
+        mNavigationAction = view.findViewById(R.id.delivery_address_layout);
         mStatusFirstAction = view.findViewById(R.id.first_action);
         mStatusSecondAction = view.findViewById(R.id.second_action);
         mStatusThirdAction = view.findViewById(R.id.third_action);

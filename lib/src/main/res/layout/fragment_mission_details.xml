@@ -45,6 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="80dp"
         android:weightSum="12"
         android:paddingLeft="@dimen/fragment_mission_header_padding_horizontal"
         android:orientation="horizontal">
@@ -72,23 +73,6 @@
                 android:textSize="@dimen/fragment_mission_body_time_windows_size"
                 android:textAlignment="gravity"
                 tools:text="Ref : H4DAZ456D" />
-
-            <Button
-                android:id="@+id/navigation_launcher"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:drawableLeft="@drawable/ic_directions_black_24dp"
-                android:drawableTint="@android:color/white"
-                android:textColor="@android:color/white"
-                android:drawablePadding="15dp"
-                android:gravity="left|center"
-                android:height="60dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="25dp"
-                android:text="@string/directions"
-                android:background="@drawable/bg_navigate_button" />
 
         </LinearLayout>
 
@@ -119,11 +103,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:clickable="true"
         android:paddingRight="@dimen/fragment_mission_body_element_padding"
         android:paddingTop="@dimen/fragment_mission_body_element_padding"
         android:paddingBottom="@dimen/fragment_mission_body_element_padding"
         android:weightSum="5"
-        android:background="@drawable/bg_mission_detail_item">
+        android:background="@drawable/bg_action_detail_item">
 
         <ImageView
             android:layout_width="0dp"
@@ -133,9 +118,10 @@
             android:src="@drawable/ic_location_on_black_24dp" />
 
         <LinearLayout
-            android:layout_weight="4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
@@ -146,6 +132,15 @@
                 tools:text="Pépinière éco-créative, 9 Rue André Darbon\nSonner à la porte\n33000 Bordeaux\nFrance" />
 
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/ic_navigation_black_24dp"
+            android:tint="@color/colorMapoBlueDark"
+            />
 
     </LinearLayout>
 
