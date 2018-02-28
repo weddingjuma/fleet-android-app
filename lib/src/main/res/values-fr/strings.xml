@@ -12,6 +12,7 @@
     <string name="remember_me">Se souvenir de moi</string>
     <string name="advanced_login_parameter">Parametre de connexion avancé</string>
     <string name="invalid_login_format">Le format de login est invalide, vérifier les espaces.</string>
+    <string name="fleet_server_compatibility_error">Votre application nécessite une mise à pour communiquer avec le serveur fleet.</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Erreur de connexion</string>

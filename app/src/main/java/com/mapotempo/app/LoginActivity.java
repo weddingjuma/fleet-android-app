@@ -29,8 +29,6 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.lib.fragments.login.LoginFragment;
 import com.mapotempo.lib.utils.AlertMessageHelper;
 
-import java.util.TimerTask;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -73,11 +71,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
      * An interface which is trigger when the connection has been processed.
      *
      * @param status The current status of connection
-     * @param task   A task which is in charge to stop the timer if no connection has been established.
      */
     @Override
-    public void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task, MapotempoFleetManagerInterface manager) {
-        task.cancel();
+    public void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, MapotempoFleetManagerInterface manager) {
         switch (status) {
             case VERIFY:
                 // ConnectionManager.getInstance().askUserPreference(this, R.layout.user_data_pref);
@@ -87,7 +83,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
-
                 break;
             case LOGIN_ERROR:
                 LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);

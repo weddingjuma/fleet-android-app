@@ -14,6 +14,7 @@
     <string name="remember_me">Remember me</string>
     <string name="advanced_login_parameter">Advanced login parameter</string>
     <string name="invalid_login_format">The login format is invalid, check spaces.</string>
+    <string name="fleet_server_compatibility_error">Your application need to be upgrade to communicate with fleet server.</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Sign in error</string>
@@ -74,6 +75,5 @@
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
     <string name="seconds">seconds</string>
-
 
 </resources>

@@ -21,6 +21,7 @@ package com.mapotempo.lib;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.couchbase.lite.android.AndroidContext;
 import com.mapotempo.fleet.api.ManagerFactory;
@@ -70,6 +71,10 @@ public class MapotempoApplication extends Application implements MapotempoApplic
         if (iFleetManager != null)
             iFleetManager.release();
         iFleetManager = manager;
+
+        if (iFleetManager != null && !iFleetManager.serverCompatibility()) {
+            displayErrorServerCompatibility();
+        }
     }
 
     // ===============
@@ -92,5 +97,9 @@ public class MapotempoApplication extends Application implements MapotempoApplic
                 mLoginPrefManager.getPasswordPref(),
                 mOnServerConnexionVerify,
                 mLoginPrefManager.getFullURL());
+    }
+
+    private void displayErrorServerCompatibility() {
+        Toast.makeText(this, getResources().getString(R.string.fleet_server_compatibility_error), Toast.LENGTH_LONG).show();
     }
 }

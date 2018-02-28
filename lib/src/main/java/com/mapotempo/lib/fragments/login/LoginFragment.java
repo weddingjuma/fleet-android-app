@@ -43,10 +43,6 @@ import com.couchbase.lite.android.AndroidContext;
 import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.utils.AlertMessageHelper;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Responsible for establish a connection with the library that allow you to get access to Mapotempo models. The fragment launch a connection attempt that give you, in some cases, a manager. The manager allow you to get access to the following entities :
@@ -64,7 +60,7 @@ import java.util.TimerTask;
  * </code>
  * </p>
  * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
- * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, TimerTask, MapotempoFleetManagerInterface)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
+ * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, MapotempoFleetManagerInterface)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
  * <p>
  * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
  * </p>
@@ -185,7 +181,6 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -222,7 +217,7 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFragmentImplementation {
-        void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, TimerTask task,
+        void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status,
                      MapotempoFleetManagerInterface manager);
     }
 
@@ -251,29 +246,19 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        final TimerTask timerTask = new TimerTask() {
+        MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
             @Override
-            public void run() {
+            public void connexion(final Status status, final MapotempoFleetManagerInterface manager) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        toogleLogginView(false);
-                        AlertMessageHelper.errorAlert(getContext(), null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
+                        mListener.onLogin(status, manager);
                     }
                 });
             }
         };
 
-        MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
-            @Override
-            public void connexion(final Status status, final MapotempoFleetManagerInterface manager) {
-                mListener.onLogin(status, timerTask, manager);
-            }
-        };
         toogleLogginView(true);
-
-        final Timer timer = new Timer();
-        timer.schedule(timerTask, 5000);
 
         String fullUrl = mLoginPrefManager.getFullURL();
 
