@@ -21,6 +21,7 @@ package com.mapotempo.lib.fragments.mission;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;
+
 import com.mapotempo.lib.R;
 
 public class MissionsPagerBorderTransformer implements ViewPager.PageTransformer {
@@ -28,15 +29,9 @@ public class MissionsPagerBorderTransformer implements ViewPager.PageTransformer
     @Override
     public void transformPage(View view, float position) {
         float margin = view.getResources().getDimension(R.dimen.margin_on_scroll);
-
-        if (position < 0 && position > -1) { // [LEFT]
-            view.setTranslationX(-margin * Math.abs(position));
-        } else if (position < 1 && position > 0) { // [RIGHT]
-            view.setTranslationX(margin * Math.abs(position));
-        }
-
-        if (position == 0 || position < -1 || position > 1) {
+        if (Math.abs(position) > 0 && Math.abs(position) < 1)
+            view.setTranslationX(margin * position);
+        else
             view.setTranslationX(0f);
-        }
     }
 }
