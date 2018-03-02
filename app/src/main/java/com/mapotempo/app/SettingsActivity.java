@@ -30,7 +30,7 @@ public class SettingsActivity extends MapotempoBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.settings);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

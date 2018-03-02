@@ -26,12 +26,19 @@
     <string name="save_signature_success">La signature a été sauvegardée avec succès</string>
     <string name="save_signature_fail">La signature n\'a pas été sauvegardée</string>
 
-    <!-- Menu -->
+    <!-- Main Menu -->
     <string name="map">Carte</string>
     <string name="tracking">Suivi</string>
     <string name="settings">Paramètres</string>
     <string name="help">Aide</string>
     <string name="sign_out">Déconnexion</string>
+
+    <!-- Mission Menu -->
+    <string name="edit_location">Relever une position</string>
+
+    <!-- Edit Location Menu -->
+    <string name="validate_location">Enregistrer</string>
+    <string name="reset_location">Supprimer la position relevé</string>
 
     <!-- Location/Tracknig -->
     <string name="Activate">Activer</string>

@@ -40,7 +40,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -59,6 +58,7 @@ import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.actions.ActionsListFragment;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.fragments.signature.SignatureFragment;
+import com.mapotempo.lib.utils.AddressHelper;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
 import com.mapotempo.lib.utils.SVGDrawableHelper;
@@ -70,7 +70,6 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-import com.mapotempo.lib.utils.AddressHelper;
 
 /**
  * This fragment is a view detailed of a mission. it is working along side a <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html" target="_blank"><u>Android ViewPager</u></a>  that allow users to swipe left/right side to get the previous/next mission's view.
@@ -383,8 +382,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     }
 
     private void mapVisivilityManager() {
+        final LocationInterface location = mMission.getPickedLocation().isValide() ? mMission.getPickedLocation() : mMission.getLocation();
+
         // Asynchronously fill the mapImageView when the widget is draw to retrieve dimensions.
-        if (mMission.getLocation().isValide()) {
+        if (location.isValide()) {
             ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
             vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 public boolean onPreDraw() {
@@ -405,8 +406,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                     String MapUrl = new StaticMapURLHelper.TileHostingURLBuilder()
                             .setBaseURL(getString(R.string.tilehosting_base_url))
                             .setKey(getString(R.string.tilehosting_access_token))
-                            .setLat(mMission.getLocation().getLat())
-                            .setLon(mMission.getLocation().getLon())
+                            .setLat(location.getLat())
+                            .setLon(location.getLon())
                             .setWidth(x)
                             .setHeight(y)
                             .setZoom(18)
@@ -447,11 +448,11 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mTextViewDuration.setText(DateHelpers.FormatedHour(getContext(), mission.getDuration()));
 
         String fullAdress = String.format("%s%s%s %s%s",
-            AddressHelper.addBackDashIfNonNull(mission.getAddress().getStreet(), ""),
-            AddressHelper.addBackDashIfNonNull(mission.getAddress().getDetail(), ""),
-            mission.getAddress().getPostalcode(),
-            AddressHelper.addBackDashIfNonNull(mission.getAddress().getCity(), ""),
-            mission.getAddress().getCountry()).trim();
+                AddressHelper.addBackDashIfNonNull(mission.getAddress().getStreet(), ""),
+                AddressHelper.addBackDashIfNonNull(mission.getAddress().getDetail(), ""),
+                mission.getAddress().getPostalcode(),
+                AddressHelper.addBackDashIfNonNull(mission.getAddress().getCity(), ""),
+                mission.getAddress().getCountry()).trim();
 
         mTextViewDeliveryAddress.setText(fullAdress);
 

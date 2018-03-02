@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
@@ -165,6 +166,14 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
 
         if (missionPagerAdapter != null)
             missionPagerAdapter.updateMissions(missions);
+    }
+
+    @Nullable
+    public MissionInterface getCurrentMission() {
+        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        List<MissionInterface> missions = mapotempoFleetManagerInterface.getMissionAccess().getAll();
+        MissionInterface ms = missions.get(mViewPager.getCurrentItem());
+        return ms;
     }
 
     public void setCurrentItem(int position) {

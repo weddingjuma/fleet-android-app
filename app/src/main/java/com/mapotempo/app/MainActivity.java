@@ -63,7 +63,7 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         addDrawableHandler(toolbar);
@@ -226,5 +226,4 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
             }
         }
     }
-
 }

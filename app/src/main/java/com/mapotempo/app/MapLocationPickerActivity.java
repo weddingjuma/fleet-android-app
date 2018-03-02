@@ -19,20 +19,20 @@
 
 package com.mapotempo.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
-import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
+import com.mapotempo.lib.fragments.map.MapLocationPickerFragment;
 
-public class MapActivity extends MapotempoBaseActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
+public class MapLocationPickerActivity extends MapotempoBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_activity);
+        setContentView(R.layout.edit_location_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,10 +48,25 @@ public class MapActivity extends MapotempoBaseActivity implements MissionDetails
     }
 
     @Override
-    public void onMapImageViewClick(MissionInterface mission) {
-        Intent intent = new Intent(this, MapActivity.class);
-        startActivity(intent);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_location, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        MapLocationPickerFragment mapLocationPickerFragment = (MapLocationPickerFragment) getSupportFragmentManager().findFragmentById(R.id.edit_location_fragment);
+
+        switch (item.getItemId()) {
+            case R.id.validate_location:
+                mapLocationPickerFragment.savePickedLocation();
+                finish();
+                return true;
+            case R.id.reset_location:
+                mapLocationPickerFragment.deletePickedLocation();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
-
-

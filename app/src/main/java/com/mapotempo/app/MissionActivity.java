@@ -22,6 +22,8 @@ package com.mapotempo.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.api.model.MissionInterface;
@@ -37,7 +39,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mission_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.mission);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,6 +50,30 @@ public class MissionActivity extends MapotempoBaseActivity implements
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_mission, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        MissionsPagerFragment missionDetailsFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
+
+        switch (item.getItemId()) {
+            case R.id.edit_location:
+                MissionInterface ms = missionDetailsFragment.getCurrentMission();
+                if (ms != null) {
+                    Intent intent = new Intent(this, MapLocationPickerActivity.class);
+                    intent.putExtra("mission_id", ms.getId());
+                    startActivity(intent);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -68,6 +94,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
     // ==================================================
     // ==  OnMissionDetailsFragmentListener Interface  ==
     // ==================================================
+
     @Override
     public void onMapImageViewClick(MissionInterface mission) {
         Intent intent = new Intent(this, MapActivity.class);

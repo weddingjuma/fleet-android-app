@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
@@ -85,11 +84,9 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     // ==  Android Fragment Life cycle  ==
     // ===================================
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Mapbox.getInstance(getContext(), getString(R.string.mapbox_access_token_dummy));
         if (savedInstanceState != null) {
             mIsInitCameraPosition = savedInstanceState.getBoolean(CAMERA_POSITION);
         }
@@ -211,7 +208,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
 
                 // Draw marker
                 IconFactory mIconFactory = IconFactory.getInstance(getActivity());
-                Icon icon = mIconFactory.fromResource(R.drawable.ic_map_marker);
+                Icon icon = mIconFactory.fromResource(R.drawable.ic_map_green_marker);
                 for (MissionInterface mission : missions) {
                     if (mission.getLocation().isValide()) {
                         mapboxMap.addMarker(new MarkerViewOptions()

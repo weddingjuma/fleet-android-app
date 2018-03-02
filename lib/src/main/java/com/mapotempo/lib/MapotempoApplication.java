@@ -19,14 +19,18 @@
 
 package com.mapotempo.lib;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.couchbase.lite.android.AndroidContext;
-import com.mapotempo.fleet.api.ManagerFactory;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
-import com.mapotempo.lib.fragments.login.LoginPrefManager;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
@@ -35,15 +39,6 @@ public class MapotempoApplication extends Application implements MapotempoApplic
 
     private MapotempoFleetManagerInterface iFleetManager;
 
-    private LoginPrefManager mLoginPrefManager;
-
-    private MapotempoFleetManagerInterface.OnServerConnexionVerify mOnServerConnexionVerify = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
-        @Override
-        public void connexion(Status status, MapotempoFleetManagerInterface mapotempoFleetManagerInterface) {
-            iFleetManager = mapotempoFleetManagerInterface;
-        }
-    };
-
     // ======================================
     // ==  Android Application Life cycle  ==
     // ======================================
@@ -51,10 +46,14 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     @Override
     public void onCreate() {
         super.onCreate();
+        // Init Mapbox
+        Mapbox.getInstance(this, getString(R.string.mapbox_access_token_dummy));
+
+        // Init Sentry
         initSentry();
 
-        mLoginPrefManager = new LoginPrefManager(this);
-        tryToInitLastSession();
+        // Init Location
+        initLocation();
     }
 
     // ==============
@@ -91,15 +90,31 @@ public class MapotempoApplication extends Application implements MapotempoApplic
         }
     }
 
-    private void tryToInitLastSession() {
-        ManagerFactory.getManager(new AndroidContext(this.getApplicationContext()),
-                mLoginPrefManager.getLoginPref(),
-                mLoginPrefManager.getPasswordPref(),
-                mOnServerConnexionVerify,
-                mLoginPrefManager.getFullURL());
-    }
-
     private void displayErrorServerCompatibility() {
         Toast.makeText(this, getResources().getString(R.string.fleet_server_compatibility_error), Toast.LENGTH_LONG).show();
+    }
+
+    private void initLocation() {
+        LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+        if (!locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && !locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.enable_location_services);
+            dialog.setMessage(R.string.location_is_disabled_long_text);
+            dialog.setPositiveButton(R.string.connection_settings, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                }
+            });
+            dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                }
+            });
+            dialog.show();
+        }
     }
 }

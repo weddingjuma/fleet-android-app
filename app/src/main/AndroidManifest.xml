@@ -39,5 +39,7 @@
 
         <activity android:name=".SettingsActivity" />
 
+        <activity android:name=".MapLocationPickerActivity" />
+
     </application>
 </manifest>
