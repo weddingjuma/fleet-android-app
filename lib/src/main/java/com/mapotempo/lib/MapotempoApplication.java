@@ -19,13 +19,7 @@
 
 package com.mapotempo.lib;
 
-import android.app.AlertDialog;
 import android.app.Application;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.location.LocationManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -42,7 +36,6 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     // ======================================
     // ==  Android Application Life cycle  ==
     // ======================================
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -51,9 +44,6 @@ public class MapotempoApplication extends Application implements MapotempoApplic
 
         // Init Sentry
         initSentry();
-
-        // Init Location
-        initLocation();
     }
 
     // ==============
@@ -92,29 +82,5 @@ public class MapotempoApplication extends Application implements MapotempoApplic
 
     private void displayErrorServerCompatibility() {
         Toast.makeText(this, getResources().getString(R.string.fleet_server_compatibility_error), Toast.LENGTH_LONG).show();
-    }
-
-    private void initLocation() {
-        LocationManager locMngr = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-        if (!locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && !locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            // notify user
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle(R.string.enable_location_services);
-            dialog.setMessage(R.string.location_is_disabled_long_text);
-            dialog.setPositiveButton(R.string.connection_settings, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(myIntent);
-                }
-            });
-            dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                }
-            });
-            dialog.show();
-        }
     }
 }

@@ -19,12 +19,19 @@
 
 package com.mapotempo.lib.fragments.base;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 
 import com.mapotempo.lib.MapotempoApplicationInterface;
+import com.mapotempo.lib.R;
 import com.mapotempo.lib.exception.MapotempoBaseFragmentRuntimeException;
 import com.mapotempo.lib.exception.MapotempoManagerMissingException;
 
@@ -35,6 +42,20 @@ import com.mapotempo.lib.exception.MapotempoManagerMissingException;
  * Activity can try catch on inflate this exception.
  */
 public abstract class MapotempoBaseFragment extends Fragment {
+
+    public static boolean locationHasBeenAsked = false;
+
+    // ====================================
+    // ==  Android Fragments Life cycle  ==
+    // ====================================
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Init location if Gps is off
+        if (!locationHasBeenAsked) initLocation();
+    }
 
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
@@ -54,5 +75,32 @@ public abstract class MapotempoBaseFragment extends Fragment {
         }
     }
 
+    // =============================
+    // ==  Private Init Location  ==
+    // =============================
 
+    private void initLocation() {
+        LocationManager locMngr = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (!locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && !locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.enable_location_services);
+            dialog.setMessage(R.string.location_is_disabled_long_text);
+            dialog.setPositiveButton(R.string.connection_settings, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                }
+            });
+            dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                }
+            });
+            dialog.show();
+            locationHasBeenAsked = true;
+        }
+    }
 }
