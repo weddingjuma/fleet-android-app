@@ -396,6 +396,12 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                     mMapImageView.setVisibility(View.GONE);
                     mMapMarker.setVisibility(View.GONE);
 
+                    // Coloration depend of marker type
+                    if (mMission.getPickedLocation().isValide())
+                        mMapMarker.setColorFilter(getResources().getColor(R.color.colorMapoBlue));
+                    else
+                        mMapMarker.setColorFilter(getResources().getColor(R.color.colorMapoGreen));
+
                     // Prepare Request
                     int x = mMapImageView.getMeasuredWidth();
                     int y = mMapImageView.getMeasuredHeight();
