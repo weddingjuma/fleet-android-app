@@ -27,11 +27,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.api.model.MissionStatusActionInterface;
-import com.mapotempo.fleet.api.model.MissionStatusTypeInterface;
+import com.mapotempo.fleet.api.model.MissionActionTypeInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
-import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +40,11 @@ public class ActionsListFragment extends MapotempoBaseFragment {
 
     private ActionsRecyclerViewAdapter mRecyclerAdapter;
 
-    private List<MissionStatusActionInterface> mMissionStatusActions = new ArrayList<>();
+    private List<MissionActionTypeInterface> mMissionStatusActions = new ArrayList<>();
 
-    private OnMissionActionSelectedListener mListener = new OnMissionActionSelectedListener() {
+    private ActionsRecyclerViewAdapter.OnMissionActionSelectedListener mListener = new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener() {
         @Override
-        public void onMissionActionSelected(MissionStatusTypeInterface newStatus) {
+        public void onMissionActionSelected(MissionActionTypeInterface action) {
             // DEFAULT
         }
     };
@@ -64,10 +62,10 @@ public class ActionsListFragment extends MapotempoBaseFragment {
 
         View view = inflater.cloneInContext(contextThemeWrapper).inflate(R.layout.fragment_actions, container, false);
         mRecyclerView = view.findViewById(R.id.action_recycler_view);
-        mRecyclerAdapter = new ActionsRecyclerViewAdapter(getContext(), new OnMissionActionSelectedListener() {
+        mRecyclerAdapter = new ActionsRecyclerViewAdapter(getContext(), new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener() {
             @Override
-            public void onMissionActionSelected(MissionStatusTypeInterface newStatus) {
-                mListener.onMissionActionSelected(newStatus);
+            public void onMissionActionSelected(MissionActionTypeInterface action) {
+                mListener.onMissionActionSelected(action);
             }
         }, mMissionStatusActions);
         mRecyclerView.setAdapter(mRecyclerAdapter);
@@ -79,24 +77,13 @@ public class ActionsListFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public void setActions(List<MissionStatusActionInterface> missionStatusActions) {
+    public void setActions(List<MissionActionTypeInterface> missionStatusActions) {
         mMissionStatusActions = new ArrayList<>(missionStatusActions);
         mRecyclerAdapter.notifyDataSyncHasChanged(mMissionStatusActions);
     }
 
-    /**
-     * This interface must be implemented by activities that contain {@link MissionsListFragment}
-     */
-    public interface OnMissionActionSelectedListener {
-        /**
-         * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
-         *
-         * @param newStatus return the next newStatus item selected
-         */
-        void onMissionActionSelected(MissionStatusTypeInterface newStatus);
-    }
 
-    public void setOnActionSelectedListener(OnMissionActionSelectedListener onActionSelectedListener) {
+    public void setOnActionSelectedListener(ActionsRecyclerViewAdapter.OnMissionActionSelectedListener onActionSelectedListener) {
         mListener = onActionSelectedListener;
     }
 }
