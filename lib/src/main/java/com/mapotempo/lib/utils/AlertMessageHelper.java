@@ -41,7 +41,7 @@ public class AlertMessageHelper {
      * @param message    Custom message
      * @param details    Custom Details
      */
-    public static void errorAlert(Context context, Integer customView, int title, int message, int details) {
+    public static void errorAlert(Context context, Integer customView, String title, String message, String details) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -59,7 +59,8 @@ public class AlertMessageHelper {
 
         titleView.setText(title);
         errorView.setText(message);
-        detailsView.setText(details);
+        String message_code = details;
+        detailsView.setText(message_code);
 
         alert.setView(box);
         alert.show();

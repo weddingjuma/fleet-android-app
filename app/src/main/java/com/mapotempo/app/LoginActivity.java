@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.app.utils.ConnectionManager;
+import com.mapotempo.fleet.api.ConnectionVerifyStatus;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.lib.fragments.login.LoginFragment;
 import com.mapotempo.lib.utils.AlertMessageHelper;
@@ -70,14 +71,13 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     /**
      * An interface which is trigger when the connection has been processed.
      *
-     * @param status The current status of connection
+     * @param code The current status of connection
      */
     @Override
-    public void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status, MapotempoFleetManagerInterface manager) {
+    public void onLogin(ConnectionVerifyStatus status, MapotempoFleetManagerInterface manager) {
+        LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);
         switch (status) {
             case VERIFY:
-                // ConnectionManager.getInstance().askUserPreference(this, R.layout.user_data_pref);
-
                 MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
                 mapotempoApplication.setManager(manager);
                 Intent intent = new Intent(this, MainActivity.class);
@@ -85,11 +85,12 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
                 finish();
                 break;
             case LOGIN_ERROR:
-                LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);
                 loginFragment.toogleLogginView(false);
-                AlertMessageHelper.errorAlert(this, null, R.string.login_error_title, R.string.login_error_short_text, R.string.login_error_details);
+                AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_invalid));
                 break;
             default:
+                loginFragment.toogleLogginView(false);
+                AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_server) + "\ncode : " + status.getCode());
                 break;
         }
     }

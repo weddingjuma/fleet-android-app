@@ -17,7 +17,8 @@
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Erreur de connexion</string>
     <string name="login_error_short_text">La connexion ne peut pas être établie</string>
-    <string name="login_error_details">Votre mot de passe ou login est invalide, essayez de nouveau.</string>
+    <string name="login_error_invalid">Votre mot de passe ou login est invalide, essayez de nouveau.</string>
+    <string name="login_error_server">Veuillez verifier votre connexion, si le problème persiste veuillez contacter le support.</string>
 
     <!-- USER DATA PREF -->
     <string name="agreement">J\'accepte les termes et conditions.</string>

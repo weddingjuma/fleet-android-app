@@ -40,6 +40,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.couchbase.lite.android.AndroidContext;
+import com.mapotempo.fleet.api.ConnectionVerifyStatus;
 import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.lib.R;
@@ -60,7 +61,7 @@ import com.mapotempo.lib.R;
  * </code>
  * </p>
  * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
- * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status, MapotempoFleetManagerInterface)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
+ * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(ConnectionVerifyStatus, MapotempoFleetManagerInterface)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
  * <p>
  * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
  * </p>
@@ -141,8 +142,8 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        final Button testButton = view.findViewById(R.id.login_sign_up_button);
-        testButton.setOnClickListener(new View.OnClickListener() {
+        final Button signUpButton = view.findViewById(R.id.login_sign_up_button);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Uri uriUrl = Uri.parse(getString(R.string.mapotempo_url));
@@ -217,7 +218,7 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFragmentImplementation {
-        void onLogin(MapotempoFleetManagerInterface.OnServerConnexionVerify.Status status,
+        void onLogin(ConnectionVerifyStatus status,
                      MapotempoFleetManagerInterface manager);
     }
 
@@ -246,13 +247,13 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        MapotempoFleetManagerInterface.OnServerConnexionVerify onUserAvailable = new MapotempoFleetManagerInterface.OnServerConnexionVerify() {
+        MapotempoFleetManagerInterface.ConnectionVerifyListener onUserAvailable = new MapotempoFleetManagerInterface.ConnectionVerifyListener() {
             @Override
-            public void connexion(final Status status, final MapotempoFleetManagerInterface manager) {
+            public void onServerConnectionVerify(final ConnectionVerifyStatus connectionVerifyStatus, final MapotempoFleetManagerInterface mapotempoFleetManagerInterface) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mListener.onLogin(status, manager);
+                        mListener.onLogin(connectionVerifyStatus, mapotempoFleetManagerInterface);
                     }
                 });
             }
