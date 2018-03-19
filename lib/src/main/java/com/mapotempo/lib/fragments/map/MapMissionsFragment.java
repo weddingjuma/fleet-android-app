@@ -35,6 +35,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -50,9 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapMissionsFragment extends MapotempoBaseFragment {
-
-    @Nullable
-    private Bundle mBundle;
 
     private MapView mMapView;
 
@@ -204,7 +202,6 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 mapboxMap.clear();
-                final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
 
                 // Draw marker
                 IconFactory mIconFactory = IconFactory.getInstance(getActivity());
@@ -252,56 +249,63 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
         // Set zoom and position
         final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         LocationDetailsInterface locationDetailsInterface = mapotempoApplication.getManager().getCurrentLocationDetails();
-        _InternalLocation bestLocation = new _InternalLocation(locationDetailsInterface, missions, mission_id);
-
-        int zoom = bestLocation.mZoom;
-        LatLng latLng = new LatLng(bestLocation.mLat, bestLocation.mLon);
-
-        final CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(latLng)
-                .zoom(zoom)
-                .build();
+        final _InternalLocationWithBnounds internalLocationWithBnounds = new _InternalLocationWithBnounds(locationDetailsInterface, missions, mission_id);
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
-                mapboxMap.setCameraPosition(cameraPosition);
+                if (internalLocationWithBnounds.isBounded)
+                    mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(internalLocationWithBnounds.getBoundedLocation(), 30));
+                else
+                    mapboxMap.setCameraPosition(new CameraPosition.Builder()
+                                                                  .target(internalLocationWithBnounds.getLocation())
+                                                                  .zoom(7)
+                                                                  .build());
             }
         });
     }
 
-    private class _InternalLocation {
-        public int mZoom;
-        public double mLat = 0.0, mLon = 0.0;
-        private boolean mValide = false;
+    private class _InternalLocationWithBnounds {
 
-        public _InternalLocation(LocationDetailsInterface userLocation, List<MissionInterface> missions, String missionId) {
-            int count = 0;
+        private LatLngBounds.Builder latLngBounds = new LatLngBounds.Builder();
+        private LatLng mLocation = new LatLng();
+        private int validMissionSize = 0;
+        public boolean isBounded = true;
+
+        public _InternalLocationWithBnounds(LocationDetailsInterface userLocation, List<MissionInterface> missions, String missionId) {
             for (MissionInterface mission : missions) {
                 if (mission.getLocation().isValide()) {
-                    mValide = true;
-                    count++;
-                    mLat += mission.getLocation().getLat();
-                    mLon += mission.getLocation().getLon();
+                    double lat = mission.getLocation().getLat();
+                    double lon = mission.getLocation().getLon();
+                    validMissionSize++;
+
+                    latLngBounds.include(new LatLng(lat, lon));
+
                     if (mission.getId().equals(missionId)) {
-                        mLat = mission.getLocation().getLat();
-                        mLon = mission.getLocation().getLon();
-                        mZoom = 15;
+                        isBounded = false;
+                        mLocation.setLatitude(lat);
+                        mLocation.setLongitude(lon);
                         return;
                     }
                 }
             }
-            if (!mValide && userLocation.isValide()) {
-                mLat = userLocation.getLat();
-                mLon = userLocation.getLon();
-                mZoom = 7;
-                mValide = true;
+
+            if (userLocation.isValide() && validMissionSize < 2) {
+                isBounded = false;
+                mLocation.setLongitude(userLocation.getLon());
+                mLocation.setLatitude(userLocation.getLat());
                 return;
-            } else if (mValide) {
-                mLat = mLat / count;
-                mLon = mLon / count;
-                mZoom = 10;
             }
+
+            isBounded = (validMissionSize > 2);
+        }
+
+        public LatLngBounds getBoundedLocation() {
+            return latLngBounds.build();
+        }
+
+        public LatLng getLocation() {
+            return mLocation;
         }
     }
 }
