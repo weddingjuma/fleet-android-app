@@ -35,7 +35,7 @@
     <string name="sign_out">Déconnexion</string>
 
     <!-- Mission Menu -->
-    <string name="edit_location">Relever une position</string>
+    <string name="edit_location">Relever la position</string>
 
     <!-- Edit Location Menu -->
     <string name="validate_location">Enregistrer</string>

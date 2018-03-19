@@ -21,7 +21,7 @@
     <string name="login_error_short_text">Connection can\'t be established</string>
     <string name="login_error_invalid">Either password and login doesn\'t match, please try again.</string>
     <string name="login_error_server">Verify data connexion, if problem persist please contact support.</string>
-    
+
     <!-- USER DATA PREF -->
     <string name="agreement">I agree the terms and conditions.</string>
     <string name="clear_pad">Clear Pad</string>
@@ -37,7 +37,7 @@
     <string name="sign_out">Sign Out</string>
 
     <!-- Mission Menu -->
-    <string name="edit_location">Survey a position</string>
+    <string name="edit_location">Survey the position</string>
 
     <!-- Edit Location Menu -->
     <string name="validate_location">Save</string>

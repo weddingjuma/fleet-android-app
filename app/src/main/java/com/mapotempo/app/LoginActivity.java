@@ -71,7 +71,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     /**
      * An interface which is trigger when the connection has been processed.
      *
-     * @param code The current status of connection
+     * @param status  The current status of connection
+     * @param manager The connexion associate manager
      */
     @Override
     public void onLogin(ConnectionVerifyStatus status, MapotempoFleetManagerInterface manager) {
