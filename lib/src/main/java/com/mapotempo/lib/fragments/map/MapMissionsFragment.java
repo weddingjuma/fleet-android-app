@@ -203,16 +203,31 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
             public void onMapReady(MapboxMap mapboxMap) {
                 mapboxMap.clear();
 
-                // Draw marker
+                // Draw markers
                 IconFactory mIconFactory = IconFactory.getInstance(getActivity());
-                Icon icon = mIconFactory.fromResource(R.drawable.ic_map_green_marker);
+                Icon icon;
+                LatLng location;
+
                 for (MissionInterface mission : missions) {
-                    if (mission.getLocation().isValide()) {
-                        mapboxMap.addMarker(new MarkerViewOptions()
-                                .icon(icon)
-                                .position(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()))
+                    if (mission.getSurveyLocation().isValide()) {
+                        icon = mIconFactory.fromResource(R.drawable.ic_map_blue_marker);
+                        location = new LatLng(
+                                mission.getSurveyLocation().getLat(),
+                                mission.getSurveyLocation().getLon()
                         );
+                    } else if(mission.getLocation().isValide()) {
+                        icon = mIconFactory.fromResource(R.drawable.ic_map_green_marker);
+                        location = new LatLng(
+                                mission.getLocation().getLat(),
+                                mission.getLocation().getLon()
+                        );
+                    } else {
+                        continue;
                     }
+
+                    mapboxMap.addMarker(new MarkerViewOptions()
+                                            .position(location)
+                                            .icon(icon));
                 }
 
                 // Draw path
@@ -259,7 +274,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                 else
                     mapboxMap.setCameraPosition(new CameraPosition.Builder()
                                                                   .target(internalLocationWithBnounds.getLocation())
-                                                                  .zoom(7)
+                                                                  .zoom(17)
                                                                   .build());
             }
         });
@@ -273,6 +288,11 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
         public boolean isBounded = true;
 
         public _InternalLocationWithBnounds(LocationDetailsInterface userLocation, List<MissionInterface> missions, String missionId) {
+            if (userLocation.isValide()) {
+                mLocation.setLongitude(userLocation.getLon());
+                mLocation.setLatitude(userLocation.getLat());
+            }
+
             for (MissionInterface mission : missions) {
                 if (mission.getLocation().isValide()) {
                     double lat = mission.getLocation().getLat();
@@ -281,20 +301,24 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
 
                     latLngBounds.include(new LatLng(lat, lon));
 
-                    if (mission.getId().equals(missionId)) {
-                        isBounded = false;
+                    // Check if mission matches
+                    if (!mission.getId().equals(missionId))
+                        continue;
+
+                    if (mission.getSurveyLocation().isValide()) {
+                        double surveyLat = mission.getSurveyLocation().getLat();
+                        double surveyLon = mission.getSurveyLocation().getLon();
+
+                        mLocation.setLatitude(surveyLat);
+                        mLocation.setLongitude(surveyLon);
+                    } else {
                         mLocation.setLatitude(lat);
                         mLocation.setLongitude(lon);
-                        return;
                     }
-                }
-            }
 
-            if (userLocation.isValide() && validMissionSize < 2) {
-                isBounded = false;
-                mLocation.setLongitude(userLocation.getLon());
-                mLocation.setLatitude(userLocation.getLat());
-                return;
+                    isBounded = false;
+                    return;
+                }
             }
 
             isBounded = (validMissionSize > 2);
