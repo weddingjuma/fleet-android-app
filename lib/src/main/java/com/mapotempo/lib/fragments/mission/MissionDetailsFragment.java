@@ -387,7 +387,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     }
 
     private void mapVisivilityManager() {
-        final LocationInterface location = mMission.getPickedLocation().isValide() ? mMission.getPickedLocation() : mMission.getLocation();
+        final LocationInterface location = mMission.getSurveyLocation().isValide() ? mMission.getSurveyLocation() : mMission.getLocation();
 
         // Asynchronously fill the mapImageView when the widget is draw to retrieve dimensions.
         if (location.isValide()) {
@@ -403,7 +403,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                     mMapMarker.setVisibility(View.GONE);
 
                     // Coloration depend of marker type
-                    if (mMission.getPickedLocation().isValide())
+                    if (mMission.getSurveyLocation().isValide())
                         mMapMarker.setColorFilter(getResources().getColor(R.color.colorMapoBlue));
                     else
                         mMapMarker.setColorFilter(getResources().getColor(R.color.colorMapoGreen));

@@ -195,7 +195,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
         if (mScrollLocation != null) {
             MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
             LocationInterface locationInterface = mapotempoFleetManagerInterface.getSubmodelFactory().CreateNewLocation(mScrollLocation.getLatitude(), mScrollLocation.getLongitude());
-            mMission.setPickedLocation(locationInterface);
+            mMission.setSurveyLocation(locationInterface);
             mMission.save();
         }
     }
@@ -203,7 +203,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
     public void deletePickedLocation() {
         MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
         LocationInterface locationInterface = mapotempoFleetManagerInterface.getSubmodelFactory().CreateNewLocation(null, null);
-        mMission.setPickedLocation(locationInterface);
+        mMission.setSurveyLocation(locationInterface);
         mMission.save();
         displayLocationMarkers();
     }
@@ -260,12 +260,12 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
                         );
                     }
 
-                    if (mMission.getPickedLocation().isValide()) {
+                    if (mMission.getSurveyLocation().isValide()) {
                         IconFactory mIconFactory = IconFactory.getInstance(getActivity());
                         Icon icon = mIconFactory.fromResource(R.drawable.ic_map_blue_marker);
                         mapboxMap.addMarker(new MarkerViewOptions()
                                 .icon(icon)
-                                .position(new LatLng(mMission.getPickedLocation().getLat(), mMission.getPickedLocation().getLon()))
+                                .position(new LatLng(mMission.getSurveyLocation().getLat(), mMission.getSurveyLocation().getLon()))
                         );
                     }
                 }
