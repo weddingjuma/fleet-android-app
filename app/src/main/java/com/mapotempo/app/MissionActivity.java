@@ -71,6 +71,14 @@ public class MissionActivity extends MapotempoBaseActivity implements
                     startActivity(intent);
                 }
                 return true;
+            case R.id.edit_mission_address:
+                MissionInterface mission = missionDetailsFragment.getCurrentMission();
+                if (mission != null) {
+                    Intent intent = new Intent(this, MapoEditMissionAddress.class);
+                    intent.putExtra("mission_id", mission.getId());
+                    startActivity(intent);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

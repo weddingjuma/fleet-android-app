@@ -8,4 +8,9 @@
         android:title="@string/edit_location"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/edit_mission_address"
+        android:title="@string/edit_address"
+        app:showAsAction="never" />
+
 </menu>

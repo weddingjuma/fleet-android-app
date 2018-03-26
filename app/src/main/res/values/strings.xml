@@ -10,4 +10,6 @@
     <!-- SINGLE MAP ACIVITY STRINGS -->
     <string name="settings">Settings</string>
 
+    <!-- ADDRESS EDITION -->
+    <string name="address">Adress</string>
 </resources>

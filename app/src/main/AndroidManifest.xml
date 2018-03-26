@@ -17,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -40,6 +39,8 @@
         <activity android:name=".SettingsActivity" />
 
         <activity android:name=".MapLocationPickerActivity" />
+
+        <activity android:name=".MapoEditMissionAddress" />
 
     </application>
 </manifest>
