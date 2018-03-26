@@ -21,8 +21,11 @@ package com.mapotempo.app;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
+import com.mapotempo.lib.fragments.mission.MissionAddressEditor;
 
 public class MapoEditMissionAddress extends MapotempoBaseActivity {
 
@@ -40,8 +43,24 @@ public class MapoEditMissionAddress extends MapotempoBaseActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_address, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        MissionAddressEditor missionAddressEditor = (MissionAddressEditor) getSupportFragmentManager().findFragmentById(R.id.mission_address_fragment);
+
+        switch (item.getItemId()) {
+            case R.id.validate_address:
+                missionAddressEditor.saveAddress();
+                break;
+            default:
+                onBackPressed();
+                break;
+        }
+
         return true;
     }
 }

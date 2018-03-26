@@ -45,7 +45,6 @@ public class MissionAddressEditor extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mission_adress_editor, container, false);
-        Button onUpdate = view.findViewById(R.id.update_address_button);
         AddressInterface missionAddress = mMission.getAddress();
 
         mStreet = view.findViewById(R.id.street);
@@ -62,24 +61,21 @@ public class MissionAddressEditor extends Fragment {
         mCountry.setText(missionAddress.getCountry());
         mDetail.setText(missionAddress.getDetail());
 
-        onUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SubModelFactoryInterface sub =  mapotempoFleetManagerInterface.getSubmodelFactory();
-                AddressInterface addressInterface = sub.CreateNewAddress(
-                        mStreet.getText().toString(),
-                        mPostalCode.getText().toString(),
-                        mCity.getText().toString(),
-                        mState.getText().toString(),
-                        mCountry.getText().toString(),
-                        mDetail.getText().toString()
-                );
-                mMission.setAddress(addressInterface);
-                mMission.save();
-                getActivity().onBackPressed();
-            }
-        });
-
         return view;
+    }
+
+    public void saveAddress() {
+        SubModelFactoryInterface sub =  mapotempoFleetManagerInterface.getSubmodelFactory();
+        AddressInterface addressInterface = sub.CreateNewAddress(
+                mStreet.getText().toString(),
+                mPostalCode.getText().toString(),
+                mCity.getText().toString(),
+                mState.getText().toString(),
+                mCountry.getText().toString(),
+                mDetail.getText().toString()
+        );
+        mMission.setAddress(addressInterface);
+        mMission.save();
+        getActivity().onBackPressed();
     }
 }

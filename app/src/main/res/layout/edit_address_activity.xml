@@ -40,7 +40,7 @@
             app:title="Address" />
 
         <fragment class="com.mapotempo.lib.fragments.mission.MissionAddressEditor"
-            android:id="@+id/fzflez"
+            android:id="@+id/mission_address_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -120,14 +120,6 @@
             android:layout_height="wrap_content" />
     </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:layout_weight="1"
-        android:id="@+id/update_address_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorMapoBlue"
-        android:textColor="@color/colorWhite"
-        android:text="@string/update"/>
     </LinearLayout>
 
 </FrameLayout>
