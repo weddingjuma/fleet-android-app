@@ -209,13 +209,13 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                 LatLng location;
 
                 for (MissionInterface mission : missions) {
-                    if (mission.getSurveyLocation().isValide()) {
+                    if (mission.getSurveyLocation().isValid()) {
                         icon = mIconFactory.fromResource(R.drawable.ic_map_blue_marker);
                         location = new LatLng(
                                 mission.getSurveyLocation().getLat(),
                                 mission.getSurveyLocation().getLon()
                         );
-                    } else if(mission.getLocation().isValide()) {
+                    } else if(mission.getLocation().isValid()) {
                         icon = mIconFactory.fromResource(R.drawable.ic_map_green_marker);
                         location = new LatLng(
                                 mission.getLocation().getLat(),
@@ -233,7 +233,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                 // Draw path
                 List<LatLng> polygonPath = new ArrayList<>();
                 for (MissionInterface mission : missions) {
-                    if (mission.getLocation().isValide()) {
+                    if (mission.getLocation().isValid()) {
                         polygonPath.add(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()));
                     }
                 }
@@ -246,7 +246,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     }
 
     private void setCurrentPosition(final LocationDetailsInterface locationDetailsInterface) {
-        if (locationDetailsInterface.isValide()) {
+        if (locationDetailsInterface.isValid()) {
             mMapView.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(MapboxMap mapboxMap) {
@@ -288,13 +288,13 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
         public boolean isBounded = true;
 
         public _InternalLocationWithBnounds(LocationDetailsInterface userLocation, List<MissionInterface> missions, String missionId) {
-            if (userLocation.isValide()) {
+            if (userLocation.isValid()) {
                 mLocation.setLongitude(userLocation.getLon());
                 mLocation.setLatitude(userLocation.getLat());
             }
 
             for (MissionInterface mission : missions) {
-                if (mission.getLocation().isValide()) {
+                if (mission.getLocation().isValid()) {
                     double lat = mission.getLocation().getLat();
                     double lon = mission.getLocation().getLon();
                     validMissionSize++;
@@ -305,7 +305,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                     if (!mission.getId().equals(missionId))
                         continue;
 
-                    if (mission.getSurveyLocation().isValide()) {
+                    if (mission.getSurveyLocation().isValid()) {
                         double surveyLat = mission.getSurveyLocation().getLat();
                         double surveyLon = mission.getSurveyLocation().getLon();
 

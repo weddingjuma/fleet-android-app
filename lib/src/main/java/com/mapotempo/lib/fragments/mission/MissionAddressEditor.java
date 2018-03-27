@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
@@ -45,7 +44,12 @@ public class MissionAddressEditor extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mission_adress_editor, container, false);
-        AddressInterface missionAddress = mMission.getAddress();
+        AddressInterface missionAddress;
+
+        if (mMission.getSurveyAddress().isValid())
+            missionAddress = mMission.getSurveyAddress();
+        else
+            missionAddress = mMission.getAddress();
 
         mStreet = view.findViewById(R.id.street);
         mPostalCode = view.findViewById(R.id.postal_code);
@@ -74,7 +78,7 @@ public class MissionAddressEditor extends Fragment {
                 mCountry.getText().toString(),
                 mDetail.getText().toString()
         );
-        mMission.setAddress(addressInterface);
+        mMission.setSurveyAddress(addressInterface);
         mMission.save();
         getActivity().onBackPressed();
     }

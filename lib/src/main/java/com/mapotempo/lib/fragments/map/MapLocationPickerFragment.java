@@ -227,12 +227,20 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
-                LatLng latLng = new LatLng(0, 0);
-                Location loc = getNativeLocation();
-                if (loc != null)
-                    latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
-                else if (mMission != null && mMission.getLocation().isValide())
-                    latLng = new LatLng(mMission.getLocation().getLat(), mMission.getLocation().getLon());
+                LocationInterface locationInterface;
+                LatLng latLng = new LatLng(0,0);
+
+                if (getNativeLocation() != null) {
+                    latLng.setLatitude(getNativeLocation().getLatitude());
+                    latLng.setLongitude(getNativeLocation().getLongitude());
+                } else if (mMission != null) {
+                    locationInterface = (mMission.getSurveyLocation().isValid()) ? mMission.getSurveyLocation() :
+                                                                                   mMission.getLocation();
+                    if (locationInterface.isValid()) {
+                        latLng.setLatitude(locationInterface.getLat());
+                        latLng.setLongitude(locationInterface.getLon());
+                    }
+                }
 
                 final CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(latLng)
@@ -251,7 +259,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
                 public void onMapReady(final MapboxMap mapboxMap) {
                     mapboxMap.clear();
 
-                    if (mMission.getLocation().isValide()) {
+                    if (mMission.getLocation().isValid()) {
                         IconFactory mIconFactory = IconFactory.getInstance(getActivity());
                         Icon icon = mIconFactory.fromResource(R.drawable.ic_map_green_marker);
                         mapboxMap.addMarker(new MarkerViewOptions()
@@ -260,7 +268,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
                         );
                     }
 
-                    if (mMission.getSurveyLocation().isValide()) {
+                    if (mMission.getSurveyLocation().isValid()) {
                         IconFactory mIconFactory = IconFactory.getInstance(getActivity());
                         Icon icon = mIconFactory.fromResource(R.drawable.ic_map_blue_marker);
                         mapboxMap.addMarker(new MarkerViewOptions()

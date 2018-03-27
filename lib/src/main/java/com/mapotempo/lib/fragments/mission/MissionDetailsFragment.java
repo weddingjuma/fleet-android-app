@@ -53,6 +53,7 @@ import com.mapotempo.fleet.api.model.MissionActionInterface;
 import com.mapotempo.fleet.api.model.MissionActionTypeInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.MissionStatusTypeInterface;
+import com.mapotempo.fleet.api.model.submodel.AddressInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationInterface;
 import com.mapotempo.fleet.api.model.submodel.TimeWindowsInterface;
 import com.mapotempo.lib.MapotempoApplicationInterface;
@@ -358,10 +359,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
             @Override
             public void onClick(View view) {
                 if (mMission != null) {
-                    LocationInterface loc = mission.getLocation();
-
+                    LocationInterface loc = (mission.getSurveyLocation().isValid()) ? mission.getSurveyLocation() :
+                                                                                      mission.getLocation();
                     // Check lat/lon object
-                    if (loc.isValide()) {
+                    if (loc.isValid()) {
                         Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
 
@@ -387,10 +388,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     }
 
     private void mapVisivilityManager() {
-        final LocationInterface location = mMission.getSurveyLocation().isValide() ? mMission.getSurveyLocation() : mMission.getLocation();
+        final LocationInterface location = mMission.getSurveyLocation().isValid() ? mMission.getSurveyLocation() : mMission.getLocation();
 
         // Asynchronously fill the mapImageView when the widget is draw to retrieve dimensions.
-        if (location.isValide()) {
+        if (location.isValid()) {
             mMapContainer.setVisibility(View.VISIBLE);
             ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
             vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -403,7 +404,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                     mMapMarker.setVisibility(View.GONE);
 
                     // Coloration depend of marker type
-                    if (mMission.getSurveyLocation().isValide())
+                    if (mMission.getSurveyLocation().isValid())
                         mMapMarker.setColorFilter(getResources().getColor(R.color.colorMapoBlue));
                     else
                         mMapMarker.setColorFilter(getResources().getColor(R.color.colorMapoGreen));
@@ -460,12 +461,19 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mTextViewDate.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.SHORTDATE));
         mTextViewDuration.setText(DateHelpers.FormatedHour(getContext(), mission.getDuration()));
 
+        AddressInterface addressInterface;
+
+        if (mission.getSurveyAddress().isValid())
+            addressInterface = mission.getSurveyAddress();
+        else
+            addressInterface = mission.getAddress();
+
         String fullAdress = String.format("%s%s%s %s%s",
-                AddressHelper.addBackDashIfNonNull(mission.getAddress().getStreet(), ""),
-                AddressHelper.addBackDashIfNonNull(mission.getAddress().getDetail(), ""),
-                mission.getAddress().getPostalcode(),
-                AddressHelper.addBackDashIfNonNull(mission.getAddress().getCity(), ""),
-                mission.getAddress().getCountry()).trim();
+                AddressHelper.addBackDashIfNonNull(addressInterface.getStreet(), ""),
+                AddressHelper.addBackDashIfNonNull(addressInterface.getDetail(), ""),
+                addressInterface.getPostalcode(),
+                AddressHelper.addBackDashIfNonNull(addressInterface.getCity(), ""),
+                addressInterface.getCountry().trim());
 
         mTextViewDeliveryAddress.setText(fullAdress);
 
