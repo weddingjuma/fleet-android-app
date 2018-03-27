@@ -19,6 +19,7 @@
 
 package com.mapotempo.lib.fragments.mission;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,12 +29,15 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -73,6 +77,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -598,17 +603,38 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
 
-        // Create new action
+        /**
+         * Create a new location
+         * TODO: Refactor me at getNativeLocation Call
+         */
         MapotempoFleetManagerInterface mapotempoFleetManagerInterface = mapotempoApplication.getManager();
         MissionActionInterface mai = mapotempoFleetManagerInterface.getMissionActionAccessInterface().create(
                 mapotempoFleetManagerInterface.getCompany(),
                 mMission,
-                action);
+                action,
+                new Date(),
+                (LocationInterface) getNativeLocation());
 
         // Set mission status type
         mission.setStatus(action.getNextStatus());
         mission.save();
 
+    }
+
+    /**
+     * Try to get the current Location
+     * TODO: DELETE ME, Code redundant with MapLocationPickerFragment.getNativeLocation method
+     * @return
+     */
+    private Location getNativeLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationManager mLocMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+            if (mLocMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                return mLocMngr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            else if (mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+                return mLocMngr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        return null;
     }
 }
 
