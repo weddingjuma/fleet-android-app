@@ -44,6 +44,9 @@
     <string name="validate_location">Save</string>
     <string name="reset_location">Delete the surveyed location</string>
 
+    <!-- Edit Address Menu -->
+    <string name="reset_address">Reset</string>
+
     <!-- Location/Tracknig -->
     <string name="Activate">Activate</string>
     <string name="enable_location_services">Please enable Location Services"</string>

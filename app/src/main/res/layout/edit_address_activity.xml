@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorMapoBlue"
+            app:popupTheme="@style/AppTheme"
             android:theme="@style/HeaderTheme"
             app:title="Address" />
 

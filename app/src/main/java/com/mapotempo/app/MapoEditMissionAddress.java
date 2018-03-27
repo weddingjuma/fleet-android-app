@@ -55,6 +55,11 @@ public class MapoEditMissionAddress extends MapotempoBaseActivity {
         switch (item.getItemId()) {
             case R.id.validate_address:
                 missionAddressEditor.saveAddress();
+                onBackPressed();
+                break;
+            case R.id.reset_address:
+                missionAddressEditor.resetAddress();
+                onBackPressed();
                 break;
             default:
                 onBackPressed();

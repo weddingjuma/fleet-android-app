@@ -20,7 +20,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:id="@+id/edit_location_menu"
+      android:id="@+id/edit_address_menu"
       android:clickable="true"
       android:theme="@style/MapotempoTheme">
 
@@ -28,4 +28,10 @@
         android:id="@+id/validate_address"
         android:title="@string/validate_location"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/reset_address"
+        android:title="@string/reset_address"
+        app:showAsAction="never" />
+
 </menu>

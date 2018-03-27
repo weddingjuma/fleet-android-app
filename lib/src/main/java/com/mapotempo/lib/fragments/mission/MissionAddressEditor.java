@@ -68,6 +68,9 @@ public class MissionAddressEditor extends Fragment {
         return view;
     }
 
+    /**
+     * Save the current modifications as Survey Address, then close the current activity
+     */
     public void saveAddress() {
         SubModelFactoryInterface sub =  mapotempoFleetManagerInterface.getSubmodelFactory();
         AddressInterface addressInterface = sub.CreateNewAddress(
@@ -80,6 +83,21 @@ public class MissionAddressEditor extends Fragment {
         );
         mMission.setSurveyAddress(addressInterface);
         mMission.save();
-        getActivity().onBackPressed();
+    }
+
+    /**
+     * Reset the current address by removing it from the survey model.
+     */
+    public void resetAddress() {
+        AddressInterface addressInterface = mMission.getSurveyAddress();
+
+        if (!addressInterface.isValid())
+            return;
+
+        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
+        AddressInterface nullifiedAddress = mapotempoFleetManagerInterface.getSubmodelFactory()
+                                                                          .CreateNewAddress(null, null,null,null,null, null);
+        mMission.setSurveyAddress(nullifiedAddress);
+        mMission.save();
     }
 }
