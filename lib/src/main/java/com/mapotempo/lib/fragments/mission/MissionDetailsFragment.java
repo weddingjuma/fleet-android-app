@@ -457,8 +457,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mMissionName.setText(mission.getName());
         mMissionReference.setText(mission.getReference());
 
-        mTextViewHours.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES));
-        mTextViewDate.setText(DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.SHORTDATE));
+        mTextViewHours.setText(DateHelpers.parse(mission.getEtaOrDefault(), DateHelpers.DateStyle.HOURMINUTES));
+        mTextViewDate.setText(DateHelpers.parse(mission.getEtaOrDefault(), DateHelpers.DateStyle.SHORTDATE));
         mTextViewDuration.setText(DateHelpers.FormatedHour(getContext(), mission.getDuration()));
 
         AddressInterface addressInterface;

@@ -128,8 +128,8 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
         }
 
         void setMission(MissionInterface mission, final int position) {
-            String missionDate = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.SHORTDATE);
-            String missionHour = DateHelpers.parse(mission.getDate(), DateHelpers.DateStyle.HOURMINUTES);
+            String missionDate = DateHelpers.parse(mission.getEtaOrDefault(), DateHelpers.DateStyle.SHORTDATE);
+            String missionHour = DateHelpers.parse(mission.getEtaOrDefault(), DateHelpers.DateStyle.HOURMINUTES);
             mItem = mission;
             mName.setText(mission.getName());
             mListId.setText(Integer.toString(position + 1));
