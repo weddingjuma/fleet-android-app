@@ -607,13 +607,19 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
          * Create a new location
          * TODO: Refactor me at getNativeLocation Call
          */
+        Location loc = getNativeLocation();
+        LocationInterface locationInterface = null;
+
+        if (loc != null)
+            locationInterface = manager.getSubmodelFactory().CreateNewLocation(loc.getLatitude(), loc.getLongitude());
+
         MapotempoFleetManagerInterface mapotempoFleetManagerInterface = mapotempoApplication.getManager();
         MissionActionInterface mai = mapotempoFleetManagerInterface.getMissionActionAccessInterface().create(
                 mapotempoFleetManagerInterface.getCompany(),
                 mMission,
                 action,
                 new Date(),
-                (LocationInterface) getNativeLocation());
+                locationInterface);
 
         // Set mission status type
         mission.setStatus(action.getNextStatus());
@@ -629,10 +635,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     private Location getNativeLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager mLocMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-            if (mLocMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                return mLocMngr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            else if (mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+            if (mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
                 return mLocMngr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            else if (mLocMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                return mLocMngr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
         return null;
     }
