@@ -34,12 +34,12 @@
     <string name="help">Aide</string>
     <string name="sign_out">Déconnexion</string>
 
-    <!-- Mission Menu -->
+    <!-- Edit Menu -->
+    <string name="edit_address">Éditer l\'adresse</string>
     <string name="edit_location">Relever la position</string>
-
-    <!-- Edit Location Menu -->
-    <string name="validate_location">Enregistrer</string>
     <string name="reset_location">Supprimer la position relevé</string>
+    <string name="reset_address">Supprimer l\'adresse relevé</string>
+    <string name="validate_location">Enregistrer</string>
 
     <!-- Location/Tracknig -->
     <string name="Activate">Activer</string>
@@ -81,5 +81,13 @@
     <string name="hours">heures</string>
     <string name="minutes">minutes</string>
     <string name="seconds">secondes</string>
+
+    <!-- Mission address edition -->
+    <string name="street">Voie</string>
+    <string name="detail">Complément</string>
+    <string name="postal_code">Code postal</string>
+    <string name="city">Ville</string>
+    <string name="state">Région</string>
+    <string name="country">Pays</string>
 
 </resources>

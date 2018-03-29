@@ -18,11 +18,11 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             tools:context="com.mapotempo.lib.fragments.mission.MissionAddressEditor">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.mapotempo.lib.fragments.mission.MissionAddressEditorFragment">
 
     <LinearLayout
         android:padding="15dp"
@@ -30,95 +30,99 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/street"
-            android:hint="@string/street"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium">
-
-        <android.support.design.widget.TextInputEditText
+        <android.support.design.widget.TextInputLayout
             android:layout_weight="1"
-            android:id="@+id/postal_code"
-            android:inputType="text"
-            android:hint="@string/postal_code"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium">
-        <android.support.design.widget.TextInputEditText
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/street"
+                android:hint="@string/street"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+        
+        <android.support.design.widget.TextInputLayout
             android:layout_weight="1"
-            android:id="@+id/city"
-            android:hint="@string/city"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium">
-        <android.support.design.widget.TextInputEditText
-            android:layout_weight="1"
-            android:id="@+id/state"
-            android:inputType="text"
-            android:hint="@string/state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputEditText
+                android:layout_weight="1"
+                android:id="@+id/detail"
+                android:inputType="text"
+                android:hint="@string/detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium">
-        <android.support.design.widget.TextInputEditText
+        <android.support.design.widget.TextInputLayout
             android:layout_weight="1"
-            android:id="@+id/country"
-            android:inputType="text"
-            android:hint="@string/country"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium">
-        <android.support.design.widget.TextInputEditText
+            <android.support.design.widget.TextInputEditText
+                android:layout_weight="1"
+                android:id="@+id/postal_code"
+                android:inputType="text"
+                android:hint="@string/postal_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_weight="1"
-            android:id="@+id/detail"
-            android:inputType="text"
-            android:hint="@string/detail"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_weight="1"
+                android:id="@+id/city"
+                android:hint="@string/city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_weight="1"
+                android:id="@+id/state"
+                android:inputType="text"
+                android:hint="@string/state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_weight="1"
+                android:id="@+id/country"
+                android:inputType="text"
+                android:hint="@string/country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 

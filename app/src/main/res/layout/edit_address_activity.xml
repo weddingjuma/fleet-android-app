@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright © Mapotempo, 2018
   ~
   ~ This file is part of Mapotempo.
@@ -18,18 +17,17 @@
   ~ <http://www.gnu.org/licenses/agpl.html>
   -->
 
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mapotempo.app.MapoEditMissionAddress">
+    tools:context="com.mapotempo.app.EditAddressActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -40,7 +38,8 @@
             android:theme="@style/HeaderTheme"
             app:title="Address" />
 
-        <fragment class="com.mapotempo.lib.fragments.mission.MissionAddressEditor"
+        <fragment
+            class="com.mapotempo.lib.fragments.mission.MissionAddressEditorFragment"
             android:id="@+id/mission_address_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

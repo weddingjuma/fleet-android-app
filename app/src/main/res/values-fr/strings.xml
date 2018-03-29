@@ -5,9 +5,9 @@
     <string name="mission">Mission</string>
 
     <!-- SINGLE MAP ACTIVITY STRINGS -->
-    <string name="map">Map</string>
+    <string name="map">Carte</string>
 
     <!-- SINGLE MAP ACTIVITY STRINGS -->
-    <string name="settings">Settings</string>
+    <string name="settings">Parametre</string>
 
 </resources>

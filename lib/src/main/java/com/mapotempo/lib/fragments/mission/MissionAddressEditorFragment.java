@@ -16,7 +16,7 @@ import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 
 
-public class MissionAddressEditor extends Fragment {
+public class MissionAddressEditorFragment extends Fragment {
 
     private MapotempoFleetManagerInterface mapotempoFleetManagerInterface;
     private MissionInterface mMission;
@@ -27,7 +27,7 @@ public class MissionAddressEditor extends Fragment {
     private TextInputEditText mCountry;
     private TextInputEditText mDetail;
 
-    public MissionAddressEditor() {
+    public MissionAddressEditorFragment() {
         // Required empty public constructor
     }
 
@@ -72,7 +72,7 @@ public class MissionAddressEditor extends Fragment {
      * Save the current modifications as Survey Address, then close the current activity
      */
     public void saveAddress() {
-        SubModelFactoryInterface sub =  mapotempoFleetManagerInterface.getSubmodelFactory();
+        SubModelFactoryInterface sub = mapotempoFleetManagerInterface.getSubmodelFactory();
         AddressInterface addressInterface = sub.CreateNewAddress(
                 mStreet.getText().toString(),
                 mPostalCode.getText().toString(),
@@ -96,7 +96,7 @@ public class MissionAddressEditor extends Fragment {
 
         MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
         AddressInterface nullifiedAddress = mapotempoFleetManagerInterface.getSubmodelFactory()
-                                                                          .CreateNewAddress(null, null,null,null,null, null);
+                .CreateNewAddress(null, null, null, null, null, null);
         mMission.setSurveyAddress(nullifiedAddress);
         mMission.save();
     }

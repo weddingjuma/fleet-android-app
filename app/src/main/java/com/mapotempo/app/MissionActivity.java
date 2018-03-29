@@ -66,7 +66,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
             case R.id.edit_location:
                 MissionInterface ms = missionDetailsFragment.getCurrentMission();
                 if (ms != null) {
-                    Intent intent = new Intent(this, MapLocationPickerActivity.class);
+                    Intent intent = new Intent(this, EditLocationActivity.class);
                     intent.putExtra("mission_id", ms.getId());
                     startActivity(intent);
                 }
@@ -74,7 +74,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
             case R.id.edit_mission_address:
                 MissionInterface mission = missionDetailsFragment.getCurrentMission();
                 if (mission != null) {
-                    Intent intent = new Intent(this, MapoEditMissionAddress.class);
+                    Intent intent = new Intent(this, EditAddressActivity.class);
                     intent.putExtra("mission_id", mission.getId());
                     startActivity(intent);
                 }

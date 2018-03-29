@@ -25,48 +25,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
-import com.mapotempo.lib.fragments.map.MapLocationPickerFragment;
+import com.mapotempo.lib.fragments.mission.MissionAddressEditorFragment;
 
-public class MapLocationPickerActivity extends MapotempoBaseActivity {
+public class EditAddressActivity extends MapotempoBaseActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_location_activity);
+        setContentView(R.layout.edit_address_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.map);
+        getSupportActionBar().setTitle(R.string.edit_address);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_edit_location, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_address, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        MapLocationPickerFragment mapLocationPickerFragment = (MapLocationPickerFragment) getSupportFragmentManager().findFragmentById(R.id.edit_location_fragment);
+        MissionAddressEditorFragment missionAddressEditorFragment = (MissionAddressEditorFragment) getSupportFragmentManager().findFragmentById(R.id.mission_address_fragment);
 
         switch (item.getItemId()) {
-            case R.id.validate_location:
-                mapLocationPickerFragment.savePickedLocation();
-                finish();
-                return true;
-            case R.id.reset_location:
-                mapLocationPickerFragment.deletePickedLocation();
-                return true;
+            case R.id.validate_address:
+                missionAddressEditorFragment.saveAddress();
+                onBackPressed();
+                break;
+            case R.id.reset_address:
+                missionAddressEditorFragment.resetAddress();
+                onBackPressed();
+                break;
             default:
-                return super.onOptionsItemSelected(item);
+                onBackPressed();
+                break;
         }
+
+        return true;
     }
 }

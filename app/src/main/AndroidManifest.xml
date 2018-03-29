@@ -38,9 +38,9 @@
 
         <activity android:name=".SettingsActivity" />
 
-        <activity android:name=".MapLocationPickerActivity" />
+        <activity android:name=".EditLocationActivity" />
 
-        <activity android:name=".MapoEditMissionAddress" />
+        <activity android:name=".EditAddressActivity" />
 
     </application>
 </manifest>
