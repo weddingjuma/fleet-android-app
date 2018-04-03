@@ -191,10 +191,16 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_ACCESS_FINE_LOCATION)
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                if (!shouldShowRequestPermissionRationale(permissions[0]))
-                    displayOptions();
+
+        if (requestCode == REQUEST_ACCESS_FINE_LOCATION) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    if (!shouldShowRequestPermissionRationale(permissions[i])) {
+                        displayOptions();
+                    }
+                }
+            }
+        }
     }
 
     // ==============
