@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class MissionAddressEditorFragment extends Fragment {
      */
     public void saveAddress() {
         SubModelFactoryInterface sub = mapotempoFleetManagerInterface.getSubmodelFactory();
-        AddressInterface addressInterface = sub.CreateNewAddress(
+        AddressInterface surveyAddress = sub.CreateNewAddress(
                 mStreet.getText().toString(),
                 mPostalCode.getText().toString(),
                 mCity.getText().toString(),
@@ -81,17 +82,20 @@ public class MissionAddressEditorFragment extends Fragment {
                 mCountry.getText().toString(),
                 mDetail.getText().toString()
         );
-        mMission.setSurveyAddress(addressInterface);
-        mMission.save();
+
+        if (!surveyAddress.equals(mMission.getAddress()) && surveyAddress.isValid()) {
+            mMission.setSurveyAddress(surveyAddress);
+            mMission.save();
+        }
     }
 
     /**
      * Reset the current address by removing it from the survey model.
      */
     public void resetAddress() {
-        AddressInterface addressInterface = mMission.getSurveyAddress();
+        AddressInterface surveyAddress = mMission.getSurveyAddress();
 
-        if (!addressInterface.isValid())
+        if (!surveyAddress.isValid())
             return;
 
         MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
