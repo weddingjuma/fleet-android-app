@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -169,7 +170,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
-    private ActionsListFragment mActionFragment;
+    private boolean mButtonsVisibility = true;
 
     private MapotempoModelBaseInterface.ChangeListener<MissionInterface> mCallback = new MapotempoModelBaseInterface.ChangeListener<MissionInterface>() {
         @Override
@@ -252,6 +253,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_mission, container, false);
+
+        // If the screen isn't too small, hide all buttons from UI.
+        mButtonsVisibility = !((getResources().getConfiguration().screenLayout &
+                                Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL);
 
         // Map view
         mMapContainer = view.findViewById(R.id.mapContainer);
@@ -570,13 +575,13 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
 
         // Next actions
         int idx = 0;
-        FloatingActionButton floatingActionButtonArray[] = {mStatusFirstAction, mStatusSecondAction, mStatusThirdAction};
+        FloatingActionButton floatingActionButtonArray[] = { mStatusFirstAction, mStatusSecondAction, mStatusThirdAction };
         final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         MapotempoFleetManagerInterface manager = mapotempoApplication.getManager();
         List<MissionActionTypeInterface> actions = manager.getMissionActionTypeAccessInterface().getByPrevious(mission.getStatus());
 
         for (FloatingActionButton button : floatingActionButtonArray) {
-            if (idx < actions.size()) {
+            if (idx < actions.size() && mButtonsVisibility) {
                 final MissionActionTypeInterface action = actions.get(idx);
                 Drawable d = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), "#ffffff", new BitmapDrawable());
                 button.setImageDrawable(d);
