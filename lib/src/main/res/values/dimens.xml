@@ -42,4 +42,9 @@
     <!-- PAGER TRANSFORMER DIMENSION -->
     <dimen name="margin_on_scroll">10px</dimen>
 
+    <!-- SMALL SCREEN VALUES -->
+    <dimen name="login_small_text_size">9dp</dimen>
+    <dimen name="login_small_icon_size">15dp</dimen>
+    <dimen name="login_small_margin_global">10dp</dimen>
+
 </resources>
