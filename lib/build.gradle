@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.android.support:preference-v7:26.+'
     implementation 'com.android.support:preference-v14:26.+'
 
-    implementation 'com.mapotempo.fleet:mapotempo-fleet-java-client:3.0'
+    implementation 'com.mapotempo.fleet:mapotempo-fleet-java-client:3.1'
     implementation 'com.couchbase.lite:couchbase-lite-android:1.4.1'
     implementation 'com.couchbase.lite:couchbase-lite-android-sqlcipher:+'
 
