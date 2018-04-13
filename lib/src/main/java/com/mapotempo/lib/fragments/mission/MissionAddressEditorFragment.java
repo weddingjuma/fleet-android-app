@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,15 +92,7 @@ public class MissionAddressEditorFragment extends Fragment {
      * Reset the current address by removing it from the survey model.
      */
     public void resetAddress() {
-        AddressInterface surveyAddress = mMission.getSurveyAddress();
-
-        if (!surveyAddress.isValid())
-            return;
-
-        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
-        AddressInterface nullifiedAddress = mapotempoFleetManagerInterface.getSubmodelFactory()
-                .CreateNewAddress(null, null, null, null, null, null);
-        mMission.setSurveyAddress(nullifiedAddress);
+        mMission.deleteSurveyAddress();
         mMission.save();
     }
 }

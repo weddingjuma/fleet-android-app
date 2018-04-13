@@ -201,9 +201,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
     }
 
     public void deletePickedLocation() {
-        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
-        LocationInterface locationInterface = mapotempoFleetManagerInterface.getSubmodelFactory().CreateNewLocation(null, null);
-        mMission.setSurveyLocation(locationInterface);
+        mMission.deleteSurveyAddress();
         mMission.save();
         displayLocationMarkers();
     }
@@ -228,14 +226,14 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
                 LocationInterface locationInterface;
-                LatLng latLng = new LatLng(0,0);
+                LatLng latLng = new LatLng(0, 0);
 
                 if (getNativeLocation() != null) {
                     latLng.setLatitude(getNativeLocation().getLatitude());
                     latLng.setLongitude(getNativeLocation().getLongitude());
                 } else if (mMission != null) {
                     locationInterface = (mMission.getSurveyLocation().isValid()) ? mMission.getSurveyLocation() :
-                                                                                   mMission.getLocation();
+                            mMission.getLocation();
                     if (locationInterface.isValid()) {
                         latLng.setLatitude(locationInterface.getLat());
                         latLng.setLongitude(locationInterface.getLon());

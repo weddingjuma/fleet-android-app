@@ -62,7 +62,7 @@ dependencies {
     })
     implementation 'com.android.support:appcompat-v7:26.+'
     implementation 'com.android.support:design:26.+'
-    implementation 'com.mapotempo.fleet:mapotempo-fleet-java-client:1.0-SNAPSHOT'
+    implementation 'com.mapotempo.fleet:mapotempo-fleet-java-client:3.2'
 
     testCompile 'junit:junit:4.12'
 }
