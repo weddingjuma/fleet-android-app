@@ -135,7 +135,9 @@ public class LoginFragment extends Fragment {
         mLoginView.setText(mLoginPrefManager.getLoginPref());
 
         mPasswordView = view.findViewById(R.id.password);
-        mPasswordView.setText(mLoginPrefManager.getPasswordPref());
+
+        if (mLoginPrefManager.getAutoLoginPref())
+            mPasswordView.setText(mLoginPrefManager.getPasswordPref());
 
         final Button connexionButton = view.findViewById(R.id.login_sign_in_button);
         connexionButton.setOnClickListener(new View.OnClickListener() {
@@ -197,10 +199,12 @@ public class LoginFragment extends Fragment {
     public void onPause() {
         super.onPause();
         TextInputLayout passwordLayout = getView().findViewById(R.id.password_layout);
-        TextInputEditText passwordText = getView().findViewById(R.id.password);
+
+        if (!mLoginPrefManager.getAutoLoginPref())
+            mPasswordView.setText(null);
 
         // Simple Trick to reset the Icon of CheckableImageButton [Cuz of LIBRARY_GROUP restriction]
-        passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        mPasswordView.setTransformationMethod(PasswordTransformationMethod.getInstance());
         passwordLayout.setPasswordVisibilityToggleEnabled(false);
         passwordLayout.setPasswordVisibilityToggleEnabled(true);
     }

@@ -79,9 +79,11 @@ public class LoginPrefManager {
         return mContext.getResources().getString(R.string.default_fleet_db_default);
     }
 
-    // ==================
-    // ==  Login pref  ==
-    // ==================
+    // ============================
+    // ==  Login pref ACCESSORS  ==
+    // ============================
+
+    // GETTERS:
 
     public String getLoginPref() {
         return mSharedPreference.getString(LoginPrefManager.USER_LOGIN_KEY, "");
@@ -91,20 +93,22 @@ public class LoginPrefManager {
         return mSharedPreference.getString(LoginPrefManager.USER_PASSWORD_KEY, "");
     }
 
-    public void setLoginPasswordPref(String login, String password) {
-        SharedPreferences.Editor editor = mSharedPreference.edit();
-        editor.putString(LoginPrefManager.USER_LOGIN_KEY, login);
-        editor.putString(LoginPrefManager.USER_PASSWORD_KEY, password);
-        editor.apply(); // Apply is async, while commit isn't.
-    }
-
     public boolean getAutoLoginPref() {
         return mSharedPreference.getBoolean(LoginPrefManager.AUTO_LOGIN, false);
     }
+
+    // SETTERS:
 
     public void setAutoLoginPref(boolean status) {
         SharedPreferences.Editor editor = mSharedPreference.edit();
         editor.putBoolean(LoginPrefManager.AUTO_LOGIN, status);
         editor.apply();
+    }
+
+    public void setLoginPasswordPref(String login, String password) {
+        SharedPreferences.Editor editor = mSharedPreference.edit();
+        editor.putString(LoginPrefManager.USER_LOGIN_KEY, login);
+        editor.putString(LoginPrefManager.USER_PASSWORD_KEY, password);
+        editor.apply(); // Apply is async, while commit isn't.
     }
 }
