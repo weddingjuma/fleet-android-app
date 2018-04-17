@@ -13,6 +13,12 @@
     <string name="advanced_login_parameter">Parametre de connexion avancé</string>
     <string name="invalid_login_format">Le format de login est invalide, vérifier les espaces.</string>
     <string name="fleet_server_compatibility_error">Votre application nécessite une mise à pour communiquer avec le serveur fleet.</string>
+    <string name="preload_modal_title">Confirmer le téléchargement</string>
+    <string name="preload_modal_desc">Le téléchargement local consomme de la place, vérifier de disposer de suffisamment d\'espace disque</string>
+    <string name="preload_modal_ok">Télécharger</string>
+    <string name="preload_modal_cancel">Annuler</string>
+    <string name="preload_modal_title_no_connection">Aucune connexion disponible</string>
+    <string name="preload_modal_desc_no_connection">Pour télécharger la carte vous devez activer votre connexion internet (Wifi, 3G/4G)</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Erreur de connexion</string>
@@ -33,6 +39,7 @@
     <string name="settings">Paramètres</string>
     <string name="help">Aide</string>
     <string name="sign_out">Déconnexion</string>
+    <string name="offline_map">Cartes hors-ligne</string>
 
     <!-- Edit Menu -->
     <string name="edit_address">Éditer l\'adresse</string>
@@ -49,6 +56,10 @@
     <string name="close">Fermer</string>
     <string name="explaination_location_permission">Cette autorisation est requise pour activer le suivi de l\'emplacement</string>
     <string name="disabled_permission">Vous avez désactivé la permission</string>
+    <string name="map_deleted">Cartes hors-ligne supprimées</string>
+    <string name="delete_offline_map_error">Erreur lors de la suppréssion des données</string>
+    <string name="no_offline_maps">Aucune Carte Enregistrée</string>
+    <string name="loading_completed">Chargement terminé.</string>
 
     <!-- Mission List -->
     <string name="no_available_mission">Aucune mission disponible</string>
@@ -73,6 +84,19 @@
     <string name="map_settings">Parametre de la carte</string>
     <string name="map_zoom_button">"Bouton de zoom de la carte"</string>
     <string name="map_current_position">"Position courrante sur la carte"</string>
+    <string name="delete_cache">Supprimer le cache</string>
+    <string name="tiles_settings_title">Cartographie hors-ligne</string>
+    <string name="preload_action">Cartographie Hors-ligne</string>
+    <string name="preload_description">Permet de télécharger la carte sur votre périphérique</string>
+    <string name="preload_info_title">Date du dernier téléchargement</string>
+    <string name="preload_info_desc">Pas de carte téléchargée pour le moment</string>
+    <string name="preload_consumption_title">Consommation données</string>
+    <string name="preload_consumption_default_desc">0Mo</string>
+    <string name="preload_action_delete_title">Supprimer la carte</string>
+    <string name="preload_action_delete_desc">Supprimer l\'ensemble des données téléchargées sur ce périphérique</string>
+    <string name="preload_action_dl_maps_title">Télécharger la carte</string>
+    <string name="preload_action_dl_maps_desc">Télécharge la carte nécéssaire à la visualisation des missions courrantes</string>
+    <string name="preload_map_consumption_prefix">Taille des données:</string>
 
     <!-- Time -->
     <string name="hour">heure</string>

@@ -21,6 +21,7 @@ package com.mapotempo.app;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -30,17 +31,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.UserPreferenceInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
+import com.mapotempo.lib.fragments.map.OfflineMapManager;
 import com.mapotempo.lib.fragments.menu.MainMenuFragment;
 import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
 import com.mapotempo.lib.fragments.missions.MissionsListFragment;
+import com.mapotempo.lib.fragments.settings.SettingsHelper;
 
 import java.util.ArrayList;
 
@@ -49,8 +55,6 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
         MissionDetailsFragment.OnMissionDetailsFragmentListener,
         MainMenuFragment.OnMenuInteractionListener
         /* LocationListener */ {
-
-    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
     // ===================================
     // ==  Android Activity Life cycle  ==
@@ -77,7 +81,6 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(mConnexionReceiver, intentFilter);
-
     }
 
     @Override
@@ -179,6 +182,10 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
             missionsPagerFragment.notifyDataChange();
     }
 
+    ////////////////////////////////////////////////
+    /// Drawer layout Initializer
+    ////////////////////////////////////////////////
+
     private void addDrawableHandler(Toolbar toolbar) {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout != null) {
@@ -226,4 +233,5 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
             }
         }
     }
+
 }

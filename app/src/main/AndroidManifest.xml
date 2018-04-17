@@ -29,18 +29,23 @@
 
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
-        <activity android:name=".MissionActivity" />
+        <activity android:name=".MissionActivity"
+            android:launchMode="singleInstance" />
 
-        <activity android:name=".MapActivity" />
+        <activity android:name=".MapActivity"
+            android:launchMode="singleInstance" />
 
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SettingsActivity"
+            android:launchMode="singleInstance" />
 
-        <activity android:name=".EditLocationActivity" />
+        <activity android:name=".EditLocationActivity"
+            android:launchMode="singleTask" />
 
-        <activity android:name=".EditAddressActivity" />
+        <activity android:name=".EditAddressActivity"
+            android:launchMode="singleTask" />
 
     </application>
 </manifest>

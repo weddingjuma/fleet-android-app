@@ -24,7 +24,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.fragments.map.OfflineMapManager;
+import com.mapotempo.lib.fragments.settings.SettingsHelper;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
@@ -32,6 +35,8 @@ import io.sentry.android.AndroidSentryClientFactory;
 public class MapotempoApplication extends Application implements MapotempoApplicationInterface {
 
     private MapotempoFleetManagerInterface iFleetManager;
+
+    private OfflineMapManager offlineMapManager;
 
     // ======================================
     // ==  Android Application Life cycle  ==
@@ -64,6 +69,19 @@ public class MapotempoApplication extends Application implements MapotempoApplic
         if (iFleetManager != null && !iFleetManager.serverCompatibility()) {
             displayErrorServerCompatibility();
         }
+    }
+
+    @Override
+    public OfflineMapManager getOfflineManager() {
+        return offlineMapManager;
+    }
+
+    @Override
+    public OfflineMapManager setOfflineMapManager() {
+        if (offlineMapManager != null) {
+            offlineMapManager = null;
+        }
+        return offlineMapManager = new OfflineMapManager(this);
     }
 
     // ===============

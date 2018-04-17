@@ -20,17 +20,36 @@
 package com.mapotempo.lib.fragments.settings;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.SwitchPreferenceCompat;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.UserPreferenceInterface;
+import com.mapotempo.fleet.utils.DateHelper;
+import com.mapotempo.lib.MapotempoApplication;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseSettingsFragment;
+import com.mapotempo.lib.fragments.map.OfflineMapManager;
+import com.mapotempo.lib.utils.DateHelpers;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class SettingsFragment extends MapotempoBaseSettingsFragment {
 
@@ -48,6 +67,7 @@ public class SettingsFragment extends MapotempoBaseSettingsFragment {
         initAutomaticDataUpdatePrefsCallbacks();
         initMapZoomButtonPrefsCallbacks();
         initMapCurrentPositionPrefsCallbacks();
+        initMapPreloadPrefsCallbacks();
     }
 
     private void initMobileDataPrefsCallbacks() {
@@ -160,6 +180,34 @@ public class SettingsFragment extends MapotempoBaseSettingsFragment {
         });
     }
 
+    private void initMapPreloadPrefsCallbacks() {
+        Preference pref = findPreference(getString(R.string.pref_map_preload_tiles));
+        if (pref == null) return;
+
+        boolean canPreload = getUserPreferenceInterface().getBoolPreference(UserPreferenceInterface.Preference.PRELOAD_DATA);
+
+        ((SwitchPreferenceCompat) pref).setChecked(canPreload);
+        pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                UserPreferenceInterface pref = getUserPreferenceInterface();
+                pref.setBoolPreference(UserPreferenceInterface.Preference.PRELOAD_DATA, (boolean) newValue);
+                setOfflinePrefsVisibility((boolean) newValue);
+
+                boolean saved = pref.save();
+                MapotempoApplicationInterface IMapApp = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+
+                if (saved && !(boolean) newValue) {
+                    IMapApp.getOfflineManager().deleteOfflineCacheRegions();
+                }
+
+                return saved;
+            }
+        });
+
+        setOfflinePrefsVisibility(canPreload);
+    }
+
     private UserPreferenceInterface getUserPreferenceInterface() {
         final MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
         return mapotempoFleetManagerInterface.getUserPreference();
@@ -174,4 +222,103 @@ public class SettingsFragment extends MapotempoBaseSettingsFragment {
             }
         });
     }
+
+    private void setOfflinePrefsVisibility(boolean visibility) {
+        Preference dlAction = findPreference(getString(R.string.pref_map_preload_dl_action));
+        Preference deleteAction = findPreference(getString(R.string.pref_map_preload_delete_action));
+        Preference info = findPreference(getString(R.string.pref_map_preload_infos));
+        Preference consumption = findPreference(getString(R.string.pref_map_preload_consumption));
+
+        dlAction.setVisible(visibility);
+        deleteAction.setVisible(visibility);
+        info.setVisible(visibility);
+        consumption.setVisible(visibility);
+
+        if (visibility) {
+            dlAction.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ((MapotempoApplication) getContext().getApplicationContext())
+                            .getOfflineManager()
+                            .alertBuilderForMapDownloading(getContext(), onOk, null);
+                    return true;
+                }
+            });
+
+            deleteAction.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ((MapotempoApplication) getContext().getApplicationContext())
+                                                        .getOfflineManager()
+                                                        .deleteOfflineCacheRegions();
+                    setConsumptionInfo();
+                    setDateInfo();
+                    return true;
+                }
+            });
+
+            setConsumptionInfo();
+            setDateInfo();
+        } else {
+            dlAction.setOnPreferenceClickListener(null);
+            deleteAction.setOnPreferenceClickListener(null);
+        }
+    }
+
+    private void setConsumptionInfo() {
+        Preference consumption = findPreference(getString(R.string.pref_map_preload_consumption));
+        if (consumption == null) return;
+
+        OfflineMapManager manager = ((MapotempoApplication) getContext().getApplicationContext()).getOfflineManager();
+
+        long size = manager.getOfflineDbSize();
+        String summary = getString(R.string.preload_map_consumption_prefix) + " " + String.valueOf(size) + " Mo";
+
+        consumption.setSummary(summary);
+    }
+
+    private void setDateInfo() {
+        Preference info = findPreference(getString(R.string.pref_map_preload_infos));
+        if (info == null) return;
+
+        OfflineMapManager manager = ((MapotempoApplication) getContext().getApplicationContext()).getOfflineManager();
+
+        String lastCachedDate = DateHelpers.parse(manager.getLastCachedDate(), DateHelpers.DateStyle.FULLDATE);
+
+        if (lastCachedDate == null) {
+            lastCachedDate = getString(R.string.preload_consumption_default_desc);
+        }
+
+        info.setSummary(lastCachedDate);
+    }
+
+
+    // Listeners -------------------------------------------------------------------
+
+    DialogInterface.OnClickListener onOk = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            MapotempoFleetManagerInterface fleetManager = ((MapotempoApplication) getContext().getApplicationContext()).getManager();
+            LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+
+            // Construct bounds of the current missions set
+            for(MissionInterface mission : fleetManager.getMissionAccess().getAll()) {
+                bounds.include(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()));
+            }
+
+            // Initialize Caching using the Mapbox Service
+            ((MapotempoApplication) getContext().getApplicationContext())
+               .getOfflineManager()
+               .initCachForZone(bounds.build(), new OfflineMapManager.IMapLoading() {
+                   @Override
+                   public void OnDownloadingCompleted() {
+                      setConsumptionInfo();
+                      setDateInfo();
+                   }
+
+                   @Override
+                   public void OnDownloadingFailed(String message) { /*...*/ }
+               });
+        }
+    };
 }

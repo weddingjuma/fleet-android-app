@@ -6,10 +6,19 @@
     <string name="pref_map_zoom_button" translatable="false">MapZoomButton</string>
     <string name="pref_map_current_position" translatable="false">CurrentPosition</string>
 
+    <!-- OFFLINE MAP'S PREFS -->
+    <string name="pref_map_offline_category" translatable="false">offlineCategory</string>
+    <string name="pref_map_preload_tiles" translatable="false">preloadAction</string>
+    <string name="pref_map_preload_dl_action" translatable="false">preloadDlAction</string>
+    <string name="pref_map_preload_infos" translatable="false">preloadInfo</string>
+    <string name="pref_map_preload_consumption" translatable="false">preloadConsumption</string>
+    <string name="pref_map_preload_delete_action" translatable="false">preloadDeleteAction</string>
+
     <!--  MAP CONFIG -->
     <string name="mapbox_access_token_dummy">pk.mapox-token-dummy</string>
     <string name="tilehosting_base_url">https://maps.tilehosting.com</string>
     <string name="tilehosting_access_token"></string>
+    <string name="tilehosting_style_base">/styles/basic/style.json?key=</string>
 
     <!--  FLEET -->
     <string name="default_fleet_url_default">https://mobile.fleet.mapotempo.com</string>

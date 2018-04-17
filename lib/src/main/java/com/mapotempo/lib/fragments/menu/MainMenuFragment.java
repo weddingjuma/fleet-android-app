@@ -25,17 +25,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.fragments.login.LoginPrefManager;
+import com.mapotempo.lib.fragments.settings.SettingsHelper;
 
 public class MainMenuFragment extends MapotempoBaseFragment {
 
@@ -116,6 +120,7 @@ public class MainMenuFragment extends MapotempoBaseFragment {
                 return true;
             }
         });
+
         return view;
     }
 
@@ -131,7 +136,6 @@ public class MainMenuFragment extends MapotempoBaseFragment {
         boolean onTracking(boolean tracking_status);
 
         void onLogout();
-
     }
 }
 

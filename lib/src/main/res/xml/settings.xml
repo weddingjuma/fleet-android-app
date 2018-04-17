@@ -31,6 +31,51 @@
 
     </android.support.v7.preference.PreferenceCategory>
 
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/tiles_settings_title"
+        android:key="@string/pref_map_offline_category"
+        android:order="3">
+
+        <SwitchPreferenceCompat
+            android:key="@string/pref_map_preload_tiles"
+            android:title="@string/preload_action"
+            android:summary="@string/preload_description"
+            android:order="1" />
+
+        <Preference
+            android:key="@string/pref_map_preload_dl_action"
+            android:icon="@drawable/ic_file_download_black_24dp"
+            android:title="@string/preload_action_dl_maps_title"
+            android:summary="@string/preload_action_dl_maps_desc"
+            android:order="2"
+            />
+
+        <Preference
+            android:key="@string/pref_map_preload_infos"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="@string/preload_info_title"
+            android:summary="@string/preload_info_desc"
+            android:order="3"
+            />
+
+        <Preference
+            android:key="@string/pref_map_preload_consumption"
+            android:icon="@drawable/ic_cloud_done_black_24dp"
+            android:title="@string/preload_consumption_title"
+            android:summary="@string/preload_consumption_default_desc"
+            android:order="4"
+            />
+
+        <Preference
+            android:key="@string/pref_map_preload_delete_action"
+            android:icon="@drawable/ic_delete_black_24dp"
+            android:title="@string/preload_action_delete_title"
+            android:summary="@string/preload_action_delete_desc"
+            android:order="5"
+            />
+
+    </android.support.v7.preference.PreferenceCategory>
+
     <!--Uncomment this to enable map option-->
 
     <!--<android.support.v7.preference.PreferenceCategory-->

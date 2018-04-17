@@ -15,6 +15,12 @@
     <string name="advanced_login_parameter">Advanced login parameter</string>
     <string name="invalid_login_format">The login format is invalid, check spaces.</string>
     <string name="fleet_server_compatibility_error">Your application need to be upgrade to communicate with fleet server.</string>
+    <string name="preload_modal_title">Confirm the map download</string>
+    <string name="preload_modal_desc">Download map locally will use your device\'s memory, make sure you have enough place</string>
+    <string name="preload_modal_ok">Download</string>
+    <string name="preload_modal_cancel">Cancel</string>
+    <string name="preload_modal_title_no_connection">No connection available</string>
+    <string name="preload_modal_desc_no_connection">To download the map you must enabled any connection (Wifi, Mobile data..)</string>
 
     <!-- Strings related to alert dialogs -->
     <string name="login_error_title">Sign in error</string>
@@ -35,6 +41,7 @@
     <string name="settings">Settings</string>
     <string name="help">Help</string>
     <string name="sign_out">Sign Out</string>
+    <string name="offline_map">Offline Maps</string>
 
     <!-- Edit Menu -->
     <string name="edit_address">Survey the address</string>
@@ -51,6 +58,10 @@
     <string name="close">Close</string>
     <string name="explaination_location_permission">This permission is required to activate the location tracking</string>
     <string name="disabled_permission">You have disabled permission</string>
+    <string name="map_deleted">Offline Maps Deleted</string>
+    <string name="delete_offline_map_error">Error on Deletion</string>
+    <string name="no_offline_maps">No Offline Maps Detected</string>
+    <string name="loading_completed">Loading Completed.</string>
 
     <!-- Mission List -->
     <string name="no_available_mission">No missions available</string>
@@ -75,6 +86,16 @@
     <string name="map_settings">Map settings</string>
     <string name="map_zoom_button">"Map zoom button"</string>
     <string name="map_current_position">"Map current position"</string>
+    <string name="delete_cache">Remove cached</string>
+    <string name="preload_action">Offline Map</string>
+    <string name="preload_description">Enable the possibility to download maps in the current device</string>
+    <string name="preload_info_title">Last download Date</string>
+    <string name="preload_info_desc">No offline map downloaded yet</string>
+    <string name="preload_consumption_title">Memory Consumption</string>
+    <string name="preload_consumption_default_desc">0 Mo</string>
+    <string name="preload_action_delete_title">Delete Map downloaded</string>
+    <string name="preload_action_delete_desc">Remove all data downloaded on the current device</string>
+    <string name="preload_map_consumption_prefix">Data Size:</string>
 
     <!-- Time -->
     <string name="hour">hour</string>

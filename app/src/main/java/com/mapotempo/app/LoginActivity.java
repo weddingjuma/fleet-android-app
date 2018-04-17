@@ -20,14 +20,18 @@
 package com.mapotempo.app;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.app.utils.ConnectionManager;
 import com.mapotempo.fleet.api.ConnectionVerifyStatus;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.fragments.login.LoginFragment;
+import com.mapotempo.lib.fragments.settings.SettingsHelper;
 import com.mapotempo.lib.utils.AlertMessageHelper;
 
 /**
@@ -52,16 +56,12 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
 
     @Override
     public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        intentNext();
     }
 
     @Override
     public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        intentNext();
     }
 
     // =============================================================
@@ -81,9 +81,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
             case VERIFY:
                 MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
                 mapotempoApplication.setManager(manager);
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                mapotempoApplication.setOfflineMapManager();
+                intentNext();
                 break;
             case LOGIN_ERROR:
                 loginFragment.toogleLogginView(false);
@@ -94,6 +93,12 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
                 AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_server) + "\ncode : " + status.getCode());
                 break;
         }
+    }
+
+    private void intentNext() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 

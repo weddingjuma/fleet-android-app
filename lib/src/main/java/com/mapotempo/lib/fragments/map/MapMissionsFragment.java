@@ -43,9 +43,11 @@ import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
 import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
+import com.mapotempo.lib.MapotempoApplication;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
+import com.mapotempo.lib.fragments.settings.SettingsHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +64,8 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
 
     private FloatingActionButton mZoomOut;
 
+    private String mStyleUrl;
+
     private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
         @Override
         public void changed(final List<MissionInterface> missions) {
@@ -76,7 +80,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
 
     private boolean mIsInitCameraPosition = false;
 
-    private static String CAMERA_POSITION = "CAMERA_POSITION";
+    private static final String CAMERA_POSITION = "CAMERA_POSITION";
 
     // ===================================
     // ==  Android Fragment Life cycle  ==
@@ -93,9 +97,37 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
-        mMapView = view.findViewById(R.id.mapView);
-        mMapView.setStyleUrl(getString(R.string.tilehosting_base_url) + "/styles/basic/style.json?key=" + getString(R.string.tilehosting_access_token));
+        View view;
+        mStyleUrl = getString(R.string.tilehosting_base_url) +
+                    getString(R.string.tilehosting_style_base) +
+                    getString(R.string.tilehosting_access_token);
+
+        MapotempoApplicationInterface IMapoApp = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+
+        switch (SettingsHelper.dataAccess(getContext())) {
+            case DATA:
+            case WIFI:
+                view = inflater.inflate(R.layout.fragment_map, container, false);
+                mMapView = view.findViewById(R.id.mapView);
+                initMap(view, savedInstanceState);
+                break;
+            case USECACHE:
+                if (IMapoApp.getOfflineManager() != null && IMapoApp.getOfflineManager().asCachedData()) {
+                    view = inflater.inflate(R.layout.fragment_map, container, false);
+                    mMapView = view.findViewById(R.id.mapView);
+                    initMap(view, savedInstanceState);
+                    break;
+                }
+            default:
+                view = inflater.inflate(R.layout.fragment_no_map, container, false);
+                break;
+        }
+
+        return view;
+    }
+
+    private void initMap(View view, Bundle savedInstanceState) {
+        mMapView.setStyleUrl(mStyleUrl);
         mMapView.onCreate(savedInstanceState);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -124,8 +156,6 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
         mZoomOut.setTag(ZOOM_OUT);
         mZoomIn.setOnClickListener(onClickListener);
         mZoomOut.setOnClickListener(onClickListener);
-
-        return view;
     }
 
     @Override
@@ -136,12 +166,16 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mMapView.onStart();
+        if (mMapView != null)
+            mMapView.onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (mMapView == null)
+            return;
+
         final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
         MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
         if (mapotempoFleetManagerInterface != null) {
@@ -162,6 +196,9 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (mMapView == null)
+            return;
+
         mMapView.onPause();
         MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
         if (mapotempoFleetManagerInterface != null) {
@@ -172,26 +209,33 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        mMapView.onStop();
+        if (mMapView != null)
+            mMapView.onStop();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(CAMERA_POSITION, mIsInitCameraPosition);
-        mMapView.onSaveInstanceState(outState);
+        if (mMapView != null) {
+            outState.putBoolean(CAMERA_POSITION, mIsInitCameraPosition);
+            mMapView.onSaveInstanceState(outState);
+        }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+        if (mMapView != null) {
+            mMapView.onLowMemory();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+        if (mMapView != null) {
+            mMapView.onDestroy();
+        }
     }
     // ===============
     // ==  Private  ==

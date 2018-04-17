@@ -20,9 +20,12 @@
 package com.mapotempo.lib;
 
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.lib.fragments.map.OfflineMapManager;
 
 public interface MapotempoApplicationInterface {
     MapotempoFleetManagerInterface getManager();
+    OfflineMapManager getOfflineManager();
 
     void setManager(MapotempoFleetManagerInterface manager);
+    OfflineMapManager setOfflineMapManager();
 }
