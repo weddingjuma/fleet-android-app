@@ -373,7 +373,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                                                                                       mission.getLocation();
                     // Check lat/lon object
                     if (loc.isValid()) {
-                        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')");
+                        // Geo will get the camera to the current loc, ?q= (query) will ask for navigation
+                        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')" + "?q=" + loc.getLat() + "," + loc.getLon());
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
 
                         PackageManager packageManager = getActivity().getPackageManager();
@@ -383,8 +384,9 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                             System.out.print(ri.activityInfo.name);
                             System.out.print(ri.activityInfo.describeContents());
                         }
-                        if (isIntentSafe)
+                        if (isIntentSafe) {
                             startActivity(mapIntent);
+                        }
                     }
                 }
             }
