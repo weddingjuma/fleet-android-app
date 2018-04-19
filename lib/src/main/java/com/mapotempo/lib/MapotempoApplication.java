@@ -24,14 +24,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.api.FleetException;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 
 public class MapotempoApplication extends Application implements MapotempoApplicationInterface {
 
-    private MapotempoFleetManagerInterface iFleetManager;
+    private MapotempoFleetManager iFleetManager;
 
     // ======================================
     // ==  Android Application Life cycle  ==
@@ -51,14 +52,21 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     // ==============
 
     @Override
-    public MapotempoFleetManagerInterface getManager() {
+    public MapotempoFleetManager getManager() {
         return iFleetManager;
     }
 
     @Override
-    public void setManager(MapotempoFleetManagerInterface manager) {
-        if (iFleetManager != null)
-            iFleetManager.release();
+    public void setManager(MapotempoFleetManager manager) {
+        if (iFleetManager != null) {
+            try {
+                iFleetManager.release();
+            } catch (FleetException e) {
+                e.printStackTrace();
+            } finally {
+                iFleetManager = null;
+            }
+        }
         iFleetManager = manager;
 
         if (iFleetManager != null && !iFleetManager.serverCompatibility()) {

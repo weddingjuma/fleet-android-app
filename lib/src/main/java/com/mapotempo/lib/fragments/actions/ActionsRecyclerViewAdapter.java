@@ -28,8 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.api.model.MissionActionTypeInterface;
-import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.dao.model.MissionActionType;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 import com.mapotempo.lib.utils.SVGDrawableHelper;
@@ -38,7 +37,7 @@ import com.mapotempo.lib.view.action.MissionActionPanel;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link MissionInterface} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link com.mapotempo.fleet.dao.model.Mission} and makes a call to the
  * specified {@link MissionsListFragment.OnMissionSelectedListener}.
  */
 public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerViewAdapter.ViewHolder> {
@@ -52,19 +51,19 @@ public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecy
          *
          * @param newStatus return the next newStatus item selected
          */
-        void onMissionActionSelected(MissionActionTypeInterface newStatus);
+        void onMissionActionSelected(MissionActionType newStatus);
     }
 
     private OnMissionActionSelectedListener mListener;
     private int mActionsCount = 0;
-    private List<MissionActionTypeInterface> mActions;
+    private List<MissionActionType> mActions;
     private Context mContext;
 
     // ===================
     // ==  Constructor  ==
     // ===================
 
-    public ActionsRecyclerViewAdapter(Context context, OnMissionActionSelectedListener listener, List<MissionActionTypeInterface> actions) {
+    public ActionsRecyclerViewAdapter(Context context, OnMissionActionSelectedListener listener, List<MissionActionType> actions) {
         mActions = actions;
         mActionsCount = actions.size();
         mListener = listener;
@@ -83,7 +82,7 @@ public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final MissionActionTypeInterface action = mActions.get(position);
+        final MissionActionType action = mActions.get(position);
         holder.setMission(action, position);
     }
 
@@ -96,14 +95,14 @@ public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecy
     // ==  Public  ==
     // ==============
 
-    public void notifyDataSyncHasChanged(List<MissionActionTypeInterface> actions) {
+    public void notifyDataSyncHasChanged(List<MissionActionType> actions) {
         mActions = actions;
         mActionsCount = actions.size();
         notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        MissionActionTypeInterface mItem;
+        MissionActionType mItem;
         final MissionActionPanel mActionView;
 
         public ViewHolder(View view) {
@@ -117,7 +116,7 @@ public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecy
             });
         }
 
-        void setMission(MissionActionTypeInterface action, final int position) {
+        void setMission(MissionActionType action, final int position) {
             mItem = mActions.get(position);
             Drawable d = new BitmapDrawable();
             Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), "#FFFFFF", d);

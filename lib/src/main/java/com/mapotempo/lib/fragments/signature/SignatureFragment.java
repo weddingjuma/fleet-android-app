@@ -28,7 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
-import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
@@ -50,7 +50,7 @@ public class SignatureFragment extends MapotempoBaseDialogFragment {
     private SignaturePad mSignaturePad;
     private Button mClearButton;
     private Button mSaveButton;
-    private MissionInterface mMission = null;
+    private Mission mMission = null;
     private Context mContext = null;
     private SignatureSaveListener mSignatureSaveListener = new SignatureSaveListener() {
         @Override

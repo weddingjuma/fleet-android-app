@@ -30,7 +30,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.SVGDrawableHelper;
@@ -39,7 +39,7 @@ import com.mapotempo.lib.view.action.MissionActionPanel;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link MissionInterface} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Mission} and makes a call to the
  * specified {@link MissionsListFragment.OnMissionSelectedListener}.
  */
 class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
@@ -48,7 +48,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
 
     private int missionsCount = 0;
 
-    private List<MissionInterface> mMissions;
+    private List<Mission> mMissions;
 
     private int mMissionFocus = 0;
 
@@ -58,7 +58,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
     // ==  Constructor  ==
     // ===================
 
-    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<MissionInterface> missions, ListBehavior behavior) {
+    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<Mission> missions, ListBehavior behavior) {
         mMissions = missions;
         missionsCount = missions.size();
         mListener = listener;
@@ -77,7 +77,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final MissionInterface mission = mMissions.get(position);
+        final Mission mission = mMissions.get(position);
         holder.setMission(mission, position);
         holder.setBackgroundFocus(position == mMissionFocus);
     }
@@ -98,14 +98,14 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
         notifyItemChanged(mMissionFocus);
     }
 
-    public void notifyDataSyncHasChanged(List<MissionInterface> missions) {
+    public void notifyDataSyncHasChanged(List<Mission> missions) {
         mMissions = missions;
         missionsCount = missions.size();
         notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        MissionInterface mItem;
+        Mission mItem;
         final View mView;
         final TextView mName;
         final TextView mListId;
@@ -127,17 +127,17 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
             mMissionActionPanel = view.findViewById(R.id.status_panel);
         }
 
-        void setMission(MissionInterface mission, final int position) {
-            String missionDate = DateHelpers.parse(mission.getEtaOrDefault(), DateHelpers.DateStyle.SHORTDATE);
-            String missionHour = DateHelpers.parse(mission.getEtaOrDefault(), DateHelpers.DateStyle.HOURMINUTES);
+        void setMission(Mission mission, final int position) {
+            String missionDate = DateHelpers.parse(mission.getETAOrDefault(), DateHelpers.DateStyle.SHORTDATE);
+            String missionHour = DateHelpers.parse(mission.getETAOrDefault(), DateHelpers.DateStyle.HOURMINUTES);
             mItem = mission;
             mName.setText(mission.getName());
             mListId.setText(Integer.toString(position + 1));
             mAddress.setText(String.format("%s %s %s", mission.getAddress().getStreet(), mission.getAddress().getPostalcode(), mission.getAddress().getCity()));
             mDelivery_date.setText(missionDate);
             mDelivery_hour.setText(missionHour);
-            mMissionActionPanel.setBackgroundColor(Color.parseColor(mission.getStatus().getColor()));
-            Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(mission.getStatus().getSVGPath(), "#ffffff", new BitmapDrawable());
+            mMissionActionPanel.setBackgroundColor(Color.parseColor(mission.getStatusType().getColor()));
+            Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(mission.getStatusType().getSVGPath(), "#ffffff", new BitmapDrawable());
             mMissionActionPanel.setImageDrawable(drawable);
 
             mView.setOnClickListener(new View.OnClickListener() {

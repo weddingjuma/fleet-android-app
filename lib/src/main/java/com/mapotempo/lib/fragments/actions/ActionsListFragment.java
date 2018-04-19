@@ -27,7 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.api.model.MissionActionTypeInterface;
+import com.mapotempo.fleet.dao.model.MissionActionType;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
@@ -40,11 +40,11 @@ public class ActionsListFragment extends MapotempoBaseFragment {
 
     private ActionsRecyclerViewAdapter mRecyclerAdapter;
 
-    private List<MissionActionTypeInterface> mMissionStatusActions = new ArrayList<>();
+    private List<MissionActionType> mMissionStatusActions = new ArrayList<>();
 
     private ActionsRecyclerViewAdapter.OnMissionActionSelectedListener mListener = new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener() {
         @Override
-        public void onMissionActionSelected(MissionActionTypeInterface action) {
+        public void onMissionActionSelected(MissionActionType action) {
             // DEFAULT
         }
     };
@@ -64,7 +64,7 @@ public class ActionsListFragment extends MapotempoBaseFragment {
         mRecyclerView = view.findViewById(R.id.action_recycler_view);
         mRecyclerAdapter = new ActionsRecyclerViewAdapter(getContext(), new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener() {
             @Override
-            public void onMissionActionSelected(MissionActionTypeInterface action) {
+            public void onMissionActionSelected(MissionActionType action) {
                 mListener.onMissionActionSelected(action);
             }
         }, mMissionStatusActions);
@@ -77,7 +77,7 @@ public class ActionsListFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public void setActions(List<MissionActionTypeInterface> missionStatusActions) {
+    public void setActions(List<MissionActionType> missionStatusActions) {
         mMissionStatusActions = new ArrayList<>(missionStatusActions);
         mRecyclerAdapter.notifyDataSyncHasChanged(mMissionStatusActions);
     }

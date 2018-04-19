@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -42,10 +41,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.couchbase.lite.android.AndroidContext;
-import com.mapotempo.fleet.api.ConnectionVerifyStatus;
 import com.mapotempo.fleet.api.ManagerFactory;
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.manager.LOGIN_STATUS;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.R;
 
 /**
@@ -64,7 +62,7 @@ import com.mapotempo.lib.R;
  * </code>
  * </p>
  * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
- * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(ConnectionVerifyStatus, MapotempoFleetManagerInterface)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
+ * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(LOGIN_STATUS, MapotempoFleetManager)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
  * <p>
  * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
  * </p>
@@ -94,7 +92,7 @@ import com.mapotempo.lib.R;
 public class LoginFragment extends Fragment {
     private OnLoginFragmentImplementation mListener;
 
-    private MapotempoFleetManagerInterface iFleetManager = null;
+    private MapotempoFleetManager iFleetManager = null;
 
     private EditText mLoginView;
 
@@ -237,8 +235,8 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFragmentImplementation {
-        void onLogin(ConnectionVerifyStatus status,
-                     MapotempoFleetManagerInterface manager);
+        void onLogin(LOGIN_STATUS status,
+                     MapotempoFleetManager manager);
     }
 
     public class InvalidLoginException extends Exception {
@@ -266,13 +264,13 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        MapotempoFleetManagerInterface.ConnectionVerifyListener onUserAvailable = new MapotempoFleetManagerInterface.ConnectionVerifyListener() {
+        ManagerFactory.OnManagerReadyListener onUserAvailable = new ManagerFactory.OnManagerReadyListener() {
             @Override
-            public void onServerConnectionVerify(final ConnectionVerifyStatus connectionVerifyStatus, final MapotempoFleetManagerInterface mapotempoFleetManagerInterface) {
+            public void onManagerReady(final MapotempoFleetManager manager, final LOGIN_STATUS errorStatus) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mListener.onLogin(connectionVerifyStatus, mapotempoFleetManagerInterface);
+                        mListener.onLogin(errorStatus, manager);
                     }
                 });
             }
@@ -282,7 +280,7 @@ public class LoginFragment extends Fragment {
 
         String fullUrl = mLoginPrefManager.getFullURL();
 
-        ManagerFactory.getManager(new AndroidContext(getContext().getApplicationContext()), login, password, onUserAvailable, fullUrl);
+        ManagerFactory.getManagerAsync(getContext(), login, password, onUserAvailable, fullUrl);
         hideCurrentKeyboard();
 
         mLoginPrefManager.setLoginPasswordPref(login, password);

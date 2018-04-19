@@ -39,15 +39,18 @@ import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
-import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.api.model.accessor.AccessInterface;
-import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
+import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
+import com.mapotempo.fleet.core.accessor.LiveAccessToken;
+import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MapMissionsFragment extends MapotempoBaseFragment {
@@ -62,17 +65,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
 
     private FloatingActionButton mZoomOut;
 
-    private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
-        @Override
-        public void changed(final List<MissionInterface> missions) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setMissions(missions);
-                }
-            });
-        }
-    };
+    private LiveAccessToken mLiveAccessToken;
 
     private boolean mIsInitCameraPosition = false;
 
@@ -142,18 +135,35 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(calendar.HOUR, -12);
+
         final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
-        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+
         if (mapotempoFleetManagerInterface != null) {
-            mapotempoFleetManagerInterface.getMissionAccess().addChangeListener(missionChangeListener);
-            setCurrentPosition(mapotempoFleetManagerInterface.getCurrentLocationDetails());
-            setMissions(mapotempoFleetManagerInterface.getMissionAccess().getAll());
+            mLiveAccessToken = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>() {
+                                                                                                                   @Override
+                                                                                                                   public void changed(final List<Mission> missions) {
+                                                                                                                       getActivity().runOnUiThread(new Runnable() {
+                                                                                                                           @Override
+                                                                                                                           public void run() {
+                                                                                                                               setMissions(missions);
+                                                                                                                           }
+                                                                                                                       });
+                                                                                                                   }
+                                                                                                               }, calendar.getTime()
+            );
+            setCurrentPosition(mapotempoFleetManagerInterface.getCurrentLocation().getLocation());
+            List<Mission> missions = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan(calendar.getTime());
+            setMissions(missions);
             if (!mIsInitCameraPosition) {
-                setCameraPosition(mapotempoFleetManagerInterface.getMissionAccess().getAll(), mission_id);
+                setCameraPosition(missions, mission_id);
                 mIsInitCameraPosition = true;
             }
         } else {
-            setCameraPosition(new ArrayList<MissionInterface>(), mission_id);
+            setCameraPosition(new ArrayList<Mission>(), mission_id);
         }
 
         mMapView.onResume();
@@ -163,9 +173,9 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
         if (mapotempoFleetManagerInterface != null) {
-            mapotempoFleetManagerInterface.getMissionAccess().removeChangeListener(missionChangeListener);
+            mapotempoFleetManagerInterface.getMissionAccess().removeListener(mLiveAccessToken);
         }
     }
 
@@ -197,7 +207,7 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
     // ==  Private  ==
     // ===============
 
-    private void setMissions(final List<MissionInterface> missions) {
+    private void setMissions(final List<Mission> missions) {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
@@ -208,14 +218,14 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                 Icon icon;
                 LatLng location;
 
-                for (MissionInterface mission : missions) {
+                for (Mission mission : missions) {
                     if (mission.getSurveyLocation().isValid()) {
                         icon = mIconFactory.fromResource(R.drawable.ic_map_blue_marker);
                         location = new LatLng(
                                 mission.getSurveyLocation().getLat(),
                                 mission.getSurveyLocation().getLon()
                         );
-                    } else if(mission.getLocation().isValid()) {
+                    } else if (mission.getLocation().isValid()) {
                         icon = mIconFactory.fromResource(R.drawable.ic_map_green_marker);
                         location = new LatLng(
                                 mission.getLocation().getLat(),
@@ -226,13 +236,13 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                     }
 
                     mapboxMap.addMarker(new MarkerViewOptions()
-                                            .position(location)
-                                            .icon(icon));
+                            .position(location)
+                            .icon(icon));
                 }
 
                 // Draw path
                 List<LatLng> polygonPath = new ArrayList<>();
-                for (MissionInterface mission : missions) {
+                for (Mission mission : missions) {
                     if (mission.getLocation().isValid()) {
                         polygonPath.add(new LatLng(mission.getLocation().getLat(), mission.getLocation().getLon()));
                     }
@@ -245,8 +255,8 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
         });
     }
 
-    private void setCurrentPosition(final LocationDetailsInterface locationDetailsInterface) {
-        if (locationDetailsInterface.isValid()) {
+    private void setCurrentPosition(final LocationDetails locationDetails) {
+        if (locationDetails.isValid()) {
             mMapView.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(MapboxMap mapboxMap) {
@@ -254,16 +264,16 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                     Icon icon = mIconFactory.fromResource(R.drawable.ic_current_location);
                     mapboxMap.addMarker(new MarkerViewOptions()
                             .icon(icon)
-                            .position(new LatLng(locationDetailsInterface.getLat(), locationDetailsInterface.getLon())));
+                            .position(new LatLng(locationDetails.getLat(), locationDetails.getLon())));
                 }
             });
         }
     }
 
-    private void setCameraPosition(final List<MissionInterface> missions, @Nullable String mission_id) {
+    private void setCameraPosition(final List<Mission> missions, @Nullable String mission_id) {
         // Set zoom and position
         final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        LocationDetailsInterface locationDetailsInterface = mapotempoApplication.getManager().getCurrentLocationDetails();
+        LocationDetails locationDetailsInterface = mapotempoApplication.getManager().getCurrentLocation().getLocation();
         final _InternalLocationWithBnounds internalLocationWithBnounds = new _InternalLocationWithBnounds(locationDetailsInterface, missions, mission_id);
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
@@ -273,9 +283,9 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
                     mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(internalLocationWithBnounds.getBoundedLocation(), 30));
                 else
                     mapboxMap.setCameraPosition(new CameraPosition.Builder()
-                                                                  .target(internalLocationWithBnounds.getLocation())
-                                                                  .zoom(17)
-                                                                  .build());
+                            .target(internalLocationWithBnounds.getLocation())
+                            .zoom(17)
+                            .build());
             }
         });
     }
@@ -287,13 +297,13 @@ public class MapMissionsFragment extends MapotempoBaseFragment {
         private int validMissionSize = 0;
         public boolean isBounded = true;
 
-        public _InternalLocationWithBnounds(LocationDetailsInterface userLocation, List<MissionInterface> missions, String missionId) {
+        public _InternalLocationWithBnounds(LocationDetails userLocation, List<Mission> missions, String missionId) {
             if (userLocation.isValid()) {
                 mLocation.setLongitude(userLocation.getLon());
                 mLocation.setLatitude(userLocation.getLat());
             }
 
-            for (MissionInterface mission : missions) {
+            for (Mission mission : missions) {
                 if (mission.getLocation().isValid()) {
                     double lat = mission.getLocation().getLat();
                     double lon = mission.getLocation().getLon();

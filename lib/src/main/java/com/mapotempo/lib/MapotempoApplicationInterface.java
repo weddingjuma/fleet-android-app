@@ -19,10 +19,10 @@
 
 package com.mapotempo.lib;
 
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 
 public interface MapotempoApplicationInterface {
-    MapotempoFleetManagerInterface getManager();
+    MapotempoFleetManager getManager();
 
-    void setManager(MapotempoFleetManagerInterface manager);
+    void setManager(MapotempoFleetManager manager);
 }

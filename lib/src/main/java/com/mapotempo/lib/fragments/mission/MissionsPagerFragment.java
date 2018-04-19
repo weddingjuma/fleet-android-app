@@ -29,15 +29,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
-import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.api.model.accessor.AccessInterface;
+import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
+import com.mapotempo.fleet.core.accessor.LiveAccessToken;
+import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,7 +49,7 @@ import java.util.List;
  * <ul>
  * <li>Detect if a ViewPager must be used</li>
  * <li>Return the current view displayed</li>
- * <li>Provide the {@link MissionInterface} object to {@link MissionDetailsFragment}</li>
+ * <li>Provide the {@link com.mapotempo.fleet.dao.model.Mission} object to {@link MissionDetailsFragment}</li>
  * </ul>
  * <p>
  * <h3>Integration</h3>
@@ -89,7 +91,7 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
 
     private int mCurrentPosition = 0;
 
-    private AccessInterface.ChangeListener<MissionInterface> missionChangeListener;
+    private LiveAccessToken missionChangeListenerToken;
 
     public MissionsPagerFragment() {
     }
@@ -120,28 +122,42 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0);
         }
+    }
 
-        missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
-            @Override
-            public void changed(final List<MissionInterface> missions) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<MissionInterface> oldDeprecatedMissions = mPagerAdapter.getMissionsList(); // Keep track of old data using a shallow copy
-                        MissionInterface mission = oldDeprecatedMissions.get(mViewPager.getCurrentItem()); // Keep the mission currently displayed
-                        int newMissionPosition = 0;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(calendar.HOUR, -12);
 
-                        // DO NOTHING IF DATA NEED TO BE REFRESHED
-                        if (oldDeprecatedMissions.equals(missions)) {
-                            return;
-                        } else if (missions.size() == 0) {
-                            MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-                            mapotempoApplication.getManager().getMissionAccess().removeChangeListener(missionChangeListener);
-                            getActivity().finish();
-                            return;
-                        } else {
-                            mPagerAdapter.refreshMissions(missions);
-                        }
+        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+        List<Mission> missions = new ArrayList<>();
+        if (mapotempoApplication.getManager() != null) {
+            missions = mapotempoApplication.getManager().getMissionAccess().byDateGreaterThan(calendar.getTime());
+            missionChangeListenerToken = mapotempoApplication.getManager().getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>() {
+                @Override
+                public void changed(final List<Mission> missions) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAdded()) {
+                                // TODO Refactor the update behavior
+
+                                List<Mission> oldDeprecatedMissions = mPagerAdapter.getMissionsList(); // Keep track of old data using a shallow copy
+                                Mission mission = oldDeprecatedMissions.get(mViewPager.getCurrentItem()); // Keep the mission currently displayed
+                                int newMissionPosition = 0;
+
+                                // DO NOTHING IF DATA NEED TO BE REFRESHED
+                                if (oldDeprecatedMissions.equals(missions)) {
+                                    return;
+                                } else if (missions.size() == 0) {
+                                    MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
+                                    mapotempoApplication.getManager().getMissionAccess().removeListener(missionChangeListenerToken);
+                                    getActivity().finish();
+                                    return;
+                                } else {
+                                    mPagerAdapter.refreshMissions(missions);
+                                }
 
 //                        // Update previous list to prevent useless updates
 //                        for (MissionInterface loopMission : missions) {
@@ -158,30 +174,22 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
 //
 //                        mPagerAdapter.notifyDataSetChanged();
 
-                        // Search for new index
-                        Iterator<MissionInterface> iterable = missions.iterator();
-                        while (iterable.hasNext()) {
-                            if (mission.getId().equals(iterable.next().getId())) {
-                                newMissionPosition = mPagerAdapter.getItemPosition(iterable.next());
-                                break;
+                                // Search for new index
+//                            Iterator<Mission> iterable = missions.iterator();
+//                            while (iterable.hasNext()) {
+//                                if (mission.getId().equals(iterable.next().getId())) {
+//                                    newMissionPosition = mPagerAdapter.getItemPosition(iterable.next());
+//                                    break;
+//                                }
+//                            }
+//
+//                            // Update pager position according to the mission new position
+//                            mViewPager.setCurrentItem(newMissionPosition);
                             }
                         }
-
-                        // Update pager position according to the mission new position
-                        mViewPager.setCurrentItem(newMissionPosition);
-                    }
-                });
-            }
-        };
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        List<MissionInterface> missions = new ArrayList<>();
-        if (mapotempoApplication.getManager() != null) {
-            missions = mapotempoApplication.getManager().getMissionAccess().getAll();
-            mapotempoApplication.getManager().getMissionAccess().addChangeListener(missionChangeListener);
+                    });
+                }
+            }, calendar.getTime());
         }
 
         View view = inflater.inflate(R.layout.fragment_mission_pager, container, false);
@@ -204,7 +212,7 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
     public void onDetach() {
         super.onDetach();
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        mapotempoApplication.getManager().getMissionAccess().removeChangeListener(missionChangeListener);
+        mapotempoApplication.getManager().getMissionAccess().removeListener(missionChangeListenerToken);
         mListener = null;
     }
 
@@ -223,10 +231,14 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
     }
 
     @Nullable
-    public MissionInterface getCurrentMission() {
-        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
-        List<MissionInterface> missions = mapotempoFleetManagerInterface.getMissionAccess().getAll();
-        MissionInterface ms = missions.get(mViewPager.getCurrentItem());
+    public Mission getCurrentMission() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(calendar.HOUR, -12);
+
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        List<Mission> missions = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan(calendar.getTime());
+        Mission ms = missions.get(mViewPager.getCurrentItem());
         return ms;
     }
 

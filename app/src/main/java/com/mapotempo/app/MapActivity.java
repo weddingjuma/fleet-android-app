@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
-import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 
 public class MapActivity extends MapotempoBaseActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
@@ -48,7 +48,7 @@ public class MapActivity extends MapotempoBaseActivity implements MissionDetails
     }
 
     @Override
-    public void onMapImageViewClick(MissionInterface mission) {
+    public void onMapImageViewClick(Mission mission) {
         Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }

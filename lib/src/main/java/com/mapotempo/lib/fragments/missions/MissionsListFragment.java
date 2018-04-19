@@ -39,14 +39,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
-import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.api.model.accessor.AccessInterface;
+import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
+import com.mapotempo.fleet.core.accessor.LiveAccessToken;
+import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -91,21 +94,11 @@ public class MissionsListFragment extends MapotempoBaseFragment {
 
     private MissionsRecyclerViewAdapter mRecyclerAdapter;
 
-    private List<MissionInterface> mMissions = new ArrayList<>();
+    private List<Mission> mMissions = new ArrayList<>();
 
     private FrameLayout mDefaultFrameLayout;
 
-    private AccessInterface.ChangeListener<MissionInterface> missionChangeListener = new AccessInterface.ChangeListener<MissionInterface>() {
-        @Override
-        public void changed(final List<MissionInterface> missions) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setMissions(missions);
-                }
-            });
-        }
-    };
+    private LiveAccessToken missionChangeListenerToken;
 
     private ListBehavior mBehavior = ListBehavior.FOCUS;
 
@@ -161,18 +154,32 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(calendar.HOUR, -12);
+
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
         if (mapotempoFleetManagerInterface != null) {
-            mapotempoFleetManagerInterface.getMissionAccess().addChangeListener(missionChangeListener);
-            setMissions(mapotempoFleetManagerInterface.getMissionAccess().getAll());
+            missionChangeListenerToken = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>() {
+                @Override
+                public void changed(final List<Mission> missions) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setMissions(missions);
+                        }
+                    });
+                }
+            }, calendar.getTime());
+            setMissions(mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan(calendar.getTime()));
         }
     }
 
     @Override
     public void onPause() {
-        MapotempoFleetManagerInterface mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
-        if (mapotempoFleetManagerInterface != null) {
-            mapotempoFleetManagerInterface.getMissionAccess().removeChangeListener(missionChangeListener);
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null && missionChangeListenerToken != null) {
+            mapotempoFleetManagerInterface.getMissionAccess().removeListener(missionChangeListenerToken);
         }
         super.onPause();
     }
@@ -233,7 +240,7 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     // ==  Private  ==
     // ===============
 
-    private void setMissions(List<MissionInterface> missions) {
+    private void setMissions(List<Mission> missions) {
         mRecyclerAdapter.notifyDataSyncHasChanged(missions);
         if (missions == null || missions.size() == 0) {
             mDefaultFrameLayout.setVisibility(View.VISIBLE);

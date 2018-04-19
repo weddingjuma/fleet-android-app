@@ -25,7 +25,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.dao.model.Mission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +35,10 @@ import java.util.Map;
 class MissionPagerAdapter extends FragmentStatePagerAdapter {
 
     private int mCount;
-    private List<MissionInterface> mMissions;
+    private List<Mission> mMissions;
     private Map<Integer, MissionDetailsFragment> mPageReferenceMap = new HashMap<>();
 
-    public MissionPagerAdapter(FragmentManager fm, int count, List<MissionInterface> missions) {
+    public MissionPagerAdapter(FragmentManager fm, int count, List<Mission> missions) {
         super(fm);
         mCount = count;
         mMissions = new ArrayList<>(missions);
@@ -76,13 +76,13 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter {
         return null;
     }
 
-    public void refreshMissions(List<MissionInterface> newMissions) {
+    public void refreshMissions(List<Mission> newMissions) {
         mMissions = newMissions;
         notifyDataSetChanged();
     }
 
 
-    public List<MissionInterface> getMissionsList() {
+    public List<Mission> getMissionsList() {
         return mMissions;
     }
 

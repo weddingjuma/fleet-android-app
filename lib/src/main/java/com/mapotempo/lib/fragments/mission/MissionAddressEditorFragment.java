@@ -8,18 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
-import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.api.model.submodel.AddressInterface;
-import com.mapotempo.fleet.api.model.submodel.SubModelFactoryInterface;
+import com.mapotempo.fleet.api.FleetException;
+import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.dao.model.submodel.Address;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 
-
 public class MissionAddressEditorFragment extends Fragment {
 
-    private MapotempoFleetManagerInterface mapotempoFleetManagerInterface;
-    private MissionInterface mMission;
+    private MapotempoFleetManager mapotempoFleetManager;
+    private Mission mMission;
     private TextInputEditText mStreet;
     private TextInputEditText mPostalCode;
     private TextInputEditText mCity;
@@ -36,15 +35,15 @@ public class MissionAddressEditorFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
-        mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
-        mMission = mapotempoFleetManagerInterface.getMissionAccess().get(mission_id);
+        mapotempoFleetManager = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
+        mMission = mapotempoFleetManager.getMissionAccess().get(mission_id);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mission_adress_editor, container, false);
-        AddressInterface missionAddress;
+        Address missionAddress;
 
         if (mMission.getSurveyAddress().isValid())
             missionAddress = mMission.getSurveyAddress();
@@ -72,19 +71,21 @@ public class MissionAddressEditorFragment extends Fragment {
      * Save the current modifications as Survey Address, then close the current activity
      */
     public void saveAddress() {
-        SubModelFactoryInterface sub = mapotempoFleetManagerInterface.getSubmodelFactory();
-        AddressInterface surveyAddress = sub.CreateNewAddress(
-                mStreet.getText().toString(),
-                mPostalCode.getText().toString(),
-                mCity.getText().toString(),
-                mState.getText().toString(),
-                mCountry.getText().toString(),
-                mDetail.getText().toString()
-        );
-
-        if (!surveyAddress.equals(mMission.getAddress()) && surveyAddress.isValid()) {
-            mMission.setSurveyAddress(surveyAddress);
-            mMission.save();
+        try {
+            Address surveyAddress = new Address(mapotempoFleetManager, mStreet.getText().toString(),
+                    mPostalCode.getText().toString(),
+                    mCity.getText().toString(),
+                    mState.getText().toString(),
+                    mCountry.getText().toString(),
+                    mDetail.getText().toString()
+            );
+            if (!surveyAddress.equals(mMission.getAddress()) && surveyAddress.isValid()) {
+                mMission.setSurveyAddress(surveyAddress);
+                mMission.save();
+            }
+        } catch (FleetException e) {
+//            TODO CL2.0
+            return;
         }
     }
 

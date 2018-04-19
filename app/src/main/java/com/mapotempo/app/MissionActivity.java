@@ -26,7 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
-import com.mapotempo.fleet.api.model.MissionInterface;
+import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
 
@@ -64,7 +64,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
 
         switch (item.getItemId()) {
             case R.id.edit_location:
-                MissionInterface ms = missionDetailsFragment.getCurrentMission();
+                Mission ms = missionDetailsFragment.getCurrentMission();
                 if (ms != null) {
                     Intent intent = new Intent(this, EditLocationActivity.class);
                     intent.putExtra("mission_id", ms.getId());
@@ -72,7 +72,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
                 }
                 return true;
             case R.id.edit_mission_address:
-                MissionInterface mission = missionDetailsFragment.getCurrentMission();
+                Mission mission = missionDetailsFragment.getCurrentMission();
                 if (mission != null) {
                     Intent intent = new Intent(this, EditAddressActivity.class);
                     intent.putExtra("mission_id", mission.getId());
@@ -104,7 +104,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
     // ==================================================
 
     @Override
-    public void onMapImageViewClick(MissionInterface mission) {
+    public void onMapImageViewClick(Mission mission) {
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("mission_id", mission.getId());
         startActivity(intent);

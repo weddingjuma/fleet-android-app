@@ -76,8 +76,8 @@ public class MainMenuFragment extends MapotempoBaseFragment {
         View header = view.getHeaderView(0);
         mUserName = header.findViewById(R.id.user_name_header);
         mUserEmail = header.findViewById(R.id.user_email_header);
-        mUserName.setText(mapotempoApplication.getManager().getUser().getUserName());
-        mUserEmail.setText(mapotempoApplication.getManager().getUser().getUserEmail());
+        mUserName.setText(mapotempoApplication.getManager().getUser().getName());
+        mUserEmail.setText(mapotempoApplication.getManager().getUser().getEmail());
 
         mMenu = view.getMenu();
         mLogoutItem = mMenu.findItem(R.id.sign_out);

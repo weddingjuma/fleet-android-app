@@ -25,8 +25,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.app.utils.ConnectionManager;
-import com.mapotempo.fleet.api.ConnectionVerifyStatus;
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
+import com.mapotempo.fleet.manager.LOGIN_STATUS;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.fragments.login.LoginFragment;
 import com.mapotempo.lib.utils.AlertMessageHelper;
 
@@ -75,7 +75,17 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
      * @param manager The connexion associate manager
      */
     @Override
-    public void onLogin(ConnectionVerifyStatus status, MapotempoFleetManagerInterface manager) {
+    public void onLogin(LOGIN_STATUS status,
+                        MapotempoFleetManager manager) {
+        if (manager != null) {
+            MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
+            mapotempoApplication.setManager(manager);
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);
         switch (status) {
             case VERIFY:

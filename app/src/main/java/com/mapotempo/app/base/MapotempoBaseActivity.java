@@ -22,6 +22,7 @@ package com.mapotempo.app.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.InflateException;
 import android.view.View;
@@ -29,8 +30,6 @@ import android.view.ViewGroup;
 
 import com.mapotempo.app.LoginActivity;
 import com.mapotempo.lib.exception.MapotempoManagerMissingException;
-
-import javax.annotation.Nullable;
 
 public abstract class MapotempoBaseActivity extends AppCompatActivity {
 

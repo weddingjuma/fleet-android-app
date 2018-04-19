@@ -33,16 +33,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
-import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
-import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.api.model.UserPreferenceInterface;
-import com.mapotempo.fleet.api.model.submodel.LocationDetailsInterface;
+import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.dao.model.UserSettings;
+import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.fragments.menu.MainMenuFragment;
 import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
 import com.mapotempo.lib.fragments.missions.MissionsListFragment;
-
-import java.util.ArrayList;
 
 public class MainActivity extends MapotempoBaseActivity implements MissionsListFragment.OnMissionSelectedListener,
         MissionsPagerFragment.OnMissionFocusListener,
@@ -50,7 +47,8 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
         MainMenuFragment.OnMenuInteractionListener
         /* LocationListener */ {
 
-    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
+    //TODO
+//    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
     // ===================================
     // ==  Android Activity Life cycle  ==
@@ -128,7 +126,7 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     // ==  OnMissionDetailsFragmentListener Interface  ==
     // ==================================================
     @Override
-    public void onMapImageViewClick(MissionInterface mission) {
+    public void onMapImageViewClick(Mission mission) {
         Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
@@ -202,7 +200,7 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     private class ConnexionReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            MapotempoFleetManagerInterface manager = ((MapotempoApplication) getApplicationContext()).getManager();
+            MapotempoFleetManager manager = ((MapotempoApplication) getApplicationContext()).getManager();
 
             final ConnectivityManager connMgr = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -218,7 +216,7 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
                 manager.onlineStatus(true);
             } else if (mobile != null && mobile.isConnected()) {
                 Log.d(">>>>>>>>>>>>> " + intent.getAction(), "data");
-                boolean status = manager.getUserPreference().getBoolPreference(UserPreferenceInterface.Preference.MOBILE_DATA_USAGE);
+                boolean status = manager.getUserPreference().getBoolPreference(UserSettings.Preference.MOBILE_DATA_USAGE);
                 manager.onlineStatus(status);
             } else {
                 Log.d(">>>>>>>>>>>>> " + intent.getAction(), "network down");
