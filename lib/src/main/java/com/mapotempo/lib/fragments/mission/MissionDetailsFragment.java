@@ -194,7 +194,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     // ==============
 
     public void fillViewFromActivity() {
-        if (mMission != null) {
+        if (mMission != null && isAdded()) {
             fillViewData(mMission);
             initNavigationAction(mMission);
             initMainActionButtons(mMission);
