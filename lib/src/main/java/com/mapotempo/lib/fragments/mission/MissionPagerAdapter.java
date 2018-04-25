@@ -78,18 +78,13 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter {
         return null;
     }
 
-    public void addMission(Mission mission) {
-        mMissions.add(mission);
-        mCount++;
-
+    public void refreshMissions(List<MissionInterface> newMissions) {
+        mMissions = newMissions;
         notifyDataSetChanged();
     }
 
-    public void updateMissions(List<MissionInterface> missions) {
-        mMissions = missions;
-        mCount = missions.size();
-
-        notifyDataSetChanged();
+    public List<MissionInterface> getMissionsList() {
+        return mMissions;
     }
 
 }
