@@ -189,7 +189,6 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
                         while (iterable.hasNext()) {
                             if (mission.getId().equals(iterable.next().getId())) {
                                 newMissionPosition = mPagerAdapter.getItemPosition(iterable.next());
-
                                 break;
                             }
                         }
