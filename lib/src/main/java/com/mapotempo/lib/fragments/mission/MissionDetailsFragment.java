@@ -205,7 +205,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     public void setMission(MissionInterface mission) {
         if (mission != null) {
             mMission = mission;
-            mMission.addChangeListener(mCallback);
         } else {
             throw new RuntimeException("Mission passed to constructor must not be null");
         }
@@ -312,14 +311,26 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         super.onResume();
         fillViewFromActivity();
         initBottomSheet(getView());
+        if (mMission != null) {
+            mMission.addChangeListener(mCallback);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mMission != null) {
+            mMission.removeChangeListener(mCallback);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        if (mMission != null)
+        if (mMission != null) {
             mMission.removeChangeListener(mCallback);
+        }
     }
 
     // ===============
