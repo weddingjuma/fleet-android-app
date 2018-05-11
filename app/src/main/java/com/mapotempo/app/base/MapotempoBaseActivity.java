@@ -20,6 +20,9 @@
 package com.mapotempo.app.base;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.InflateException;
 import android.view.View;
@@ -31,6 +34,37 @@ import com.mapotempo.lib.exception.MapotempoManagerMissingException;
 public abstract class MapotempoBaseActivity extends AppCompatActivity {
 
     final MapotempoBaseActivity INSTANCE = this;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        try {
+            super.onCreate(savedInstanceState, persistentState);
+        } catch (InflateException e) {
+            // Catch only MapotempoManagerMissingException exception
+            if (e.getCause() instanceof MapotempoManagerMissingException) {
+                e.printStackTrace();
+                intentLoginActivity();
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        try {
+            super.onCreate(savedInstanceState);
+        } catch (InflateException e) {
+            // Catch only MapotempoManagerMissingException exception
+            if (e.getCause() instanceof MapotempoManagerMissingException) {
+                e.printStackTrace();
+                intentLoginActivity();
+            } else {
+                throw e;
+            }
+        }
+    }
+
 
     @Override
     public void setContentView(View view) {
