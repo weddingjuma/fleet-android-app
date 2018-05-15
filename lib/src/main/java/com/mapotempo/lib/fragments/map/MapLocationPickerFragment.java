@@ -59,14 +59,6 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
 
     private static final String ZOOM_OUT = "zoom_out";
 
-    private FloatingActionButton mZoomIn;
-
-    private FloatingActionButton mZoomOut;
-
-    private boolean mIsInitCameraPosition = false;
-
-    private static String CAMERA_POSITION = "CAMERA_POSITION";
-
     private static LatLng mScrollLocation;
 
     private MissionInterface mMission;
@@ -116,31 +108,15 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
             }
         };
 
-        mZoomIn = view.findViewById(R.id.zoom_in);
-        mZoomOut = view.findViewById(R.id.zoom_out);
+        FloatingActionButton mZoomIn = view.findViewById(R.id.zoom_in);
+        FloatingActionButton mZoomOut = view.findViewById(R.id.zoom_out);
         mZoomIn.setTag(ZOOM_IN);
         mZoomOut.setTag(ZOOM_OUT);
         mZoomIn.setOnClickListener(onClickListener);
         mZoomOut.setOnClickListener(onClickListener);
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(final MapboxMap mapboxMap) {
-
-                mapboxMap.setOnScrollListener(new MapboxMap.OnScrollListener() {
-                    @Override
-                    public void onScroll() {
-                        mScrollLocation = mapboxMap
-                                .getProjection()
-                                .fromScreenLocation(new PointF(mMapView.getWidth() / 2, mMapView.getHeight() / 2));
-                    }
-                });
-            }
-        });
-
         displayLocationMarkers();
-
-        setCameraPosition();
+        initializeMapLocation();
 
         return view;
     }
@@ -221,7 +197,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
         return null;
     }
 
-    private void setCameraPosition() {
+    private void initializeMapLocation() {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
@@ -240,12 +216,24 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
                     }
                 }
 
-                final CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(latLng)
-                        .zoom(14)
-                        .build();
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                                                                  .target(latLng)
+                                                                  .zoom(14)
+                                                                  .build();
 
                 mapboxMap.setCameraPosition(cameraPosition);
+
+                mScrollLocation = latLng;
+
+                mapboxMap.setOnScrollListener(new MapboxMap.OnScrollListener() {
+                    @Override
+                    public void onScroll() {
+                        mScrollLocation = mapboxMap
+                                .getProjection()
+                                .fromScreenLocation(new PointF(mMapView.getWidth() / 2,
+                                                               mMapView.getHeight() / 2));
+                    }
+                });
             }
         });
     }
@@ -256,22 +244,22 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
                 @Override
                 public void onMapReady(final MapboxMap mapboxMap) {
                     mapboxMap.clear();
+                    IconFactory mIconFactory = IconFactory.getInstance(getActivity());
+                    int iconId = R.drawable.ic_map_green_marker;
+                    LatLng position = null;
 
-                    if (mMission.getLocation().isValid()) {
-                        IconFactory mIconFactory = IconFactory.getInstance(getActivity());
-                        Icon icon = mIconFactory.fromResource(R.drawable.ic_map_green_marker);
-                        mapboxMap.addMarker(new MarkerViewOptions()
-                                .icon(icon)
-                                .position(new LatLng(mMission.getLocation().getLat(), mMission.getLocation().getLon()))
-                        );
-                    }
+                    if (mMission.getLocation().isValid())
+                        position = new LatLng(mMission.getLocation().getLat(), mMission.getLocation().getLon());
 
                     if (mMission.getSurveyLocation().isValid()) {
-                        IconFactory mIconFactory = IconFactory.getInstance(getActivity());
-                        Icon icon = mIconFactory.fromResource(R.drawable.ic_map_blue_marker);
+                        position = new LatLng(mMission.getSurveyLocation().getLat(), mMission.getSurveyLocation().getLon());
+                        iconId = R.drawable.ic_map_blue_marker;
+                    }
+
+                    if (position != null) {
                         mapboxMap.addMarker(new MarkerViewOptions()
-                                .icon(icon)
-                                .position(new LatLng(mMission.getSurveyLocation().getLat(), mMission.getSurveyLocation().getLon()))
+                                 .icon(mIconFactory.fromResource(iconId))
+                                 .position(position)
                         );
                     }
                 }
