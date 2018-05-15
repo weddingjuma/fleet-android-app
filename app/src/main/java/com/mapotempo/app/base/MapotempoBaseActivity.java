@@ -22,7 +22,6 @@ package com.mapotempo.app.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.InflateException;
 import android.view.View;
@@ -30,6 +29,8 @@ import android.view.ViewGroup;
 
 import com.mapotempo.app.LoginActivity;
 import com.mapotempo.lib.exception.MapotempoManagerMissingException;
+
+import javax.annotation.Nullable;
 
 public abstract class MapotempoBaseActivity extends AppCompatActivity {
 
@@ -39,9 +40,9 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         try {
             super.onCreate(savedInstanceState, persistentState);
-        } catch (InflateException e) {
+        } catch (Exception e) {
             // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException) {
+            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException) {
                 e.printStackTrace();
                 intentLoginActivity();
             } else {
@@ -54,9 +55,9 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-        } catch (InflateException e) {
+        } catch (Exception e) {
             // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException) {
+            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException) {
                 e.printStackTrace();
                 intentLoginActivity();
             } else {
@@ -64,7 +65,6 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity {
             }
         }
     }
-
 
     @Override
     public void setContentView(View view) {
