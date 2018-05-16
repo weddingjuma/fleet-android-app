@@ -26,7 +26,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import com.mapotempo.fleet.api.model.MissionInterface;
-import com.mapotempo.fleet.core.model.Mission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +41,7 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter {
     public MissionPagerAdapter(FragmentManager fm, int count, List<MissionInterface> missions) {
         super(fm);
         mCount = count;
-        mMissions = new ArrayList<>();
-        mMissions = missions;
+        mMissions = new ArrayList<>(missions);
     }
 
     public MissionDetailsFragment getFragment(int position) {
@@ -83,8 +81,10 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
+
     public List<MissionInterface> getMissionsList() {
         return mMissions;
     }
+
 
 }

@@ -20,10 +20,8 @@
 package com.mapotempo.lib.fragments.mission;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -34,7 +32,6 @@ import android.widget.LinearLayout;
 import com.mapotempo.fleet.api.MapotempoFleetManagerInterface;
 import com.mapotempo.fleet.api.model.MissionInterface;
 import com.mapotempo.fleet.api.model.accessor.AccessInterface;
-import com.mapotempo.fleet.core.model.Mission;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
@@ -130,59 +127,36 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        List<MissionInterface> oldMissions = new ArrayList<>(mPagerAdapter.getMissionsList()); // Keep track of old data using a shallow copy
-                        MissionInterface mission = oldMissions.get(mViewPager.getCurrentItem()); // Keep the mission currently displayed
+                        List<MissionInterface> oldDeprecatedMissions = mPagerAdapter.getMissionsList(); // Keep track of old data using a shallow copy
+                        MissionInterface mission = oldDeprecatedMissions.get(mViewPager.getCurrentItem()); // Keep the mission currently displayed
                         int newMissionPosition = 0;
 
                         // DO NOTHING IF DATA NEED TO BE REFRESHED
-                        if (oldMissions.size() == missions.size() && oldMissions.containsAll(missions)) {
+                        if (oldDeprecatedMissions.equals(missions)) {
                             return;
                         } else if (missions.size() == 0) {
                             MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
                             mapotempoApplication.getManager().getMissionAccess().removeChangeListener(missionChangeListener);
                             getActivity().finish();
                             return;
+                        } else {
+                            mPagerAdapter.refreshMissions(missions);
                         }
 
-                        //////////////////////////////////////////////////
-                        /// SIMPLE METHOD, REPLACE ALL [OLD]
-                        //////////////////////////////////////////////////
-
-                        // Update the adapter
-//                        mPagerAdapter.refreshMissions(missions);
-
-                        // Let's looking for the old mission new position if still in the sets
-//                        Iterator<MissionInterface> iterable = missions.iterator();
-//                        while (iterable.hasNext()) {
-//                            if (mission.getId().equals(iterable.next().getId())) {
-//                                newMissionPosition = mPagerAdapter.getItemPosition(iterable.next());
-//                                break;
+//                        // Update previous list to prevent useless updates
+//                        for (MissionInterface loopMission : missions) {
+//                            if (!oldDeprecatedMissions.contains(loopMission)) {
+//                                mPagerAdapter.addMission(loopMission);
+//                            } else {
+//                                int id = oldDeprecatedMissions.indexOf(loopMission);
+//                                oldDeprecatedMissions.remove(id);
 //                            }
 //                        }
-
-                        // Update pager position according to the mission new position
-//                        mViewPager.setCurrentItem(newMissionPosition);
-
-                        //////////////////////////////////////////////////
-                        /// TRY TO REDUCE TIME NEEDED FOR UPDATE
-                        //////////////////////////////////////////////////
-                        List<MissionInterface> AddList = new ArrayList();
-
-                        for (MissionInterface loopMission : missions) {
-                            if (!oldMissions.contains(loopMission)) {
-                                AddList.add(loopMission);
-                            } else {
-                                int id = oldMissions.indexOf(loopMission);
-                                oldMissions.remove(id);
-                            }
-                        }
-
-                        // Update
-                        mPagerAdapter.getMissionsList().removeAll(oldMissions);
-                        mPagerAdapter.getMissionsList().addAll(AddList);
-
-                        // Notify data changed
-                        mPagerAdapter.notifyDataSetChanged();
+//
+//                        // Remove deprecated mission
+//                        mPagerAdapter.removeMissions(oldDeprecatedMissions);
+//
+//                        mPagerAdapter.notifyDataSetChanged();
 
                         // Search for new index
                         Iterator<MissionInterface> iterable = missions.iterator();
