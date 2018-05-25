@@ -560,9 +560,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
 //    }
 
     private void initActionButtons(final Mission mission) {
-        final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        MapotempoFleetManager manager = mapotempoApplication.getManager();
-        List<MissionActionType> actions = manager.getMissionActionTypeAccessInterface().byPreviousStatusType(mission.getStatusType());
+        List<MissionActionType> actions = mMission.getStatusType().getNextActionType();
         ActionsListFragment fragment = (ActionsListFragment) getChildFragmentManager().findFragmentById(R.id.actions_fragment);
         if (fragment != null) {
             fragment.setActions(actions);
