@@ -27,10 +27,12 @@ import android.view.MenuItem;
 import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.lib.fragments.map.MapLocationPickerFragment;
 
-public class EditLocationActivity extends MapotempoBaseActivity {
+public class EditLocationActivity extends MapotempoBaseActivity
+{
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_location_activity);
 
@@ -42,31 +44,35 @@ public class EditLocationActivity extends MapotempoBaseActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         onBackPressed();
         return true;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.menu_edit_location, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         MapLocationPickerFragment mapLocationPickerFragment = (MapLocationPickerFragment) getSupportFragmentManager().findFragmentById(R.id.edit_location_fragment);
 
-        switch (item.getItemId()) {
-            case R.id.validate_location:
-                mapLocationPickerFragment.savePickedLocation();
-                finish();
-                return true;
-            case R.id.reset_location:
-                mapLocationPickerFragment.deletePickedLocation();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        switch (item.getItemId())
+        {
+        case R.id.validate_location:
+            mapLocationPickerFragment.savePickedLocation();
+            finish();
+            return true;
+        case R.id.reset_location:
+            mapLocationPickerFragment.deletePickedLocation();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 }

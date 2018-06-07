@@ -31,86 +31,118 @@ import android.view.ViewGroup;
 import com.mapotempo.app.LoginActivity;
 import com.mapotempo.lib.exception.MapotempoManagerMissingException;
 
-public abstract class MapotempoBaseActivity extends AppCompatActivity {
+public abstract class MapotempoBaseActivity extends AppCompatActivity
+{
 
     final MapotempoBaseActivity INSTANCE = this;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        try {
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState)
+    {
+        try
+        {
             super.onCreate(savedInstanceState, persistentState);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             // Catch only MapotempoManagerMissingException exception
-            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException) {
+            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException)
+            {
                 e.printStackTrace();
                 intentLoginActivity();
-            } else {
+            }
+            else
+            {
                 throw e;
             }
         }
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        try {
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        try
+        {
             super.onCreate(savedInstanceState);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             // Catch only MapotempoManagerMissingException exception
-            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException) {
+            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException)
+            {
                 e.printStackTrace();
                 intentLoginActivity();
-            } else {
+            }
+            else
+            {
                 throw e;
             }
         }
     }
 
     @Override
-    public void setContentView(View view) {
-        try {
+    public void setContentView(View view)
+    {
+        try
+        {
             super.setContentView(view);
-        } catch (InflateException e) {
+        } catch (InflateException e)
+        {
             // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException) {
+            if (e.getCause() instanceof MapotempoManagerMissingException)
+            {
                 e.printStackTrace();
                 intentLoginActivity();
-            } else {
+            }
+            else
+            {
                 throw e;
             }
         }
     }
 
     @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        try {
+    public void setContentView(View view, ViewGroup.LayoutParams params)
+    {
+        try
+        {
             super.setContentView(view, params);
-        } catch (InflateException e) {
+        } catch (InflateException e)
+        {
             // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException) {
+            if (e.getCause() instanceof MapotempoManagerMissingException)
+            {
                 e.printStackTrace();
                 intentLoginActivity();
-            } else {
+            }
+            else
+            {
                 throw e;
             }
         }
     }
 
     @Override
-    public void setContentView(int layoutResID) {
-        try {
+    public void setContentView(int layoutResID)
+    {
+        try
+        {
             super.setContentView(layoutResID);
-        } catch (InflateException e) {
+        } catch (InflateException e)
+        {
             // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException) {
+            if (e.getCause() instanceof MapotempoManagerMissingException)
+            {
                 e.printStackTrace();
                 intentLoginActivity();
-            } else {
+            }
+            else
+            {
                 throw e;
             }
         }
     }
 
-    private void intentLoginActivity() {
+    private void intentLoginActivity()
+    {
         Intent intent = new Intent(INSTANCE, LoginActivity.class);
         startActivity(intent);
         finish();

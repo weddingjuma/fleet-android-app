@@ -33,14 +33,16 @@ import com.mapotempo.lib.utils.AlertMessageHelper;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoginFragment.OnLoginFragmentImplementation, ConnectionManager.OnConnectionSetup {
+public class LoginActivity extends AppCompatActivity implements LoginFragment.OnLoginFragmentImplementation, ConnectionManager.OnConnectionSetup
+{
 
     // ===================================
     // ==  Android Activity Life cycle  ==
     // ===================================
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         setTheme(R.style.AppTheme_Night);
@@ -51,14 +53,16 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     // =====================================================
 
     @Override
-    public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context) {
+    public void onSelectedDataProviderWifi(ConnectionManager.ConnectionType connectionType, Context context)
+    {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
-    public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context) {
+    public void onSelectedDataProviderBoth(ConnectionManager.ConnectionType connectionType, Context context)
+    {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -76,8 +80,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
      */
     @Override
     public void onLogin(LOGIN_STATUS status,
-                        MapotempoFleetManager manager) {
-        if (manager != null) {
+                        MapotempoFleetManager manager)
+    {
+        if (manager != null)
+        {
             MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
             mapotempoApplication.setManager(manager);
             Intent intent = new Intent(this, MainActivity.class);
@@ -87,22 +93,23 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         }
 
         LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.hook_login_fragment);
-        switch (status) {
-            case VERIFY:
-                MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
-                mapotempoApplication.setManager(manager);
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-            case LOGIN_ERROR:
-                loginFragment.toogleLogginView(false);
-                AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_invalid));
-                break;
-            default:
-                loginFragment.toogleLogginView(false);
-                AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_server) + "\ncode : " + status.getCode());
-                break;
+        switch (status)
+        {
+        case VERIFY:
+            MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
+            mapotempoApplication.setManager(manager);
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            break;
+        case LOGIN_ERROR:
+            loginFragment.toogleLogginView(false);
+            AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_invalid));
+            break;
+        default:
+            loginFragment.toogleLogginView(false);
+            AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_server) + "\ncode : " + status.getCode());
+            break;
         }
     }
 }

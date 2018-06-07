@@ -24,9 +24,11 @@ import android.support.v7.widget.Toolbar;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
 
-public class SettingsActivity extends MapotempoBaseActivity {
+public class SettingsActivity extends MapotempoBaseActivity
+{
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
@@ -38,7 +40,8 @@ public class SettingsActivity extends MapotempoBaseActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         onBackPressed();
         return true;
     }

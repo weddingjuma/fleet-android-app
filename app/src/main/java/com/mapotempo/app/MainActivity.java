@@ -42,13 +42,14 @@ import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
 import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 
 public class MainActivity extends MapotempoBaseActivity implements MissionsListFragment.OnMissionSelectedListener,
-        MissionsPagerFragment.OnMissionFocusListener,
-        MissionDetailsFragment.OnMissionDetailsFragmentListener,
-        MainMenuFragment.OnMenuInteractionListener
-        /* LocationListener */ {
+    MissionsPagerFragment.OnMissionFocusListener,
+    MissionDetailsFragment.OnMissionDetailsFragmentListener,
+    MainMenuFragment.OnMenuInteractionListener
+    /* LocationListener */
+{
 
     //TODO
-//    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
+    //    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
 
     // ===================================
     // ==  Android Activity Life cycle  ==
@@ -58,7 +59,8 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     private ConnexionReceiver mConnexionReceiver;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,7 +71,8 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
         // Wifi / Data manager connexion status
         IntentFilter intentFilter = new IntentFilter();
@@ -79,9 +82,11 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
-        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START))
+        {
             mDrawerLayout.closeDrawers();
         }
         refreshMissionListFragment();
@@ -89,7 +94,8 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
         unregisterReceiver(mConnexionReceiver);
     }
@@ -99,7 +105,8 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     // ========================================
 
     @Override
-    public void onMissionFocus(int position) {
+    public void onMissionFocus(int position)
+    {
         MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         if (missionsListFragment != null)
             missionsListFragment.missionFocus(position);
@@ -110,12 +117,16 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     // ===========================================
 
     @Override
-    public void onMissionSelected(final int position) {
+    public void onMissionSelected(final int position)
+    {
         MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-        if (missionsPagerFragment != null && missionsPagerFragment.isVisible()) {
+        if (missionsPagerFragment != null && missionsPagerFragment.isVisible())
+        {
             MissionsPagerFragment fragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
             fragment.setCurrentItem(position);
-        } else {
+        }
+        else
+        {
             Intent intent = new Intent(this, MissionActivity.class);
             intent.putExtra("mission_id", position);
             startActivity(intent);
@@ -126,7 +137,8 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     // ==  OnMissionDetailsFragmentListener Interface  ==
     // ==================================================
     @Override
-    public void onMapImageViewClick(Mission mission) {
+    public void onMapImageViewClick(Mission mission)
+    {
         Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
@@ -136,24 +148,28 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     // ===========================================
 
     @Override
-    public void onMap() {
+    public void onMap()
+    {
         Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public void onSettings() {
+    public void onSettings()
+    {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public boolean onTracking(boolean tracking_status) {
+    public boolean onTracking(boolean tracking_status)
+    {
         return tracking_status;
     }
 
     @Override
-    public void onLogout() {
+    public void onLogout()
+    {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
@@ -165,28 +181,35 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     // ==  Private  ==
     // ===============
 
-    private void refreshMissionListFragment() {
+    private void refreshMissionListFragment()
+    {
         MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
         if (missionsListFragment != null && missionsListFragment.isVisible())
             missionsListFragment.notifyDataChange();
     }
 
-    private void refreshMissionsPagerFragment() {
+    private void refreshMissionsPagerFragment()
+    {
         MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
         if (missionsPagerFragment != null && missionsPagerFragment.isVisible())
             missionsPagerFragment.notifyDataChange();
     }
 
-    private void addDrawableHandler(Toolbar toolbar) {
+    private void addDrawableHandler(Toolbar toolbar)
+    {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (mDrawerLayout != null) {
-            ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name) {
+        if (mDrawerLayout != null)
+        {
+            ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name)
+            {
 
-                public void onDrawerClosed(View view) {
+                public void onDrawerClosed(View view)
+                {
                     supportInvalidateOptionsMenu();
                 }
 
-                public void onDrawerOpened(View drawerView) {
+                public void onDrawerOpened(View drawerView)
+                {
                     supportInvalidateOptionsMenu();
                 }
             };
@@ -197,28 +220,35 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
         }
     }
 
-    private class ConnexionReceiver extends BroadcastReceiver {
+    private class ConnexionReceiver extends BroadcastReceiver
+    {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent intent)
+        {
             MapotempoFleetManager manager = ((MapotempoApplication) getApplicationContext()).getManager();
 
             final ConnectivityManager connMgr = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
 
             final android.net.NetworkInfo wifi = connMgr
-                    .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
             final android.net.NetworkInfo mobile = connMgr
-                    .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if (wifi != null && wifi.isConnected()) {
+            if (wifi != null && wifi.isConnected())
+            {
                 Log.d(">>>>>>>>>>>>> " + intent.getAction(), "wifi");
                 manager.onlineStatus(true);
-            } else if (mobile != null && mobile.isConnected()) {
+            }
+            else if (mobile != null && mobile.isConnected())
+            {
                 Log.d(">>>>>>>>>>>>> " + intent.getAction(), "data");
                 boolean status = manager.getUserPreference().getBoolPreference(UserSettings.Preference.MOBILE_DATA_USAGE);
                 manager.onlineStatus(status);
-            } else {
+            }
+            else
+            {
                 Log.d(">>>>>>>>>>>>> " + intent.getAction(), "network down");
                 ((MapotempoApplication) getApplicationContext()).getManager().onlineStatus(false);
             }

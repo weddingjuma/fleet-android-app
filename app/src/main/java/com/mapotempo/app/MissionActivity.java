@@ -31,11 +31,13 @@ import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
 
 public class MissionActivity extends MapotempoBaseActivity implements
-        MissionsPagerFragment.OnMissionFocusListener,
-        MissionDetailsFragment.OnMissionDetailsFragmentListener {
+    MissionsPagerFragment.OnMissionFocusListener,
+    MissionDetailsFragment.OnMissionDetailsFragmentListener
+{
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mission_activity);
 
@@ -47,49 +49,57 @@ public class MissionActivity extends MapotempoBaseActivity implements
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         onBackPressed();
         return true;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.menu_mission, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         MissionsPagerFragment missionDetailsFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
 
-        switch (item.getItemId()) {
-            case R.id.edit_location:
-                Mission ms = missionDetailsFragment.getCurrentMission();
-                if (ms != null) {
-                    Intent intent = new Intent(this, EditLocationActivity.class);
-                    intent.putExtra("mission_id", ms.getId());
-                    startActivity(intent);
-                }
-                return true;
-            case R.id.edit_mission_address:
-                Mission mission = missionDetailsFragment.getCurrentMission();
-                if (mission != null) {
-                    Intent intent = new Intent(this, EditAddressActivity.class);
-                    intent.putExtra("mission_id", mission.getId());
-                    startActivity(intent);
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        switch (item.getItemId())
+        {
+        case R.id.edit_location:
+            Mission ms = missionDetailsFragment.getCurrentMission();
+            if (ms != null)
+            {
+                Intent intent = new Intent(this, EditLocationActivity.class);
+                intent.putExtra("mission_id", ms.getId());
+                startActivity(intent);
+            }
+            return true;
+        case R.id.edit_mission_address:
+            Mission mission = missionDetailsFragment.getCurrentMission();
+            if (mission != null)
+            {
+                Intent intent = new Intent(this, EditAddressActivity.class);
+                intent.putExtra("mission_id", mission.getId());
+                startActivity(intent);
+            }
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
-    public void onMissionFocus(int position) {
+    public void onMissionFocus(int position)
+    {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         MissionsPagerFragment missionDetailsFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
         boolean handle = false;
         if (missionDetailsFragment != null)
@@ -104,7 +114,8 @@ public class MissionActivity extends MapotempoBaseActivity implements
     // ==================================================
 
     @Override
-    public void onMapImageViewClick(Mission mission) {
+    public void onMapImageViewClick(Mission mission)
+    {
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("mission_id", mission.getId());
         startActivity(intent);

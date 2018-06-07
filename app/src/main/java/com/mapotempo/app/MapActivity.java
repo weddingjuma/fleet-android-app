@@ -27,10 +27,12 @@ import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 
-public class MapActivity extends MapotempoBaseActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener {
+public class MapActivity extends MapotempoBaseActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener
+{
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
 
@@ -42,13 +44,15 @@ public class MapActivity extends MapotempoBaseActivity implements MissionDetails
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         onBackPressed();
         return true;
     }
 
     @Override
-    public void onMapImageViewClick(Mission mission) {
+    public void onMapImageViewClick(Mission mission)
+    {
         Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }

@@ -27,10 +27,12 @@ import android.view.MenuItem;
 import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.lib.fragments.mission.MissionAddressEditorFragment;
 
-public class EditAddressActivity extends MapotempoBaseActivity {
+public class EditAddressActivity extends MapotempoBaseActivity
+{
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_address_activity);
 
@@ -42,27 +44,30 @@ public class EditAddressActivity extends MapotempoBaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.menu_edit_address, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         MissionAddressEditorFragment missionAddressEditorFragment = (MissionAddressEditorFragment) getSupportFragmentManager().findFragmentById(R.id.mission_address_fragment);
 
-        switch (item.getItemId()) {
-            case R.id.validate_address:
-                missionAddressEditorFragment.saveAddress();
-                onBackPressed();
-                break;
-            case R.id.reset_address:
-                missionAddressEditorFragment.resetAddress();
-                onBackPressed();
-                break;
-            default:
-                onBackPressed();
-                break;
+        switch (item.getItemId())
+        {
+        case R.id.validate_address:
+            missionAddressEditorFragment.saveAddress();
+            onBackPressed();
+            break;
+        case R.id.reset_address:
+            missionAddressEditorFragment.resetAddress();
+            onBackPressed();
+            break;
+        default:
+            onBackPressed();
+            break;
         }
 
         return true;
