@@ -15,7 +15,8 @@ import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 
-public class MissionAddressEditorFragment extends Fragment {
+public class MissionAddressEditorFragment extends Fragment
+{
 
     private MapotempoFleetManager mapotempoFleetManager;
     private Mission mMission;
@@ -26,12 +27,14 @@ public class MissionAddressEditorFragment extends Fragment {
     private TextInputEditText mCountry;
     private TextInputEditText mDetail;
 
-    public MissionAddressEditorFragment() {
+    public MissionAddressEditorFragment()
+    {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
@@ -41,7 +44,8 @@ public class MissionAddressEditorFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_mission_adress_editor, container, false);
         Address missionAddress;
 
@@ -70,21 +74,25 @@ public class MissionAddressEditorFragment extends Fragment {
     /**
      * Save the current modifications as Survey Address, then close the current activity
      */
-    public void saveAddress() {
-        try {
+    public void saveAddress()
+    {
+        try
+        {
             Address surveyAddress = new Address(mapotempoFleetManager, mStreet.getText().toString(),
-                    mPostalCode.getText().toString(),
-                    mCity.getText().toString(),
-                    mState.getText().toString(),
-                    mCountry.getText().toString(),
-                    mDetail.getText().toString()
+                mPostalCode.getText().toString(),
+                mCity.getText().toString(),
+                mState.getText().toString(),
+                mCountry.getText().toString(),
+                mDetail.getText().toString()
             );
-            if (!surveyAddress.equals(mMission.getAddress()) && surveyAddress.isValid()) {
+            if (!surveyAddress.equals(mMission.getAddress()) && surveyAddress.isValid())
+            {
                 mMission.setSurveyAddress(surveyAddress);
                 mMission.save();
             }
-        } catch (FleetException e) {
-//            TODO CL2.0
+        } catch (FleetException e)
+        {
+            //            TODO CL2.0
             return;
         }
     }
@@ -92,7 +100,8 @@ public class MissionAddressEditorFragment extends Fragment {
     /**
      * Reset the current address by removing it from the survey model.
      */
-    public void resetAddress() {
+    public void resetAddress()
+    {
         mMission.deleteSurveyAddress();
         mMission.save();
     }

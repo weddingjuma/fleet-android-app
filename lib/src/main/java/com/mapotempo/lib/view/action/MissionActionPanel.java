@@ -30,35 +30,41 @@ import android.widget.TextView;
 
 import com.mapotempo.lib.R;
 
-public class MissionActionPanel extends LinearLayout {
+public class MissionActionPanel extends LinearLayout
+{
 
     private View rootView;
     private ImageView mActionImageView;
     private TextView mActionTextView;
     private boolean mShowLabel = true;
 
-    public MissionActionPanel(Context context) {
+    public MissionActionPanel(Context context)
+    {
         super(context);
         init(context);
     }
 
-    public MissionActionPanel(Context context, AttributeSet attrs) {
+    public MissionActionPanel(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         TypedArray a = context.getTheme().obtainStyledAttributes(
-                attrs,
-                R.styleable.MissionActionPanel,
-                0, 0);
+            attrs,
+            R.styleable.MissionActionPanel,
+            0, 0);
 
-        try {
+        try
+        {
             mShowLabel = a.getBoolean(R.styleable.MissionActionPanel_showLabel, true);
-        } finally {
+        } finally
+        {
             a.recycle();
         }
 
         init(context);
     }
 
-    private void init(Context context) {
+    private void init(Context context)
+    {
         setClickable(true);
         setOrientation(VERTICAL);
         rootView = inflate(context, R.layout.view_mission_action_panel, this);
@@ -72,11 +78,13 @@ public class MissionActionPanel extends LinearLayout {
             mActionTextView.setVisibility(GONE);
     }
 
-    public final void setText(CharSequence text) {
+    public final void setText(CharSequence text)
+    {
         mActionTextView.setText(text);
     }
 
-    public void setImageDrawable(Drawable drawable) {
+    public void setImageDrawable(Drawable drawable)
+    {
         mActionImageView.setImageDrawable(drawable);
     }
 }

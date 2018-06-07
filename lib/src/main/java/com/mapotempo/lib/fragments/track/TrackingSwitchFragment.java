@@ -45,7 +45,8 @@ import com.mapotempo.lib.utils.Haversine;
 
 import java.util.Date;
 
-public class TrackingSwitchFragment extends MapotempoBaseFragment implements LocationListener {
+public class TrackingSwitchFragment extends MapotempoBaseFragment implements LocationListener
+{
 
     static final int UPDATE_TIME = 5 * 60000; // 5 min
     static final int UPDATE_DISTANCE = 150;   // 150 meter
@@ -64,11 +65,14 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
 
     @Override
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         mSwitchTracking = new SwitchCompat(getContext());
-        mSwitchTracking.setOnClickListener(new View.OnClickListener() {
+        mSwitchTracking.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 boolean hooked = hookLocationListener(mSwitchTracking.isChecked());
                 mSwitchTracking.setChecked(hooked);
                 UserSettings up = mMapotempoApplicationInterface.getManager().getUserPreference();
@@ -80,19 +84,21 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
         initLocationManager();
 
         mMapotempoApplicationInterface = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         boolean check = (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-                && mMapotempoApplicationInterface.getManager().getUserPreference().getBoolPreference(UserSettings.Preference.TRACKING_ENABLE);
+            && mMapotempoApplicationInterface.getManager().getUserPreference().getBoolPreference(UserSettings.Preference.TRACKING_ENABLE);
         mSwitchTracking.setChecked(check);
         hookLocationListener(check);
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroyView()
+    {
         super.onDestroyView();
         hookLocationListener(false);
     }
@@ -102,68 +108,76 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
     // ==================================
 
     @Override
-    public void onLocationChanged(@NonNull Location location) {
+    public void onLocationChanged(@NonNull Location location)
+    {
         Log.d("onLocationChanged", "" + location.getLongitude() + location.getLatitude());
 
-        if (mMapotempoApplicationInterface != null && mMapotempoApplicationInterface.getManager() != null) {
+        if (mMapotempoApplicationInterface != null && mMapotempoApplicationInterface.getManager() != null)
+        {
             Integer cid = -1;
             Integer lac = -1;
             Integer mcc = -1;
             Integer mnc = -1;
 
-//            TelephonyManager telephonyManager = (TelephonyManager) (getActivity().getSystemService((Context.TELEPHONY_SERVICE)));
-//             GsmCellLocation gl = (GsmCellLocation) telephonyManager.getCellLocation();
-//            String networkOperator = telephonyManager.getNetworkOperator();
+            //            TelephonyManager telephonyManager = (TelephonyManager) (getActivity().getSystemService((Context.TELEPHONY_SERVICE)));
+            //             GsmCellLocation gl = (GsmCellLocation) telephonyManager.getCellLocation();
+            //            String networkOperator = telephonyManager.getNetworkOperator();
 
-//            if (gl != null) {
-//                cid = gl.getCid();
-//                lac = gl.getLac();
-//                //Log.i("loc info", "psc : " + cl.getPsc());
-//            }
-//            if (networkOperator != null) {
-//                System.out.println(">>>>>>>>>>>" + networkOperator);
-//                //mcc = Integer.parseInt(networkOperator.substring(0, 3));
-//                //mnc = Integer.parseInt(networkOperator.substring(3));
-//            }
+            //            if (gl != null) {
+            //                cid = gl.getCid();
+            //                lac = gl.getLac();
+            //                //Log.i("loc info", "psc : " + cl.getPsc());
+            //            }
+            //            if (networkOperator != null) {
+            //                System.out.println(">>>>>>>>>>>" + networkOperator);
+            //                //mcc = Integer.parseInt(networkOperator.substring(0, 3));
+            //                //mnc = Integer.parseInt(networkOperator.substring(3));
+            //            }
 
-            try {
-                if (mLastLocation == null || (mLastLocation != null && accuracyTester(location, mLastLocation))) {
+            try
+            {
+                if (mLastLocation == null || (mLastLocation != null && accuracyTester(location, mLastLocation)))
+                {
                     mLastLocation = location;
                     LocationDetails locationDetails = new LocationDetails(mMapotempoApplicationInterface.getManager(),
-                            location.getLatitude(),
-                            location.getLongitude(),
-                            new Date(),
-                            (double) location.getAccuracy(),
-                            (double) location.getSpeed(),
-                            (double) location.getBearing()
-                            , location.getAltitude(),
-                            0,
-                            cid,
-                            lac,
-                            mcc,
-                            mnc);
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        new Date(),
+                        (double) location.getAccuracy(),
+                        (double) location.getSpeed(),
+                        (double) location.getBearing()
+                        , location.getAltitude(),
+                        0,
+                        cid,
+                        lac,
+                        mcc,
+                        mnc);
                     UserCurrentLocation userCurrentLocation = mMapotempoApplicationInterface.getManager().getCurrentLocation();
                     userCurrentLocation.setLocation(locationDetails);
                     userCurrentLocation.save();
                 }
-            } catch (FleetException e) {
+            } catch (FleetException e)
+            {
                 // TODO CL2.0
             }
         }
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
+    public void onStatusChanged(String s, int i, Bundle bundle)
+    {
         Log.i("onStatusChanged", s);
     }
 
     @Override
-    public void onProviderEnabled(String s) {
+    public void onProviderEnabled(String s)
+    {
         Log.i("onProviderEnabled", s);
     }
 
     @Override
-    public void onProviderDisabled(String s) {
+    public void onProviderDisabled(String s)
+    {
         Log.i("onProviderDisabled", s);
     }
 
@@ -171,13 +185,16 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
     // ===============
     // ==  Private  ==
     // ===============
-    private void initLocationManager() {
+    private void initLocationManager()
+    {
         mLocMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
     }
 
-    private boolean hookLocationListener(boolean hook_status) {
+    private boolean hookLocationListener(boolean hook_status)
+    {
         boolean access_fine_location = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        if (hook_status && access_fine_location) {
+        if (hook_status && access_fine_location)
+        {
             Log.d(getClass().getName(), "hooked the location listener");
 
             if (mLocMngr.isProviderEnabled(LocationManager.PASSIVE_PROVIDER))
@@ -187,7 +204,9 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
             if (mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
                 mLocMngr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_TIME, UPDATE_DISTANCE, this);
             return true;
-        } else {
+        }
+        else
+        {
             Log.d(getClass().getName(), "unhooked the location listener");
             mLocMngr.removeUpdates(this);
             return false;
@@ -195,11 +214,14 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
     }
 
     // NewLoc accuracy test
-    private boolean accuracyTester(Location newLoc, Location oldLoc) {
+    private boolean accuracyTester(Location newLoc, Location oldLoc)
+    {
         Double dist = Haversine.distance(newLoc.getLatitude(), newLoc.getLongitude(), oldLoc.getLatitude(), oldLoc.getLongitude());
-        if (dist + oldLoc.getAccuracy() > newLoc.getAccuracy()) {
+        if (dist + oldLoc.getAccuracy() > newLoc.getAccuracy())
+        {
             return true;
-        } else
+        }
+        else
             return false;
     }
 }

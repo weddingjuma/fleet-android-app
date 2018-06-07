@@ -19,21 +19,25 @@
 
 package com.mapotempo.lib.fragments.missions;
 
-public enum ListBehavior {
+public enum ListBehavior
+{
     FOCUS("FOCUS"),
     SIMPLE("SIMPLE");
 
     final public String mStringType;
 
-    ListBehavior(String stringType) {
+    ListBehavior(String stringType)
+    {
         mStringType = stringType;
     }
 
-    public static ListBehavior fromString(String stringType) {
+    public static ListBehavior fromString(String stringType)
+    {
         return valueOf(stringType.toUpperCase());
     }
 
-    public static ListBehavior fromInteger(int intType) {
+    public static ListBehavior fromInteger(int intType)
+    {
         return ListBehavior.values()[intType];
     }
 }

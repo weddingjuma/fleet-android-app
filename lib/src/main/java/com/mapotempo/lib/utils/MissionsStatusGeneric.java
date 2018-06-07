@@ -19,7 +19,8 @@
 
 package com.mapotempo.lib.utils;
 
-public class MissionsStatusGeneric<V, T> {
+public class MissionsStatusGeneric<V, T>
+{
 
     private V view;
     private T type;
@@ -31,7 +32,8 @@ public class MissionsStatusGeneric<V, T> {
      * @param type Type of a status, can be anything from the database.
      * @throws NullPointerException
      */
-    public MissionsStatusGeneric(V view, T type) throws NullPointerException {
+    public MissionsStatusGeneric(V view, T type) throws NullPointerException
+    {
         this.view = view;
         this.type = type;
 
@@ -42,11 +44,13 @@ public class MissionsStatusGeneric<V, T> {
             throw new NullPointerException("type can't be null");
     }
 
-    public V getView() {
+    public V getView()
+    {
         return view;
     }
 
-    public T getType() {
+    public T getType()
+    {
         return type;
     }
 }

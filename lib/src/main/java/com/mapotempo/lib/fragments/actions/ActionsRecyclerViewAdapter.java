@@ -40,12 +40,14 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link com.mapotempo.fleet.dao.model.Mission} and makes a call to the
  * specified {@link MissionsListFragment.OnMissionSelectedListener}.
  */
-public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerViewAdapter.ViewHolder> {
+public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerViewAdapter.ViewHolder>
+{
 
     /**
      * This interface must be implemented by activities that contain {@link MissionsListFragment}
      */
-    public interface OnMissionActionSelectedListener {
+    public interface OnMissionActionSelectedListener
+    {
         /**
          * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
          *
@@ -63,7 +65,8 @@ public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecy
     // ==  Constructor  ==
     // ===================
 
-    public ActionsRecyclerViewAdapter(Context context, OnMissionActionSelectedListener listener, List<MissionActionType> actions) {
+    public ActionsRecyclerViewAdapter(Context context, OnMissionActionSelectedListener listener, List<MissionActionType> actions)
+    {
         mActions = actions;
         mActionsCount = actions.size();
         mListener = listener;
@@ -75,19 +78,22 @@ public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecy
     // ======================================
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_actions_list_adapter, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position)
+    {
         final MissionActionType action = mActions.get(position);
         holder.setMission(action, position);
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return mActionsCount;
     }
 
@@ -95,28 +101,34 @@ public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecy
     // ==  Public  ==
     // ==============
 
-    public void notifyDataSyncHasChanged(List<MissionActionType> actions) {
+    public void notifyDataSyncHasChanged(List<MissionActionType> actions)
+    {
         mActions = actions;
         mActionsCount = actions.size();
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder
+    {
         MissionActionType mItem;
         final MissionActionPanel mActionView;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view)
+        {
             super(view);
             mActionView = view.findViewById(R.id.status_panel);
-            mActionView.setOnClickListener(new View.OnClickListener() {
+            mActionView.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     mListener.onMissionActionSelected(mItem);
                 }
             });
         }
 
-        void setMission(MissionActionType action, final int position) {
+        void setMission(MissionActionType action, final int position)
+        {
             mItem = mActions.get(position);
             Drawable d = new BitmapDrawable();
             Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), "#FFFFFF", d);

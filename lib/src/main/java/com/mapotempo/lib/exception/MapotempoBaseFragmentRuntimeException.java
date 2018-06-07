@@ -21,19 +21,24 @@ package com.mapotempo.lib.exception;
 
 import android.util.AndroidRuntimeException;
 
-public class MapotempoBaseFragmentRuntimeException extends AndroidRuntimeException {
-    public MapotempoBaseFragmentRuntimeException() {
+public class MapotempoBaseFragmentRuntimeException extends AndroidRuntimeException
+{
+    public MapotempoBaseFragmentRuntimeException()
+    {
     }
 
-    public MapotempoBaseFragmentRuntimeException(String name) {
+    public MapotempoBaseFragmentRuntimeException(String name)
+    {
         super(name);
     }
 
-    public MapotempoBaseFragmentRuntimeException(String name, Throwable cause) {
+    public MapotempoBaseFragmentRuntimeException(String name, Throwable cause)
+    {
         super(name, cause);
     }
 
-    public MapotempoBaseFragmentRuntimeException(Exception cause) {
+    public MapotempoBaseFragmentRuntimeException(Exception cause)
+    {
         super(cause);
     }
 }

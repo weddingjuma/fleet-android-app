@@ -34,7 +34,8 @@ import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionsListFragment extends MapotempoBaseFragment {
+public class ActionsListFragment extends MapotempoBaseFragment
+{
 
     private RecyclerView mRecyclerView;
 
@@ -42,9 +43,11 @@ public class ActionsListFragment extends MapotempoBaseFragment {
 
     private List<MissionActionType> mMissionStatusActions = new ArrayList<>();
 
-    private ActionsRecyclerViewAdapter.OnMissionActionSelectedListener mListener = new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener() {
+    private ActionsRecyclerViewAdapter.OnMissionActionSelectedListener mListener = new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener()
+    {
         @Override
-        public void onMissionActionSelected(MissionActionType action) {
+        public void onMissionActionSelected(MissionActionType action)
+        {
             // DEFAULT
         }
     };
@@ -55,16 +58,19 @@ public class ActionsListFragment extends MapotempoBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
         if (false) // TODO to finish when theme switch will be implemented
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
 
         View view = inflater.cloneInContext(contextThemeWrapper).inflate(R.layout.fragment_actions, container, false);
         mRecyclerView = view.findViewById(R.id.action_recycler_view);
-        mRecyclerAdapter = new ActionsRecyclerViewAdapter(getContext(), new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener() {
+        mRecyclerAdapter = new ActionsRecyclerViewAdapter(getContext(), new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener()
+        {
             @Override
-            public void onMissionActionSelected(MissionActionType action) {
+            public void onMissionActionSelected(MissionActionType action)
+            {
                 mListener.onMissionActionSelected(action);
             }
         }, mMissionStatusActions);
@@ -77,13 +83,15 @@ public class ActionsListFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public void setActions(List<MissionActionType> missionStatusActions) {
+    public void setActions(List<MissionActionType> missionStatusActions)
+    {
         mMissionStatusActions = new ArrayList<>(missionStatusActions);
         mRecyclerAdapter.notifyDataSyncHasChanged(mMissionStatusActions);
     }
 
 
-    public void setOnActionSelectedListener(ActionsRecyclerViewAdapter.OnMissionActionSelectedListener onActionSelectedListener) {
+    public void setOnActionSelectedListener(ActionsRecyclerViewAdapter.OnMissionActionSelectedListener onActionSelectedListener)
+    {
         mListener = onActionSelectedListener;
     }
 }

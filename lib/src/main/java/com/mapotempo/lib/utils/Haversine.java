@@ -19,12 +19,14 @@
 
 package com.mapotempo.lib.utils;
 
-public class Haversine {
+public class Haversine
+{
 
     private static final int EARTH_RADIUS = 6371008; // Earth radius in meter
 
     public static double distance(double startLat, double startLon,
-                                  double endLat, double endLon) {
+                                  double endLat, double endLon)
+    {
 
         double dLat = Math.toRadians((endLat - startLat));
         double dLong = Math.toRadians((endLon - startLon));
@@ -38,7 +40,8 @@ public class Haversine {
         return EARTH_RADIUS * c;
     }
 
-    private static double haversin(double val) {
+    private static double haversin(double val)
+    {
         return Math.pow(Math.sin(val / 2), 2);
     }
 }

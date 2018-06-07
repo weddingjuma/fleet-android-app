@@ -24,7 +24,8 @@ import android.content.SharedPreferences;
 
 import com.mapotempo.lib.R;
 
-public class LoginPrefManager {
+public class LoginPrefManager
+{
 
     private Context mContext;
 
@@ -40,7 +41,8 @@ public class LoginPrefManager {
 
     private static final String URL_CONFIGURATION = "UrlConf";
 
-    public LoginPrefManager(Context context) {
+    public LoginPrefManager(Context context)
+    {
         mContext = context;
         mSharedPreference = context.getSharedPreferences(LoginPrefManager.SHARED_BASE_NAME, 0);
     }
@@ -49,33 +51,39 @@ public class LoginPrefManager {
     // ==  URL Builder  ==
     // ===================
 
-    public String getFullURL() {
+    public String getFullURL()
+    {
         return String.format("%s:%s/%s", getUrlPref(), getPortPref(), getDBPref());
     }
 
 
-    public String getUrlPref() {
+    public String getUrlPref()
+    {
         String default_url = mContext.getResources().getString(R.string.default_fleet_url_default);
         return mSharedPreference.getString(LoginPrefManager.URL_CONFIGURATION, default_url);
     }
 
-    public void setUrlPref(String url) {
+    public void setUrlPref(String url)
+    {
         SharedPreferences.Editor editor = mSharedPreference.edit();
         editor.putString(LoginPrefManager.URL_CONFIGURATION, url);
         editor.apply();
     }
 
-    public void resetUrlPref() {
+    public void resetUrlPref()
+    {
         SharedPreferences.Editor editor = mSharedPreference.edit();
         editor.remove(LoginPrefManager.URL_CONFIGURATION);
         editor.apply();
     }
 
-    public String getPortPref() {
+    public String getPortPref()
+    {
         return mContext.getResources().getString(R.string.default_fleet_port_default);
     }
 
-    public String getDBPref() {
+    public String getDBPref()
+    {
         return mContext.getResources().getString(R.string.default_fleet_db_default);
     }
 
@@ -85,27 +93,32 @@ public class LoginPrefManager {
 
     // GETTERS:
 
-    public String getLoginPref() {
+    public String getLoginPref()
+    {
         return mSharedPreference.getString(LoginPrefManager.USER_LOGIN_KEY, "");
     }
 
-    public String getPasswordPref() {
+    public String getPasswordPref()
+    {
         return mSharedPreference.getString(LoginPrefManager.USER_PASSWORD_KEY, "");
     }
 
-    public boolean getAutoLoginPref() {
+    public boolean getAutoLoginPref()
+    {
         return mSharedPreference.getBoolean(LoginPrefManager.AUTO_LOGIN, false);
     }
 
     // SETTERS:
 
-    public void setAutoLoginPref(boolean status) {
+    public void setAutoLoginPref(boolean status)
+    {
         SharedPreferences.Editor editor = mSharedPreference.edit();
         editor.putBoolean(LoginPrefManager.AUTO_LOGIN, status);
         editor.apply();
     }
 
-    public void setLoginPasswordPref(String login, String password) {
+    public void setLoginPasswordPref(String login, String password)
+    {
         SharedPreferences.Editor editor = mSharedPreference.edit();
         editor.putString(LoginPrefManager.USER_LOGIN_KEY, login);
         editor.putString(LoginPrefManager.USER_PASSWORD_KEY, password);

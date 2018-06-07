@@ -21,21 +21,26 @@ package com.mapotempo.lib.exception;
 
 import android.view.InflateException;
 
-public class MapotempoManagerMissingException extends InflateException {
+public class MapotempoManagerMissingException extends InflateException
+{
 
-    public MapotempoManagerMissingException() {
+    public MapotempoManagerMissingException()
+    {
         super();
     }
 
-    public MapotempoManagerMissingException(String detailMessage, Throwable throwable) {
+    public MapotempoManagerMissingException(String detailMessage, Throwable throwable)
+    {
         super(detailMessage, throwable);
     }
 
-    public MapotempoManagerMissingException(String detailMessage) {
+    public MapotempoManagerMissingException(String detailMessage)
+    {
         super(detailMessage);
     }
 
-    public MapotempoManagerMissingException(Throwable throwable) {
+    public MapotempoManagerMissingException(Throwable throwable)
+    {
         super(throwable);
     }
 }

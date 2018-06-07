@@ -1,22 +1,22 @@
 <resources>
-    <!--  PREFS -->
-    <string name="pref_night_mode" translatable="false">NightMode</string>
-    <string name="pref_mobile_data" translatable="false">MobileData</string>
-    <string name="pref_automatic_data_update" translatable="false">AutomaticDataUpdate</string>
-    <string name="pref_map_zoom_button" translatable="false">MapZoomButton</string>
-    <string name="pref_map_current_position" translatable="false">CurrentPosition</string>
+  <!--  PREFS -->
+  <string name="pref_night_mode" translatable="false">NightMode</string>
+  <string name="pref_mobile_data" translatable="false">MobileData</string>
+  <string name="pref_automatic_data_update" translatable="false">AutomaticDataUpdate</string>
+  <string name="pref_map_zoom_button" translatable="false">MapZoomButton</string>
+  <string name="pref_map_current_position" translatable="false">CurrentPosition</string>
 
-    <!--  MAP CONFIG -->
-    <string name="mapbox_access_token_dummy">pk.mapox-token-dummy</string>
-    <string name="tilehosting_base_url">https://maps.tilehosting.com</string>
-    <string name="tilehosting_access_token"></string>
+  <!--  MAP CONFIG -->
+  <string name="mapbox_access_token_dummy">pk.mapox-token-dummy</string>
+  <string name="tilehosting_base_url">https://maps.tilehosting.com</string>
+  <string name="tilehosting_access_token"></string>
 
-    <!--  FLEET -->
-    <string name="default_fleet_url_default">https://mobile.fleet.mapotempo.com</string>
-    <string name="default_fleet_port_default">4984</string>
-    <string name="default_fleet_db_default">db</string>
+  <!--  FLEET -->
+  <string name="default_fleet_url_default">https://mobile.fleet.mapotempo.com</string>
+  <string name="default_fleet_port_default">4984</string>
+  <string name="default_fleet_db_default">db</string>
 
-    <!-- SENTRY -->
-    <!-- "https://publicKey:secretKey@host:port/1?options" -->
-    <string name="sentry_config"></string>
+  <!-- SENTRY -->
+  <!-- "https://publicKey:secretKey@host:port/1?options" -->
+  <string name="sentry_config"></string>
 </resources>

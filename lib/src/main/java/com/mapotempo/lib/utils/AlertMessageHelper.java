@@ -27,9 +27,11 @@ import android.widget.TextView;
 
 import com.mapotempo.lib.R;
 
-public class AlertMessageHelper {
+public class AlertMessageHelper
+{
 
-    private AlertMessageHelper() {
+    private AlertMessageHelper()
+    {
     }
 
     /**
@@ -41,15 +43,19 @@ public class AlertMessageHelper {
      * @param message    Custom message
      * @param details    Custom Details
      */
-    public static void errorAlert(Context context, Integer customView, String title, String message, String details) {
+    public static void errorAlert(Context context, Integer customView, String title, String message, String details)
+    {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
         LayoutInflater inflater = LayoutInflater.from(context);
         View box;
 
-        if (customView == null) {
+        if (customView == null)
+        {
             box = inflater.inflate(R.layout.alert_dialog, null);
-        } else {
+        }
+        else
+        {
             box = inflater.inflate(customView, null);
         }
 

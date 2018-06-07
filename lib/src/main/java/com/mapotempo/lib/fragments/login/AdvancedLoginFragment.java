@@ -34,7 +34,8 @@ import android.widget.EditText;
 
 import com.mapotempo.lib.R;
 
-public class AdvancedLoginFragment extends DialogFragment {
+public class AdvancedLoginFragment extends DialogFragment
+{
 
     private Button mDefaultButton;
 
@@ -44,7 +45,8 @@ public class AdvancedLoginFragment extends DialogFragment {
 
     private LoginPrefManager mLoginPrefManager;
 
-    public static AdvancedLoginFragment newInstance() {
+    public static AdvancedLoginFragment newInstance()
+    {
         AdvancedLoginFragment f = new AdvancedLoginFragment();
         return f;
     }
@@ -55,7 +57,8 @@ public class AdvancedLoginFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
         if (false) // TODO
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
@@ -70,18 +73,22 @@ public class AdvancedLoginFragment extends DialogFragment {
         mEditUrl.setText(dataBaseUrl);
 
         mDefaultButton = v.findViewById(R.id.default_button);
-        mDefaultButton.setOnClickListener(new View.OnClickListener() {
+        mDefaultButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 mLoginPrefManager.resetUrlPref();
                 getDialog().dismiss();
             }
         });
 
         mValidateButton = v.findViewById(R.id.validate_button);
-        mValidateButton.setOnClickListener(new View.OnClickListener() {
+        mValidateButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 mLoginPrefManager.setUrlPref(mEditUrl.getText().toString());
                 getDialog().dismiss();
             }
@@ -92,7 +99,8 @@ public class AdvancedLoginFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;

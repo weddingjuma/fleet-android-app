@@ -34,22 +34,29 @@ import com.mapotempo.lib.exception.MapotempoManagerMissingException;
  * If MapotempoFleetManagerInterface is null throw a MapotempoManagerMissingException.
  * Activity can try catch on inflate this exception.
  */
-public abstract class MapotempoBaseDialogFragment extends DialogFragment {
+public abstract class MapotempoBaseDialogFragment extends DialogFragment
+{
 
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState)
+    {
         super.onInflate(context, attrs, savedInstanceState);
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
 
-        if (context.getApplicationContext() instanceof MapotempoApplicationInterface) {
-            if (((MapotempoApplicationInterface) context.getApplicationContext()).getManager() == null) {
+        if (context.getApplicationContext() instanceof MapotempoApplicationInterface)
+        {
+            if (((MapotempoApplicationInterface) context.getApplicationContext()).getManager() == null)
+            {
                 throw new MapotempoManagerMissingException(context.toString() + "getManager() of MapotempoFleetManagerInterface return null value");
             }
-        } else {
+        }
+        else
+        {
             throw new MapotempoBaseFragmentRuntimeException(context.toString() + "Application must implement MapotempoApplicationInterface");
         }
     }

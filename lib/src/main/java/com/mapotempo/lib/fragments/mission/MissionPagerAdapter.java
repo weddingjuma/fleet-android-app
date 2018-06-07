@@ -32,57 +32,67 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class MissionPagerAdapter extends FragmentStatePagerAdapter {
+class MissionPagerAdapter extends FragmentStatePagerAdapter
+{
 
     private int mCount;
     private List<Mission> mMissions;
     private Map<Integer, MissionDetailsFragment> mPageReferenceMap = new HashMap<>();
 
-    public MissionPagerAdapter(FragmentManager fm, int count, List<Mission> missions) {
+    public MissionPagerAdapter(FragmentManager fm, int count, List<Mission> missions)
+    {
         super(fm);
         mCount = count;
         mMissions = new ArrayList<>(missions);
     }
 
-    public MissionDetailsFragment getFragment(int position) {
+    public MissionDetailsFragment getFragment(int position)
+    {
         return mPageReferenceMap.get(position);
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public Fragment getItem(int position)
+    {
         MissionDetailsFragment fragment = MissionDetailsFragment.create(position, mMissions.get(position));
         mPageReferenceMap.put(position, fragment);
         return fragment;
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(ViewGroup container, int position, Object object)
+    {
         super.destroyItem(container, position, object);
         mPageReferenceMap.remove(position);
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return mCount;
     }
 
     @Override
-    public int getItemPosition(Object object) {
+    public int getItemPosition(Object object)
+    {
         return POSITION_NONE;
     }
 
     @Override
-    public Parcelable saveState() {
+    public Parcelable saveState()
+    {
         return null;
     }
 
-    public void refreshMissions(List<Mission> newMissions) {
+    public void refreshMissions(List<Mission> newMissions)
+    {
         mMissions = newMissions;
         notifyDataSetChanged();
     }
 
 
-    public List<Mission> getMissionsList() {
+    public List<Mission> getMissionsList()
+    {
         return mMissions;
     }
 

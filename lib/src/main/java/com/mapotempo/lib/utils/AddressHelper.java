@@ -22,10 +22,13 @@ package com.mapotempo.lib.utils;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class AddressHelper {
+public class AddressHelper
+{
 
-    public static String addBackDashIfNonNull(@Nullable String first, @NonNull final String second) {
-        if (first != null && !first.isEmpty()) {
+    public static String addBackDashIfNonNull(@Nullable String first, @NonNull final String second)
+    {
+        if (first != null && !first.isEmpty())
+        {
             return first + "\n";
         }
 

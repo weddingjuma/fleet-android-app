@@ -86,7 +86,8 @@ import java.util.List;
  *    }
  * </pre>
  */
-public class MissionsListFragment extends MapotempoBaseFragment {
+public class MissionsListFragment extends MapotempoBaseFragment
+{
 
     private RecyclerView mRecyclerView;
 
@@ -109,29 +110,36 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     // ===================================
 
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState)
+    {
         super.onInflate(context, attrs, savedInstanceState);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MissionsListFragment);
 
         CharSequence behaviorType = a.getText(R.styleable.MissionsListFragment_ViewStyle);
-        if (behaviorType != null) {
+        if (behaviorType != null)
+        {
             mBehavior = ListBehavior.fromInteger(Integer.parseInt(behaviorType.toString()));
         }
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        if (context instanceof OnMissionSelectedListener) {
+        if (context instanceof OnMissionSelectedListener)
+        {
             mListener = (OnMissionSelectedListener) context;
-        } else {
+        }
+        else
+        {
             throw new RuntimeException(context.toString() + " must implement OnMissionSelectedListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
         if (false) // FIXME to finish when theme switch will be implemented
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
@@ -139,9 +147,11 @@ public class MissionsListFragment extends MapotempoBaseFragment {
         View view = inflater.cloneInContext(contextThemeWrapper).inflate(R.layout.fragment_missions_list, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener() {
+        mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener()
+        {
             @Override
-            public void onMissionSelected(int position) {
+            public void onMissionSelected(int position)
+            {
                 mListener.onMissionSelected(position);
             }
         }, mMissions, mBehavior);
@@ -152,20 +162,26 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(calendar.HOUR, -12);
 
         MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
-        if (mapotempoFleetManagerInterface != null) {
-            missionChangeListenerToken = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>() {
+        if (mapotempoFleetManagerInterface != null)
+        {
+            missionChangeListenerToken = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>()
+            {
                 @Override
-                public void changed(final List<Mission> missions) {
-                    getActivity().runOnUiThread(new Runnable() {
+                public void changed(final List<Mission> missions)
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             setMissions(missions);
                         }
                     });
@@ -176,18 +192,22 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
-        if (mapotempoFleetManagerInterface != null && missionChangeListenerToken != null) {
+        if (mapotempoFleetManagerInterface != null && missionChangeListenerToken != null)
+        {
             mapotempoFleetManagerInterface.getMissionAccess().removeListener(missionChangeListenerToken);
         }
         super.onPause();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
             if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))
                 explain();
             else
@@ -196,13 +216,18 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == REQUEST_ACCESS_FINE_LOCATION) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                    if (!shouldShowRequestPermissionRationale(permissions[i])) {
+        if (requestCode == REQUEST_ACCESS_FINE_LOCATION)
+        {
+            for (int i = 0; i < permissions.length; i++)
+            {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
+                {
+                    if (!shouldShowRequestPermissionRationale(permissions[i]))
+                    {
                         displayOptions();
                     }
                 }
@@ -214,11 +239,13 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public void notifyDataChange() {
+    public void notifyDataChange()
+    {
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
-    public void missionFocus(int position) {
+    public void missionFocus(int position)
+    {
         mRecyclerView.smoothScrollToPosition(position);
         if (mRecyclerAdapter != null)
             mRecyclerAdapter.setMissionFocus(position);
@@ -227,7 +254,8 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     /**
      * This interface must be implemented by activities that contain {@link MissionsListFragment}
      */
-    public interface OnMissionSelectedListener {
+    public interface OnMissionSelectedListener
+    {
         /**
          * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
          *
@@ -240,21 +268,28 @@ public class MissionsListFragment extends MapotempoBaseFragment {
     // ==  Private  ==
     // ===============
 
-    private void setMissions(List<Mission> missions) {
+    private void setMissions(List<Mission> missions)
+    {
         mRecyclerAdapter.notifyDataSyncHasChanged(missions);
-        if (missions == null || missions.size() == 0) {
+        if (missions == null || missions.size() == 0)
+        {
             mDefaultFrameLayout.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.GONE);
-        } else {
+        }
+        else
+        {
             mDefaultFrameLayout.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
         }
     }
 
-    private void displayOptions() {
-        Snackbar.make(getView(), com.mapotempo.lib.R.string.disabled_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.settings, new View.OnClickListener() {
+    private void displayOptions()
+    {
+        Snackbar.make(getView(), com.mapotempo.lib.R.string.disabled_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.settings, new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 final Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
                 intent.setData(uri);
@@ -263,18 +298,22 @@ public class MissionsListFragment extends MapotempoBaseFragment {
         }).show();
     }
 
-    private void explain() {
+    private void explain()
+    {
         askForPermission();
 
-        Snackbar.make(getView(), com.mapotempo.lib.R.string.explaination_location_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.Activate, new View.OnClickListener() {
+        Snackbar.make(getView(), com.mapotempo.lib.R.string.explaination_location_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.Activate, new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 askForPermission();
             }
         }).show();
     }
 
-    private void askForPermission() {
+    private void askForPermission()
+    {
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
     }
 }

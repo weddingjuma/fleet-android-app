@@ -79,7 +79,8 @@ import java.util.List;
  *  }
  * </pre>
  */
-public class MissionsPagerFragment extends MapotempoBaseFragment {
+public class MissionsPagerFragment extends MapotempoBaseFragment
+{
 
     private static final String CURRENT_POSITION = "current_position";
 
@@ -93,7 +94,8 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
 
     private LiveAccessToken missionChangeListenerToken;
 
-    public MissionsPagerFragment() {
+    public MissionsPagerFragment()
+    {
     }
 
     // ===================================
@@ -101,12 +103,14 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
     // ===================================
 
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState)
+    {
         super.onInflate(context, attrs, savedInstanceState);
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         mListener = (OnMissionFocusListener) context;
         if (mListener == null)
@@ -114,33 +118,42 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         // Get extra argument and savedInstanceState can override it.
         mCurrentPosition = getActivity().getIntent().getIntExtra("mission_id", 0);
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null)
+        {
             mCurrentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(calendar.HOUR, -12);
 
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         List<Mission> missions = new ArrayList<>();
-        if (mapotempoApplication.getManager() != null) {
+        if (mapotempoApplication.getManager() != null)
+        {
             missions = mapotempoApplication.getManager().getMissionAccess().byDateGreaterThan(calendar.getTime());
-            missionChangeListenerToken = mapotempoApplication.getManager().getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>() {
+            missionChangeListenerToken = mapotempoApplication.getManager().getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>()
+            {
                 @Override
-                public void changed(final List<Mission> missions) {
-                    getActivity().runOnUiThread(new Runnable() {
+                public void changed(final List<Mission> missions)
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
                         @Override
-                        public void run() {
-                            if (isAdded()) {
+                        public void run()
+                        {
+                            if (isAdded())
+                            {
                                 // TODO Refactor the update behavior
 
                                 List<Mission> oldDeprecatedMissions = mPagerAdapter.getMissionsList(); // Keep track of old data using a shallow copy
@@ -148,43 +161,48 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
                                 int newMissionPosition = 0;
 
                                 // DO NOTHING IF DATA NEED TO BE REFRESHED
-                                if (oldDeprecatedMissions.equals(missions)) {
+                                if (oldDeprecatedMissions.equals(missions))
+                                {
                                     return;
-                                } else if (missions.size() == 0) {
+                                }
+                                else if (missions.size() == 0)
+                                {
                                     MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
                                     mapotempoApplication.getManager().getMissionAccess().removeListener(missionChangeListenerToken);
                                     getActivity().finish();
                                     return;
-                                } else {
+                                }
+                                else
+                                {
                                     mPagerAdapter.refreshMissions(missions);
                                 }
 
-//                        // Update previous list to prevent useless updates
-//                        for (MissionInterface loopMission : missions) {
-//                            if (!oldDeprecatedMissions.contains(loopMission)) {
-//                                mPagerAdapter.addMission(loopMission);
-//                            } else {
-//                                int id = oldDeprecatedMissions.indexOf(loopMission);
-//                                oldDeprecatedMissions.remove(id);
-//                            }
-//                        }
-//
-//                        // Remove deprecated mission
-//                        mPagerAdapter.removeMissions(oldDeprecatedMissions);
-//
-//                        mPagerAdapter.notifyDataSetChanged();
+                                //                        // Update previous list to prevent useless updates
+                                //                        for (MissionInterface loopMission : missions) {
+                                //                            if (!oldDeprecatedMissions.contains(loopMission)) {
+                                //                                mPagerAdapter.addMission(loopMission);
+                                //                            } else {
+                                //                                int id = oldDeprecatedMissions.indexOf(loopMission);
+                                //                                oldDeprecatedMissions.remove(id);
+                                //                            }
+                                //                        }
+                                //
+                                //                        // Remove deprecated mission
+                                //                        mPagerAdapter.removeMissions(oldDeprecatedMissions);
+                                //
+                                //                        mPagerAdapter.notifyDataSetChanged();
 
                                 // Search for new index
-//                            Iterator<Mission> iterable = missions.iterator();
-//                            while (iterable.hasNext()) {
-//                                if (mission.getId().equals(iterable.next().getId())) {
-//                                    newMissionPosition = mPagerAdapter.getItemPosition(iterable.next());
-//                                    break;
-//                                }
-//                            }
-//
-//                            // Update pager position according to the mission new position
-//                            mViewPager.setCurrentItem(newMissionPosition);
+                                //                            Iterator<Mission> iterable = missions.iterator();
+                                //                            while (iterable.hasNext()) {
+                                //                                if (mission.getId().equals(iterable.next().getId())) {
+                                //                                    newMissionPosition = mPagerAdapter.getItemPosition(iterable.next());
+                                //                                    break;
+                                //                                }
+                                //                            }
+                                //
+                                //                            // Update pager position according to the mission new position
+                                //                            mViewPager.setCurrentItem(newMissionPosition);
                             }
                         }
                     });
@@ -209,7 +227,8 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
 
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         mapotempoApplication.getManager().getMissionAccess().removeListener(missionChangeListenerToken);
@@ -217,7 +236,8 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_POSITION, mCurrentPosition);
     }
@@ -226,12 +246,14 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public void notifyDataChange() {
+    public void notifyDataChange()
+    {
         mPagerAdapter.notifyDataSetChanged();
     }
 
     @Nullable
-    public Mission getCurrentMission() {
+    public Mission getCurrentMission()
+    {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(calendar.HOUR, -12);
@@ -242,15 +264,18 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
         return ms;
     }
 
-    public void setCurrentItem(int position) {
+    public void setCurrentItem(int position)
+    {
         mViewPager.setCurrentItem(position, true);
     }
 
-    public interface OnMissionFocusListener {
+    public interface OnMissionFocusListener
+    {
         void onMissionFocus(int page);
     }
 
-    public boolean onBackPressed() {
+    public boolean onBackPressed()
+    {
         MissionDetailsFragment missionDetailsFragment = mPagerAdapter.getFragment(mViewPager.getCurrentItem());
         if (missionDetailsFragment != null)
             return missionDetailsFragment.onBackPressed();
@@ -261,20 +286,25 @@ public class MissionsPagerFragment extends MapotempoBaseFragment {
     // ==  Private  ==
     // ===============
 
-    private void setPagerChangeListener() {
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    private void setPagerChangeListener()
+    {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(int position)
+            {
                 mListener.onMissionFocus(position);
                 mCurrentPosition = position;
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
+            public void onPageScrollStateChanged(int state)
+            {
             }
         });
     }

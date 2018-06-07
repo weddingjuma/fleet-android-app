@@ -29,15 +29,18 @@ import java.util.Date;
 import java.util.IllegalFormatException;
 import java.util.Locale;
 
-public class DateHelpers {
+public class DateHelpers
+{
 
-    public enum DateStyle {
+    public enum DateStyle
+    {
         FULLDATE,
         SHORTDATE,
         HOURMINUTES
     }
 
-    private enum Days {
+    private enum Days
+    {
         MONDAY("Monday", "Lundi"),
         TUESDAY("Tuesday", "Mardi"),
         WEDNESDAY("Wednesday", "Mercredi"),
@@ -50,32 +53,40 @@ public class DateHelpers {
 
         private String mFrenchTag;
 
-        Days(String englishTag, String frenchTag) {
+        Days(String englishTag, String frenchTag)
+        {
             mEnglishTag = englishTag;
             mFrenchTag = frenchTag;
         }
 
-        public static Days fromEnglishString(String englishTag) {
+        public static Days fromEnglishString(String englishTag)
+        {
             Days day = MONDAY;
-            try {
+            try
+            {
                 day = Days.valueOf(englishTag.toUpperCase());
-            } catch (IllegalFormatException e) {
+            } catch (IllegalFormatException e)
+            {
                 e.printStackTrace();
-            } finally {
+            } finally
+            {
                 return day;
             }
         }
 
-        public String getEnglishString() {
+        public String getEnglishString()
+        {
             return mEnglishTag;
         }
 
-        public String getFrenchString() {
+        public String getFrenchString()
+        {
             return mFrenchTag;
         }
     }
 
-    private enum Months {
+    private enum Months
+    {
 
         JANVIER(1, "Janvier"),
         FEVRIER(2, "Février"),
@@ -93,15 +104,19 @@ public class DateHelpers {
         private String mVal;
         private int mIndex;
 
-        Months(int index, String val) {
+        Months(int index, String val)
+        {
             mVal = val;
             mIndex = index;
         }
 
-        public static String getStringFromIndex(int i) {
+        public static String getStringFromIndex(int i)
+        {
             String rlt = "";
-            for (DateHelpers.Months m : DateHelpers.Months.values()) {
-                if (m.getIndex() == i) {
+            for (DateHelpers.Months m : DateHelpers.Months.values())
+            {
+                if (m.getIndex() == i)
+                {
                     rlt = m.toString();
                 }
             }
@@ -109,25 +124,29 @@ public class DateHelpers {
             return rlt;
         }
 
-        public int getIndex() {
+        public int getIndex()
+        {
             return mIndex;
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return mVal;
         }
     }
 
 
-    private DateHelpers() {
+    private DateHelpers()
+    {
     }
 
 
     // #########################
     // FULL DATE PARSER
     // #########################
-    private static String fullDateParsing(Date entryDate) {
+    private static String fullDateParsing(Date entryDate)
+    {
         SimpleDateFormat formatter;
         String dayNumberInMonth;
         String month;
@@ -153,14 +172,16 @@ public class DateHelpers {
         return date;
     }
 
-    private static String shortDateParsing(Date entryDate) {
+    private static String shortDateParsing(Date entryDate)
+    {
         SimpleDateFormat formatter;
         formatter = new SimpleDateFormat("d'/'MM'/'yyyy");
 
         return formatter.format(entryDate);
     }
 
-    private static String onlyHour(Date entryDate) {
+    private static String onlyHour(Date entryDate)
+    {
         SimpleDateFormat formatter;
         formatter = new SimpleDateFormat("HH':'mm");
 
@@ -174,21 +195,23 @@ public class DateHelpers {
      * @param format    FULLDATE | SHORTDATE | HOURMINUTES
      * @return
      */
-    public static String parse(Date entryDate, DateStyle format) {
+    public static String parse(Date entryDate, DateStyle format)
+    {
         String dateFormatted = "";
 
-        switch (format) {
-            case FULLDATE:
-                dateFormatted = fullDateParsing(entryDate);
-                break;
+        switch (format)
+        {
+        case FULLDATE:
+            dateFormatted = fullDateParsing(entryDate);
+            break;
 
-            case SHORTDATE:
-                dateFormatted = shortDateParsing(entryDate);
-                break;
+        case SHORTDATE:
+            dateFormatted = shortDateParsing(entryDate);
+            break;
 
-            case HOURMINUTES:
-                dateFormatted = onlyHour(entryDate);
-                break;
+        case HOURMINUTES:
+            dateFormatted = onlyHour(entryDate);
+            break;
         }
 
         return dateFormatted;
@@ -200,7 +223,8 @@ public class DateHelpers {
      * @param timeToAdd number of day to add from current date
      * @return An array that contain 2 Date object, before(0) and after(1).
      */
-    public static Date[] generateTimeWindowDate(int timeToAdd) {
+    public static Date[] generateTimeWindowDate(int timeToAdd)
+    {
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
 
@@ -218,25 +242,26 @@ public class DateHelpers {
         return new Date[]{currentDate, furtherDate};
     }
 
-    public static String FormatedHour(Context context, int totalSecs) {
+    public static String FormatedHour(Context context, int totalSecs)
+    {
         int hours = totalSecs / 3600;
         int minutes = (totalSecs % 3600) / 60;
         int seconds = totalSecs % 60;
         if (hours > 0 && minutes == 0 && seconds == 0)
             return String.format(Locale.ENGLISH, "%d %s", hours, (hours > 1 ? context.getString(R.string.hours) :
-                    context.getString(R.string.hour)));
+                context.getString(R.string.hour)));
         else if (hours > 0 && seconds == 0)
             return String.format(Locale.ENGLISH, "%dh %dm", hours, minutes);
         else if (hours > 0)
             return String.format(Locale.ENGLISH, "%dh %dm %ds", hours, minutes, seconds);
         else if (minutes > 0 && seconds == 0)
             return String.format(Locale.ENGLISH, "%d %s", minutes, (minutes > 1 ? context.getString(R.string.minutes) :
-                    context.getString(R.string.minute)));
+                context.getString(R.string.minute)));
         else if (minutes > 0)
             return String.format(Locale.ENGLISH, "%dm %ds", minutes, seconds);
         else if (seconds > 0)
             return String.format(Locale.ENGLISH, "%d %s", seconds, (seconds > 1 ? context.getString(R.string.seconds) :
-                    context.getString(R.string.second)));
+                context.getString(R.string.second)));
         else
             return "";
 

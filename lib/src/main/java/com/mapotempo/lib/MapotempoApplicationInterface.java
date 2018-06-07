@@ -21,7 +21,8 @@ package com.mapotempo.lib;
 
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 
-public interface MapotempoApplicationInterface {
+public interface MapotempoApplicationInterface
+{
     MapotempoFleetManager getManager();
 
     void setManager(MapotempoFleetManager manager);

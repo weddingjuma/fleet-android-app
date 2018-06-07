@@ -37,7 +37,8 @@ import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.fragments.login.LoginPrefManager;
 
-public class MainMenuFragment extends MapotempoBaseFragment {
+public class MainMenuFragment extends MapotempoBaseFragment
+{
 
     private MainMenuFragment.OnMenuInteractionListener mListener;
 
@@ -51,7 +52,8 @@ public class MainMenuFragment extends MapotempoBaseFragment {
 
     SwitchCompat mSwitchTracking;
 
-    public MainMenuFragment() {
+    public MainMenuFragment()
+    {
     }
 
     // ===================================
@@ -59,7 +61,8 @@ public class MainMenuFragment extends MapotempoBaseFragment {
     // ===================================
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         mListener = (OnMenuInteractionListener) context;
         if (mListener == null)
@@ -67,7 +70,8 @@ public class MainMenuFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         super.onCreateView(inflater, container, savedInstanceState);
 
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
@@ -81,9 +85,11 @@ public class MainMenuFragment extends MapotempoBaseFragment {
 
         mMenu = view.getMenu();
         mLogoutItem = mMenu.findItem(R.id.sign_out);
-        mLogoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        mLogoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+        {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item)
+            {
                 LoginPrefManager loginPrefManager = new LoginPrefManager(getActivity());
                 loginPrefManager.setAutoLoginPref(false);
                 mListener.onLogout();
@@ -91,25 +97,31 @@ public class MainMenuFragment extends MapotempoBaseFragment {
             }
         });
 
-        mMenu.findItem(R.id.map).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        mMenu.findItem(R.id.map).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+        {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item)
+            {
                 mListener.onMap();
                 return true;
             }
         });
 
-        mMenu.findItem(R.id.setting).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        mMenu.findItem(R.id.setting).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+        {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item)
+            {
                 mListener.onSettings();
                 return true;
             }
         });
 
-        mMenu.findItem(R.id.help).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        mMenu.findItem(R.id.help).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+        {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item)
+            {
                 Uri uriUrl = Uri.parse(getString(R.string.mapotempo_help_url));
                 Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
                 startActivity(launchBrowser);
@@ -123,7 +135,8 @@ public class MainMenuFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public interface OnMenuInteractionListener {
+    public interface OnMenuInteractionListener
+    {
         void onMap();
 
         void onSettings();

@@ -41,7 +41,8 @@ import com.mapotempo.lib.exception.MapotempoManagerMissingException;
  * If MapotempoFleetManagerInterface is null throw a MapotempoManagerMissingException.
  * Activity can try catch on inflate this exception.
  */
-public abstract class MapotempoBaseFragment extends Fragment {
+public abstract class MapotempoBaseFragment extends Fragment
+{
 
     public static boolean locationHasBeenAsked = false;
 
@@ -50,27 +51,35 @@ public abstract class MapotempoBaseFragment extends Fragment {
     // ====================================
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         // Init location if Gps is off
-        if (!locationHasBeenAsked) initLocation();
+        if (!locationHasBeenAsked)
+            initLocation();
     }
 
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState)
+    {
         super.onInflate(context, attrs, savedInstanceState);
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
 
-        if (context.getApplicationContext() instanceof MapotempoApplicationInterface) {
-            if (((MapotempoApplicationInterface) context.getApplicationContext()).getManager() == null) {
+        if (context.getApplicationContext() instanceof MapotempoApplicationInterface)
+        {
+            if (((MapotempoApplicationInterface) context.getApplicationContext()).getManager() == null)
+            {
                 throw new MapotempoManagerMissingException(context.toString() + "getManager() of MapotempoApplicationInterface return null value");
             }
-        } else {
+        }
+        else
+        {
             throw new MapotempoBaseFragmentRuntimeException(context.toString() + "Application must implement MapotempoApplicationInterface");
         }
     }
@@ -79,24 +88,30 @@ public abstract class MapotempoBaseFragment extends Fragment {
     // ==  Private Init Location  ==
     // =============================
 
-    private void initLocation() {
+    private void initLocation()
+    {
         LocationManager locMngr = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (!locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && !locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!locMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && !locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
             // notify user
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.enable_location_services);
             dialog.setMessage(R.string.location_is_disabled_long_text);
-            dialog.setPositiveButton(R.string.connection_settings, new DialogInterface.OnClickListener() {
+            dialog.setPositiveButton(R.string.connection_settings, new DialogInterface.OnClickListener()
+            {
                 @Override
-                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                public void onClick(DialogInterface paramDialogInterface, int paramInt)
+                {
                     Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(myIntent);
                 }
             });
-            dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+            dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener()
+            {
 
                 @Override
-                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                public void onClick(DialogInterface paramDialogInterface, int paramInt)
+                {
                 }
             });
             dialog.show();

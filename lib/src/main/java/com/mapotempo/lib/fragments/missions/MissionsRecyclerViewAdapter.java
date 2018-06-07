@@ -42,7 +42,8 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link Mission} and makes a call to the
  * specified {@link MissionsListFragment.OnMissionSelectedListener}.
  */
-class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder> {
+class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder>
+{
 
     private MissionsListFragment.OnMissionSelectedListener mListener;
 
@@ -58,7 +59,8 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
     // ==  Constructor  ==
     // ===================
 
-    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<Mission> missions, ListBehavior behavior) {
+    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<Mission> missions, ListBehavior behavior)
+    {
         mMissions = missions;
         missionsCount = missions.size();
         mListener = listener;
@@ -70,20 +72,23 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
     // ======================================
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_missions_list_adapter, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position)
+    {
         final Mission mission = mMissions.get(position);
         holder.setMission(mission, position);
         holder.setBackgroundFocus(position == mMissionFocus);
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return missionsCount;
     }
 
@@ -91,20 +96,23 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
     // ==  Public  ==
     // ==============
 
-    public void setMissionFocus(int position) {
+    public void setMissionFocus(int position)
+    {
         int oldPosition = mMissionFocus;
         mMissionFocus = position;
         notifyItemChanged(oldPosition);
         notifyItemChanged(mMissionFocus);
     }
 
-    public void notifyDataSyncHasChanged(List<Mission> missions) {
+    public void notifyDataSyncHasChanged(List<Mission> missions)
+    {
         mMissions = missions;
         missionsCount = missions.size();
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder
+    {
         Mission mItem;
         final View mView;
         final TextView mName;
@@ -115,7 +123,8 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
         final FrameLayout mSelected;
         final MissionActionPanel mMissionActionPanel;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view)
+        {
             super(view);
             mView = view;
             mSelected = view.findViewById(R.id.selected);
@@ -127,7 +136,8 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
             mMissionActionPanel = view.findViewById(R.id.status_panel);
         }
 
-        void setMission(Mission mission, final int position) {
+        void setMission(Mission mission, final int position)
+        {
             String missionDate = DateHelpers.parse(mission.getETAOrDefault(), DateHelpers.DateStyle.SHORTDATE);
             String missionHour = DateHelpers.parse(mission.getETAOrDefault(), DateHelpers.DateStyle.HOURMINUTES);
             mItem = mission;
@@ -140,15 +150,18 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
             Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(mission.getStatusType().getSVGPath(), "#ffffff", new BitmapDrawable());
             mMissionActionPanel.setImageDrawable(drawable);
 
-            mView.setOnClickListener(new View.OnClickListener() {
+            mView.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     mListener.onMissionSelected(position);
                 }
             });
         }
 
-        void setBackgroundFocus(boolean focus) {
+        void setBackgroundFocus(boolean focus)
+        {
             if (focus && mBehavior == ListBehavior.FOCUS)
                 mSelected.setVisibility(View.VISIBLE);
             else
@@ -156,7 +169,8 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return super.toString() + " '" + mName.getText() + "'";
         }
     }

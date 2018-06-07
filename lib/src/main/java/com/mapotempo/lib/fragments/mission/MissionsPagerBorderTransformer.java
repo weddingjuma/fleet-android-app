@@ -24,10 +24,12 @@ import android.view.View;
 
 import com.mapotempo.lib.R;
 
-public class MissionsPagerBorderTransformer implements ViewPager.PageTransformer {
+public class MissionsPagerBorderTransformer implements ViewPager.PageTransformer
+{
 
     @Override
-    public void transformPage(View view, float position) {
+    public void transformPage(View view, float position)
+    {
         float margin = view.getResources().getDimension(R.dimen.margin_on_scroll);
         if (Math.abs(position) > 0 && Math.abs(position) < 1)
             view.setTranslationX(margin * position);

@@ -30,7 +30,8 @@ import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 
-public class MapotempoApplication extends Application implements MapotempoApplicationInterface {
+public class MapotempoApplication extends Application implements MapotempoApplicationInterface
+{
 
     private MapotempoFleetManager iFleetManager;
 
@@ -38,7 +39,8 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     // ==  Android Application Life cycle  ==
     // ======================================
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
         // Init Mapbox
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token_dummy));
@@ -52,24 +54,31 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     // ==============
 
     @Override
-    public MapotempoFleetManager getManager() {
+    public MapotempoFleetManager getManager()
+    {
         return iFleetManager;
     }
 
     @Override
-    public void setManager(MapotempoFleetManager manager) {
-        if (iFleetManager != null) {
-            try {
+    public void setManager(MapotempoFleetManager manager)
+    {
+        if (iFleetManager != null)
+        {
+            try
+            {
                 iFleetManager.release();
-            } catch (FleetException e) {
+            } catch (FleetException e)
+            {
                 e.printStackTrace();
-            } finally {
+            } finally
+            {
                 iFleetManager = null;
             }
         }
         iFleetManager = manager;
 
-        if (iFleetManager != null && !iFleetManager.serverCompatibility()) {
+        if (iFleetManager != null && !iFleetManager.serverCompatibility())
+        {
             displayErrorServerCompatibility();
         }
     }
@@ -78,9 +87,11 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     // ==  Private  ==
     // ===============
 
-    private void initSentry() {
+    private void initSentry()
+    {
         Log.i(getClass().getName(), "PRODUCTION MODE : " + !BuildConfig.DEBUG);
-        if (!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG)
+        {
             Log.i(getClass().getName(), "sentry initialisation");
             // Use the Sentry DSN (client key) from the Project Settings page on Sentry
             String sentryDsn = getString(R.string.sentry_config);
@@ -88,7 +99,8 @@ public class MapotempoApplication extends Application implements MapotempoApplic
         }
     }
 
-    private void displayErrorServerCompatibility() {
+    private void displayErrorServerCompatibility()
+    {
         Toast.makeText(this, getResources().getString(R.string.fleet_server_compatibility_error), Toast.LENGTH_LONG).show();
     }
 }

@@ -89,7 +89,8 @@ import com.mapotempo.lib.R;
  * }
  * </pre>
  */
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment
+{
     private OnLoginFragmentImplementation mListener;
 
     private MapotempoFleetManager iFleetManager = null;
@@ -100,7 +101,8 @@ public class LoginFragment extends Fragment {
 
     private LoginPrefManager mLoginPrefManager;
 
-    public LoginFragment() {
+    public LoginFragment()
+    {
         // Required empty public constructor
     }
 
@@ -109,17 +111,22 @@ public class LoginFragment extends Fragment {
     // ===================================
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        if (context instanceof OnLoginFragmentImplementation) {
+        if (context instanceof OnLoginFragmentImplementation)
+        {
             mListener = (OnLoginFragmentImplementation) context;
-        } else {
+        }
+        else
+        {
             throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme);
         if (false)
             contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.MapotempoTheme_Night);
@@ -138,17 +145,21 @@ public class LoginFragment extends Fragment {
             mPasswordView.setText(mLoginPrefManager.getPasswordPref());
 
         final Button connexionButton = view.findViewById(R.id.login_sign_in_button);
-        connexionButton.setOnClickListener(new View.OnClickListener() {
+        connexionButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 attemptLogin();
             }
         });
 
         final Button signUpButton = view.findViewById(R.id.login_sign_up_button);
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Uri uriUrl = Uri.parse(getString(R.string.mapotempo_url));
                 Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
                 startActivity(launchBrowser);
@@ -158,21 +169,26 @@ public class LoginFragment extends Fragment {
         // Auto Login configuration
         final CheckBox checkbox = view.findViewById(R.id.remember_logs);
         checkbox.setChecked(mLoginPrefManager.getAutoLoginPref());
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
                 mLoginPrefManager.setAutoLoginPref(isChecked);
             }
         });
 
         // Advanced connexion option
         ImageButton advancedConnexion = view.findViewById(R.id.advanced_connexion);
-        advancedConnexion.setOnClickListener(new View.OnClickListener() {
+        advancedConnexion.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null) {
+                if (prev != null)
+                {
                     ft.remove(prev);
                 }
                 ft.addToBackStack(null);
@@ -186,15 +202,18 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
-        if (mLoginPrefManager.getAutoLoginPref()) {
+        if (mLoginPrefManager.getAutoLoginPref())
+        {
             attemptLogin();
         }
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         TextInputLayout passwordLayout = getView().findViewById(R.id.password_layout);
 
@@ -208,7 +227,8 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mListener = null;
     }
@@ -222,25 +242,32 @@ public class LoginFragment extends Fragment {
      *
      * @param active True: start spinner and kill form.
      */
-    public void toogleLogginView(boolean active) {
+    public void toogleLogginView(boolean active)
+    {
         final LinearLayout progressLayout = getView().findViewById(R.id.login_progress_layout);
         final LinearLayout formLayout = getView().findViewById(R.id.login_form_layout);
-        if (active) {
+        if (active)
+        {
             formLayout.setVisibility(View.GONE);
             progressLayout.setVisibility(View.VISIBLE);
-        } else {
+        }
+        else
+        {
             formLayout.setVisibility(View.VISIBLE);
             progressLayout.setVisibility(View.GONE);
         }
     }
 
-    public interface OnLoginFragmentImplementation {
+    public interface OnLoginFragmentImplementation
+    {
         void onLogin(LOGIN_STATUS status,
                      MapotempoFleetManager manager);
     }
 
-    public class InvalidLoginException extends Exception {
-        public InvalidLoginException(String message) {
+    public class InvalidLoginException extends Exception
+    {
+        public InvalidLoginException(String message)
+        {
             super(message);
         }
     }
@@ -253,23 +280,30 @@ public class LoginFragment extends Fragment {
      * Try to get connection with existing database through the library.
      * If none as been found in 5 seconds, the TimerTask restart the view.
      */
-    private void attemptLogin() {
+    private void attemptLogin()
+    {
         final String login = mLoginView.getText().toString();
         final String password = mPasswordView.getText().toString();
 
-        try {
+        try
+        {
             loginValid(login, password);
-        } catch (InvalidLoginException e) {
+        } catch (InvalidLoginException e)
+        {
             e.getStackTrace();
             return;
         }
 
-        ManagerFactory.OnManagerReadyListener onUserAvailable = new ManagerFactory.OnManagerReadyListener() {
+        ManagerFactory.OnManagerReadyListener onUserAvailable = new ManagerFactory.OnManagerReadyListener()
+        {
             @Override
-            public void onManagerReady(final MapotempoFleetManager manager, final LOGIN_STATUS errorStatus) {
-                getActivity().runOnUiThread(new Runnable() {
+            public void onManagerReady(final MapotempoFleetManager manager, final LOGIN_STATUS errorStatus)
+            {
+                getActivity().runOnUiThread(new Runnable()
+                {
                     @Override
-                    public void run() {
+                    public void run()
+                    {
                         mListener.onLogin(errorStatus, manager);
                     }
                 });
@@ -289,17 +323,21 @@ public class LoginFragment extends Fragment {
     /**
      * Private method called when the virtual android keyboard needs to be hidden.
      */
-    private void hideCurrentKeyboard() {
+    private void hideCurrentKeyboard()
+    {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = getActivity().getCurrentFocus();
-        if (view == null) {
+        if (view == null)
+        {
             view = new View(getContext());
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    private void loginValid(String login, String password) throws InvalidLoginException {
-        if ((login == null || password == null) || (login.isEmpty() || password.isEmpty())) {
+    private void loginValid(String login, String password) throws InvalidLoginException
+    {
+        if ((login == null || password == null) || (login.isEmpty() || password.isEmpty()))
+        {
             throw new InvalidLoginException("Connection login invalid");
         }
     }

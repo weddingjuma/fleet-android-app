@@ -32,18 +32,22 @@ import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
-public class SignatureFragment extends MapotempoBaseDialogFragment {
+public class SignatureFragment extends MapotempoBaseDialogFragment
+{
 
-    public static SignatureFragment newInstance() {
+    public static SignatureFragment newInstance()
+    {
         SignatureFragment f = new SignatureFragment();
         return f;
     }
 
-    public interface SignatureSaveListener {
+    public interface SignatureSaveListener
+    {
         boolean onSignatureSave(Bitmap signatureBitmap);
     }
 
-    public void setSignatureSaveListener(SignatureSaveListener signatureSaveListener) {
+    public void setSignatureSaveListener(SignatureSaveListener signatureSaveListener)
+    {
         mSignatureSaveListener = signatureSaveListener;
     }
 
@@ -52,9 +56,11 @@ public class SignatureFragment extends MapotempoBaseDialogFragment {
     private Button mSaveButton;
     private Mission mMission = null;
     private Context mContext = null;
-    private SignatureSaveListener mSignatureSaveListener = new SignatureSaveListener() {
+    private SignatureSaveListener mSignatureSaveListener = new SignatureSaveListener()
+    {
         @Override
-        public boolean onSignatureSave(Bitmap signatureBitmap) {
+        public boolean onSignatureSave(Bitmap signatureBitmap)
+        {
             return true;
         }
     };
@@ -65,30 +71,36 @@ public class SignatureFragment extends MapotempoBaseDialogFragment {
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         mContext = context;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         View v = inflater.inflate(R.layout.fragment_signature, container, false);
         mSignaturePad = v.findViewById(R.id.signature_pad);
-        mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
+        mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener()
+        {
             @Override
-            public void onStartSigning() {
+            public void onStartSigning()
+            {
                 //Toast.makeText(SignatureActivity.this, "OnStartSigning", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onSigned() {
+            public void onSigned()
+            {
                 mSaveButton.setEnabled(true);
                 mClearButton.setEnabled(true);
             }
 
             @Override
-            public void onClear() {
+            public void onClear()
+            {
                 mSaveButton.setEnabled(false);
                 mClearButton.setEnabled(false);
             }
@@ -97,18 +109,23 @@ public class SignatureFragment extends MapotempoBaseDialogFragment {
         mClearButton = v.findViewById(R.id.clear_button);
         mSaveButton = v.findViewById(R.id.save_button);
 
-        mClearButton.setOnClickListener(new View.OnClickListener() {
+        mClearButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 mSignaturePad.clear();
             }
         });
 
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
+        mSaveButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
-                if (mSignatureSaveListener.onSignatureSave(signatureBitmap)) {
+                if (mSignatureSaveListener.onSignatureSave(signatureBitmap))
+                {
                     dismiss();
                 }
             }
