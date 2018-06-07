@@ -24,7 +24,8 @@ import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.SubModelBase;
 
-public class Address extends SubModelBase {
+public class Address extends SubModelBase
+{
 
     private static final String STREET = "street";
     private static final String POSTALCODE = "postalcode";
@@ -33,7 +34,8 @@ public class Address extends SubModelBase {
     private static final String COUNTRY = "country";
     private static final String DETAIL = "detail";
 
-    public Address(IDatabaseHandler iDatabaseHandler, String street, String postalCode, String city, String state, String country, String detail) throws FleetException {
+    public Address(IDatabaseHandler iDatabaseHandler, String street, String postalCode, String city, String state, String country, String detail) throws FleetException
+    {
         super(iDatabaseHandler, null);
         mDictionary.setString(STREET, street);
         mDictionary.setString(POSTALCODE, postalCode);
@@ -43,55 +45,64 @@ public class Address extends SubModelBase {
         mDictionary.setString(DETAIL, detail);
     }
 
-    public Address(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException {
+    public Address(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    {
         super(iDatabaseHandler, dictionary);
     }
 
-    public String getStreet() {
+    public String getStreet()
+    {
         String res = mDictionary.getString(STREET);
         return res != null ? res : "";
     }
 
-    public String getPostalcode() {
+    public String getPostalcode()
+    {
         String res = mDictionary.getString(POSTALCODE);
         return res != null ? res : "";
     }
 
-    public String getCity() {
+    public String getCity()
+    {
         String res = mDictionary.getString(CITY);
         return res != null ? res : "";
     }
 
-    public String getState() {
+    public String getState()
+    {
         String res = mDictionary.getString(STATE);
         return res != null ? res : "";
     }
 
-    public String getCountry() {
+    public String getCountry()
+    {
         String res = mDictionary.getString(COUNTRY);
         return res != null ? res : "";
     }
 
-    public String getDetail() {
+    public String getDetail()
+    {
         String res = mDictionary.getString(DETAIL);
         return res != null ? res : "";
     }
 
-    public boolean isValid() {
-        if (getStreet() != null || getStreet().trim().isEmpty())
-            return false;
-        if (getPostalcode() != null || getPostalcode().trim().isEmpty())
-            return false;
-        if (getCity() != null || getCity().trim().isEmpty())
-            return false;
-        if (getState() != null || getState().trim().isEmpty())
-            return false;
-        if (getCountry() != null || getCountry().trim().isEmpty())
-            return false;
-        return true;
+    public boolean isValid()
+    {
+        if (getStreet() != null && !getStreet().trim().isEmpty())
+            return true;
+        if (getPostalcode() != null && !getPostalcode().trim().isEmpty())
+            return true;
+        if (getCity() != null && !getCity().trim().isEmpty())
+            return true;
+        if (getState() != null && !getState().trim().isEmpty())
+            return true;
+        if (getCountry() != null && !getCountry().trim().isEmpty())
+            return true;
+        return false;
     }
 
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (super.equals(obj))
             return true;
 
@@ -100,11 +111,11 @@ public class Address extends SubModelBase {
 
         Address cmp = (Address) obj;
         return (getStreet().equals(cmp.getStreet()) &&
-                getPostalcode().equals(cmp.getPostalcode()) &&
-                getCity().equals(cmp.getCity()) &&
-                getCountry().equals(cmp.getCountry()) &&
-                getState().equals(cmp.getState()) &&
-                getDetail().equals(cmp.getDetail()) &&
-                super.equals(cmp));
+            getPostalcode().equals(cmp.getPostalcode()) &&
+            getCity().equals(cmp.getCity()) &&
+            getCountry().equals(cmp.getCountry()) &&
+            getState().equals(cmp.getState()) &&
+            getDetail().equals(cmp.getDetail()) &&
+            super.equals(cmp));
     }
 }

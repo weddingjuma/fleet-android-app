@@ -30,14 +30,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MissionAccess extends AccessBase<Mission> {
+public class MissionAccess extends AccessBase<Mission>
+{
     private static final int HOUR_PURGE_OFFSET = -96;
 
-    public MissionAccess(IDatabaseHandler databaseHandler) throws FleetException {
+    public MissionAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, Mission.class, "");
     }
 
-    public void purgeOutdated() {
+    public void purgeOutdated()
+    {
         Date d = new Date();
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(d);
@@ -45,17 +48,20 @@ public class MissionAccess extends AccessBase<Mission> {
         final Date date = calendar.getTime();
 
         List<Mission> missions = byDateLessThan(date);
-        for (Mission m : missions) {
-            try {
+        for (Mission m : missions)
+        {
+            try
+            {
                 mDatabaseHandler.getDatabase().purge(m.mDocument);
-            } catch (CouchbaseLiteException e) {
+            } catch (CouchbaseLiteException e)
+            {
                 e.printStackTrace();
             }
         }
-
     }
 
-    public List<Mission> byName(String name) {
-        return runQuery(Expression.property(Mission.NAME).equalTo(Expression.string(name)));
+    public List<Mission> byName(String name)
+    {
+        return runQuery(Expression.property(Mission.NAME).equalTo(Expression.string(name)), "");
     }
 }

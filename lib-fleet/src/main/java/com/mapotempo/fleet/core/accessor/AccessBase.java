@@ -32,6 +32,7 @@ import com.couchbase.lite.IndexBuilder;
 import com.couchbase.lite.ListenerToken;
 import com.couchbase.lite.Meta;
 import com.couchbase.lite.MutableDocument;
+import com.couchbase.lite.Ordering;
 import com.couchbase.lite.Query;
 import com.couchbase.lite.QueryBuilder;
 import com.couchbase.lite.QueryChange;
@@ -57,7 +58,8 @@ import java.util.List;
 /**
  * AccessBase.
  */
-public abstract class AccessBase<T extends ModelBase> extends Base {
+public abstract class AccessBase<T extends ModelBase> extends Base
+{
 
     private final String TAG = AccessBase.class.getName();
 
@@ -72,7 +74,10 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
     private final HashMap<ModelAccessToken, ModelAccessChangeListener> mModelAccessMap;
     private final HashMap<LiveAccessToken, LiveAccessChangeListener> mLiveAccessMap;
 
-    public AccessBase(IDatabaseHandler databaseHandler, Class<T> clazz, final String sortField) throws FleetException {
+    private String DEFAULT_DATE_FIELD = "date";
+
+    public AccessBase(IDatabaseHandler databaseHandler, Class<T> clazz, final String sortField) throws FleetException
+    {
         super(databaseHandler);
 
         mLiveAccessMap = new HashMap();
@@ -80,24 +85,29 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
         mModelClazz = clazz;
         mDocumentAnnotation = mModelClazz.getAnnotation(ModelType.class);
 
-        try {
+        try
+        {
             mConstructorFromDocument = mModelClazz.getConstructor(IDatabaseHandler.class, Document.class);
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException e)
+        {
             throw new FleetException("Error : wrong definition of fleet model " + mModelClazz + " constructor in : ");
         }
 
         if (mDocumentAnnotation == null)
             throw new FleetException("Error : The fleet model " + mModelClazz + " need to be annotate with " + ModelType.class);
 
-        try {
+        try
+        {
             mDatabaseHandler.getDatabase().createIndex(mDocumentAnnotation.type(), IndexBuilder.valueIndex(ValueIndexItem.property("type")));
-        } catch (CouchbaseLiteException e) {
+        } catch (CouchbaseLiteException e)
+        {
             throw new FleetException("Error during index creation", e);
         }
         mBaseExpression = Expression.property(mDocumentAnnotation.type_field()).equalTo(Expression.string(mDocumentAnnotation.type()));
     }
 
-    public T get(String id) {
+    public T get(String id)
+    {
         Document document = mDatabaseHandler.getDatabase().getDocument(id);
         if (document == null)
             return null;
@@ -109,11 +119,14 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
         return getInstance(document);
     }
 
-    public ModelAccessToken addListener(final T item, final ModelAccessChangeListener<T> listener) {
+    public ModelAccessToken addListener(final T item, final ModelAccessChangeListener<T> listener)
+    {
         final String id = item.getId();
-        ListenerToken tk = mDatabaseHandler.getDatabase().addDocumentChangeListener(id, new DocumentChangeListener() {
+        ListenerToken tk = mDatabaseHandler.getDatabase().addDocumentChangeListener(id, new DocumentChangeListener()
+        {
             @Override
-            public void changed(DocumentChange change) {
+            public void changed(DocumentChange change)
+            {
                 Document document = mDatabaseHandler.getDatabase().getDocument(id);
                 if (document != null)
                     listener.changed(getInstance(document));
@@ -124,7 +137,8 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
         return res;
     }
 
-    public void removeListener(ModelAccessToken modelAccessToken) {
+    public void removeListener(ModelAccessToken modelAccessToken)
+    {
         mLiveAccessMap.remove(modelAccessToken);
         mDatabaseHandler.getDatabase().removeChangeListener(modelAccessToken.mListenerToken);
     }
@@ -133,7 +147,8 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
     // == Query Definition
     // =============================================================================================
 
-    public T getNew() {
+    public T getNew()
+    {
         return getInstance(new MutableDocument());
     }
 
@@ -143,43 +158,54 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
      *
      * @return all data <T> in a list
      */
-    public List<T> all() {
-        return runQuery(null);
+    public List<T> all()
+    {
+        return runQuery(null, DEFAULT_DATE_FIELD);
     }
 
-    public List<T> byDateGreaterThan(Date date) {
-        return runQuery(Expression.property(getDateField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))));
+    public List<T> byDateGreaterThan(Date date)
+    {
+        return runQuery(Expression.property(getDateField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
     }
 
-    public List<T> byDateLessThan(Date date) {
-        return runQuery(Expression.property(getDateField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))));
+    public List<T> byDateLessThan(Date date)
+    {
+        return runQuery(Expression.property(getDateField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
     }
 
-    public List<T> byDateBetween(String dateField, Date date1, Date date2) {
-        return runQuery(Expression.property(getDateField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression.string(DateUtils.toStringISO8601(date2))));
+    public List<T> byDateBetween(String dateField, Date date1, Date date2)
+    {
+        return runQuery(Expression.property(getDateField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression.string(DateUtils
+            .toStringISO8601(date2))), DEFAULT_DATE_FIELD);
     }
 
     // =============================================================================================
     // == Live Query Definition
     // =============================================================================================
 
-    public LiveAccessToken all_AddListener(final LiveAccessChangeListener<T> changeListener) {
-        return createLiveQuery(changeListener, null);
+    public LiveAccessToken all_AddListener(final LiveAccessChangeListener<T> changeListener)
+    {
+        return createLiveQuery(changeListener, null, DEFAULT_DATE_FIELD);
     }
 
-    public LiveAccessToken byDateGreaterThan_AddListener(final LiveAccessChangeListener<T> changeListener, Date date) {
-        return createLiveQuery(changeListener, Expression.property(getDateField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))));
+    public LiveAccessToken byDateGreaterThan_AddListener(final LiveAccessChangeListener<T> changeListener, Date date)
+    {
+        return createLiveQuery(changeListener, Expression.property(getDateField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
     }
 
-    public LiveAccessToken byDateLessThanAdd_AddListener(final LiveAccessChangeListener<T> changeListener, Date date) {
-        return createLiveQuery(changeListener, Expression.property(getDateField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))));
+    public LiveAccessToken byDateLessThanAdd_AddListener(final LiveAccessChangeListener<T> changeListener, Date date)
+    {
+        return createLiveQuery(changeListener, Expression.property(getDateField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
     }
 
-    public LiveAccessToken byDateBetween_AddListener(final LiveAccessChangeListener<T> changeListener, Date date1, Date date2) {
-        return createLiveQuery(changeListener, Expression.property(getDateField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression.string(DateUtils.toStringISO8601(date2))));
+    public LiveAccessToken byDateBetween_AddListener(final LiveAccessChangeListener<T> changeListener, Date date1, Date date2)
+    {
+        return createLiveQuery(changeListener, Expression.property(getDateField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression
+            .string(DateUtils.toStringISO8601(date2))), DEFAULT_DATE_FIELD);
     }
 
-    public void removeListener(LiveAccessToken liveAccessToken) {
+    public void removeListener(LiveAccessToken liveAccessToken)
+    {
         mLiveAccessMap.remove(liveAccessToken);
         liveAccessToken.mLiveQuery.removeChangeListener(liveAccessToken.mListenerToken);
     }
@@ -188,36 +214,45 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
     // == Protected method
     // =============================================================================================
 
-    protected String getDateField() {
-        return "date";
+    protected String getDateField()
+    {
+        return DEFAULT_DATE_FIELD;
     }
 
-    protected List<T> runQuery(@Nullable Expression expression) {
-        Query query = getQuery(expression);
+    protected List<T> runQuery(@Nullable Expression expression, @Nullable String orderField)
+    {
+        Query query = getQuery(expression, orderField);
         List<T> res = new ArrayList<>();
-        try {
+        try
+        {
             Log.d(TAG, query.explain());
             ResultSet rs = query.execute();
-            for (Result result : rs) {
+            for (Result result : rs)
+            {
                 Log.d(TAG, result.toMap().toString());
                 String id = result.getString("id");
                 Document doc = mDatabaseHandler.getDatabase().getDocument(id);
                 res.add(getInstance(doc));
             }
-        } catch (CouchbaseLiteException e) {
+        } catch (CouchbaseLiteException e)
+        {
             Log.e("Sample", e.getLocalizedMessage());
         }
         return res;
     }
 
-    protected LiveAccessToken createLiveQuery(final LiveAccessChangeListener<T> changeListener, @Nullable Expression expression) {
-        Query query = getQuery(expression);
-        ListenerToken listenerToken = query.addChangeListener(new QueryChangeListener() {
+    protected LiveAccessToken createLiveQuery(final LiveAccessChangeListener<T> changeListener, @Nullable Expression expression, @Nullable String orderField)
+    {
+        Query query = getQuery(expression, orderField);
+        ListenerToken listenerToken = query.addChangeListener(new QueryChangeListener()
+        {
             @Override
-            public void changed(QueryChange change) {
+            public void changed(QueryChange change)
+            {
                 List<T> res = new ArrayList<>();
                 ResultSet rs = change.getResults();
-                for (Result result : rs) {
+                for (Result result : rs)
+                {
                     String id = result.getString("id");
                     Document doc = mDatabaseHandler.getDatabase().getDocument(id);
                     res.add(getInstance(doc));
@@ -234,25 +269,32 @@ public abstract class AccessBase<T extends ModelBase> extends Base {
     // == Private method
     // =============================================================================================
 
-    private Query getQuery(@Nullable Expression expression) {
+    private Query getQuery(@Nullable Expression expression, @Nullable String orderField)
+    {
         Expression e = expression != null ? expression.and(mBaseExpression) : mBaseExpression;
         return QueryBuilder
-                .select(SelectResult.expression(Meta.id), SelectResult.all())
-                .from(DataSource.database(mDatabaseHandler.getDatabase()))
-                .where(e);
+            .select(SelectResult.expression(Meta.id), SelectResult.all())
+            .from(DataSource.database(mDatabaseHandler.getDatabase()))
+            .where(e)
+            .orderBy(Ordering.property(orderField != null ? orderField : ""));
     }
 
-    private T getInstance(Document document) throws UnknownError {
+    private T getInstance(Document document) throws UnknownError
+    {
         T res = null;
-        try {
+        try
+        {
             res = mConstructorFromDocument.newInstance(mDatabaseHandler, document);
-        } catch (InstantiationException e) {
+        } catch (InstantiationException e)
+        {
             e.printStackTrace();
             throw new UnknownError(e.getMessage());
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e)
+        {
             e.printStackTrace();
             throw new UnknownError(e.getMessage());
-        } catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e)
+        {
             e.printStackTrace();
             throw new UnknownError(e.getMessage());
         }

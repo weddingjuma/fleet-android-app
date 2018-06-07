@@ -28,12 +28,15 @@ import com.mapotempo.fleet.dao.model.MissionStatusType;
 
 import java.util.List;
 
-public class MissionActionTypeAccess extends AccessBase<MissionActionType> {
-    public MissionActionTypeAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class MissionActionTypeAccess extends AccessBase<MissionActionType>
+{
+    public MissionActionTypeAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, MissionActionType.class, "");
     }
 
-    public List<MissionActionType> byPreviousStatusType(MissionStatusType statusType) {
-        return runQuery(Expression.property(MissionActionType.PREVIOUS_STATUS_TYPE_ID).equalTo(Expression.string(statusType.getId())));
+    public List<MissionActionType> byPreviousStatusType(MissionStatusType statusType)
+    {
+        return runQuery(Expression.property(MissionActionType.PREVIOUS_STATUS_TYPE_ID).equalTo(Expression.string(statusType.getId())), "");
     }
 }

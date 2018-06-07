@@ -50,7 +50,8 @@ import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
-public class MapLocationPickerFragment extends MapotempoBaseFragment {
+public class MapLocationPickerFragment extends MapotempoBaseFragment
+{
 
     private MapView mMapView;
 
@@ -68,7 +69,8 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
         MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
@@ -78,7 +80,8 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
-            container, @Nullable Bundle savedInstanceState) {
+        container, @Nullable Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         mMapView = view.findViewById(R.id.mapView);
         mMapView.setStyleUrl(getString(R.string.tilehosting_base_url) + "/styles/basic/style.json?key=" + getString(R.string.tilehosting_access_token));
@@ -87,19 +90,23 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
         ImageView crossPicker = view.findViewById(R.id.cross_picker);
         crossPicker.setVisibility(View.VISIBLE);
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
+        View.OnClickListener onClickListener = new View.OnClickListener()
+        {
             @Override
-            public void onClick(final View v) {
-                mMapView.getMapAsync(new OnMapReadyCallback() {
+            public void onClick(final View v)
+            {
+                mMapView.getMapAsync(new OnMapReadyCallback()
+                {
                     @Override
-                    public void onMapReady(final MapboxMap mapboxMap) {
+                    public void onMapReady(final MapboxMap mapboxMap)
+                    {
                         double offset = 1;
                         if (v.getTag().equals(ZOOM_IN))
                             offset = -offset;
                         CameraPosition lastCameraPosition = mapboxMap.getCameraPosition();
                         CameraPosition cameraPosition = new CameraPosition.Builder(lastCameraPosition)
-                                .zoom(lastCameraPosition.zoom + offset)
-                                .build();
+                            .zoom(lastCameraPosition.zoom + offset)
+                            .build();
                         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
                         mapboxMap.animateCamera(cameraUpdate);
                     }
@@ -121,43 +128,50 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
         mMapView.onStart();
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         mMapView.onResume();
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         mMapView.onPause();
     }
 
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
         mMapView.onStop();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onLowMemory() {
+    public void onLowMemory()
+    {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
         mMapView.onDestroy();
     }
@@ -166,21 +180,26 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public void savePickedLocation() {
-        if (mScrollLocation != null) {
+    public void savePickedLocation()
+    {
+        if (mScrollLocation != null)
+        {
             MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
-            try {
+            try
+            {
                 com.mapotempo.fleet.dao.model.submodel.Location location = new com.mapotempo.fleet.dao.model.submodel.Location(mapotempoFleetManagerInterface, mScrollLocation.getLatitude(), mScrollLocation.getLongitude());
                 mMission.setSurveyLocation(location);
                 mMission.save();
-            } catch (FleetException e) {
+            } catch (FleetException e)
+            {
                 e.printStackTrace();
             }
         }
     }
 
-    public void deletePickedLocation() {
-        mMission.deleteSurveyAddress();
+    public void deletePickedLocation()
+    {
+        mMission.deleteSurveyLocation();
         mMission.save();
         displayLocationMarkers();
     }
@@ -189,8 +208,10 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
     // ==  Private  ==
     // ===============
 
-    private Location getNativeLocation() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    private Location getNativeLocation()
+    {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
             LocationManager mLocMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
             if (mLocMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
                 return mLocMngr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -200,52 +221,65 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
         return null;
     }
 
-    private void initializeMapLocation() {
-        mMapView.getMapAsync(new OnMapReadyCallback() {
+    private void initializeMapLocation()
+    {
+        mMapView.getMapAsync(new OnMapReadyCallback()
+        {
             @Override
-            public void onMapReady(final MapboxMap mapboxMap) {
+            public void onMapReady(final MapboxMap mapboxMap)
+            {
                 com.mapotempo.fleet.dao.model.submodel.Location locationInterface;
                 LatLng latLng = new LatLng(0, 0);
 
-                if (getNativeLocation() != null) {
+                if (getNativeLocation() != null)
+                {
                     latLng.setLatitude(getNativeLocation().getLatitude());
                     latLng.setLongitude(getNativeLocation().getLongitude());
-                } else if (mMission != null) {
+                }
+                else if (mMission != null)
+                {
                     locationInterface = (mMission.getSurveyLocation().isValid()) ? mMission.getSurveyLocation() :
-                            mMission.getLocation();
-                    if (locationInterface.isValid()) {
+                        mMission.getLocation();
+                    if (locationInterface.isValid())
+                    {
                         latLng.setLatitude(locationInterface.getLat());
                         latLng.setLongitude(locationInterface.getLon());
                     }
                 }
 
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(latLng)
-                        .zoom(14)
-                        .build();
+                    .target(latLng)
+                    .zoom(14)
+                    .build();
 
                 mapboxMap.setCameraPosition(cameraPosition);
 
                 mScrollLocation = latLng;
 
-                mapboxMap.setOnScrollListener(new MapboxMap.OnScrollListener() {
+                mapboxMap.setOnScrollListener(new MapboxMap.OnScrollListener()
+                {
                     @Override
-                    public void onScroll() {
+                    public void onScroll()
+                    {
                         mScrollLocation = mapboxMap
-                                .getProjection()
-                                .fromScreenLocation(new PointF(mMapView.getWidth() / 2,
-                                        mMapView.getHeight() / 2));
+                            .getProjection()
+                            .fromScreenLocation(new PointF(mMapView.getWidth() / 2,
+                                mMapView.getHeight() / 2));
                     }
                 });
             }
         });
     }
 
-    private void displayLocationMarkers() {
-        if (mMission != null) {
-            mMapView.getMapAsync(new OnMapReadyCallback() {
+    private void displayLocationMarkers()
+    {
+        if (mMission != null)
+        {
+            mMapView.getMapAsync(new OnMapReadyCallback()
+            {
                 @Override
-                public void onMapReady(final MapboxMap mapboxMap) {
+                public void onMapReady(final MapboxMap mapboxMap)
+                {
                     mapboxMap.clear();
                     IconFactory mIconFactory = IconFactory.getInstance(getActivity());
                     int iconId = R.drawable.ic_map_green_marker;
@@ -254,15 +288,17 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment {
                     if (mMission.getLocation().isValid())
                         position = new LatLng(mMission.getLocation().getLat(), mMission.getLocation().getLon());
 
-                    if (mMission.getSurveyLocation().isValid()) {
+                    if (mMission.getSurveyLocation().isValid())
+                    {
                         position = new LatLng(mMission.getSurveyLocation().getLat(), mMission.getSurveyLocation().getLon());
                         iconId = R.drawable.ic_map_blue_marker;
                     }
 
-                    if (position != null) {
+                    if (position != null)
+                    {
                         mapboxMap.addMarker(new MarkerViewOptions()
-                                .icon(mIconFactory.fromResource(iconId))
-                                .position(position)
+                            .icon(mIconFactory.fromResource(iconId))
+                            .position(position)
                         );
                     }
                 }
