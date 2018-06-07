@@ -19,7 +19,8 @@
 
 package com.mapotempo.fleet.api;
 
-public interface OnServerCompatibility {
+public interface OnServerCompatibility
+{
     /**
      * Return the client server compatibility.
      * If compatibility is false the synchronisation switch off automatically

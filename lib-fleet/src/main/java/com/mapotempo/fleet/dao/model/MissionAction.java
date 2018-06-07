@@ -31,7 +31,8 @@ import com.mapotempo.fleet.utils.DateUtils;
 import java.util.Date;
 
 @ModelType(type = "mission_action")
-public class MissionAction extends ModelBase {
+public class MissionAction extends ModelBase
+{
 
     // MAPOTEMPO KEY
     public static final String COMPANY_ID = "company_id";
@@ -40,51 +41,64 @@ public class MissionAction extends ModelBase {
     public static final String ACTION_LOCATION = "action_location";
     public static final String DATE = "date";
 
-    public MissionAction(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public MissionAction(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public void setActionType(MissionActionType statusType) {
+    public void setActionType(MissionActionType statusType)
+    {
         mDocument.setString(MISSION_ACTION_TYPE_ID, statusType.getId());
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(Company company)
+    {
         mDocument.setString(COMPANY_ID, company.getId());
     }
 
-    public void setMission(Mission mission) {
+    public void setMission(Mission mission)
+    {
         mDocument.setString(MISSION_ID, mission.getId());
     }
 
-    public MissionActionType getActionType() {
+    public MissionActionType getActionType()
+    {
         String action_type_id = mDocument.getString(MISSION_ACTION_TYPE_ID);
-        try {
+        try
+        {
             MissionActionTypeAccess missionActionTypeAccess = new MissionActionTypeAccess(mDatabaseHandler);
             return missionActionTypeAccess.get(action_type_id);
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public Date getDate() {
+    public Date getDate()
+    {
         String dateString = mDocument.getString(DATE);
         return DateUtils.fromStringISO8601(dateString);
     }
 
-    public void setDate(Date date) {
+    public void setDate(Date date)
+    {
         mDocument.setString(DATE, DateUtils.toStringISO8601(date));
     }
 
-    public Location getLocation() {
-        try {
+    public Location getLocation()
+    {
+        try
+        {
             Location res = new Location(mDatabaseHandler, mDocument.getDictionary(ACTION_LOCATION));
             return res;
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(Location location)
+    {
         if (location.isValid())
             mDocument = mDocument.setDictionary(ACTION_LOCATION, location.getDictionary());
     }

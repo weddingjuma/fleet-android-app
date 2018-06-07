@@ -26,7 +26,8 @@ import com.mapotempo.fleet.utils.DateUtils;
 
 import java.util.Date;
 
-public class LocationDetails extends Location {
+public class LocationDetails extends Location
+{
 
     public static final String DATE = "date";
     public static final String ACCURACY = "accuracy";
@@ -51,7 +52,8 @@ public class LocationDetails extends Location {
                            Integer cid,
                            Integer lac,
                            Integer mcc,
-                           Integer mnc) throws FleetException {
+                           Integer mnc) throws FleetException
+    {
         super(iDatabaseHandler, lat, lon);
         mDictionary.setString(DATE, DateUtils.toStringISO8601(date));
         mDictionary.setDouble(ACCURACY, accuracy);
@@ -65,61 +67,74 @@ public class LocationDetails extends Location {
         mDictionary.setInt(MNC, mnc);
     }
 
-    public LocationDetails(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException {
+    public LocationDetails(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    {
         super(iDatabaseHandler, dictionary);
     }
 
-    public Date getDate() {
+    public Date getDate()
+    {
         String dateString = mDictionary.getString(DATE);
         String res = dateString != null ? dateString : "0";
         return DateUtils.fromStringISO8601(dateString);
     }
 
-    public Double getAccuracy() {
+    public Double getAccuracy()
+    {
         return mDictionary.getDouble(ACCURACY);
     }
 
-    public Double getSpeed() {
+    public Double getSpeed()
+    {
         return mDictionary.getDouble(SPEED);
     }
 
-    public Double getBearing() {
+    public Double getBearing()
+    {
         return mDictionary.getDouble(BEARING);
     }
 
-    public Double getAltitude() {
+    public Double getAltitude()
+    {
         return mDictionary.getDouble(ALTITUDE);
     }
 
-    public Integer getSignalStrength() {
+    public Integer getSignalStrength()
+    {
         return mDictionary.getInt(SIGNAL_STRENGTH);
     }
 
-    public Integer getCid() {
+    public Integer getCid()
+    {
         return mDictionary.getInt(CID);
     }
 
-    public Integer getLac() {
+    public Integer getLac()
+    {
         return mDictionary.getInt(LAC);
     }
 
-    public Integer getMcc() {
+    public Integer getMcc()
+    {
         return mDictionary.getInt(MCC);
     }
 
-    public Integer getMnc() {
+    public Integer getMnc()
+    {
         return mDictionary.getInt(MNC);
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid()
+    {
         if (super.isValid())
             return mDictionary.contains(DATE);
         return false;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (!(obj instanceof TimeWindow))
             return false;
 
@@ -128,15 +143,15 @@ public class LocationDetails extends Location {
 
         LocationDetails cmp = (LocationDetails) obj;
         return (getDate().equals(obj) &&
-                getAccuracy().equals(cmp.getAccuracy()) &&
-                getSpeed().equals(cmp.getAccuracy()) &&
-                getBearing().equals(cmp.getBearing()) &&
-                getAltitude().equals(cmp.getAltitude()) &&
-                getSignalStrength().equals(cmp.getSignalStrength()) &&
-                getCid().equals(cmp.getCid()) &&
-                getLac().equals(cmp.getLac()) &&
-                getMcc().equals(cmp.getMcc()) &&
-                getMnc().equals(cmp.getMnc()) &&
-                super.equals(obj));
+            getAccuracy().equals(cmp.getAccuracy()) &&
+            getSpeed().equals(cmp.getAccuracy()) &&
+            getBearing().equals(cmp.getBearing()) &&
+            getAltitude().equals(cmp.getAltitude()) &&
+            getSignalStrength().equals(cmp.getSignalStrength()) &&
+            getCid().equals(cmp.getCid()) &&
+            getLac().equals(cmp.getLac()) &&
+            getMcc().equals(cmp.getMcc()) &&
+            getMnc().equals(cmp.getMnc()) &&
+            super.equals(obj));
     }
 }

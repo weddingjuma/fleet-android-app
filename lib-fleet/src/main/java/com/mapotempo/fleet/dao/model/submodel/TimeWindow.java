@@ -27,38 +27,45 @@ import com.mapotempo.fleet.utils.DateUtils;
 
 import java.util.Date;
 
-public class TimeWindow extends SubModelBase {
+public class TimeWindow extends SubModelBase
+{
     public static final String START = "start";
     public static final String END = "end";
 
-    public TimeWindow(IDatabaseHandler iDatabaseHandler, Date start, Date end) throws FleetException {
+    public TimeWindow(IDatabaseHandler iDatabaseHandler, Date start, Date end) throws FleetException
+    {
         super(iDatabaseHandler, null);
         mDictionary.setString(START, DateUtils.toStringISO8601(start));
         mDictionary.setString(END, DateUtils.toStringISO8601(end));
     }
 
-    public TimeWindow(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException {
+    public TimeWindow(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    {
         super(iDatabaseHandler, dictionary);
     }
 
-    public Date getStart() {
+    public Date getStart()
+    {
         String dateString = mDictionary.getString(START);
         String res = dateString != null ? dateString : "0";
         return DateUtils.fromStringISO8601(dateString);
     }
 
-    public Date getEnd() {
+    public Date getEnd()
+    {
         String dateString = mDictionary.getString(END);
         String res = dateString != null ? dateString : "0";
         return DateUtils.fromStringISO8601(dateString);
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid()
+    {
         return mDictionary.contains(END) && mDictionary.contains(START);
     }
 
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (this == obj)
             return true;
 
@@ -67,7 +74,7 @@ public class TimeWindow extends SubModelBase {
 
         TimeWindow cmp = (TimeWindow) obj;
         return (getStart().equals(cmp.getStart()) &&
-                getEnd().equals(cmp.getEnd()) &&
-                super.equals(obj));
+            getEnd().equals(cmp.getEnd()) &&
+            super.equals(obj));
     }
 }

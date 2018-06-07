@@ -27,26 +27,32 @@ import com.mapotempo.fleet.core.model.ModelType;
 import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
 
 @ModelType(type = "user_current_location")
-public class UserCurrentLocation extends ModelBase {
+public class UserCurrentLocation extends ModelBase
+{
 
     // MAPOTEMPO KEY
     public static final String LOCATION_DETAIL = "location_detail";
     public static final String COMPANY_ID = "company_id";
 
-    public UserCurrentLocation(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public UserCurrentLocation(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public LocationDetails getLocation() {
-        try {
+    public LocationDetails getLocation()
+    {
+        try
+        {
             LocationDetails res = new LocationDetails(mDatabaseHandler, mDocument.getDictionary(LOCATION_DETAIL));
             return res;
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public void setLocation(LocationDetails location) {
+    public void setLocation(LocationDetails location)
+    {
         if (location.isValid())
             mDocument = mDocument.setDictionary(LOCATION_DETAIL, location.getDictionary());
     }

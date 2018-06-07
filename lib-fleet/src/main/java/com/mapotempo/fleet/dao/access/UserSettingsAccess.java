@@ -24,8 +24,10 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
 import com.mapotempo.fleet.dao.model.UserSettings;
 
-public class UserSettingsAccess extends AccessBase<UserSettings> {
-    public UserSettingsAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class UserSettingsAccess extends AccessBase<UserSettings>
+{
+    public UserSettingsAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, UserSettings.class, "");
     }
 }

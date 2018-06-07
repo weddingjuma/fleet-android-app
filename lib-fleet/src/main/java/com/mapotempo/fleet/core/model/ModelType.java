@@ -28,7 +28,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-public @interface ModelType {
+public @interface ModelType
+{
     String type();
 
     String type_field() default "type";

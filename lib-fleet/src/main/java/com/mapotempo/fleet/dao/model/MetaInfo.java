@@ -26,21 +26,25 @@ import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
 
 @ModelType(type = "meta_info")
-public class MetaInfo extends ModelBase {
+public class MetaInfo extends ModelBase
+{
 
     // MAPOTEMPO KEY
     private static final String SERVER_VERSION = "server_version";
     private static final String MINIMAL_CLIENT_VERSION = "minimal_client_version";
 
-    public MetaInfo(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public MetaInfo(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public Integer getServerVersion() {
+    public Integer getServerVersion()
+    {
         return mDocument.getInt(SERVER_VERSION);
     }
 
-    public Integer getMinimalClientVersion() {
+    public Integer getMinimalClientVersion()
+    {
         return mDocument.getInt(MINIMAL_CLIENT_VERSION);
     }
 }

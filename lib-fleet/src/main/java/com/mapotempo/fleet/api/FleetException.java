@@ -22,13 +22,16 @@ package com.mapotempo.fleet.api;
 /**
  * FleetException.
  */
-public class FleetException extends Exception {
+public class FleetException extends Exception
+{
 
-    public FleetException(String string) {
+    public FleetException(String string)
+    {
         super(string);
     }
 
-    public FleetException(String string, Exception e) {
+    public FleetException(String string, Exception e)
+    {
         super(string, e);
     }
 }

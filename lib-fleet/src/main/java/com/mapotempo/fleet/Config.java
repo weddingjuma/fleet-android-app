@@ -19,6 +19,7 @@
 
 package com.mapotempo.fleet;
 
-public class Config {
+public class Config
+{
     public static final int CLIENT_VERSION = 3;
 }

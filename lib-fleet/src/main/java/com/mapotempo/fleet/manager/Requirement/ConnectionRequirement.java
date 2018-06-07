@@ -19,9 +19,11 @@
 
 package com.mapotempo.fleet.manager.Requirement;
 
-public interface ConnectionRequirement {
+public interface ConnectionRequirement
+{
 
-    interface SatisfyListener {
+    interface SatisfyListener
+    {
         void satisfy(boolean status, String payload);
     }
 

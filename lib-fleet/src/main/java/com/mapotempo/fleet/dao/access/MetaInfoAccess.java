@@ -24,8 +24,10 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
 import com.mapotempo.fleet.dao.model.MetaInfo;
 
-public class MetaInfoAccess extends AccessBase<MetaInfo> {
-    public MetaInfoAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class MetaInfoAccess extends AccessBase<MetaInfo>
+{
+    public MetaInfoAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, MetaInfo.class, "");
     }
 }

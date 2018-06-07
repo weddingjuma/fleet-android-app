@@ -24,16 +24,20 @@ import com.mapotempo.fleet.api.FleetException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HashUtils {
+public class HashUtils
+{
     private static String algorithm = "SHA-256";
 
-    public static String sha256(String string) throws FleetException {
-        try {
+    public static String sha256(String string) throws FleetException
+    {
+        try
+        {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             String test = printHexBinary(md.digest(string.getBytes()));
             return test.toLowerCase();
 
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e)
+        {
             e.printStackTrace();
             throw new FleetException("Error with : " + algorithm + " algorithm", e);
         }
@@ -41,9 +45,11 @@ public class HashUtils {
 
     private static final char[] hexCode = "0123456789ABCDEF".toCharArray();
 
-    private static String printHexBinary(byte[] data) {
+    private static String printHexBinary(byte[] data)
+    {
         StringBuilder r = new StringBuilder(data.length * 2);
-        for (byte b : data) {
+        for (byte b : data)
+        {
             r.append(hexCode[(b >> 4) & 0xF]);
             r.append(hexCode[(b & 0xF)]);
         }

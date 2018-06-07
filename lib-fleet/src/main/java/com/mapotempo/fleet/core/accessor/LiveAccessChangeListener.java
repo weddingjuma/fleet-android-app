@@ -21,7 +21,8 @@ package com.mapotempo.fleet.core.accessor;
 
 import java.util.List;
 
-public interface LiveAccessChangeListener<T> {
+public interface LiveAccessChangeListener<T>
+{
     void changed(List<T> items);
 }
 

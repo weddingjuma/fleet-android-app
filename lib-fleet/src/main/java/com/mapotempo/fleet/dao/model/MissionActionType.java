@@ -27,7 +27,8 @@ import com.mapotempo.fleet.core.model.ModelType;
 import com.mapotempo.fleet.dao.access.MissionStatusTypeAccess;
 
 @ModelType(type = "mission_action_type")
-public class MissionActionType extends ModelBase {
+public class MissionActionType extends ModelBase
+{
 
     // MAPOTEMPO KEY
     public static final String LABEL = "label";
@@ -35,36 +36,45 @@ public class MissionActionType extends ModelBase {
     public static final String PREVIOUS_STATUS_TYPE_ID = "previous_mission_status_type_id";
     public static final String NEXT_STATUS_TYPE_ID = "next_mission_status_type_id";
 
-    public MissionActionType(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public MissionActionType(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public String getLabel() {
+    public String getLabel()
+    {
         String res = mDocument.getString(LABEL);
         return res != null ? res : "";
     }
 
-    public String getGroup() {
+    public String getGroup()
+    {
         String res = mDocument.getString(GROUP);
         return res != null ? res : "";
     }
 
-    public MissionStatusType getPreviousStatus() {
+    public MissionStatusType getPreviousStatus()
+    {
         String status_id = mDocument.getString(PREVIOUS_STATUS_TYPE_ID);
-        try {
+        try
+        {
             MissionStatusTypeAccess missionStatusTypeAccess = new MissionStatusTypeAccess(mDatabaseHandler);
             return missionStatusTypeAccess.get(status_id);
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public MissionStatusType getNextStatus() {
+    public MissionStatusType getNextStatus()
+    {
         String status_id = mDocument.getString(NEXT_STATUS_TYPE_ID);
-        try {
+        try
+        {
             MissionStatusTypeAccess missionStatusTypeAccess = new MissionStatusTypeAccess(mDatabaseHandler);
             return missionStatusTypeAccess.get(status_id);
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }

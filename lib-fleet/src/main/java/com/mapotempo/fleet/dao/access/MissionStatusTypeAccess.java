@@ -24,8 +24,10 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
 import com.mapotempo.fleet.dao.model.MissionStatusType;
 
-public class MissionStatusTypeAccess extends AccessBase<MissionStatusType> {
-    public MissionStatusTypeAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class MissionStatusTypeAccess extends AccessBase<MissionStatusType>
+{
+    public MissionStatusTypeAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, MissionStatusType.class, "");
     }
 }

@@ -24,30 +24,36 @@ import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.SubModelBase;
 
-public class Location extends SubModelBase {
+public class Location extends SubModelBase
+{
     public static final String LAT = "lat";
     public static final String LON = "lon";
 
-    public Location(IDatabaseHandler iDatabaseHandler, double lat, double lon) throws FleetException {
+    public Location(IDatabaseHandler iDatabaseHandler, double lat, double lon) throws FleetException
+    {
         super(iDatabaseHandler, null);
         mDictionary.setDouble(LAT, lat);
         mDictionary.setDouble(LON, lon);
     }
 
-    public Location(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException {
+    public Location(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    {
         super(iDatabaseHandler, dictionary);
     }
 
-    public double getLat() {
+    public double getLat()
+    {
         return mDictionary.getDouble(LAT);
     }
 
-    public double getLon() {
+    public double getLon()
+    {
         return mDictionary.getDouble(LON);
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid()
+    {
         // Test the real value to ensure isn't null
         if (mDictionary.getValue(LAT) == null || mDictionary.getValue(LON) == null)
             return false;
@@ -56,7 +62,8 @@ public class Location extends SubModelBase {
         return true;
     }
 
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (this == obj)
             return true;
 
@@ -65,7 +72,7 @@ public class Location extends SubModelBase {
 
         Location cmp = (Location) obj;
         return (getLat() == cmp.getLat() &&
-                getLon() == cmp.getLon()) &&
-                super.equals(obj);
+            getLon() == cmp.getLon()) &&
+            super.equals(obj);
     }
 }

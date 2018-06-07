@@ -30,7 +30,8 @@ import com.mapotempo.fleet.utils.ModelUtils;
 import java.util.List;
 
 @ModelType(type = "user")
-public class User extends ModelBase {
+public class User extends ModelBase
+{
 
     // MAPOTEMPO KEY
     public static final String NAME = "name";
@@ -39,32 +40,38 @@ public class User extends ModelBase {
     public static final String COMPANY_ID = "company_id";
     public static final String ROLES = "roles";
 
-    public User(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public User(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public String getCompanyId() {
+    public String getCompanyId()
+    {
         String res = mDocument.getString(COMPANY_ID);
         return res != null ? res : "";
     }
 
 
-    public String getSyncUser() {
+    public String getSyncUser()
+    {
         String res = mDocument.getString(SYNC_USER);
         return res != null ? res : "";
     }
 
-    public String getName() {
+    public String getName()
+    {
         String res = mDocument.getString(NAME);
         return res != null ? res : "";
     }
 
-    public String getEmail() {
+    public String getEmail()
+    {
         String res = mDocument.getString(EMAIL);
         return res != null ? res : "";
     }
 
-    public List<String> getRoles() {
+    public List<String> getRoles()
+    {
         MutableArray array = mDocument.getArray(ROLES);
         return ModelUtils.arrayToStringList(array);
     }

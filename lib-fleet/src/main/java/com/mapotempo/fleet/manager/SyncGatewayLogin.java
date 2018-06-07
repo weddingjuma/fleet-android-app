@@ -36,11 +36,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SyncGatewayLogin {
+public class SyncGatewayLogin
+{
     // http://www.vogella.com/tutorials/JavaLibrary-OkHttp/article.html
     // https://developer.couchbase.com/documentation/mobile/2.0/references/sync-gateway/rest-api/index.html
 
-    public enum SyncGatewayLoginStatus {
+    public enum SyncGatewayLoginStatus
+    {
         VALID,
         INVALID,
         SERVER_UNREACHABLE
@@ -50,35 +52,39 @@ public class SyncGatewayLogin {
 
 
     private static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
+        = MediaType.parse("application/json; charset=utf-8");
 
     private String jsonTemplate = "" +
-            "{" +
-            "\"name\": \"%s\"," +
-            "\"password\": \"%s\"" +
-            "}";
+        "{" +
+        "\"name\": \"%s\"," +
+        "\"password\": \"%s\"" +
+        "}";
 
     private SyncGatewayLoginStatus res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
 
-    public SyncGatewayLoginStatus tryLogin(final String login, String password, final String url) {
+    public SyncGatewayLoginStatus tryLogin(final String login, String password, final String url)
+    {
         final CountDownLatch cdl = new CountDownLatch(1);
 
         final OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar()).build();
         // Create Session
         Request request = new Request.Builder().url(url + "/_session")
-                .post(RequestBody.create(JSON, String.format(jsonTemplate, login, password)))
-                .build();
+            .post(RequestBody.create(JSON, String.format(jsonTemplate, login, password)))
+            .build();
 
         // Async post request to prevent
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        okHttpClient.newCall(request).enqueue(new Callback()
+        {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, IOException e)
+            {
                 cdl.countDown();
                 res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException
+            {
                 cdl.countDown();
                 if (response.code() == 200)
                     res = SyncGatewayLoginStatus.VALID;
@@ -89,26 +95,32 @@ public class SyncGatewayLogin {
             }
         });
 
-        try {
+        try
+        {
             cdl.await(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
-        } finally {
+        } finally
+        {
             return res;
         }
     }
 
-    private class CookieJar implements okhttp3.CookieJar {
+    private class CookieJar implements okhttp3.CookieJar
+    {
 
         private List<Cookie> cookies;
 
         @Override
-        public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+        public void saveFromResponse(HttpUrl url, List<Cookie> cookies)
+        {
             this.cookies = cookies;
         }
 
         @Override
-        public List<Cookie> loadForRequest(HttpUrl url) {
+        public List<Cookie> loadForRequest(HttpUrl url)
+        {
             if (cookies != null)
                 return cookies;
             return new ArrayList<Cookie>();

@@ -50,7 +50,8 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
-public class MapotempoFleetManager implements IDatabaseHandler /*implements MapotempoFleetManagerInterface*/ {
+public class MapotempoFleetManager implements IDatabaseHandler /*implements MapotempoFleetManagerInterface*/
+{
 
     // == General ===========================================
 
@@ -86,18 +87,18 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
 
     private OnServerCompatibility mOnServerCompatibility;
 
-//    private final LiveAccessChangeListener<MetaInfo> mMetaInfoListener = new LiveAccessChangeListener<MetaInfo>() {
-//        @Override
-//        public void changed(List<MetaInfo> items) {
-//            ensureServerCompatibility(item);
-//        }
-//    };
+    //    private final LiveAccessChangeListener<MetaInfo> mMetaInfoListener = new LiveAccessChangeListener<MetaInfo>() {
+    //        @Override
+    //        public void changed(List<MetaInfo> items) {
+    //            ensureServerCompatibility(item);
+    //        }
+    //    };
 
     // == Location ==========================================
 
     private static int LOCATION_TIMEOUT = 30000; // Location timeout in ms
 
-//    private LocationManager mLocationManager = new LocationManager(null, LOCATION_TIMEOUT);
+    //    private LocationManager mLocationManager = new LocationManager(null, LOCATION_TIMEOUT);
 
 
     // == Connection sequence ================================
@@ -107,7 +108,7 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
 
     private boolean mLockOffline = false;
 
-// == Constructor =======================================
+    // == Constructor =======================================
 
     /**
      * TODO
@@ -118,7 +119,8 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
      * @param databaseHandler databaseHandler
      * @param url             server
      */
-    public MapotempoFleetManager(Context context, String user, String password, DatabaseHandler databaseHandler, String url) throws FleetException {
+    public MapotempoFleetManager(Context context, String user, String password, DatabaseHandler databaseHandler, String url) throws FleetException
+    {
         mContext = context;
         mUser = HashUtils.sha256(user); // Hash user to cover email case.
         mPassword = password;
@@ -134,13 +136,14 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         mUserCurrentLocationAccess = new UserCurrentLocationAccess(this);
     }
 
-// == MapotempoFleetManagerInterface =====================
+    // == MapotempoFleetManagerInterface =====================
 
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public MetaInfo getMetaInfo() {
+    //    @Override
+    public MetaInfo getMetaInfo()
+    {
         List<MetaInfo> metaInfos = mMetaInfoAccess.all();
         if (metaInfos.size() > 0)
             return metaInfos.get(0);
@@ -151,8 +154,9 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public Company getCompany() {
+    //    @Override
+    public Company getCompany()
+    {
         List<Company> companies = mCompanyAccess.all();
         if (companies.size() > 0)
             return companies.get(0);
@@ -163,8 +167,9 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public User getUser() {
+    //    @Override
+    public User getUser()
+    {
         List<User> users = mUserAccess.all();
         if (users.size() > 0)
             return users.get(0);
@@ -175,8 +180,9 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public UserSettings getUserPreference() {
+    //    @Override
+    public UserSettings getUserPreference()
+    {
         List<UserSettings> users = mUserSettingsAccess.all();
         if (users.size() > 0)
             return users.get(0);
@@ -184,7 +190,8 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
             return null;
     }
 
-    public UserCurrentLocation getCurrentLocation() {
+    public UserCurrentLocation getCurrentLocation()
+    {
         List<UserCurrentLocation> userCurrentLocations = mUserCurrentLocationAccess.all();
         if (userCurrentLocations.size() > 0)
             return userCurrentLocations.get(0);
@@ -192,69 +199,75 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
             return null;
     }
 
-/**
- * {@inheritDoc}
- */
-//    @Override
-//    public LocationDetailsInterface getCurrentLocationDetails() {
-//        return getCurrentLocation().getLocation();
-//    }
-
-/**
- * {@inheritDoc}
- */
-//    @Override
-//    public void setCurrentLocationDetails(LocationDetailsInterface locationDetailsInterface) {
-//        mLocationManager.updateLocation((LocationDetails) locationDetailsInterface);
-//
-//    }
+    /**
+     * {@inheritDoc}
+     */
+    //    @Override
+    //    public LocationDetailsInterface getCurrentLocationDetails() {
+    //        return getCurrentLocation().getLocation();
+    //    }
 
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public MissionAccess getMissionAccess() {
+    //    @Override
+    //    public void setCurrentLocationDetails(LocationDetailsInterface locationDetailsInterface) {
+    //        mLocationManager.updateLocation((LocationDetails) locationDetailsInterface);
+    //
+    //    }
+
+    /**
+     * {@inheritDoc}
+     */
+    //    @Override
+    public MissionAccess getMissionAccess()
+    {
         return mMissionAccess;
     }
 
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public MissionActionAccess getMissionActionAccessInterface() {
+    //    @Override
+    public MissionActionAccess getMissionActionAccessInterface()
+    {
         return mMissionActionAccess;
     }
 
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public MissionStatusTypeAccess getMissionStatusTypeAccessInterface() {
+    //    @Override
+    public MissionStatusTypeAccess getMissionStatusTypeAccessInterface()
+    {
         return mMissionStatusTypeAccess;
     }
 
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public MissionActionTypeAccess getMissionActionTypeAccessInterface() {
+    //    @Override
+    public MissionActionTypeAccess getMissionActionTypeAccessInterface()
+    {
         return mMissionActionTypeAccess;
     }
-
-/**
- * {@inheritDoc}
- */
-//    @Override
-//    public UserTrackAccess getTrackAccess() {
-//        return mUserTrackAccess;
-//    }
 
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public void onlineStatus(boolean status) {
-        if (!mLockOffline) {
+    //    @Override
+    //    public UserTrackAccess getTrackAccess() {
+    //        return mUserTrackAccess;
+    //    }
+
+    /**
+     * {@inheritDoc}
+     */
+    //    @Override
+    public void onlineStatus(boolean status)
+    {
+        if (!mLockOffline)
+        {
             mDatabaseHandler.onlineStatus(status);
         }
     }
@@ -262,31 +275,35 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public boolean isOnline() {
+    //    @Override
+    public boolean isOnline()
+    {
         return mDatabaseHandler.isOnline();
     }
 
     /**
      * {@inheritDoc}
      */
-//    @Override
-    public boolean serverCompatibility() {
+    //    @Override
+    public boolean serverCompatibility()
+    {
         return serverCompatibility(getMetaInfo());
     }
 
     /**
      * Attache a callback to be notify if server version up during app run.
      */
-//    @Override
-    public void addOnServerCompatibilityChange(OnServerCompatibility onServerCompatibility) {
+    //    @Override
+    public void addOnServerCompatibilityChange(OnServerCompatibility onServerCompatibility)
+    {
         mOnServerCompatibility = onServerCompatibility;
     }
 
-// == Private method =====================================
+    // == Private method =====================================
 
     /* return true if server compatibility is ensure */
-    private boolean serverCompatibility(@Nullable MetaInfo metaInfo) {
+    private boolean serverCompatibility(@Nullable MetaInfo metaInfo)
+    {
         if (metaInfo != null)
             return (metaInfo.getMinimalClientVersion() <= Config.CLIENT_VERSION);
         else
@@ -294,28 +311,33 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     }
 
     /* switch off the syncgateway synchronisation if the client version is lower than minimal client version required */
-    private void ensureServerCompatibility(@Nullable MetaInfo metaInfo) {
+    private void ensureServerCompatibility(@Nullable MetaInfo metaInfo)
+    {
         boolean status = serverCompatibility(metaInfo);
         mDatabaseHandler.onlineStatus(status);
         mLockOffline = !status;
 
         // Notify user
-        if (mOnServerCompatibility != null) {
+        if (mOnServerCompatibility != null)
+        {
             mOnServerCompatibility.serverCompatibility(status);
         }
     }
 
     @Override
-    public Database getDatabase() {
+    public Database getDatabase()
+    {
         return mDatabaseHandler.getDatabase();
     }
 
     @Override
-    public boolean isRelease() {
+    public boolean isRelease()
+    {
         return mDatabaseHandler.isRelease();
     }
 
-    public void release() throws FleetException {
+    public void release() throws FleetException
+    {
         mDatabaseHandler.release(false);
         // Release ask by user, we don't delete database
         // mLocationManager.releaseManager(); // Release location manager before all

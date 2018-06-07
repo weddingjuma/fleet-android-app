@@ -32,8 +32,10 @@ import com.mapotempo.fleet.dao.model.submodel.Location;
 
 import java.util.Date;
 
-public class MissionActionAccess extends AccessBase<MissionAction> {
-    public MissionActionAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class MissionActionAccess extends AccessBase<MissionAction>
+{
+    public MissionActionAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, MissionAction.class, "");
     }
 
@@ -44,7 +46,8 @@ public class MissionActionAccess extends AccessBase<MissionAction> {
                                 Mission mission,
                                 MissionActionType actionType,
                                 Date date,
-                                @Nullable Location location) {
+                                @Nullable Location location)
+    {
         MissionAction res = getNew();
         res.setCompany(company);
         res.setMission(mission);

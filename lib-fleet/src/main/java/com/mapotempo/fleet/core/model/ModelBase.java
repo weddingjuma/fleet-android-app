@@ -31,45 +31,56 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 /**
  * ModelBase.
  */
-public abstract class ModelBase extends Base {
+public abstract class ModelBase extends Base
+{
 
     private static String TAG = ModelBase.class.getName();
 
     public MutableDocument mDocument;
 
-    public ModelBase(IDatabaseHandler databaseHandler) throws FleetException {
+    public ModelBase(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler);
         mDocument = new MutableDocument();
-        mDatabaseHandler.getDatabase().addDocumentChangeListener(mDocument.getId(), new DocumentChangeListener() {
+        mDatabaseHandler.getDatabase().addDocumentChangeListener(mDocument.getId(), new DocumentChangeListener()
+        {
             @Override
-            public void changed(DocumentChange change) {
+            public void changed(DocumentChange change)
+            {
                 change.getDocumentID();
 
             }
         });
     }
 
-    public ModelBase(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public ModelBase(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler);
         mDocument = document.toMutable();
-        mDatabaseHandler.getDatabase().addDocumentChangeListener(mDocument.getId(), new DocumentChangeListener() {
+        mDatabaseHandler.getDatabase().addDocumentChangeListener(mDocument.getId(), new DocumentChangeListener()
+        {
             @Override
-            public void changed(DocumentChange change) {
+            public void changed(DocumentChange change)
+            {
                 change.getDocumentID();
 
             }
         });
     }
 
-    public String getId() {
+    public String getId()
+    {
         return mDocument.getId();
     }
 
-    public boolean save() {
-        try {
+    public boolean save()
+    {
+        try
+        {
             mDatabaseHandler.getDatabase().save(mDocument);
             return true;
-        } catch (CouchbaseLiteException e) {
+        } catch (CouchbaseLiteException e)
+        {
             return false;
         }
     }

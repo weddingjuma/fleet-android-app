@@ -24,7 +24,8 @@ package com.mapotempo.fleet.manager;
  * 0 : verify
  * 2XX : document missing
  */
-public enum LOGIN_STATUS {
+public enum LOGIN_STATUS
+{
     VERIFY(200),
     LOGIN_ERROR(401),
     USER_MISSING(404),
@@ -38,19 +39,23 @@ public enum LOGIN_STATUS {
 
     private String mPayload;
 
-    LOGIN_STATUS(int code) {
+    LOGIN_STATUS(int code)
+    {
         mCode = code;
     }
 
-    public int getCode() {
+    public int getCode()
+    {
         return mCode;
     }
 
-    public void setPayload(String payload) {
+    public void setPayload(String payload)
+    {
         mPayload = payload;
     }
 
-    public String getPayload() {
+    public String getPayload()
+    {
         return mPayload;
     }
 }

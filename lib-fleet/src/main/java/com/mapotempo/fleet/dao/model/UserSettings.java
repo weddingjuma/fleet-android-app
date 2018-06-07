@@ -26,16 +26,19 @@ import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
 
 @ModelType(type = "user_settings")
-public class UserSettings extends ModelBase {
+public class UserSettings extends ModelBase
+{
 
     // MAPOTEMPO KEY
     public static final String NIGHT_MODE = "night_mode";
 
-    public UserSettings(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public UserSettings(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public enum Preference {
+    public enum Preference
+    {
         MOBILE_DATA_USAGE("data_connection", true),
         AUTOMATIC_DATA_UPDATE("automatic_data_update", true),
         TRACKING_ENABLE("tracking_enable", true),
@@ -46,67 +49,81 @@ public class UserSettings extends ModelBase {
 
         private boolean mDef;
 
-        Preference(String tag, boolean def) {
+        Preference(String tag, boolean def)
+        {
             mTag = tag;
             mDef = def;
         }
 
-        public String getTag() {
+        public String getTag()
+        {
             return mTag;
         }
 
-        public boolean getDefault() {
+        public boolean getDefault()
+        {
             return mDef;
         }
 
-        public String toString() {
+        public String toString()
+        {
             return mTag;
         }
     }
 
-    public Boolean getBoolPreference(Preference preference) {
+    public Boolean getBoolPreference(Preference preference)
+    {
         if (!mDocument.contains(preference.getTag()))
             return preference.getDefault();
         return mDocument.getBoolean(preference.getTag());
     }
 
-    public void setBoolPreference(Preference preference, Boolean status) {
+    public void setBoolPreference(Preference preference, Boolean status)
+    {
         mDocument.setBoolean(preference.getTag(), status);
     }
 
-    public enum NightModePreference {
+    public enum NightModePreference
+    {
         AUTOMATIC("automatic"),
         NIGHT("night"),
         DAY("day");
 
         private String preference;
 
-        NightModePreference(String name) {
+        NightModePreference(String name)
+        {
             preference = name;
         }
 
-        public String toString() {
+        public String toString()
+        {
             return preference;
         }
 
-        static public NightModePreference fromString(String value) {
+        static public NightModePreference fromString(String value)
+        {
             if ("".equals(value))
                 return AUTOMATIC;
 
-            try {
+            try
+            {
                 return valueOf(value.toUpperCase());
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e)
+            {
                 return AUTOMATIC;
             }
         }
     }
 
-    public NightModePreference getNightModePreference() {
+    public NightModePreference getNightModePreference()
+    {
         String nightMode = mDocument.getString(NIGHT_MODE);
         return NightModePreference.fromString(nightMode != null ? nightMode : "");
     }
 
-    public void setNightModePreference(NightModePreference status) {
+    public void setNightModePreference(NightModePreference status)
+    {
         mDocument.setString(NIGHT_MODE, status.toString());
     }
 }

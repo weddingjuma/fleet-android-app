@@ -27,36 +27,47 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelUtils {
+public class ModelUtils
+{
 
-    public static <T extends SubModelBase> List<T> arrayToSubmodelList(Array array, Class<T> submodelClazz) {
+    public static <T extends SubModelBase> List<T> arrayToSubmodelList(Array array, Class<T> submodelClazz)
+    {
         List<T> res = new ArrayList<>();
         if (array == null)
             return res;
-        for (int i = 0; i < array.count(); i++) {
+        for (int i = 0; i < array.count(); i++)
+        {
             Dictionary dico = array.getDictionary(i);
-            try {
+            try
+            {
                 res.add(submodelClazz.getConstructor(Dictionary.class).newInstance(dico));
-            } catch (NoSuchMethodException e) {
+            } catch (NoSuchMethodException e)
+            {
                 e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (IllegalAccessException e)
+            {
                 e.printStackTrace();
-            } catch (InstantiationException e) {
+            } catch (InstantiationException e)
+            {
                 e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (InvocationTargetException e)
+            {
                 e.printStackTrace();
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 e.printStackTrace();
             }
         }
         return res;
     }
 
-    public static List<String> arrayToStringList(Array array) {
+    public static List<String> arrayToStringList(Array array)
+    {
         List<String> res = new ArrayList<>();
         if (array == null)
             return res;
-        for (int i = 0; i < array.count(); i++) {
+        for (int i = 0; i < array.count(); i++)
+        {
             String str = array.getString(i);
             res.add(new String());
         }

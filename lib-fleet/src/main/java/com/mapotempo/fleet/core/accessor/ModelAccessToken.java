@@ -22,11 +22,13 @@ package com.mapotempo.fleet.core.accessor;
 import com.couchbase.lite.ListenerToken;
 import com.mapotempo.fleet.core.model.ModelBase;
 
-public class ModelAccessToken<T extends ModelBase> {
+public class ModelAccessToken<T extends ModelBase>
+{
     protected T mModel;
     protected ListenerToken mListenerToken;
 
-    protected ModelAccessToken(T model, ListenerToken mLiveListenerToken) {
+    protected ModelAccessToken(T model, ListenerToken mLiveListenerToken)
+    {
         this.mModel = model;
         this.mListenerToken = mLiveListenerToken;
     }

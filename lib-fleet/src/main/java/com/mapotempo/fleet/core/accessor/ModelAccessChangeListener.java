@@ -19,7 +19,8 @@
 
 package com.mapotempo.fleet.core.accessor;
 
-public interface ModelAccessChangeListener<T> {
+public interface ModelAccessChangeListener<T>
+{
     void changed(T item);
 }
 

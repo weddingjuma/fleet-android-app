@@ -24,8 +24,10 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
 import com.mapotempo.fleet.dao.model.Company;
 
-public class CompanyAccess extends AccessBase<Company> {
-    public CompanyAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class CompanyAccess extends AccessBase<Company>
+{
+    public CompanyAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, Company.class, "");
     }
 }

@@ -55,7 +55,8 @@ import java.util.TimerTask;
  * Company document should be access only when the user channel are download, because [company id]
  * information require to set channel are only accessible in User.
  */
-public class FleetConnectionRequirement implements ConnectionRequirement {
+public class FleetConnectionRequirement implements ConnectionRequirement
+{
 
     private static String TAG = DatabaseHandler.class.getName();
 
@@ -86,13 +87,15 @@ public class FleetConnectionRequirement implements ConnectionRequirement {
 
     // == Private Interface =================================
 
-    public interface ConnectionRequirementVerifyListener {
+    public interface ConnectionRequirementVerifyListener
+    {
         void onConnectionVerify(User user, UserCurrentLocation userCurrentLocation, UserSettings userSettings, Company company, MetaInfo metaInfo);
 
         void onConnectionFail(LOGIN_STATUS code);
     }
 
-    public FleetConnectionRequirement(DatabaseHandler databaseHandler) throws FleetException {
+    public FleetConnectionRequirement(DatabaseHandler databaseHandler) throws FleetException
+    {
         mDatabaseHandler = databaseHandler;
         mUserAccess = new UserAccess(mDatabaseHandler);
         mUserCurrentLocationAccess = new UserCurrentLocationAccess(mDatabaseHandler);
@@ -104,7 +107,8 @@ public class FleetConnectionRequirement implements ConnectionRequirement {
     }
 
     @Override
-    public boolean isSatisfy() {
+    public boolean isSatisfy()
+    {
         User user = mUserAccess.all().size() > 0 ? (User) mUserAccess.all().get(0) : null;
         UserCurrentLocation userCurrentLocation = mUserCurrentLocationAccess.all().size() > 0 ? (UserCurrentLocation) mUserCurrentLocationAccess.all().get(0) : null;
         UserSettings userSettings = mUserSettingsAccess.all().size() > 0 ? (UserSettings) mUserSettingsAccess.all().get(0) : null;
@@ -112,73 +116,87 @@ public class FleetConnectionRequirement implements ConnectionRequirement {
         MetaInfo metaInfo = mMetaInfoAccess.all().size() > 0 ? (MetaInfo) mMetaInfoAccess.all().get(0) : null;
 
         Log.d(TAG, "user: " + user +
-                "\nuserCurrentLocation: " + userCurrentLocation +
-                "\nuserSettings:" + userSettings +
-                "\ncompany:" + company +
-                "\nmetaInfo:" + metaInfo);
+            "\nuserCurrentLocation: " + userCurrentLocation +
+            "\nuserSettings:" + userSettings +
+            "\ncompany:" + company +
+            "\nmetaInfo:" + metaInfo);
         if (user == null || userCurrentLocation == null || userSettings == null || company == null || metaInfo == null)
             return false;
         return true;
     }
 
     @Override
-    public void asyncSatisfy(final SatisfyListener listener, final int timeout) {
+    public void asyncSatisfy(final SatisfyListener listener, final int timeout)
+    {
         // ================================================================
         // == 2) - Verify connection to ensure user document already present
         // ================================================================
-        if (!isSatisfy()) {
+        if (!isSatisfy())
+        {
 
             // ===========================
             // == 4) - Launch Verify timer
             // ===========================
             final VerifyTimerTask timerTask = new VerifyTimerTask(listener, timeout);
             mVerifyTimer.schedule(timerTask, TIMER_DELAY, TIMER_PERIOD);
-        } else
+        }
+        else
             listener.satisfy(true, "");
     }
 
     @Override
-    public boolean syncSatisfy(int timeout) {
+    public boolean syncSatisfy(int timeout)
+    {
         if (true)
             throw new UnknownError("Not yet implemted");
         return false;
     }
 
-    public void stopAllConnectionRequirementSequence() {
+    public void stopAllConnectionRequirementSequence()
+    {
         mVerifyTimer.cancel();
         mVerifyTimer.purge();
     }
 
-    private class VerifyTimerTask extends TimerTask {
+    private class VerifyTimerTask extends TimerTask
+    {
         int mTimeout;
         SatisfyListener mListener;
 
-        VerifyTimerTask(SatisfyListener listener, int timeout) {
+        VerifyTimerTask(SatisfyListener listener, int timeout)
+        {
             mTimeout = timeout;
             mListener = listener;
         }
 
         @Override
-        public void run() {
+        public void run()
+        {
             User user = mUserAccess.all().size() > 0 ? (User) mUserAccess.all().get(0) : null;
             UserCurrentLocation userCurrentLocation = mUserCurrentLocationAccess.all().size() > 0 ? (UserCurrentLocation) mUserCurrentLocationAccess.all().get(0) : null;
             UserSettings userSettings = mUserSettingsAccess.all().size() > 0 ? (UserSettings) mUserSettingsAccess.all().get(0) : null;
             Company company = mCompanyAccess.all().size() > 0 ? (Company) mCompanyAccess.all().get(0) : null;
             MetaInfo metaInfo = mMetaInfoAccess.all().size() > 0 ? (MetaInfo) mMetaInfoAccess.all().get(0) : null;
             // Timeout check
-            if (System.currentTimeMillis() - scheduledExecutionTime() >= mTimeout) {
+            if (System.currentTimeMillis() - scheduledExecutionTime() >= mTimeout)
+            {
                 cancel();
                 mListener.satisfy(isSatisfy(), "");
-            } else {
-                if (user != null) {
-                    if (!mChannelInit) {
+            }
+            else
+            {
+                if (user != null)
+                {
+                    if (!mChannelInit)
+                    {
                         mDatabaseHandler.configureMissionReplication(new ArrayList<Mission>());
                         mDatabaseHandler.configureCompanyReplication(user.getCompanyId());
                         mChannelInit = true;
                     }
 
                     // The others documents require are present
-                    if (isSatisfy()) {
+                    if (isSatisfy())
+                    {
                         cancel();
                         mListener.satisfy(true, "");
                     }

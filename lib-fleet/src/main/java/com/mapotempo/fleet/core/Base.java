@@ -21,10 +21,12 @@ package com.mapotempo.fleet.core;
 
 import com.mapotempo.fleet.api.FleetException;
 
-public class Base {
+public class Base
+{
     protected IDatabaseHandler mDatabaseHandler;
 
-    public Base(IDatabaseHandler databaseHandler) throws FleetException {
+    public Base(IDatabaseHandler databaseHandler) throws FleetException
+    {
         mDatabaseHandler = databaseHandler;
         if (mDatabaseHandler == null)
             throw new FleetException("Error : Fleet model required DatabaseHandler was init");

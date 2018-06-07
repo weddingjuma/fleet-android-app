@@ -19,7 +19,8 @@
 
 package com.mapotempo.fleet.core.model;
 
-public interface ModelChangeListener<T extends ModelBase> {
+public interface ModelChangeListener<T extends ModelBase>
+{
     void changed(T item);
 }
 

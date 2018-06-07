@@ -24,8 +24,10 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 
-public class UserCurrentLocationAccess extends AccessBase<UserCurrentLocation> {
-    public UserCurrentLocationAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class UserCurrentLocationAccess extends AccessBase<UserCurrentLocation>
+{
+    public UserCurrentLocationAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, UserCurrentLocation.class, "");
     }
 }

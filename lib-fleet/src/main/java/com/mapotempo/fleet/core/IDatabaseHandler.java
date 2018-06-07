@@ -21,7 +21,8 @@ package com.mapotempo.fleet.core;
 
 import com.couchbase.lite.Database;
 
-public interface IDatabaseHandler {
+public interface IDatabaseHandler
+{
     Database getDatabase();
 
     boolean isRelease();

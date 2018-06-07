@@ -44,17 +44,21 @@ import java.util.concurrent.TimeUnit;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(Parameterized.class)
-public class ManagerTestInstrumentedTest {
+public class ManagerTestInstrumentedTest
+{
 
     @Parameterized.Parameters
-    public static Object[][] data() {
+    public static Object[][] data()
+    {
         return new Object[1][0];
     }
 
     private static String TAG = ManagerTestInstrumentedTest.class.getName();
-    DatabaseHandler.OnCatchLoginError onCatchLoginError = new DatabaseHandler.OnCatchLoginError() {
+    DatabaseHandler.OnCatchLoginError onCatchLoginError = new DatabaseHandler.OnCatchLoginError()
+    {
         @Override
-        public void CatchLoginError() {
+        public void CatchLoginError()
+        {
         }
     };
 
@@ -63,40 +67,47 @@ public class ManagerTestInstrumentedTest {
     LOGIN_STATUS error = null;
 
     @Before
-    public void init() {
+    public void init()
+    {
         manager = null;
         cdl = new CountDownLatch(1);
     }
 
     @Test
-    public void useAppContext() throws Exception {
+    public void useAppContext() throws Exception
+    {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         ManagerFactory.getManagerAsync(appContext, "driver1@mapotempo.com",
-                "123456",
-                new ManagerFactory.OnManagerReadyListener() {
-                    @Override
-                    public void onManagerReady(MapotempoFleetManager m, LOGIN_STATUS errorStatus) {
-                        manager = m;
-                        cdl.countDown();
-                        error = errorStatus;
-                        Log.i(TAG, "_____________________________________________________________ READY");
-                    }
-                },
-//                "ws://192.168.1.252:4984/db"
-                "ws://10.42.0.1:4984/db"
+            "123456",
+            new ManagerFactory.OnManagerReadyListener()
+            {
+                @Override
+                public void onManagerReady(MapotempoFleetManager m, LOGIN_STATUS errorStatus)
+                {
+                    manager = m;
+                    cdl.countDown();
+                    error = errorStatus;
+                    Log.i(TAG, "_____________________________________________________________ READY");
+                }
+            },
+            //                "ws://192.168.1.252:4984/db"
+            "ws://10.42.0.1:4984/db"
         );
 
         Log.i(TAG, "_____________________________________________________________ " + (new Date()).getTime());
         cdl.await(30, TimeUnit.SECONDS);
         Log.i(TAG, "_____________________________________________________________ " + (new Date()).getTime());
 
-        if (manager != null) {
+        if (manager != null)
+        {
             Log.i(TAG, "_____________________________________________________________ manager successfully create");
-            for (Mission m : manager.getMissionAccess().all()) {
+            for (Mission m : manager.getMissionAccess().all())
+            {
                 Log.i(TAG, "______________________  " + m.getName() + "______________________");
             }
-        } else
+        }
+        else
             Log.i(TAG, "_____________________________________________________________ fail create manager : " + (error != null ? error.getPayload() : ""));
 
 

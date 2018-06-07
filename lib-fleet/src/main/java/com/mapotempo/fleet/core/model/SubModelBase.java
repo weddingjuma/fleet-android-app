@@ -27,10 +27,12 @@ import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.Base;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 
-public abstract class SubModelBase extends Base {
+public abstract class SubModelBase extends Base
+{
     protected MutableDictionary mDictionary;
 
-    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary) throws FleetException {
+    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary) throws FleetException
+    {
         super(iDatabaseHandler);
         if (dictionary == null)
             mDictionary = new MutableDictionary();
@@ -38,7 +40,8 @@ public abstract class SubModelBase extends Base {
             mDictionary = dictionary.toMutable();
     }
 
-    public MutableDictionary getDictionary() {
+    public MutableDictionary getDictionary()
+    {
         return mDictionary;
     }
 

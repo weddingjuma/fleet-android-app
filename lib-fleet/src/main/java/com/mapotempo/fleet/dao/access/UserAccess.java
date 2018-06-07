@@ -24,8 +24,10 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
 import com.mapotempo.fleet.dao.model.User;
 
-public class UserAccess extends AccessBase<User> {
-    public UserAccess(IDatabaseHandler databaseHandler) throws FleetException {
+public class UserAccess extends AccessBase<User>
+{
+    public UserAccess(IDatabaseHandler databaseHandler) throws FleetException
+    {
         super(databaseHandler, User.class, "");
     }
 }

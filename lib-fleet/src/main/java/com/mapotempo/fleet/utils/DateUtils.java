@@ -27,7 +27,8 @@ import java.util.Date;
 /**
  * DateUtils.
  */
-public class DateUtils {
+public class DateUtils
+{
 
     // Date formats need to be synchronized.
     // TODO It is recommended to create separate format instances for each thread.
@@ -35,7 +36,8 @@ public class DateUtils {
 
     private static DateUtils ourInstance = new DateUtils();
 
-    public static DateUtils getInstance() {
+    public static DateUtils getInstance()
+    {
         return ourInstance;
     }
 
@@ -44,17 +46,22 @@ public class DateUtils {
     // ####################################
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
-    public static String toStringISO8601(Date value) {
+    public static String toStringISO8601(Date value)
+    {
         long timeZoneMs = sdf.getTimeZone().getOffset(value.getTime());
         return sdf.format(value) + "+" + String.format("%02d:%02d", timeZoneMs / 3600000, timeZoneMs % 3600000);
     }
 
-    public static Date fromStringISO8601(String value) {
-        synchronized (sdf) {
-            try {
+    public static Date fromStringISO8601(String value)
+    {
+        synchronized (sdf)
+        {
+            try
+            {
                 return sdf.parse(value);
 
-            } catch (ParseException e) {
+            } catch (ParseException e)
+            {
                 return new Date(0);
             }
         }
@@ -65,8 +72,10 @@ public class DateUtils {
     // ###################################
     private static SimpleDateFormat sdf_for_channel = new SimpleDateFormat("yyyyMMdd");
 
-    public static String dateForChannel(int dayOffset) {
-        synchronized (sdf_for_channel) {
+    public static String dateForChannel(int dayOffset)
+    {
+        synchronized (sdf_for_channel)
+        {
             Date date = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -75,7 +84,8 @@ public class DateUtils {
         }
     }
 
-    public static String dateForChannel(Date date) {
+    public static String dateForChannel(Date date)
+    {
         return sdf_for_channel.format(date.getTime());
     }
 
@@ -84,8 +94,10 @@ public class DateUtils {
     // #########################
     private static SimpleDateFormat sdf_for_display = new SimpleDateFormat("dd MMMMMMM yyyy ':' hh'H' mm'M' ss's' SSS'ms'");
 
-    public static String displayDate(Date value) {
-        synchronized (sdf_for_display) {
+    public static String displayDate(Date value)
+    {
+        synchronized (sdf_for_display)
+        {
             if (value != null)
                 return sdf_for_display.format(value);
             else

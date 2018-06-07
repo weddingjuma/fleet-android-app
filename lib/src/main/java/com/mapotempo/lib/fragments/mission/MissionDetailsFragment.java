@@ -107,9 +107,11 @@ import java.util.List;
  * </pre>
  * </code>
  */
-public class MissionDetailsFragment extends MapotempoBaseFragment {
+public class MissionDetailsFragment extends MapotempoBaseFragment
+{
 
-    public MissionDetailsFragment() {
+    public MissionDetailsFragment()
+    {
     }
 
     /**
@@ -117,7 +119,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity
      */
-    public interface OnMissionDetailsFragmentListener {
+    public interface OnMissionDetailsFragmentListener
+    {
         /**
          * Callback triggered when a modification has been done to a mission
          *
@@ -175,8 +178,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     // ==  Public  ==
     // ==============
 
-    public void fillViewFromActivity() {
-        if (mMission != null && isAdded()) {
+    public void fillViewFromActivity()
+    {
+        if (mMission != null && isAdded())
+        {
             fillViewData(mMission);
             initNavigationAction(mMission);
             initMainActionButtons(mMission);
@@ -184,15 +189,20 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         }
     }
 
-    public void setMission(Mission mission) {
-        if (mission != null) {
+    public void setMission(Mission mission)
+    {
+        if (mission != null)
+        {
             mMission = mission;
-        } else {
+        }
+        else
+        {
             throw new RuntimeException("Mission passed to constructor must not be null");
         }
     }
 
-    public static MissionDetailsFragment create(int pageNumber, Mission mission) {
+    public static MissionDetailsFragment create(int pageNumber, Mission mission)
+    {
         MissionDetailsFragment fragment = new MissionDetailsFragment();
         Bundle args = new Bundle();
 
@@ -203,8 +213,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         return fragment;
     }
 
-    public boolean onBackPressed() {
-        if (BottomSheetBehavior.STATE_COLLAPSED != mBottomSheetBehavior.getState()) {
+    public boolean onBackPressed()
+    {
+        if (BottomSheetBehavior.STATE_COLLAPSED != mBottomSheetBehavior.getState())
+        {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             return true;
         }
@@ -216,7 +228,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     // ===================================
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         mListener = (MissionDetailsFragment.OnMissionDetailsFragmentListener) context;
         if (mListener == null)
@@ -224,19 +237,21 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_mission, container, false);
 
         // If the screen isn't too small, hide all buttons from UI.
         mButtonsVisibility = !((getResources().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL);
+            Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL);
 
         // Map view
         mMapContainer = view.findViewById(R.id.mapContainer);
@@ -277,9 +292,11 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mStatusThirdAction = view.findViewById(R.id.third_action);
         mStatusMoreAction = view.findViewById(R.id.more_action);
 
-        mMapImageView.setOnClickListener(new View.OnClickListener() {
+        mMapImageView.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 mListener.onMapImageViewClick(mMission);
             }
         });
@@ -289,19 +306,25 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
 
     //
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         fillViewFromActivity();
         initBottomSheet(getView());
-        if (mMission != null) {
+        if (mMission != null)
+        {
             final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
             MapotempoFleetManager manager = mapotempoApplication.getManager();
-            mToken = manager.getMissionAccess().addListener(mMission, new ModelAccessChangeListener<Mission>() {
+            mToken = manager.getMissionAccess().addListener(mMission, new ModelAccessChangeListener<Mission>()
+            {
                 @Override
-                public void changed(final Mission mission) {
-                    getActivity().runOnUiThread(new Runnable() {
+                public void changed(final Mission mission)
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             mMission = mission;
                             fillViewFromActivity();
                         }
@@ -312,9 +335,11 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
-        if (mToken != null) {
+        if (mToken != null)
+        {
             final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
             MapotempoFleetManager manager = mapotempoApplication.getManager();
             manager.getMissionAccess().removeListener(mToken);
@@ -323,10 +348,12 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroyView()
+    {
         super.onDestroyView();
 
-        if (mToken != null) {
+        if (mToken != null)
+        {
             final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
             MapotempoFleetManager manager = mapotempoApplication.getManager();
             manager.getMissionAccess().removeListener(mToken);
@@ -337,31 +364,38 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
     // ==  Private  ==
     // ===============
 
-    private void initBottomSheet(View view) {
+    private void initBottomSheet(View view)
+    {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
+        {
             @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        break;
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        break;
+            public void onStateChanged(@NonNull View bottomSheet, int newState)
+            {
+                switch (newState)
+                {
+                case BottomSheetBehavior.STATE_COLLAPSED:
+                    break;
+                case BottomSheetBehavior.STATE_EXPANDED:
+                    break;
                 }
 
             }
 
             @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            public void onSlide(@NonNull View bottomSheet, float slideOffset)
+            {
 
             }
         });
 
-        View.OnClickListener listenerMore = new View.OnClickListener() {
+        View.OnClickListener listenerMore = new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
                 MapotempoFleetManager manager = mapotempoApplication.getManager();
                 List<MissionActionType> actions = manager.getMissionActionTypeAccessInterface().byPreviousStatusType(mMission.getStatusType());
@@ -373,15 +407,20 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mStatusCurrent.setOnClickListener(listenerMore);
     }
 
-    private void initNavigationAction(final Mission mission) {
-        mLayoutDeliveryAddress.setOnClickListener(new View.OnClickListener() {
+    private void initNavigationAction(final Mission mission)
+    {
+        mLayoutDeliveryAddress.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                if (mMission != null) {
+            public void onClick(View view)
+            {
+                if (mMission != null)
+                {
                     com.mapotempo.fleet.dao.model.submodel.Location loc = (mission.getSurveyLocation().isValid()) ? mission.getSurveyLocation() :
-                            mission.getLocation();
+                        mission.getLocation();
                     // Check lat/lon object
-                    if (loc.isValid()) {
+                    if (loc.isValid())
+                    {
                         // Geo will get the camera to the current loc, ?q= (query) will ask for navigation
                         Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')" + "?q=" + loc.getLat() + "," + loc.getLon());
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
@@ -389,11 +428,13 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                         PackageManager packageManager = getActivity().getPackageManager();
                         List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
                         boolean isIntentSafe = (activities.size() > 0);
-                        for (ResolveInfo ri : activities) {
+                        for (ResolveInfo ri : activities)
+                        {
                             System.out.print(ri.activityInfo.name);
                             System.out.print(ri.activityInfo.describeContents());
                         }
-                        if (isIntentSafe) {
+                        if (isIntentSafe)
+                        {
                             startActivity(mapIntent);
                         }
                     }
@@ -402,23 +443,29 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         });
     }
 
-    private void fillViewData(Mission mission) {
+    private void fillViewData(Mission mission)
+    {
         mapVisivilityManager();
         detailsContentManager(mission);
         detailsVisibilityManager();
     }
 
-    private void mapVisivilityManager() {
+    private void mapVisivilityManager()
+    {
         final com.mapotempo.fleet.dao.model.submodel.Location location = mMission.getSurveyLocation().isValid() ? mMission.getSurveyLocation() : mMission.getLocation();
         final MissionDetailsFragment INSTANCE = this;
 
         // Asynchronously fill the mapImageView when the widget is draw to retrieve dimensions.
-        if (location.isValid()) {
+        if (location.isValid())
+        {
             mMapContainer.setVisibility(View.VISIBLE);
             ViewTreeObserver vto = mMapImageView.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    if (INSTANCE.isAdded()) {
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener()
+            {
+                public boolean onPreDraw()
+                {
+                    if (INSTANCE.isAdded())
+                    {
                         mMapImageView.getViewTreeObserver().removeOnPreDrawListener(this);
 
                         // Init visibility
@@ -440,45 +487,50 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
                         y = (int) (x * ratio);
 
                         String MapUrl = new StaticMapURLHelper.TileHostingURLBuilder()
-                                .setBaseURL(getString(R.string.tilehosting_base_url))
-                                .setKey(getString(R.string.tilehosting_access_token))
-                                .setLat(location.getLat())
-                                .setLon(location.getLon())
-                                .setWidth(x)
-                                .setHeight(y)
-                                .setZoom(18)
-                                .Build();
+                            .setBaseURL(getString(R.string.tilehosting_base_url))
+                            .setKey(getString(R.string.tilehosting_access_token))
+                            .setLat(location.getLat())
+                            .setLon(location.getLon())
+                            .setWidth(x)
+                            .setHeight(y)
+                            .setZoom(18)
+                            .Build();
 
                         // Init request with Picasso
                         Picasso.with(getActivity())
-                                .load(MapUrl)
-                                .error(R.drawable.bg_world_mapbox_v10)
-                                .into(mMapImageView, new Callback() {
-                                    @Override
-                                    public void onSuccess() {
-                                        mMapLoader.setVisibility(View.GONE);
-                                        mMapImageView.setVisibility(View.VISIBLE);
-                                        mMapMarker.setVisibility(View.VISIBLE);
-                                    }
+                            .load(MapUrl)
+                            .error(R.drawable.bg_world_mapbox_v10)
+                            .into(mMapImageView, new Callback()
+                            {
+                                @Override
+                                public void onSuccess()
+                                {
+                                    mMapLoader.setVisibility(View.GONE);
+                                    mMapImageView.setVisibility(View.VISIBLE);
+                                    mMapMarker.setVisibility(View.VISIBLE);
+                                }
 
-                                    @Override
-                                    public void onError() {
-                                        mMapLoader.setVisibility(View.GONE);
-                                        mMapImageView.setVisibility(View.VISIBLE);
-                                        mMapMarker.setVisibility(View.GONE);
-                                    }
-                                });
+                                @Override
+                                public void onError()
+                                {
+                                    mMapLoader.setVisibility(View.GONE);
+                                    mMapImageView.setVisibility(View.VISIBLE);
+                                    mMapMarker.setVisibility(View.GONE);
+                                }
+                            });
 
                         return true;
                     }
                     return true;
                 }
             });
-        } else
+        }
+        else
             mMapContainer.setVisibility(View.GONE);
     }
 
-    private void detailsContentManager(Mission mission) {
+    private void detailsContentManager(Mission mission)
+    {
         mMissionName.setText(mission.getName());
         mMissionReference.setText(mission.getReference());
 
@@ -494,11 +546,11 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
             addressInterface = mission.getAddress();
 
         String fullAdress = String.format("%s%s%s %s%s",
-                AddressHelper.addBackDashIfNonNull(addressInterface.getStreet(), ""),
-                AddressHelper.addBackDashIfNonNull(addressInterface.getDetail(), ""),
-                addressInterface.getPostalcode(),
-                AddressHelper.addBackDashIfNonNull(addressInterface.getCity(), ""),
-                addressInterface.getCountry().trim());
+            AddressHelper.addBackDashIfNonNull(addressInterface.getStreet(), ""),
+            AddressHelper.addBackDashIfNonNull(addressInterface.getDetail(), ""),
+            addressInterface.getPostalcode(),
+            AddressHelper.addBackDashIfNonNull(addressInterface.getCity(), ""),
+            addressInterface.getCountry().trim());
 
         mTextViewDeliveryAddress.setText(fullAdress);
 
@@ -507,7 +559,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mTextViewComment.setText(mission.getComment());
 
         mLayoutTimeWindowsContainer.removeAllViews();
-        for (TimeWindow tw : mMission.getTimeWindows()) {
+        for (TimeWindow tw : mMission.getTimeWindows())
+        {
             TextView textView = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.time_windows_text_view, null);
             String date = String.format("%s - %s", DateHelpers.parse(tw.getStart(), DateHelpers.DateStyle.HOURMINUTES), DateHelpers.parse(tw.getEnd(), DateHelpers.DateStyle.HOURMINUTES));
             textView.setText(date);
@@ -515,7 +568,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         }
     }
 
-    private void detailsVisibilityManager() {
+    private void detailsVisibilityManager()
+    {
         mMissionReference.setVisibility(isEmptyTextView(mMissionReference) ? View.VISIBLE : View.GONE);
         mLayoutTextViewDuration.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
         mLayoutDeliveryAddress.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) ? View.VISIBLE : View.GONE));
@@ -524,49 +578,54 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
     }
 
-    private boolean isEmptyTextView(TextView textView) {
+    private boolean isEmptyTextView(TextView textView)
+    {
         return textView.getText().toString().trim().length() > 0;
     }
 
-//    private void goSignatureFragment(Context context) {
-//        // DialogFragment.show() will take care of adding the fragment
-//        // in a transaction.  We also want to remove any currently showing
-//        // dialog, so make our own transaction and take care of that here.
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.addToBackStack(null);
-//
-//        // Create and show the dialog.
-//        SignatureFragment newFragment = SignatureFragment.newInstance();
-//        newFragment.setSignatureSaveListener(new SignatureFragment.SignatureSaveListener() {
-//            @Override
-//            public boolean onSignatureSave(Bitmap signatureBitmap) {
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
-//                mMission.setAttachment("signature", "image/jpeg", bi);
-//                if (mMission.save()) {
-//                    Toast.makeText(getContext(), R.string.save_signature_success, Toast.LENGTH_SHORT).show();
-//                    return true;
-//                } else
-//                    Toast.makeText(getContext(), R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//        });
-//        newFragment.show(ft, "t");
-//    }
+    //    private void goSignatureFragment(Context context) {
+    //        // DialogFragment.show() will take care of adding the fragment
+    //        // in a transaction.  We also want to remove any currently showing
+    //        // dialog, so make our own transaction and take care of that here.
+    //        FragmentTransaction ft = getFragmentManager().beginTransaction();
+    //        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+    //        if (prev != null) {
+    //            ft.remove(prev);
+    //        }
+    //        ft.addToBackStack(null);
+    //
+    //        // Create and show the dialog.
+    //        SignatureFragment newFragment = SignatureFragment.newInstance();
+    //        newFragment.setSignatureSaveListener(new SignatureFragment.SignatureSaveListener() {
+    //            @Override
+    //            public boolean onSignatureSave(Bitmap signatureBitmap) {
+    //                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    //                signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+    //                ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
+    //                mMission.setAttachment("signature", "image/jpeg", bi);
+    //                if (mMission.save()) {
+    //                    Toast.makeText(getContext(), R.string.save_signature_success, Toast.LENGTH_SHORT).show();
+    //                    return true;
+    //                } else
+    //                    Toast.makeText(getContext(), R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
+    //                return false;
+    //            }
+    //        });
+    //        newFragment.show(ft, "t");
+    //    }
 
-    private void initActionButtons(final Mission mission) {
+    private void initActionButtons(final Mission mission)
+    {
         List<MissionActionType> actions = mMission.getStatusType().getNextActionType();
         ActionsListFragment fragment = (ActionsListFragment) getChildFragmentManager().findFragmentById(R.id.actions_fragment);
-        if (fragment != null) {
+        if (fragment != null)
+        {
             fragment.setActions(actions);
-            fragment.setOnActionSelectedListener(new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener() {
+            fragment.setOnActionSelectedListener(new ActionsRecyclerViewAdapter.OnMissionActionSelectedListener()
+            {
                 @Override
-                public void onMissionActionSelected(MissionActionType action) {
+                public void onMissionActionSelected(MissionActionType action)
+                {
 
                     doAction(mission, action);
 
@@ -578,7 +637,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         }
     }
 
-    private void initMainActionButtons(final Mission mission) {
+    private void initMainActionButtons(final Mission mission)
+    {
         // Current status
         MissionStatusType statusType = mission.getStatusType();
         Drawable drawable = SVGDrawableHelper.getDrawableFromSVGPath(statusType.getSVGPath(), "#ffffff", new BitmapDrawable());
@@ -593,20 +653,25 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         MapotempoFleetManager manager = mapotempoApplication.getManager();
         List<MissionActionType> actions = manager.getMissionActionTypeAccessInterface().byPreviousStatusType(mission.getStatusType());
 
-        for (FloatingActionButton button : floatingActionButtonArray) {
-            if (idx < actions.size() && mButtonsVisibility) {
+        for (FloatingActionButton button : floatingActionButtonArray)
+        {
+            if (idx < actions.size() && mButtonsVisibility)
+            {
                 final MissionActionType action = actions.get(idx);
                 Drawable d = SVGDrawableHelper.getDrawableFromSVGPath(action.getNextStatus().getSVGPath(), "#ffffff", new BitmapDrawable());
                 button.setImageDrawable(d);
                 button.show();
                 button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(action.getNextStatus().getColor())));
-                button.setOnClickListener(new View.OnClickListener() {
+                button.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
                         doAction(mission, action);
                     }
                 });
-            } else
+            }
+            else
                 button.setVisibility(View.GONE);
             idx++;
         }
@@ -617,7 +682,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
             mStatusMoreAction.setVisibility(View.VISIBLE);
     }
 
-    private void doAction(Mission mission, MissionActionType action) {
+    private void doAction(Mission mission, MissionActionType action)
+    {
         final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
         MapotempoFleetManager manager = mapotempoApplication.getManager();
 
@@ -628,22 +694,24 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
         Location loc = getNativeLocation();
         com.mapotempo.fleet.dao.model.submodel.Location locationInterface = null;
 
-        try {
+        try
+        {
             if (loc != null)
                 locationInterface = new com.mapotempo.fleet.dao.model.submodel.Location(manager, loc.getLatitude(), loc.getLongitude());
 
             MissionAction ma = manager.getMissionActionAccessInterface().create(
-                    manager.getCompany(),
-                    mMission,
-                    action,
-                    new Date(),
-                    locationInterface);
+                manager.getCompany(),
+                mMission,
+                action,
+                new Date(),
+                locationInterface);
 
             // Set mission status type
             mission.setStatus(action.getNextStatus());
             mission.save();
-        } catch (FleetException e) {
-//            TODO CL2.0
+        } catch (FleetException e)
+        {
+            //            TODO CL2.0
         }
     }
 
@@ -653,8 +721,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment {
      *
      * @return
      */
-    private Location getNativeLocation() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    private Location getNativeLocation()
+    {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
             LocationManager mLocMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
             if (mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
                 return mLocMngr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);

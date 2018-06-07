@@ -26,18 +26,21 @@ import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
 
 @ModelType(type = "company")
-public class Company extends ModelBase {
+public class Company extends ModelBase
+{
 
     // MAPOTEMPO KEY
     public static final String NAME = "name";
     public static final String COMPANY_ID = "company_id";
 
 
-    public Company(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public Company(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public String getName() {
+    public String getName()
+    {
         String res = mDocument.getString(NAME);
         return res != null ? res : "";
     }

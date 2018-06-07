@@ -22,11 +22,13 @@ package com.mapotempo.fleet.core.accessor;
 import com.couchbase.lite.ListenerToken;
 import com.couchbase.lite.Query;
 
-public class LiveAccessToken {
+public class LiveAccessToken
+{
     protected Query mLiveQuery;
     protected ListenerToken mListenerToken;
 
-    protected LiveAccessToken(Query mLiveQuery, ListenerToken mLiveListenerToken) {
+    protected LiveAccessToken(Query mLiveQuery, ListenerToken mLiveListenerToken)
+    {
         this.mLiveQuery = mLiveQuery;
         this.mListenerToken = mLiveListenerToken;
     }

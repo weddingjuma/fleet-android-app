@@ -39,7 +39,8 @@ import java.util.List;
 import java.util.Map;
 
 @ModelType(type = "mission")
-public class Mission extends ModelBase {
+public class Mission extends ModelBase
+{
     final static private String TAG = Mission.class.toString();
 
     // MAPOTEMPO KEY
@@ -59,92 +60,113 @@ public class Mission extends ModelBase {
     public static final String SURVEY_LOCATION = "survey_location";
     public static final String SURVEY_ADDRESS = "survey_address";
 
-    public Mission(IDatabaseHandler databaseHandler, Document document) throws FleetException {
+    public Mission(IDatabaseHandler databaseHandler, Document document) throws FleetException
+    {
         super(databaseHandler, document);
     }
 
-    public String getName() {
+    public String getName()
+    {
         String name = mDocument.getString(NAME);
         return name != null ? name : "Nameless mission";
     }
 
-    public Date getDate() {
+    public Date getDate()
+    {
         String dateString = mDocument.getString(DATE);
         return DateUtils.fromStringISO8601(dateString);
     }
 
-    public Date getETAOrDefault() {
+    public Date getETAOrDefault()
+    {
         String eta = mDocument.getString(ETA);
         if (eta != null)
             return DateUtils.fromStringISO8601(eta);
         return getDate();
     }
 
-    public String getReference() {
+    public String getReference()
+    {
         String res = mDocument.getString(REFERENCE);
         return res != null ? res : "";
     }
 
-    public String getComment() {
+    public String getComment()
+    {
         String res = mDocument.getString(COMMENT);
         return res != null ? res : "";
     }
 
-    public String getPhone() {
+    public String getPhone()
+    {
         String res = mDocument.getString(PHONE);
         return res != null ? res : "";
     }
 
-    public int getDuration() {
+    public int getDuration()
+    {
         int res = mDocument.getInt(DURATION);
         return 0;
     }
 
-    public MissionStatusType getStatusType() {
+    public MissionStatusType getStatusType()
+    {
         String status_id = mDocument.getString(MISSION_STATUS_TYPE_ID);
-        try {
+        try
+        {
             MissionStatusTypeAccess missionStatusTypeAccess = new MissionStatusTypeAccess(mDatabaseHandler);
             return missionStatusTypeAccess.get(status_id);
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public void setStatus(MissionStatusType missionStatus) {
+    public void setStatus(MissionStatusType missionStatus)
+    {
         mDocument.setString(MISSION_STATUS_TYPE_ID, missionStatus.getId());
     }
 
-    public List<TimeWindow> getTimeWindows() {
+    public List<TimeWindow> getTimeWindows()
+    {
         MutableArray array = mDocument.getArray(TIME_WINDOWS);
         return ModelUtils.arrayToSubmodelList(array, TimeWindow.class);
     }
 
-    public Location getLocation() {
-        try {
+    public Location getLocation()
+    {
+        try
+        {
             Location res = new Location(mDatabaseHandler, mDocument.getDictionary(LOCATION));
             return res;
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public Address getAddress() {
-        try {
+    public Address getAddress()
+    {
+        try
+        {
             Address res = new Address(mDatabaseHandler, mDocument.getDictionary(ADDRESS));
             return res;
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public Map<String, Object> getCustomData() {
+    public Map<String, Object> getCustomData()
+    {
         Dictionary dico = mDocument.getDictionary(CUSTOM_DATA);
         if (dico != null)
             return dico.toMap();
         return new HashMap<>();
     }
 
-    public void setCustomData(Map<String, String> data) {
+    public void setCustomData(Map<String, String> data)
+    {
         mDocument.setValue(CUSTOM_DATA, data);
     }
 
@@ -152,39 +174,49 @@ public class Mission extends ModelBase {
     // ##    Survey Section    ##
     // ##########################
 
-    public Location getSurveyLocation() {
-        try {
+    public Location getSurveyLocation()
+    {
+        try
+        {
             Location res = new Location(mDatabaseHandler, mDocument.getDictionary(SURVEY_LOCATION));
             return res;
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public void setSurveyLocation(Location location) {
+    public void setSurveyLocation(Location location)
+    {
         if (location.isValid())
             mDocument = mDocument.setDictionary(SURVEY_LOCATION, location.getDictionary());
     }
 
-    public void deleteSurveyLocation() {
+    public void deleteSurveyLocation()
+    {
         mDocument = mDocument.remove(SURVEY_LOCATION);
     }
 
-    public Address getSurveyAddress() {
-        try {
+    public Address getSurveyAddress()
+    {
+        try
+        {
             Address res = new Address(mDatabaseHandler, mDocument.getDictionary(SURVEY_ADDRESS));
             return res;
-        } catch (FleetException e) {
+        } catch (FleetException e)
+        {
             return null;
         }
     }
 
-    public void setSurveyAddress(Address address) {
+    public void setSurveyAddress(Address address)
+    {
         if (address.isValid())
             mDocument = mDocument.setDictionary(SURVEY_ADDRESS, address.getDictionary());
     }
 
-    public void deleteSurveyAddress() {
+    public void deleteSurveyAddress()
+    {
         mDocument = mDocument.remove(SURVEY_ADDRESS);
     }
 }

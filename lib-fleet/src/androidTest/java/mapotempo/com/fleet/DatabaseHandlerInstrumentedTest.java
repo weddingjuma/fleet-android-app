@@ -45,32 +45,37 @@ import org.junit.runners.Parameterized;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(Parameterized.class)
-public class DatabaseHandlerInstrumentedTest {
+public class DatabaseHandlerInstrumentedTest
+{
 
     @Parameterized.Parameters
-    public static Object[][] data() {
-        return new Object[1][0];
+    public static Object[][] data()
+    {
+        return new Object[5][0];
     }
 
     private static String TAG = DatabaseHandlerInstrumentedTest.class.getName();
-    DatabaseHandler.OnCatchLoginError onCatchLoginError = new DatabaseHandler.OnCatchLoginError() {
+    DatabaseHandler.OnCatchLoginError onCatchLoginError = new DatabaseHandler.OnCatchLoginError()
+    {
         @Override
-        public void CatchLoginError() {
+        public void CatchLoginError()
+        {
         }
     };
 
     @Test
-    public void simpleDatabaseHandlerTest() throws Exception {
+    public void simpleDatabaseHandlerTest() throws Exception
+    {
         Database.setLogLevel(LogDomain.ALL, LogLevel.DEBUG);
 
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         DatabaseHandler dbHandler = new DatabaseHandler(appContext,
-                "5ffbb992f9c44a4e7a50897f785c5f63d38e587130f7cf86a07359d609dc50dd",
-                "123456",
-                "ws://10.42.0.1:4984/db",
-                onCatchLoginError);
+            "5ffbb992f9c44a4e7a50897f785c5f63d38e587130f7cf86a07359d609dc50dd",
+            "123456",
+            "ws://10.42.0.1:4984/db",
+            onCatchLoginError);
 
         dbHandler.configureUserReplication();
         dbHandler.configureCompanyReplication("company-dzC-REbyrC");
@@ -80,16 +85,19 @@ public class DatabaseHandlerInstrumentedTest {
 
         // Inspect database replication
         Query query = QueryBuilder
-                .select(SelectResult.expression(Meta.id),
-                        SelectResult.property("type"))
-                .from(DataSource.database(dbHandler.mDatabase));
-        try {
+            .select(SelectResult.expression(Meta.id),
+                SelectResult.property("type"))
+            .from(DataSource.database(dbHandler.mDatabase));
+        try
+        {
             ResultSet rs = query.execute();
-            for (Result result : rs) {
-//                Log.i("Sample", String.format("hotel id -> %s", result.getString("id")));
+            for (Result result : rs)
+            {
+                //                Log.i("Sample", String.format("hotel id -> %s", result.getString("id")));
             }
-        } catch (CouchbaseLiteException e) {
-//            Log.e("Sample", e.getLocalizedMessage());
+        } catch (CouchbaseLiteException e)
+        {
+            //            Log.e("Sample", e.getLocalizedMessage());
         }
 
         // Release database
