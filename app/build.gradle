@@ -1,69 +1,69 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        fleetDebug {
-            storeFile file('debug.keystore')
-            storePassword '12345678'
-            keyAlias 'debug'
-            keyPassword '12345678'
-        }
+  signingConfigs {
+    fleetDebug {
+      storeFile file('debug.keystore')
+      storePassword '12345678'
+      keyAlias 'debug'
+      keyPassword '12345678'
+    }
+  }
+
+  compileSdkVersion 27
+  buildToolsVersion '27.0.3'
+  defaultConfig {
+    applicationId "com.mapotempo.mapotempo_fleet_android"
+    minSdkVersion 19
+    targetSdkVersion 27
+    versionCode 29
+    versionName "2.9"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    debug {
+      signingConfig signingConfigs.fleetDebug
+      applicationIdSuffix '.debug'
+      minifyEnabled false
     }
 
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
-    defaultConfig {
-        applicationId "com.mapotempo.mapotempo_fleet_android"
-        minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 28
-        versionName "2.8"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    release {
+      signingConfig signingConfigs.fleetDebug
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+  }
 
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.fleetDebug
-            applicationIdSuffix '.debug'
-            minifyEnabled false
-        }
-
-        release {
-            signingConfig signingConfigs.fleetDebug
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    packagingOptions {
-        exclude 'META-INF/ASL2.0'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-    }
+  packagingOptions {
+    exclude 'META-INF/ASL2.0'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/NOTICE'
+  }
 }
 
 repositories {
-    mavenLocal()
+  mavenLocal()
 }
 
 repositories {
-    jcenter()
-    maven {
-        url "http://files.couchbase.com/maven2/"
-    }
+  jcenter()
+  maven {
+    url "http://files.couchbase.com/maven2/"
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'lib', include: ['*.jar'])
-    compile project(':lib')
+  compile fileTree(dir: 'lib', include: ['*.jar'])
+  compile project(':lib')
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation 'com.android.support:appcompat-v7:27.+'
-    implementation 'com.android.support:design:27.+'
+  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+  implementation 'com.android.support:appcompat-v7:27.+'
+  implementation 'com.android.support:design:27.+'
 
-    testCompile 'junit:junit:4.12'
+  testCompile 'junit:junit:4.12'
 }
 
 /*
@@ -77,13 +77,13 @@ task generateJavaDoc(type: org.gradle.api.tasks.javadoc.Javadoc) {
 FileTree docFilesTree = fileTree(dir: 'src/main/doc-files')
 
 task copyJavaDocSupportFiles(type: Copy) {
-    from docFilesTree
-    into 'build/docs/javadoc/doc-files/'
+  from docFilesTree
+  into 'build/docs/javadoc/doc-files/'
 }
 
 task generateApiJavadocs(name: 'documentation', type: Javadoc, dependsOn: ['copyJavaDocSupportFiles']) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    options.overview('src/main/overview.html')
-    failOnError true
+  source = android.sourceSets.main.java.srcDirs
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+  options.overview('src/main/overview.html')
+  failOnError true
 }
