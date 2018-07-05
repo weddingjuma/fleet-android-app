@@ -152,19 +152,13 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
                         @Override
                         public void run()
                         {
+                            // TODO Refactor the update behavior
                             if (isAdded())
                             {
-                                // TODO Refactor the update behavior
-
                                 List<Mission> oldDeprecatedMissions = mPagerAdapter.getMissionsList(); // Keep track of old data using a shallow copy
-                                Mission mission = oldDeprecatedMissions.get(mViewPager.getCurrentItem()); // Keep the mission currently displayed
-                                int newMissionPosition = 0;
-
                                 // DO NOTHING IF DATA NEED TO BE REFRESHED
                                 if (oldDeprecatedMissions.equals(missions))
-                                {
                                     return;
-                                }
                                 else if (missions.size() == 0)
                                 {
                                     MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
@@ -176,33 +170,6 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
                                 {
                                     mPagerAdapter.refreshMissions(missions);
                                 }
-
-                                //                        // Update previous list to prevent useless updates
-                                //                        for (MissionInterface loopMission : missions) {
-                                //                            if (!oldDeprecatedMissions.contains(loopMission)) {
-                                //                                mPagerAdapter.addMission(loopMission);
-                                //                            } else {
-                                //                                int id = oldDeprecatedMissions.indexOf(loopMission);
-                                //                                oldDeprecatedMissions.remove(id);
-                                //                            }
-                                //                        }
-                                //
-                                //                        // Remove deprecated mission
-                                //                        mPagerAdapter.removeMissions(oldDeprecatedMissions);
-                                //
-                                //                        mPagerAdapter.notifyDataSetChanged();
-
-                                // Search for new index
-                                //                            Iterator<Mission> iterable = missions.iterator();
-                                //                            while (iterable.hasNext()) {
-                                //                                if (mission.getId().equals(iterable.next().getId())) {
-                                //                                    newMissionPosition = mPagerAdapter.getItemPosition(iterable.next());
-                                //                                    break;
-                                //                                }
-                                //                            }
-                                //
-                                //                            // Update pager position according to the mission new position
-                                //                            mViewPager.setCurrentItem(newMissionPosition);
                             }
                         }
                     });
