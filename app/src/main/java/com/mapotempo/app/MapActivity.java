@@ -25,9 +25,9 @@ import android.support.v7.widget.Toolbar;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.dao.model.Mission;
-import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
+import com.mapotempo.lib.fragments.mission.OnMissionDetailsFragmentListener;
 
-public class MapActivity extends MapotempoBaseActivity implements MissionDetailsFragment.OnMissionDetailsFragmentListener
+public class MapActivity extends MapotempoBaseActivity implements OnMissionDetailsFragmentListener
 {
 
     @Override
@@ -36,7 +36,7 @@ public class MapActivity extends MapotempoBaseActivity implements MissionDetails
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.map);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

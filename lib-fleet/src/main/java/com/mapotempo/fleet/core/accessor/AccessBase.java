@@ -71,14 +71,16 @@ public abstract class AccessBase<T extends ModelBase> extends Base
 
     private final Expression mBaseExpression;
 
-    private final HashMap<ModelAccessToken, ModelAccessChangeListener> mModelAccessMap;
+
+     final HashMap<ModelAccessToken, ModelAccessChangeListener> mModelAccessMap;
     private final HashMap<LiveAccessToken, LiveAccessChangeListener> mLiveAccessMap;
 
-    private String DEFAULT_DATE_FIELD = "date";
+    private String mDefaultSortField = "date";
 
-    public AccessBase(IDatabaseHandler databaseHandler, Class<T> clazz, final String sortField) throws FleetException
+    public AccessBase(IDatabaseHandler databaseHandler, Class<T> clazz, @Nullable final String sortField) throws FleetException
     {
         super(databaseHandler);
+        mDefaultSortField = sortField != null ? sortField : mDefaultSortField;
 
         mLiveAccessMap = new HashMap();
         mModelAccessMap = new HashMap();
@@ -160,23 +162,23 @@ public abstract class AccessBase<T extends ModelBase> extends Base
      */
     public List<T> all()
     {
-        return runQuery(null, DEFAULT_DATE_FIELD);
+        return runQuery(null, mDefaultSortField);
     }
 
     public List<T> byDateGreaterThan(Date date)
     {
-        return runQuery(Expression.property(getDateField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
+        return runQuery(Expression.property(getDefaultSortdField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))), mDefaultSortField);
     }
 
     public List<T> byDateLessThan(Date date)
     {
-        return runQuery(Expression.property(getDateField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
+        return runQuery(Expression.property(getDefaultSortdField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))), mDefaultSortField);
     }
 
     public List<T> byDateBetween(String dateField, Date date1, Date date2)
     {
-        return runQuery(Expression.property(getDateField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression.string(DateUtils
-            .toStringISO8601(date2))), DEFAULT_DATE_FIELD);
+        return runQuery(Expression.property(getDefaultSortdField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression.string(DateUtils
+            .toStringISO8601(date2))), mDefaultSortField);
     }
 
     // =============================================================================================
@@ -185,23 +187,23 @@ public abstract class AccessBase<T extends ModelBase> extends Base
 
     public LiveAccessToken all_AddListener(final LiveAccessChangeListener<T> changeListener)
     {
-        return createLiveQuery(changeListener, null, DEFAULT_DATE_FIELD);
+        return createLiveQuery(changeListener, null, mDefaultSortField);
     }
 
     public LiveAccessToken byDateGreaterThan_AddListener(final LiveAccessChangeListener<T> changeListener, Date date)
     {
-        return createLiveQuery(changeListener, Expression.property(getDateField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
+        return createLiveQuery(changeListener, Expression.property(getDefaultSortdField()).greaterThan(Expression.string(DateUtils.toStringISO8601(date))), mDefaultSortField);
     }
 
     public LiveAccessToken byDateLessThanAdd_AddListener(final LiveAccessChangeListener<T> changeListener, Date date)
     {
-        return createLiveQuery(changeListener, Expression.property(getDateField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))), DEFAULT_DATE_FIELD);
+        return createLiveQuery(changeListener, Expression.property(getDefaultSortdField()).lessThan(Expression.string(DateUtils.toStringISO8601(date))), mDefaultSortField);
     }
 
     public LiveAccessToken byDateBetween_AddListener(final LiveAccessChangeListener<T> changeListener, Date date1, Date date2)
     {
-        return createLiveQuery(changeListener, Expression.property(getDateField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression
-            .string(DateUtils.toStringISO8601(date2))), DEFAULT_DATE_FIELD);
+        return createLiveQuery(changeListener, Expression.property(getDefaultSortdField()).between(Expression.string(DateUtils.toStringISO8601(date1)), Expression
+            .string(DateUtils.toStringISO8601(date2))), mDefaultSortField);
     }
 
     public void removeListener(LiveAccessToken liveAccessToken)
@@ -214,9 +216,9 @@ public abstract class AccessBase<T extends ModelBase> extends Base
     // == Protected method
     // =============================================================================================
 
-    protected String getDateField()
+    protected String getDefaultSortdField()
     {
-        return DEFAULT_DATE_FIELD;
+        return mDefaultSortField;
     }
 
     protected List<T> runQuery(@Nullable Expression expression, @Nullable String orderField)
@@ -241,9 +243,9 @@ public abstract class AccessBase<T extends ModelBase> extends Base
         return res;
     }
 
-    protected LiveAccessToken createLiveQuery(final LiveAccessChangeListener<T> changeListener, @Nullable Expression expression, @Nullable String orderField)
+    protected LiveAccessToken createLiveQuery(final LiveAccessChangeListener<T> changeListener, @Nullable Expression expression, @Nullable String sortField)
     {
-        Query query = getQuery(expression, orderField);
+        Query query = getQuery(expression, sortField);
         ListenerToken listenerToken = query.addChangeListener(new QueryChangeListener()
         {
             @Override
@@ -269,14 +271,15 @@ public abstract class AccessBase<T extends ModelBase> extends Base
     // == Private method
     // =============================================================================================
 
-    private Query getQuery(@Nullable Expression expression, @Nullable String orderField)
+    private Query getQuery(@Nullable Expression expression, @Nullable String sortField)
     {
+        Log.i("-------------", sortField != null ? sortField : mDefaultSortField);
         Expression e = expression != null ? expression.and(mBaseExpression) : mBaseExpression;
         return QueryBuilder
             .select(SelectResult.expression(Meta.id), SelectResult.all())
             .from(DataSource.database(mDatabaseHandler.getDatabase()))
             .where(e)
-            .orderBy(Ordering.property(orderField != null ? orderField : ""));
+            .orderBy(Ordering.property(sortField != null ? sortField : mDefaultSortField));
     }
 
     private T getInstance(Document document) throws UnknownError

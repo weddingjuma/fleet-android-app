@@ -27,68 +27,30 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
 import com.mapotempo.fleet.core.accessor.LiveAccessToken;
 import com.mapotempo.fleet.dao.model.Mission;
-import com.mapotempo.fleet.manager.MapotempoFleetManager;
-import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-/**
- * This fragment is responsible for display all missions assigned to the user currently connected.
- * Each view displayed by this fragment is composed of 3 main UI elements :
- * <ul>
- * <li>The name </li>
- * <li>The delivery date</li>
- * <li>The delivery hour</li>
- * </ul>
- * <p>
- * <h3>Integration</h3>
- * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment"} </code>
- * <p>
- * This fragment require the implementation of {@link OnMissionSelectedListener} directly in the Activity that hold the List Fragment.
- * Then Override the {@link OnMissionSelectedListener#onMissionSelected(int)}
- * which force to return an Android's onMissionFocus Listener. If you don't know about Event Listeners please check the documentation here : <a href="https://developer.android.com/reference/android/view/View.OnClickListener.html" target="_blank">Android Listener</a> <br>
- * Feel free to put any logic inside the listener. Keep in mind that the position returned can be used to get the detailed view of the mission triggered by a onMissionFocus.
- * </p>
- * <p>
- * <b>Here is an example of usability: </b>
- * <pre>
- *     {@literal @Override}
- *     public View.OnClickListener onMissionSelected(final int position) {
- *         View.OnClickListener onClick = new View.OnClickListener() {
- *             {@literal @Override}
- *             public void onClick(View v) {
- *                 intent = new Intent(v.getContext(), YouNewActivity.class);
- *                 intent.putExtra("mission_position", position);
- *                 v.getContext().startActivity(intent);
- *             }
- *         }
- *         return onClick;
- *    }
- * </pre>
- */
 public class MissionsListFragment extends MapotempoBaseFragment
 {
-
     private RecyclerView mRecyclerView;
 
     private OnMissionSelectedListener mListener;
@@ -133,8 +95,15 @@ public class MissionsListFragment extends MapotempoBaseFragment
         }
         else
         {
-            throw new RuntimeException(context.toString() + " must implement OnMissionSelectedListener");
+            throw new RuntimeException(context.toString() + " must implement " + OnMissionSelectedListener.class.getName());
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        Log.i(this.getClass().getSimpleName(), "++++++++++++" + this.toString());
     }
 
     @Override
@@ -147,14 +116,7 @@ public class MissionsListFragment extends MapotempoBaseFragment
         View view = inflater.cloneInContext(contextThemeWrapper).inflate(R.layout.fragment_missions_list, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), new OnMissionSelectedListener()
-        {
-            @Override
-            public void onMissionSelected(int position)
-            {
-                mListener.onMissionSelected(position);
-            }
-        }, mMissions, mBehavior);
+        mRecyclerAdapter = new MissionsRecyclerViewAdapter(getContext(), mListener, mMissions, mBehavior);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mDefaultFrameLayout = view.findViewById(R.id.default_layout);
 
@@ -165,40 +127,11 @@ public class MissionsListFragment extends MapotempoBaseFragment
     public void onResume()
     {
         super.onResume();
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(calendar.HOUR, -12);
-
-        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
-        if (mapotempoFleetManagerInterface != null)
-        {
-            missionChangeListenerToken = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>()
-            {
-                @Override
-                public void changed(final List<Mission> missions)
-                {
-                    getActivity().runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            setMissions(missions);
-                        }
-                    });
-                }
-            }, calendar.getTime());
-            setMissions(mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan(calendar.getTime()));
-        }
     }
 
     @Override
     public void onPause()
     {
-        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
-        if (mapotempoFleetManagerInterface != null && missionChangeListenerToken != null)
-        {
-            mapotempoFleetManagerInterface.getMissionAccess().removeListener(missionChangeListenerToken);
-        }
         super.onPause();
     }
 
@@ -238,40 +171,11 @@ public class MissionsListFragment extends MapotempoBaseFragment
     // ==============
     // ==  Public  ==
     // ==============
-
-    public void notifyDataChange()
+    public void setMission(@NonNull List<Mission> missions)
     {
-        mRecyclerView.getAdapter().notifyDataSetChanged();
-    }
-
-    public void missionFocus(int position)
-    {
-        mRecyclerView.smoothScrollToPosition(position);
-        if (mRecyclerAdapter != null)
-            mRecyclerAdapter.setMissionFocus(position);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain {@link MissionsListFragment}
-     */
-    public interface OnMissionSelectedListener
-    {
-        /**
-         * A Callback triggered when an item list is created. Use it to set a onMissionFocus listener to each of them.
-         *
-         * @param position return the item list position
-         */
-        void onMissionSelected(int position);
-    }
-
-    // ===============
-    // ==  Private  ==
-    // ===============
-
-    private void setMissions(List<Mission> missions)
-    {
-        mRecyclerAdapter.notifyDataSyncHasChanged(missions);
-        if (missions == null || missions.size() == 0)
+        mMissions = missions;
+        mRecyclerAdapter.notifyDataSyncHasChanged(mMissions);
+        if (mMissions == null || mMissions.size() == 0)
         {
             mDefaultFrameLayout.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.GONE);
@@ -282,6 +186,22 @@ public class MissionsListFragment extends MapotempoBaseFragment
             mRecyclerView.setVisibility(View.VISIBLE);
         }
     }
+
+    public void notifyDataChange()
+    {
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    public void setCurrentItem(int position)
+    {
+        mRecyclerView.smoothScrollToPosition(position);
+        if (mRecyclerAdapter != null)
+            mRecyclerAdapter.setMissionFocus(position);
+    }
+
+    // ===============
+    // ==  Private  ==
+    // ===============
 
     private void displayOptions()
     {

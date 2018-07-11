@@ -36,8 +36,6 @@ import com.couchbase.lite.ReplicatorChangeListener;
 import com.couchbase.lite.ReplicatorConfiguration;
 import com.couchbase.lite.URLEndpoint;
 import com.mapotempo.fleet.api.FleetException;
-import com.mapotempo.fleet.dao.model.Mission;
-import com.mapotempo.fleet.utils.DateUtils;
 import com.mapotempo.fleet.utils.HashUtils;
 
 import java.net.URI;
@@ -209,22 +207,14 @@ public class DatabaseHandler implements IDatabaseHandler
         mReplicatorList.add(mCompanyReplicator);
     }
 
-    public void configureMissionReplication(List<Mission> missions)
+    public void configureMissionReplication()
     {
         ReplicatorConfiguration replConfig = new ReplicatorConfiguration(mDatabase, mTargetEndpoint);
         replConfig.setReplicatorType(ReplicatorConfiguration.ReplicatorType.PUSH_AND_PULL);
         replConfig.setContinuous(true);
         replConfig.setAuthenticator(new BasicAuthenticator(mUser, mPassword));
         List<String> channels = new ArrayList<>();
-        for (Mission d : missions)
-        {
-            channels.add("mission:" + mUser + ":" + DateUtils.dateForChannel(d.getDate()));
-        }
-        channels.add("mission:" + mUser + ":" + DateUtils.dateForChannel(-1));
-        channels.add("mission:" + mUser + ":" + DateUtils.dateForChannel(0));
-        channels.add("mission:" + mUser + ":" + DateUtils.dateForChannel(1));
-        channels.add("mission:" + mUser + ":" + DateUtils.dateForChannel(2));
-
+        channels.add("mission:" + mUser);
         replConfig.setChannels(channels);
         mMissionReplicator = new Replicator(replConfig);
         mMissionReplicator.start();

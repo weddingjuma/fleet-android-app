@@ -27,12 +27,13 @@ import android.view.MenuItem;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.dao.model.Mission;
-import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
 import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
+import com.mapotempo.lib.fragments.mission.OnMissionDetailsFragmentListener;
+import com.mapotempo.lib.fragments.mission.OnMissionFocusListener;
 
 public class MissionActivity extends MapotempoBaseActivity implements
-    MissionsPagerFragment.OnMissionFocusListener,
-    MissionDetailsFragment.OnMissionDetailsFragmentListener
+    OnMissionFocusListener,
+    OnMissionDetailsFragmentListener
 {
 
     @Override
@@ -41,7 +42,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mission_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.mission);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,7 +59,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.menu_mission, menu);
+        getMenuInflater().inflate(com.mapotempo.app.R.menu.menu_mission, menu);
         return true;
     }
 
@@ -93,7 +94,7 @@ public class MissionActivity extends MapotempoBaseActivity implements
     }
 
     @Override
-    public void onMissionFocus(int position)
+    public void onMissionFocus(Mission mission)
     {
     }
 

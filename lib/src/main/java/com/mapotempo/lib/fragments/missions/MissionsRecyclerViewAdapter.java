@@ -38,14 +38,10 @@ import com.mapotempo.lib.view.action.MissionActionPanel;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Mission} and makes a call to the
- * specified {@link MissionsListFragment.OnMissionSelectedListener}.
- */
 class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerViewAdapter.ViewHolder>
 {
 
-    private MissionsListFragment.OnMissionSelectedListener mListener;
+    private OnMissionSelectedListener mListener;
 
     private int missionsCount = 0;
 
@@ -59,7 +55,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
     // ==  Constructor  ==
     // ===================
 
-    public MissionsRecyclerViewAdapter(Context context, MissionsListFragment.OnMissionSelectedListener listener, List<Mission> missions, ListBehavior behavior)
+    public MissionsRecyclerViewAdapter(Context context, OnMissionSelectedListener listener, List<Mission> missions, ListBehavior behavior)
     {
         mMissions = missions;
         missionsCount = missions.size();
@@ -155,7 +151,7 @@ class MissionsRecyclerViewAdapter extends RecyclerView.Adapter<MissionsRecyclerV
                 @Override
                 public void onClick(View view)
                 {
-                    mListener.onMissionSelected(position);
+                    mListener.onMissionSelected(mItem);
                 }
             });
         }

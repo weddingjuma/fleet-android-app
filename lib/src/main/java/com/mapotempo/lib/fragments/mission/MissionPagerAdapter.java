@@ -39,10 +39,10 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter
     private List<Mission> mMissions;
     private Map<Integer, MissionDetailsFragment> mPageReferenceMap = new HashMap<>();
 
-    public MissionPagerAdapter(FragmentManager fm, int count, List<Mission> missions)
+    public MissionPagerAdapter(FragmentManager fm, List<Mission> missions)
     {
         super(fm);
-        mCount = count;
+        mCount = missions.size();
         mMissions = new ArrayList<>(missions);
     }
 
@@ -69,7 +69,7 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter
     @Override
     public int getCount()
     {
-        return mCount;
+        return mMissions.size();
     }
 
     @Override

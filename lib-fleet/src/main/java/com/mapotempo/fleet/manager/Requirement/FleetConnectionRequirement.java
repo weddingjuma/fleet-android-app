@@ -30,13 +30,11 @@ import com.mapotempo.fleet.dao.access.UserCurrentLocationAccess;
 import com.mapotempo.fleet.dao.access.UserSettingsAccess;
 import com.mapotempo.fleet.dao.model.Company;
 import com.mapotempo.fleet.dao.model.MetaInfo;
-import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.dao.model.User;
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
 import com.mapotempo.fleet.manager.LOGIN_STATUS;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -189,7 +187,7 @@ public class FleetConnectionRequirement implements ConnectionRequirement
                 {
                     if (!mChannelInit)
                     {
-                        mDatabaseHandler.configureMissionReplication(new ArrayList<Mission>());
+                        mDatabaseHandler.configureMissionReplication();
                         mDatabaseHandler.configureCompanyReplication(user.getCompanyId());
                         mChannelInit = true;
                     }

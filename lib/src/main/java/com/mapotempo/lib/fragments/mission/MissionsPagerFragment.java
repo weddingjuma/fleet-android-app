@@ -24,12 +24,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
 import com.mapotempo.fleet.core.accessor.LiveAccessToken;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
@@ -42,43 +42,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
-/**
- * This fragment act as a manger for the {@link MissionDetailsFragment}.
- * It is used to :
- * <ul>
- * <li>Detect if a ViewPager must be used</li>
- * <li>Return the current view displayed</li>
- * <li>Provide the {@link com.mapotempo.fleet.dao.model.Mission} object to {@link MissionDetailsFragment}</li>
- * </ul>
- * <p>
- * <h3>Integration</h3>
- * First and foremost, it is needed to implement the fragment through XML using the following class :
- * {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionsPagerFragment"} <br>
- * {@literal android:id="@+id/base_fragment"} <br>
- * {@literal app:ViewStyle="SCROLLVIEW"} <br>
- * {@literal android:layout_width="match_parent"} <br>
- * {@literal android:layout_height="match_parent" />} <br>
- * <p>
- * It is Highly recommended to set up the enum "ViewStyle" to "SCROLLVIEW" in order to benefit of full features.
- * <p>
- * This fragment require the implementation of {@link OnMissionFocusListener} directly in the Activity that hold the List Fragment.
- * Then Override the {@link OnMissionFocusListener#onMissionFocus(int)} is required to use this fragment.
- * </p>
- * <p>
- * <b>Here is an example of usability: </b>
- * <pre>
- * @Override
- * public int onMissionFocus(int position) {
- *      MissionsListFragment missionsFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
- *
- *      if (missionsFragment != null)
- *      missionsFragment.setMissionFocus(position);
- *
- *      return position;
- *  }
- * </pre>
- */
 public class MissionsPagerFragment extends MapotempoBaseFragment
 {
 
@@ -112,75 +75,30 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        mListener = (OnMissionFocusListener) context;
-        if (mListener == null)
-            throw new RuntimeException("You must implement OnMissionFocusListener Interface");
+        if (context instanceof OnMissionFocusListener)
+        {
+            mListener = (OnMissionFocusListener) context;
+        }
+        else
+        {
+            throw new RuntimeException(context.toString() + " must implement " + OnMissionFocusListener.class.getName());
+        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        // Get extra argument and savedInstanceState can override it.
-        mCurrentPosition = getActivity().getIntent().getIntExtra("mission_id", 0);
-        if (savedInstanceState != null)
-        {
-            mCurrentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0);
-        }
+        Log.i(this.getClass().getSimpleName(), "++++++++++++" + this.toString());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(calendar.HOUR, -12);
-
-        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        List<Mission> missions = new ArrayList<>();
-        if (mapotempoApplication.getManager() != null)
-        {
-            missions = mapotempoApplication.getManager().getMissionAccess().byDateGreaterThan(calendar.getTime());
-            missionChangeListenerToken = mapotempoApplication.getManager().getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>()
-            {
-                @Override
-                public void changed(final List<Mission> missions)
-                {
-                    getActivity().runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            // TODO Refactor the update behavior
-                            if (isAdded())
-                            {
-                                List<Mission> oldDeprecatedMissions = mPagerAdapter.getMissionsList(); // Keep track of old data using a shallow copy
-                                // DO NOTHING IF DATA NEED TO BE REFRESHED
-                                if (oldDeprecatedMissions.equals(missions))
-                                    return;
-                                else if (missions.size() == 0)
-                                {
-                                    MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-                                    mapotempoApplication.getManager().getMissionAccess().removeListener(missionChangeListenerToken);
-                                    getActivity().finish();
-                                    return;
-                                }
-                                else
-                                {
-                                    mPagerAdapter.refreshMissions(missions);
-                                }
-                            }
-                        }
-                    });
-                }
-            }, calendar.getTime());
-        }
-
         View view = inflater.inflate(R.layout.fragment_mission_pager, container, false);
         LinearLayout content = view.findViewById(R.id.mission_view_content);
 
-        mPagerAdapter = new MissionPagerAdapter(getFragmentManager(), missions.size(), missions);
+        mPagerAdapter = new MissionPagerAdapter(getFragmentManager(), new ArrayList<Mission>());
         ViewPager viewPager = (ViewPager) getActivity().getLayoutInflater().inflate(R.layout.view_pager, null);
         viewPager.setPageTransformer(true, new MissionsPagerBorderTransformer());
         mViewPager = viewPager.findViewById(R.id.mission_viewpager);
@@ -197,9 +115,6 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
     public void onDetach()
     {
         super.onDetach();
-        MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        mapotempoApplication.getManager().getMissionAccess().removeListener(missionChangeListenerToken);
-        mListener = null;
     }
 
     @Override
@@ -231,14 +146,21 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
         return ms;
     }
 
-    public void setCurrentItem(int position)
+    public void setCurrentItem(int index)
     {
-        mViewPager.setCurrentItem(position, true);
+        mViewPager.setCurrentItem(index, true);
     }
 
-    public interface OnMissionFocusListener
+    public void setMissions(List<Mission> missions)
     {
-        void onMissionFocus(int page);
+        List<Mission> oldDeprecatedMissions = mPagerAdapter.getMissionsList(); // Keep track of old data using a shallow copy
+        // DO NOTHING IF DATA NEED TO BE REFRESHED
+        if (oldDeprecatedMissions.equals(missions) || missions.size() == 0)
+            return;
+        else
+        {
+            mPagerAdapter.refreshMissions(missions);
+        }
     }
 
     public boolean onBackPressed()
@@ -265,8 +187,9 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
             @Override
             public void onPageSelected(int position)
             {
-                mListener.onMissionFocus(position);
+                List<Mission> missions = mPagerAdapter.getMissionsList();
                 mCurrentPosition = position;
+                mListener.onMissionFocus(missions.get(mCurrentPosition));
             }
 
             @Override

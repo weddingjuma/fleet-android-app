@@ -75,58 +75,11 @@ import com.squareup.picasso.Picasso;
 import java.util.Date;
 import java.util.List;
 
-/**
- * This fragment is a view detailed of a mission. it is working along side a <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html" target="_blank"><u>Android ViewPager</u></a>  that allow users to swipe left/right side to get the previous/next mission's view.
- * Moreover this fragment provide the following functionality
- * <ul>
- * <li><b>Delete Mission</b>: Simply tag the current mission as deleted.</li>
- * <li><b>Update Status</b>: Change the Status of the current mission. Status are mostly custom, directly pull from database.</li>
- * <li><b>Go to Location</b>: An <a href="https://developer.android.com/reference/android/content/Intent.html" target="_blank"><u>Android Intent</u></a> which give the possibility to open a maps application in order to view the mission's geolocation from its lat/lng coordinates.</li>
- * </ul>
- * <p>
- * <h3>Integration</h3>
- * First and foremost, it is needed to implement the fragment through XML using the following class : <code> {@literal <fragment class="mapotempo.com.mapotempo_fleet_android.mission.MissionDetailsFragment"} </code>
- * <p>
- * This fragment require the implementation of {@link OnMissionDetailsFragmentListener} directly in the Activity that hold the Detail Fragment.
- * This involve the override of {@link OnMissionDetailsFragmentListener#onMapImageViewClick)}. This interface is called when a modification has
- * been done to a mission.
- * </p>
- * As we are using a <a href="https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html" target="_blank"><u>RecyclerView</u></a> to manage the list, you shall notify the alteration on this fragment through this method.
- * <br><b>Example: </b>
- * <code>
- * <pre>
- * {@literal @Override}
- * public void onSingleMissionInteraction(MissionInterface mission) {
- *      MissionsListFragment missionsFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
- *
- *      if (missionsFragment != null)
- *      missionsFragment.mRecyclerView.getAdapter().notifyDataSetChanged();
- *
- *      Do here whatever you need with the MissionInterface object
- * }
- * </pre>
- * </code>
- */
 public class MissionDetailsFragment extends MapotempoBaseFragment
 {
 
     public MissionDetailsFragment()
     {
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity
-     */
-    public interface OnMissionDetailsFragmentListener
-    {
-        /**
-         * Callback triggered when a modification has been done to a mission
-         *
-         * @param mission a mission object from Mapotempo model Mission {@link com.mapotempo.fleet.dao.model.Mission}
-         */
-        void onMapImageViewClick(Mission mission);
     }
 
     private static final String COLOR_GREEN = "56b881";
@@ -170,7 +123,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
 
     private ModelAccessToken mToken;
 
-    private MissionDetailsFragment.OnMissionDetailsFragmentListener mListener;
+    private OnMissionDetailsFragmentListener mListener;
 
     static int MAP_IMAGE_WIDTH_QUALITY = 500;
 
@@ -231,9 +184,14 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        mListener = (MissionDetailsFragment.OnMissionDetailsFragmentListener) context;
-        if (mListener == null)
-            throw new RuntimeException("You must implement OnMissionFocusListener Interface");
+        if (context instanceof OnMissionDetailsFragmentListener)
+        {
+            mListener = (OnMissionDetailsFragmentListener) context;
+        }
+        else
+        {
+            throw new RuntimeException(context.toString() + " must implement " + OnMissionDetailsFragmentListener.class.getName());
+        }
     }
 
     @Override

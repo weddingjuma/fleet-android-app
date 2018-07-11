@@ -32,7 +32,7 @@ public class MissionActionTypeAccess extends AccessBase<MissionActionType>
 {
     public MissionActionTypeAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, MissionActionType.class, "");
+        super(databaseHandler, MissionActionType.class, null);
     }
 
     public List<MissionActionType> byPreviousStatusType(MissionStatusType statusType)

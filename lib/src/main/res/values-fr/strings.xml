@@ -1,93 +1,93 @@
 <resources>
-    <!-- MAPOTEMPO URL -->
-    <string name="mapotempo_url">https://www.mapotempo.com/essai-gratuit-mapotempo-web/</string>
-    <string name="mapotempo_help_url">https://www.mapotempo.com/contact-support/</string>
+  <!-- MAPOTEMPO URL -->
+  <string name="mapotempo_url">https://www.mapotempo.com/essai-gratuit-mapotempo-web/</string>
+  <string name="mapotempo_help_url">https://www.mapotempo.com/contact-support/</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_login">Email</string>
-    <string name="prompt_password">Mot de passe</string>
-    <string name="action_sign_in">Connexion</string>
-    <string name="action_sign_up">Essai gratuit</string>
-    <string name="connexion_in_progress">Connexion en cours...</string>
-    <string name="remember_me">Se souvenir de moi</string>
-    <string name="advanced_login_parameter">Parametre de connexion avancé</string>
-    <string name="invalid_login_format">Le format de login est invalide, vérifier les espaces.</string>
-    <string name="fleet_server_compatibility_error">Votre application nécessite une mise à pour communiquer avec le serveur fleet.</string>
+  <!-- Strings related to login -->
+  <string name="prompt_login">Email</string>
+  <string name="prompt_password">Mot de passe</string>
+  <string name="action_sign_in">Connexion</string>
+  <string name="action_sign_up">Essai gratuit</string>
+  <string name="connexion_in_progress">Connexion en cours...</string>
+  <string name="remember_me">Se souvenir de moi</string>
+  <string name="advanced_login_parameter">Parametre de connexion avancé</string>
+  <string name="invalid_login_format">Le format de login est invalide, vérifier les espaces.</string>
+  <string name="fleet_server_compatibility_error">Votre application nécessite une mise à pour communiquer avec le serveur fleet.</string>
 
-    <!-- Strings related to alert dialogs -->
-    <string name="login_error_title">Erreur de connexion</string>
-    <string name="login_error_short_text">La connexion ne peut pas être établie</string>
-    <string name="login_error_invalid">Votre mot de passe ou login est invalide, essayez de nouveau.</string>
-    <string name="login_error_server">Veuillez verifier votre connexion, si le problème persiste veuillez contacter le support.</string>
+  <!-- Strings related to alert dialogs -->
+  <string name="login_error_title">Erreur de connexion</string>
+  <string name="login_error_short_text">La connexion ne peut pas être établie</string>
+  <string name="login_error_invalid">Votre mot de passe ou login est invalide, essayez de nouveau.</string>
+  <string name="login_error_server">Veuillez verifier votre connexion, si le problème persiste veuillez contacter le support.</string>
 
-    <!-- USER DATA PREF -->
-    <string name="agreement">J\'accepte les termes et conditions.</string>
-    <string name="clear_pad">Effacer</string>
-    <string name="save_signature">Sauvegarder la signature</string>
-    <string name="save_signature_success">La signature a été sauvegardée avec succès</string>
-    <string name="save_signature_fail">La signature n\'a pas été sauvegardée</string>
+  <!-- USER DATA PREF -->
+  <string name="agreement">J\'accepte les termes et conditions.</string>
+  <string name="clear_pad">Effacer</string>
+  <string name="save_signature">Sauvegarder la signature</string>
+  <string name="save_signature_success">La signature a été sauvegardée avec succès</string>
+  <string name="save_signature_fail">La signature n\'a pas été sauvegardée</string>
 
-    <!-- Main Menu -->
-    <string name="map">Carte</string>
-    <string name="tracking">Suivi</string>
-    <string name="settings">Paramètres</string>
-    <string name="help">Aide</string>
-    <string name="sign_out">Déconnexion</string>
+  <!-- Main Menu -->
+  <string name="map">Carte</string>
+  <string name="tracking">Suivi</string>
+  <string name="settings">Paramètres</string>
+  <string name="help">Aide</string>
+  <string name="sign_out">Déconnexion</string>
 
-    <!-- Edit Menu -->
-    <string name="edit_address">Éditer l\'adresse</string>
-    <string name="edit_location">Relever la position</string>
-    <string name="reset_location">Supprimer la position relevé</string>
-    <string name="reset_address">Supprimer l\'adresse relevé</string>
-    <string name="validate_location">Enregistrer</string>
+  <!-- Edit Menu -->
+  <string name="edit_address">Éditer l\'adresse</string>
+  <string name="edit_location">Relever la position</string>
+  <string name="reset_location">Supprimer la position relevé</string>
+  <string name="reset_address">Supprimer l\'adresse relevé</string>
+  <string name="validate_location">Enregistrer</string>
 
-    <!-- Location/Tracknig -->
-    <string name="Activate">Activer</string>
-    <string name="enable_location_services">Veuillez activer les services de localisation.</string>
-    <string name="location_is_disabled_long_text">Tous les services de localisation de cet appareil sont désactivés, ou ils le sont pour cette aplication. Veuillez les activer dans les paramètres.</string>
-    <string name="connection_settings">Paramètres de connexion.</string>
-    <string name="close">Fermer</string>
-    <string name="explaination_location_permission">Cette autorisation est requise pour activer le suivi de l\'emplacement</string>
-    <string name="disabled_permission">Vous avez désactivé la permission</string>
+  <!-- Location/Tracknig -->
+  <string name="Activate">Activer</string>
+  <string name="enable_location_services">Veuillez activer les services de localisation.</string>
+  <string name="location_is_disabled_long_text">Tous les services de localisation de cet appareil sont désactivés, ou ils le sont pour cette aplication. Veuillez les activer dans les paramètres.</string>
+  <string name="connection_settings">Paramètres de connexion.</string>
+  <string name="close">Fermer</string>
+  <string name="explaination_location_permission">Cette autorisation est requise pour activer le suivi de l\'emplacement</string>
+  <string name="disabled_permission">Vous avez désactivé la permission</string>
 
-    <!-- Mission List -->
-    <string name="no_available_mission">Aucune mission disponible</string>
+  <!-- Mission List -->
+  <string name="no_available_mission">Aucune mission disponible</string>
 
-    <!-- Mission Detail -->
-    <string name="planned">"Planifié : "</string>
-    <string name="visit_duration">"Durée de la visite : "</string>
-    <string name="time_windows">"Plage horaire"</string>
-    <string name="directions">"itinéraire"</string>
+  <!-- Mission Detail -->
+  <string name="planned">"Planifié : "</string>
+  <string name="visit_duration">"Durée de la visite : "</string>
+  <string name="time_windows">"Plage horaire"</string>
+  <string name="directions">"itinéraire"</string>
 
-    <!-- Settings -->
-    <string name="profil">Profil</string>
-    <string name="general_settings">Paramêtres généraux</string>
-    <string name="night_mode">"Mode nuit"</string>
-    <string name="mobile_data">"Donnée mobile"</string>
-    <string name="mobile_data_entry">"Autoriser la synchronisation sur donnée mobile"</string>
-    <string name="night">"Nuit"</string>
-    <string name="day">"Jours"</string>
-    <string name="automatic">"Automatique"</string>
-    <string name="automatic_data_update">"Mise à jours automatique des données"</string>
-    <string name="data_settings">Parametre des données</string>
-    <string name="map_settings">Parametre de la carte</string>
-    <string name="map_zoom_button">"Bouton de zoom de la carte"</string>
-    <string name="map_current_position">"Position courrante sur la carte"</string>
+  <!-- Settings -->
+  <string name="profil">Profil</string>
+  <string name="general_settings">Paramètres généraux</string>
+  <string name="night_mode">"Mode nuit"</string>
+  <string name="mobile_data">"Donnée mobile"</string>
+  <string name="mobile_data_entry">"Autoriser la synchronisation sur donnée mobile"</string>
+  <string name="night">"Nuit"</string>
+  <string name="day">"Jours"</string>
+  <string name="automatic">"Automatique"</string>
+  <string name="automatic_data_update">"Mise à jours automatique des données"</string>
+  <string name="data_settings">Parametre des données</string>
+  <string name="map_settings">Parametre de la carte</string>
+  <string name="map_zoom_button">"Bouton de zoom de la carte"</string>
+  <string name="map_current_position">"Position courrante sur la carte"</string>
 
-    <!-- Time -->
-    <string name="hour">heure</string>
-    <string name="minute">minute</string>
-    <string name="second">seconde</string>
-    <string name="hours">heures</string>
-    <string name="minutes">minutes</string>
-    <string name="seconds">secondes</string>
+  <!-- Time -->
+  <string name="hour">heure</string>
+  <string name="minute">minute</string>
+  <string name="second">seconde</string>
+  <string name="hours">heures</string>
+  <string name="minutes">minutes</string>
+  <string name="seconds">secondes</string>
 
-    <!-- Mission address edition -->
-    <string name="street">Voie</string>
-    <string name="detail">Complément</string>
-    <string name="postal_code">Code postal</string>
-    <string name="city">Ville</string>
-    <string name="state">Région</string>
-    <string name="country">Pays</string>
+  <!-- Mission address edition -->
+  <string name="street">Voie</string>
+  <string name="detail">Complément</string>
+  <string name="postal_code">Code postal</string>
+  <string name="city">Ville</string>
+  <string name="state">Région</string>
+  <string name="country">Pays</string>
 
 </resources>

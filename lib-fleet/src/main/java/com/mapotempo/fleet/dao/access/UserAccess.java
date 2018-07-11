@@ -28,6 +28,6 @@ public class UserAccess extends AccessBase<User>
 {
     public UserAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, User.class, "");
+        super(databaseHandler, User.class, null);
     }
 }

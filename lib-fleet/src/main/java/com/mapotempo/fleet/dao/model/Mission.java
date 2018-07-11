@@ -44,6 +44,7 @@ public class Mission extends ModelBase
     final static private String TAG = Mission.class.toString();
 
     // MAPOTEMPO KEY
+    public static final String ROUTE = "route_id";
     public static final String NAME = "name";
     public static final String DATE = "date";
     public static final String ETA = "eta";

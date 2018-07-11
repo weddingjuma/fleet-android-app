@@ -22,7 +22,6 @@ package com.mapotempo.fleet.api;
 import android.content.Context;
 
 import com.mapotempo.fleet.core.DatabaseHandler;
-import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.manager.LOGIN_STATUS;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.fleet.manager.Requirement.ConnectionRequirement;
@@ -30,7 +29,6 @@ import com.mapotempo.fleet.manager.Requirement.FleetConnectionRequirement;
 import com.mapotempo.fleet.manager.SyncGatewayLogin;
 import com.mapotempo.fleet.utils.HashUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,7 +129,7 @@ public class ManagerFactory
         boolean test = connectionRequirement.isSatisfy();
         if (test)
         {
-            databaseHandler.configureMissionReplication(new ArrayList<Mission>());
+            databaseHandler.configureMissionReplication();
             onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
         }
         else
@@ -144,7 +142,7 @@ public class ManagerFactory
                     {
                         if (status)
                         {
-                            databaseHandler.configureMissionReplication(new ArrayList<Mission>());
+                            databaseHandler.configureMissionReplication();
                             onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
                         }
                         else

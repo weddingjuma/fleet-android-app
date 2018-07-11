@@ -36,7 +36,7 @@ public class MissionActionAccess extends AccessBase<MissionAction>
 {
     public MissionActionAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, MissionAction.class, "");
+        super(databaseHandler, MissionAction.class, null);
     }
 
     /**

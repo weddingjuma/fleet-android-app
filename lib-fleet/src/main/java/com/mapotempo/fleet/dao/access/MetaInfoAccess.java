@@ -28,6 +28,6 @@ public class MetaInfoAccess extends AccessBase<MetaInfo>
 {
     public MetaInfoAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, MetaInfo.class, "");
+        super(databaseHandler, MetaInfo.class, null);
     }
 }

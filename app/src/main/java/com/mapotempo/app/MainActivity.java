@@ -33,30 +33,33 @@ import android.util.Log;
 import android.view.View;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
-import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
+import com.mapotempo.fleet.core.accessor.LiveAccessToken;
+import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.fleet.dao.model.UserSettings;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
+import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.fragments.menu.MainMenuFragment;
-import com.mapotempo.lib.fragments.mission.MissionDetailsFragment;
-import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
-import com.mapotempo.lib.fragments.missions.MissionsListFragment;
+import com.mapotempo.lib.fragments.routes.OnRouteSelectedListener;
+import com.mapotempo.lib.fragments.routes.RoutesListFragment;
 
-public class MainActivity extends MapotempoBaseActivity implements MissionsListFragment.OnMissionSelectedListener,
-    MissionsPagerFragment.OnMissionFocusListener,
-    MissionDetailsFragment.OnMissionDetailsFragmentListener,
+import java.util.List;
+
+public class MainActivity extends MapotempoBaseActivity implements
+    OnRouteSelectedListener,
     MainMenuFragment.OnMenuInteractionListener
-    /* LocationListener */
 {
+    String TAG = MainActivity.class.getCanonicalName();
 
-    //TODO
-    //    ArrayList<LocationDetailsInterface> mLocationPool = new ArrayList<LocationDetailsInterface>();
+    LiveAccessToken mLiveAccessToken;
+
+    private DrawerLayout mDrawerLayout;
+
+    private ConnexionReceiver mConnexionReceiver;
 
     // ===================================
     // ==  Android Activity Life cycle  ==
     // ===================================
-    private DrawerLayout mDrawerLayout;
-
-    private ConnexionReceiver mConnexionReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -85,12 +88,40 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     protected void onResume()
     {
         super.onResume();
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null)
+        {
+            mLiveAccessToken = mapotempoFleetManagerInterface.getRouteAccess().notArchived_AddListener(new LiveAccessChangeListener<Route>()
+            {
+                @Override
+                public void changed(final List<Route> routes)
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            RoutesListFragment fragment = (RoutesListFragment) getSupportFragmentManager().findFragmentById(R.id.routeList);
+                            fragment.setRoutes(routes);
+                        }
+                    });
+                }
+            });
+        }
+
         if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START))
         {
             mDrawerLayout.closeDrawers();
         }
-        refreshMissionListFragment();
-        refreshMissionsPagerFragment();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null)
+            mapotempoFleetManagerInterface.getRouteAccess().removeListener(mLiveAccessToken);
     }
 
     @Override
@@ -100,46 +131,14 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
         unregisterReceiver(mConnexionReceiver);
     }
 
-    // ========================================
-    // ==  OnMissionFocusListener Interface  ==
-    // ========================================
-
+    // =========================================
+    // ==  OnRouteSelectedListener Interface  ==
+    // =========================================
     @Override
-    public void onMissionFocus(int position)
+    public void onRouteSelected(Route route)
     {
-        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
-        if (missionsListFragment != null)
-            missionsListFragment.missionFocus(position);
-    }
-
-    // ===========================================
-    // ==  OnMissionSelectedListener Interface  ==
-    // ===========================================
-
-    @Override
-    public void onMissionSelected(final int position)
-    {
-        MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-        if (missionsPagerFragment != null && missionsPagerFragment.isVisible())
-        {
-            MissionsPagerFragment fragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-            fragment.setCurrentItem(position);
-        }
-        else
-        {
-            Intent intent = new Intent(this, MissionActivity.class);
-            intent.putExtra("mission_id", position);
-            startActivity(intent);
-        }
-    }
-
-    // ==================================================
-    // ==  OnMissionDetailsFragmentListener Interface  ==
-    // ==================================================
-    @Override
-    public void onMapImageViewClick(Mission mission)
-    {
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, MissionsActivity.class);
+        intent.putExtra("route_id", route.getId());
         startActivity(intent);
     }
 
@@ -173,6 +172,7 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         MapotempoApplication mapotempoApplication = (MapotempoApplication) getApplicationContext();
+        mapotempoApplication.getManager().getRouteAccess().removeListener(mLiveAccessToken);
         mapotempoApplication.setManager(null);
         finish();
     }
@@ -180,20 +180,6 @@ public class MainActivity extends MapotempoBaseActivity implements MissionsListF
     // ===============
     // ==  Private  ==
     // ===============
-
-    private void refreshMissionListFragment()
-    {
-        MissionsListFragment missionsListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.listMission);
-        if (missionsListFragment != null && missionsListFragment.isVisible())
-            missionsListFragment.notifyDataChange();
-    }
-
-    private void refreshMissionsPagerFragment()
-    {
-        MissionsPagerFragment missionsPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.base_fragment);
-        if (missionsPagerFragment != null && missionsPagerFragment.isVisible())
-            missionsPagerFragment.notifyDataChange();
-    }
 
     private void addDrawableHandler(Toolbar toolbar)
     {

@@ -17,17 +17,11 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.fleet.dao.access;
+package com.mapotempo.lib.fragments.mission;
 
-import com.mapotempo.fleet.api.FleetException;
-import com.mapotempo.fleet.core.IDatabaseHandler;
-import com.mapotempo.fleet.core.accessor.AccessBase;
-import com.mapotempo.fleet.dao.model.Company;
+import com.mapotempo.fleet.dao.model.Mission;
 
-public class CompanyAccess extends AccessBase<Company>
+public interface OnMissionDetailsFragmentListener
 {
-    public CompanyAccess(IDatabaseHandler databaseHandler) throws FleetException
-    {
-        super(databaseHandler, Company.class, null);
-    }
+    void onMapImageViewClick(Mission mission);
 }

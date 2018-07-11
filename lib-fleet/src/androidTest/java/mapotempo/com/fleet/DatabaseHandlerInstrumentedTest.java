@@ -21,6 +21,7 @@ package mapotempo.com.fleet;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.util.Log;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.DataSource;
@@ -51,7 +52,7 @@ public class DatabaseHandlerInstrumentedTest
     @Parameterized.Parameters
     public static Object[][] data()
     {
-        return new Object[5][0];
+        return new Object[10][0];
     }
 
     private static String TAG = DatabaseHandlerInstrumentedTest.class.getName();
@@ -66,7 +67,8 @@ public class DatabaseHandlerInstrumentedTest
     @Test
     public void simpleDatabaseHandlerTest() throws Exception
     {
-        Database.setLogLevel(LogDomain.ALL, LogLevel.DEBUG);
+        Database.setLogLevel(LogDomain.ALL, LogLevel.VERBOSE);
+        //        Database.setLogLevel(LogDomain.NETWORK, LogLevel.VERBOSE);
 
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
@@ -101,6 +103,8 @@ public class DatabaseHandlerInstrumentedTest
         }
 
         // Release database
+        Log.i(TAG, "BEGIN RELEASE");
         dbHandler.release(true);
+        Log.i(TAG, "END RELEASE");
     }
 }

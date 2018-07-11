@@ -12,7 +12,7 @@
   <string name="tilehosting_access_token"></string>
 
   <!--  FLEET -->
-  <string name="default_fleet_url_default">https://mobile.fleet.mapotempo.com</string>
+  <string name="default_fleet_url_default">wss://mobile.fleet.mapotempo.com</string>
   <string name="default_fleet_port_default">4984</string>
   <string name="default_fleet_db_default">db</string>
 

@@ -28,6 +28,6 @@ public class MissionStatusTypeAccess extends AccessBase<MissionStatusType>
 {
     public MissionStatusTypeAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, MissionStatusType.class, "");
+        super(databaseHandler, MissionStatusType.class, null);
     }
 }

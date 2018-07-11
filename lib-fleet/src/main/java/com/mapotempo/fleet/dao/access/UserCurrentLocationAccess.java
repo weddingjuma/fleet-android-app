@@ -28,6 +28,6 @@ public class UserCurrentLocationAccess extends AccessBase<UserCurrentLocation>
 {
     public UserCurrentLocationAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, UserCurrentLocation.class, "");
+        super(databaseHandler, UserCurrentLocation.class, null);
     }
 }

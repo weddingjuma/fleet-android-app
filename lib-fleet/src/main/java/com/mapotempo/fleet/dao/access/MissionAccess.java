@@ -24,7 +24,10 @@ import com.couchbase.lite.Expression;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
+import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
+import com.mapotempo.fleet.core.accessor.LiveAccessToken;
 import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.dao.model.Route;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +39,7 @@ public class MissionAccess extends AccessBase<Mission>
 
     public MissionAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, Mission.class, "");
+        super(databaseHandler, Mission.class, null);
     }
 
     public void purgeOutdated()
@@ -60,8 +63,13 @@ public class MissionAccess extends AccessBase<Mission>
         }
     }
 
-    public List<Mission> byName(String name)
+    public List<Mission> byRoute(Route route)
     {
-        return runQuery(Expression.property(Mission.NAME).equalTo(Expression.string(name)), "");
+        return runQuery(Expression.property(Mission.ROUTE).equalTo(Expression.string(route.getId())), null);
+    }
+
+    public LiveAccessToken byRoute_AddListener(final LiveAccessChangeListener<Mission> changeListener, Route route)
+    {
+        return createLiveQuery(changeListener, Expression.property(Mission.ROUTE).equalTo(Expression.string(route.getId())), null);
     }
 }

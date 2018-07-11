@@ -34,6 +34,7 @@ import com.mapotempo.fleet.dao.access.MissionAccess;
 import com.mapotempo.fleet.dao.access.MissionActionAccess;
 import com.mapotempo.fleet.dao.access.MissionActionTypeAccess;
 import com.mapotempo.fleet.dao.access.MissionStatusTypeAccess;
+import com.mapotempo.fleet.dao.access.RouteAccess;
 import com.mapotempo.fleet.dao.access.UserAccess;
 import com.mapotempo.fleet.dao.access.UserCurrentLocationAccess;
 import com.mapotempo.fleet.dao.access.UserSettingsAccess;
@@ -74,6 +75,8 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     private UserAccess mUserAccess;
 
     private UserSettingsAccess mUserSettingsAccess;
+
+    private RouteAccess mRouteAccess;
 
     private MissionAccess mMissionAccess;
 
@@ -126,6 +129,7 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         mPassword = password;
         mDatabaseHandler = databaseHandler;
         mMetaInfoAccess = new MetaInfoAccess(this);
+        mRouteAccess = new RouteAccess(this);
         mMissionAccess = new MissionAccess(this);
         mCompanyAccess = new CompanyAccess(this);
         mUserAccess = new UserAccess(this);
@@ -203,18 +207,10 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
      * {@inheritDoc}
      */
     //    @Override
-    //    public LocationDetailsInterface getCurrentLocationDetails() {
-    //        return getCurrentLocation().getLocation();
-    //    }
-
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
-    //    public void setCurrentLocationDetails(LocationDetailsInterface locationDetailsInterface) {
-    //        mLocationManager.updateLocation((LocationDetails) locationDetailsInterface);
-    //
-    //    }
+    public RouteAccess getRouteAccess()
+    {
+        return mRouteAccess;
+    }
 
     /**
      * {@inheritDoc}
