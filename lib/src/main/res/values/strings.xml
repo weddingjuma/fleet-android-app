@@ -92,4 +92,7 @@
     <string name="state">State</string>
     <string name="country">Country</string>
 
+    <!-- NAV DIALOG -->
+    <string name="nav_dialog_title">Navigation Applications available:</string>
+
 </resources>

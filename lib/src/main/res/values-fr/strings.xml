@@ -90,4 +90,7 @@
     <string name="state">Région</string>
     <string name="country">Pays</string>
 
+    <!-- NAV DIALOG -->
+    <string name="nav_dialog_title">Applications de navigation disponibles:</string>
+
 </resources>
