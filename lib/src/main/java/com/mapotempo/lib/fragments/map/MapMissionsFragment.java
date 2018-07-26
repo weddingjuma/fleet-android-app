@@ -42,6 +42,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
 import com.mapotempo.fleet.core.accessor.LiveAccessToken;
 import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
@@ -51,6 +52,7 @@ import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MapMissionsFragment extends MapotempoBaseFragment
@@ -149,30 +151,62 @@ public class MapMissionsFragment extends MapotempoBaseFragment
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(calendar.HOUR, -12);
-
+        final String route_id = getActivity().getIntent().getStringExtra("route_id");
         final String mission_id = getActivity().getIntent().getStringExtra("mission_id");
+
         MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getContext().getApplicationContext()).getManager();
 
         if (mapotempoFleetManagerInterface != null)
         {
-            mLiveAccessToken = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>()
-                                                                                                               {
-                                                                                                                   @Override
-                                                                                                                   public void changed(final List<Mission> missions)
+            Route route = null;
+            List<Mission> missions = new LinkedList<>();
+            if (route_id != null)
+            {
+                route = mapotempoFleetManagerInterface.getRouteAccess().get(route_id);
+            }
+
+            if (route == null)
+            {
+                mLiveAccessToken = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan_AddListener(new LiveAccessChangeListener<Mission>()
                                                                                                                    {
-                                                                                                                       getActivity().runOnUiThread(new Runnable()
+                                                                                                                       @Override
+                                                                                                                       public void changed(final List<Mission> missions)
                                                                                                                        {
-                                                                                                                           @Override
-                                                                                                                           public void run()
+                                                                                                                           getActivity().runOnUiThread(new Runnable()
                                                                                                                            {
-                                                                                                                               setMissions(missions);
-                                                                                                                           }
-                                                                                                                       });
-                                                                                                                   }
-                                                                                                               }, calendar.getTime()
-            );
-            setCurrentPosition(mapotempoFleetManagerInterface.getCurrentLocation().getLocation());
-            List<Mission> missions = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan(calendar.getTime());
+                                                                                                                               @Override
+                                                                                                                               public void run()
+                                                                                                                               {
+                                                                                                                                   setMissions(missions);
+                                                                                                                               }
+                                                                                                                           });
+                                                                                                                       }
+                                                                                                                   }, calendar.getTime()
+                );
+                setCurrentPosition(mapotempoFleetManagerInterface.getCurrentLocation().getLocation());
+                missions = mapotempoFleetManagerInterface.getMissionAccess().byDateGreaterThan(calendar.getTime());
+            }
+            else
+            {
+                mLiveAccessToken = mapotempoFleetManagerInterface.getMissionAccess().byRoute_AddListener(new LiveAccessChangeListener<Mission>()
+                                                                                                         {
+                                                                                                             @Override
+                                                                                                             public void changed(final List<Mission> missions)
+                                                                                                             {
+                                                                                                                 getActivity().runOnUiThread(new Runnable()
+                                                                                                                 {
+                                                                                                                     @Override
+                                                                                                                     public void run()
+                                                                                                                     {
+                                                                                                                         setMissions(missions);
+                                                                                                                     }
+                                                                                                                 });
+                                                                                                             }
+                                                                                                         }, route
+                );
+                setCurrentPosition(mapotempoFleetManagerInterface.getCurrentLocation().getLocation());
+                missions = mapotempoFleetManagerInterface.getMissionAccess().byRoute(route);
+            }
             setMissions(missions);
             if (!mIsInitCameraPosition)
             {

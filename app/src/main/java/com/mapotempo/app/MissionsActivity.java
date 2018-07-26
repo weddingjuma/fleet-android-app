@@ -46,6 +46,8 @@ import java.util.List;
 
 public class MissionsActivity extends MapotempoBaseActivity implements OnMissionSelectedListener, OnMissionFocusListener, OnMissionDetailsFragmentListener
 {
+    private String mRouteId = "";
+
     private MissionsListFragment mMissionListFragment;
 
     private MissionsPagerFragment mMissionPagerFragment;
@@ -119,8 +121,6 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        String route_id = getIntent().getStringExtra("route_id");
-
         if (savedInstanceState != null)
         {
             mPagerRestoreVisibility = savedInstanceState.getBoolean(PORTRAIT_PAGER_VISIBILITY_TAG, false);
@@ -143,9 +143,9 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         mMissionListFragment = (MissionsListFragment) getSupportFragmentManager().findFragmentById(R.id.missionsList);
         mMissionPagerFragment = (MissionsPagerFragment) getSupportFragmentManager().findFragmentById(R.id.missionsPager);
 
-        String route_id = getIntent().getStringExtra("route_id");
+        mRouteId = getIntent().getStringExtra("route_id");
         MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
-        Route route = mapotempoFleetManagerInterface.getRouteAccess().get(route_id);
+        Route route = mapotempoFleetManagerInterface.getRouteAccess().get(mRouteId);
         mLiveAccessToken = mapotempoFleetManagerInterface.getMissionAccess().byRoute_AddListener(new LiveAccessChangeListener<Mission>()
         {
             @Override
@@ -210,11 +210,12 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
     public void onMapImageViewClick(Mission mission)
     {
         Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("route_id", mRouteId);
         intent.putExtra("mission_id", mission.getId());
         startActivity(intent);
     }
 
-    // ===============
+    // ===============git gui
     // ==  Private  ==
     // ===============
     private void missionPagerFragmentVisibility(boolean visibility)
