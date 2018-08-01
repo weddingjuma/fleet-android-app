@@ -1,23 +1,30 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="MapotempoTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorMapoBlue</item>
-        <item name="colorPrimaryDark">@color/colorMapoBlueDark</item>
-    </style>
+  <!-- Base application theme. -->
+  <style name="AppTheme" parent="MapotempoTheme">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <item name="colorPrimary">@color/colorMapoBlue</item>
+    <item name="colorPrimaryDark">@color/colorMapoBlueDark</item>
+  </style>
 
-    <style name="AppTheme.Night" parent="MapotempoTheme.Night">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorMapoBlue</item>
-        <item name="colorPrimaryDark">@color/colorMapoBlueDark</item>
-    </style>
+  <style name="AppTheme.Night" parent="MapotempoTheme.Night">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <item name="colorPrimary">@color/colorMapoBlue</item>
+    <item name="colorPrimaryDark">@color/colorMapoBlueDark</item>
+    <item name="actionOverflowMenuStyle">@style/HeaderTheme</item>
+  </style>
 
-    <style name="HeaderTheme" parent="MapotempoTheme">
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-    </style>
+  <style name="HeaderTheme" parent="MapotempoTheme">
+    <item name="android:textColorPrimary">@android:color/white</item>
+    <item name="android:textColorSecondary">@android:color/white</item>
+    <item name="android:tint">@color/colorWhite</item>
+  </style>
+
+  <style name="PopupMenu" parent="android:Theme.Holo.Light">
+    <item name="android:popupBackground">@android:color/white</item>
+    <item name="android:tint">@android:color/white</item>
+  </style>
 
 </resources>

@@ -36,23 +36,18 @@ public class RouteAccess extends AccessBase<Route>
         super(databaseHandler, Route.class, "");
     }
 
-    public List<Route> notArchived(boolean archivedStatus)
+    public List<Route> archived(boolean archived)
     {
-        return runQuery(Expression.property(Route.ARCHIVED).notEqualTo(Expression.booleanValue(true)), null);
+        Expression expression = Expression.property(Route.ARCHIVED_AT);
+        expression = archived ? expression.notNullOrMissing() : expression.isNullOrMissing();
+        return runQuery(expression, null);
     }
 
-    public LiveAccessToken notArchived_AddListener(final LiveAccessChangeListener<Route> changeListener)
-    {
-        return createLiveQuery(changeListener, Expression.property(Route.ARCHIVED).notEqualTo(Expression.booleanValue(true)), null);
-    }
 
-    public List<Route> archived()
+    public LiveAccessToken archived_AddListener(final LiveAccessChangeListener<Route> changeListener, boolean archived)
     {
-        return runQuery(Expression.property(Route.ARCHIVED).equalTo(Expression.booleanValue(true)), null);
-    }
-
-    public LiveAccessToken archived_AddListener(final LiveAccessChangeListener<Route> changeListener)
-    {
-        return createLiveQuery(changeListener, Expression.property(Route.ARCHIVED).equalTo(Expression.booleanValue(true)), null);
+        Expression expression = Expression.property(Route.ARCHIVED_AT);
+        expression = archived ? expression.notNullOrMissing() : expression.isNullOrMissing();
+        return createLiveQuery(changeListener, expression, null);
     }
 }

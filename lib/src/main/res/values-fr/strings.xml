@@ -28,6 +28,8 @@
   <string name="save_signature_fail">La signature n\'a pas été sauvegardée</string>
 
   <!-- Main Menu -->
+  <string name="to_do">A faire</string>
+  <string name="archive">Archive</string>
   <string name="map">Carte</string>
   <string name="tracking">Suivi</string>
   <string name="settings">Paramètres</string>
@@ -90,4 +92,6 @@
   <string name="state">Région</string>
   <string name="country">Pays</string>
 
+  <!-- Alert dialog -->
+  <string name="archive_outdated">Archiver les routes dont la date est dépassée</string>
 </resources>

@@ -39,6 +39,7 @@ import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.fleet.dao.model.UserSettings;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
+import com.mapotempo.lib.fragments.dialogs.ArchiveDialogFragment;
 import com.mapotempo.lib.fragments.menu.MainMenuFragment;
 import com.mapotempo.lib.fragments.routes.OnRouteSelectedListener;
 import com.mapotempo.lib.fragments.routes.RoutesListFragment;
@@ -57,20 +58,54 @@ public class MainActivity extends MapotempoBaseActivity implements
 
     private ConnexionReceiver mConnexionReceiver;
 
+    private String ARCHIVED_BEHAVIOR_TAG = "ARCHIVED_BEHAVIOR";
+
+    private boolean mArchivedMode = false;
+
+    private LiveAccessChangeListener mLiveAccessChangeListener = new LiveAccessChangeListener<Route>()
+    {
+        @Override
+        public void changed(final List<Route> routes)
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    RoutesListFragment fragment = (RoutesListFragment) getSupportFragmentManager().findFragmentById(R.id.routeList);
+                    fragment.setRoutes(routes, mArchivedMode);
+                }
+            });
+        }
+    };
+
     // ===================================
     // ==  Android Activity Life cycle  ==
     // ===================================
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        mArchivedMode = savedInstanceState.getBoolean(ARCHIVED_BEHAVIOR_TAG, false);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         addDrawableHandler(toolbar);
         mConnexionReceiver = new ConnexionReceiver();
+        if (savedInstanceState == null)
+        {
+            ArchiveDialogFragment alertDialog = new ArchiveDialogFragment();
+            alertDialog.show(getSupportFragmentManager(), "ARCHIVE_DIALOG_FRAGMENT");
+        }
+
     }
 
     @Override
@@ -88,27 +123,7 @@ public class MainActivity extends MapotempoBaseActivity implements
     protected void onResume()
     {
         super.onResume();
-        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
-        if (mapotempoFleetManagerInterface != null)
-        {
-            mLiveAccessToken = mapotempoFleetManagerInterface.getRouteAccess().notArchived_AddListener(new LiveAccessChangeListener<Route>()
-            {
-                @Override
-                public void changed(final List<Route> routes)
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            RoutesListFragment fragment = (RoutesListFragment) getSupportFragmentManager().findFragmentById(R.id.routeList);
-                            fragment.setRoutes(routes);
-                        }
-                    });
-                }
-            });
-        }
-
+        setRouteListener(mArchivedMode);
         if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START))
         {
             mDrawerLayout.closeDrawers();
@@ -118,10 +133,8 @@ public class MainActivity extends MapotempoBaseActivity implements
     @Override
     protected void onPause()
     {
+        removeRouteListener();
         super.onPause();
-        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
-        if (mapotempoFleetManagerInterface != null)
-            mapotempoFleetManagerInterface.getRouteAccess().removeListener(mLiveAccessToken);
     }
 
     @Override
@@ -129,6 +142,13 @@ public class MainActivity extends MapotempoBaseActivity implements
     {
         super.onStop();
         unregisterReceiver(mConnexionReceiver);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        outState.putBoolean(ARCHIVED_BEHAVIOR_TAG, mArchivedMode);
+        super.onSaveInstanceState(outState);
     }
 
     // =========================================
@@ -145,6 +165,19 @@ public class MainActivity extends MapotempoBaseActivity implements
     // ===========================================
     // ==  OnMenuInteractionListener Interface  ==
     // ===========================================
+
+
+    @Override
+    public void onMain()
+    {
+        setRouteListener(false);
+    }
+
+    @Override
+    public void onArchived()
+    {
+        setRouteListener(true);
+    }
 
     @Override
     public void onMap()
@@ -181,6 +214,46 @@ public class MainActivity extends MapotempoBaseActivity implements
     // ==  Private  ==
     // ===============
 
+    private void setRouteListener(boolean archived)
+    {
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface != null)
+        {
+            removeRouteListener();
+            mArchivedMode = archived;
+            mLiveAccessToken = mapotempoFleetManagerInterface.getRouteAccess().archived_AddListener(mLiveAccessChangeListener, archived);
+
+            // Set the activity title
+            if (!archived)
+                getSupportActionBar().setTitle(R.string.to_do);
+            else
+                getSupportActionBar().setTitle(R.string.archive);
+        }
+        else
+        {
+            Log.e(TAG, "can't found a" + MapotempoApplicationInterface.class.getCanonicalName());
+        }
+
+    }
+
+    private void removeRouteListener()
+
+    {
+        MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
+        if (mapotempoFleetManagerInterface == null)
+        {
+            Log.e(TAG, "can't found a" + MapotempoApplicationInterface.class.getCanonicalName());
+            return;
+        }
+
+        if (mLiveAccessToken != null)
+        {
+            mapotempoFleetManagerInterface.getRouteAccess().removeListener(mLiveAccessToken);
+            mLiveAccessToken = null;
+        }
+    }
+
+
     private void addDrawableHandler(Toolbar toolbar)
     {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -188,7 +261,6 @@ public class MainActivity extends MapotempoBaseActivity implements
         {
             ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name)
             {
-
                 public void onDrawerClosed(View view)
                 {
                     supportInvalidateOptionsMenu();

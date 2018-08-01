@@ -40,17 +40,19 @@ import com.mapotempo.lib.fragments.login.LoginPrefManager;
 public class MainMenuFragment extends MapotempoBaseFragment
 {
 
+    private NavigationView mNavigationView;
+
     private MainMenuFragment.OnMenuInteractionListener mListener;
 
-    TextView mUserName;
+    private TextView mUserName;
 
-    TextView mUserEmail;
+    private TextView mUserEmail;
 
-    Menu mMenu;
+    private Menu mMenu;
 
-    MenuItem mLogoutItem;
+    private MenuItem mLogoutItem;
 
-    SwitchCompat mSwitchTracking;
+    private SwitchCompat mSwitchTracking;
 
     public MainMenuFragment()
     {
@@ -75,15 +77,15 @@ public class MainMenuFragment extends MapotempoBaseFragment
         super.onCreateView(inflater, container, savedInstanceState);
 
         MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        NavigationView view = (NavigationView) inflater.inflate(R.layout.fragment_menu, container, false);
+        mNavigationView = (NavigationView) inflater.inflate(R.layout.fragment_menu, container, false);
 
-        View header = view.getHeaderView(0);
+        View header = mNavigationView.getHeaderView(0);
         mUserName = header.findViewById(R.id.user_name_header);
         mUserEmail = header.findViewById(R.id.user_email_header);
         mUserName.setText(mapotempoApplication.getManager().getUser().getName());
         mUserEmail.setText(mapotempoApplication.getManager().getUser().getEmail());
 
-        mMenu = view.getMenu();
+        mMenu = mNavigationView.getMenu();
         mLogoutItem = mMenu.findItem(R.id.sign_out);
         mLogoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
         {
@@ -94,6 +96,27 @@ public class MainMenuFragment extends MapotempoBaseFragment
                 loginPrefManager.setAutoLoginPref(false);
                 mListener.onLogout();
                 return false;
+            }
+        });
+
+
+        mMenu.findItem(R.id.main).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+        {
+            @Override
+            public boolean onMenuItemClick(MenuItem item)
+            {
+                mListener.onMain();
+                return true;
+            }
+        });
+
+        mMenu.findItem(R.id.archived).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+        {
+            @Override
+            public boolean onMenuItemClick(MenuItem item)
+            {
+                mListener.onArchived();
+                return true;
             }
         });
 
@@ -112,6 +135,7 @@ public class MainMenuFragment extends MapotempoBaseFragment
             @Override
             public boolean onMenuItemClick(MenuItem item)
             {
+                mNavigationView.setCheckedItem(R.id.setting);
                 mListener.onSettings();
                 return true;
             }
@@ -128,7 +152,9 @@ public class MainMenuFragment extends MapotempoBaseFragment
                 return true;
             }
         });
-        return view;
+
+        mNavigationView.setCheckedItem(R.id.setting);
+        return mNavigationView;
     }
 
     // ==============
@@ -137,6 +163,10 @@ public class MainMenuFragment extends MapotempoBaseFragment
 
     public interface OnMenuInteractionListener
     {
+        void onMain();
+
+        void onArchived();
+
         void onMap();
 
         void onSettings();

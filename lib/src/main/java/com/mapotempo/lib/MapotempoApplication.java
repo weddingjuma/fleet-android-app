@@ -32,7 +32,6 @@ import io.sentry.android.AndroidSentryClientFactory;
 
 public class MapotempoApplication extends Application implements MapotempoApplicationInterface
 {
-
     private MapotempoFleetManager iFleetManager;
 
     // ======================================
@@ -77,9 +76,13 @@ public class MapotempoApplication extends Application implements MapotempoApplic
         }
         iFleetManager = manager;
 
-        if (iFleetManager != null && !iFleetManager.serverCompatibility())
+        if (iFleetManager != null)
         {
-            displayErrorServerCompatibility();
+            iFleetManager.purgeArchivedRoute(7);
+            if (!iFleetManager.serverCompatibility())
+            {
+                displayErrorServerCompatibility();
+            }
         }
     }
 

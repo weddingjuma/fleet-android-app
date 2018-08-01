@@ -58,6 +58,7 @@ dependencies {
   implementation('com.googlecode.libphonenumber:libphonenumber:8.8.8')
   implementation 'com.caverock:androidsvg:1.2.1'
   implementation 'io.sentry:sentry-android:1.6.4'
+  implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
 
   implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.5@aar') { transitive = true }
 

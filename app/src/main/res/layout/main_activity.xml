@@ -13,14 +13,13 @@
       android:layout_height="wrap_content"
       android:background="@color/colorMapoBlue"
       android:theme="@style/HeaderTheme"
-      app:title="Mapotempo"/>
+      app:popupTheme="@style/AppTheme"/>
 
   <android.support.v4.widget.DrawerLayout
       android:id="@+id/drawer_layout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      tools:context="com.mapotempo.app.MainActivity"
-      tools:theme="@style/AppTheme">
+      tools:context="com.mapotempo.app.MainActivity">
 
     <fragment
         android:id="@+id/routeList"

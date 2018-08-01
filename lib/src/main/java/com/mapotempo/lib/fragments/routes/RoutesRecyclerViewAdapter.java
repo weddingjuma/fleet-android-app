@@ -20,12 +20,16 @@
 package com.mapotempo.lib.fragments.routes;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.utils.DateHelpers;
@@ -40,17 +44,22 @@ class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecyclerViewA
 
     private int mRouteFocus = 0;
 
+    private boolean mArchiveBehavior = false;
+
     private OnRouteSelectedListener mOnRouteSelectedListener;
+
+    private String ARCHIVED_BEHAVIOR_TAG = "ARCHIVED_BEHAVIOR";
 
     // ===================
     // ==  Constructor  ==
     // ===================
 
-    public RoutesRecyclerViewAdapter(Context context, List<Route> routes, OnRouteSelectedListener onRouteSelectedListener)
+    public RoutesRecyclerViewAdapter(Context context, List<Route> routes, OnRouteSelectedListener onRouteSelectedListener, @Nullable Bundle savedInstanceState)
     {
         mRoutes = routes;
         routesCount = routes.size();
         mOnRouteSelectedListener = onRouteSelectedListener;
+        mArchiveBehavior = savedInstanceState != null ? savedInstanceState.getBoolean(ARCHIVED_BEHAVIOR_TAG, false) : false;
     }
 
     // ======================================
@@ -80,29 +89,39 @@ class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecyclerViewA
     // ==============
     // ==  Public  ==
     // ==============
+    public void saveInstanceState(Bundle outState)
+    {
+        outState.putBoolean(ARCHIVED_BEHAVIOR_TAG, mArchiveBehavior);
+    }
 
-    public void setRoutes(List<Route> routes)
+    public void setRoutes(List<Route> routes, boolean archiveBehavior)
     {
         mRoutes = routes;
         routesCount = routes.size();
+        mArchiveBehavior = archiveBehavior;
         notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         Route mRoute;
-        final View mView;
+        final SwipeLayout mView;
         final TextView mName;
         final TextView mDate;
         final TextView mHour;
+        boolean isSwipe = false;
+        ImageView mArchiveAction;
 
         public ViewHolder(View view)
         {
             super(view);
-            mView = view;
+            mView = (SwipeLayout) view;
             mName = view.findViewById(R.id.name);
             mDate = view.findViewById(R.id.date);
             mHour = view.findViewById(R.id.hour);
+            mArchiveAction = view.findViewById(R.id.archive_action);
+            mView.addSwipeListener(mSwipeListener);
+            mArchiveAction.setOnClickListener(mArchiveActionListener);
         }
 
         void setRoute(Route route)
@@ -113,15 +132,79 @@ class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecyclerViewA
             mDate.setText(missionDate);
             mHour.setText(missionHour);
             mRoute = route;
+            if (!mArchiveBehavior)
+            {
+                mArchiveAction.setImageResource(R.drawable.ic_archive_black_24dp);
+            }
+            else
+            {
+                mArchiveAction.setImageResource(R.drawable.ic_unarchive_black_24dp);
+            }
             mView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
-                    mOnRouteSelectedListener.onRouteSelected(mRoute);
+                    if (!isSwipe)
+                        mOnRouteSelectedListener.onRouteSelected(mRoute);
                 }
             });
         }
+
+        View.OnClickListener mArchiveActionListener = new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (!mArchiveBehavior)
+                {
+                    mRoute.archived();
+                }
+                else
+                {
+                    mRoute.unArchived();
+                }
+            }
+        };
+
+        SwipeLayout.SwipeListener mSwipeListener = new SwipeLayout.SwipeListener()
+        {
+            @Override
+            public void onStartOpen(SwipeLayout layout)
+            {
+                isSwipe = true;
+            }
+
+            @Override
+            public void onOpen(SwipeLayout layout)
+            {
+
+            }
+
+            @Override
+            public void onStartClose(SwipeLayout layout)
+            {
+
+            }
+
+            @Override
+            public void onClose(SwipeLayout layout)
+            {
+                isSwipe = false;
+            }
+
+            @Override
+            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset)
+            {
+
+            }
+
+            @Override
+            public void onHandRelease(SwipeLayout layout, float xvel, float yvel)
+            {
+
+            }
+        };
 
         @Override
         public String toString()

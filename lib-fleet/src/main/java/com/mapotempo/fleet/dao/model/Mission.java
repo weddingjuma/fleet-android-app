@@ -26,6 +26,7 @@ import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
+import com.mapotempo.fleet.dao.access.MissionActionAccess;
 import com.mapotempo.fleet.dao.access.MissionStatusTypeAccess;
 import com.mapotempo.fleet.dao.model.submodel.Address;
 import com.mapotempo.fleet.dao.model.submodel.Location;
@@ -33,6 +34,7 @@ import com.mapotempo.fleet.dao.model.submodel.TimeWindow;
 import com.mapotempo.fleet.utils.DateUtils;
 import com.mapotempo.fleet.utils.ModelUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +62,7 @@ public class Mission extends ModelBase
     public static final String CUSTOM_DATA = "custom_data";
     public static final String SURVEY_LOCATION = "survey_location";
     public static final String SURVEY_ADDRESS = "survey_address";
+    public static final String ARCHIVED_AT = "archived_at";
 
     public Mission(IDatabaseHandler databaseHandler, Document document) throws FleetException
     {
@@ -219,5 +222,31 @@ public class Mission extends ModelBase
     public void deleteSurveyAddress()
     {
         mDocument = mDocument.remove(SURVEY_ADDRESS);
+    }
+
+    public List<MissionAction> getMissionActions()
+    {
+        try
+        {
+            MissionActionAccess missionActionAccess = new MissionActionAccess(mDatabaseHandler);
+            return missionActionAccess.byMission(this);
+        } catch (FleetException e)
+        {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public void archived()
+    {
+        Date date = new Date();
+        mDocument.setString(ARCHIVED_AT, DateUtils.toStringISO8601(date));
+        save();
+    }
+
+    public void unArchived()
+    {
+        mDocument.remove(ARCHIVED_AT);
+        save();
     }
 }

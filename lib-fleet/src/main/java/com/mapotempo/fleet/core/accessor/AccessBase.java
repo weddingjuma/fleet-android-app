@@ -72,7 +72,7 @@ public abstract class AccessBase<T extends ModelBase> extends Base
     private final Expression mBaseExpression;
 
 
-     final HashMap<ModelAccessToken, ModelAccessChangeListener> mModelAccessMap;
+    final HashMap<ModelAccessToken, ModelAccessChangeListener> mModelAccessMap;
     private final HashMap<LiveAccessToken, LiveAccessChangeListener> mLiveAccessMap;
 
     private String mDefaultSortField = "date";
@@ -151,6 +151,8 @@ public abstract class AccessBase<T extends ModelBase> extends Base
 
     public T getNew()
     {
+        MutableDocument document = new MutableDocument();
+        document.setString(mDocumentAnnotation.type_field(), mDocumentAnnotation.type());
         return getInstance(new MutableDocument());
     }
 
@@ -273,7 +275,6 @@ public abstract class AccessBase<T extends ModelBase> extends Base
 
     private Query getQuery(@Nullable Expression expression, @Nullable String sortField)
     {
-        Log.i("-------------", sortField != null ? sortField : mDefaultSortField);
         Expression e = expression != null ? expression.and(mBaseExpression) : mBaseExpression;
         return QueryBuilder
             .select(SelectResult.expression(Meta.id), SelectResult.all())

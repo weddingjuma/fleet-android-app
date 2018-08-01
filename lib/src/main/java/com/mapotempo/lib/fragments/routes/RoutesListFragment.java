@@ -29,7 +29,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.core.accessor.LiveAccessToken;
 import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
@@ -42,8 +41,6 @@ public class RoutesListFragment extends MapotempoBaseFragment
     private RecyclerView mRecyclerView;
 
     private RoutesRecyclerViewAdapter mRecyclerAdapter;
-
-    private LiveAccessToken mMissionChangeListenerToken;
 
     private OnRouteSelectedListener mListener;
 
@@ -65,6 +62,12 @@ public class RoutesListFragment extends MapotempoBaseFragment
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -75,17 +78,24 @@ public class RoutesListFragment extends MapotempoBaseFragment
 
         View view = inflater.cloneInContext(contextThemeWrapper).inflate(R.layout.fragment_routes_list, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        mRecyclerAdapter = new RoutesRecyclerViewAdapter(getContext(), new LinkedList<Route>(), mListener);
+        mRecyclerAdapter = new RoutesRecyclerViewAdapter(getContext(), new LinkedList<Route>(), mListener, savedInstanceState);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        mRecyclerAdapter.saveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     // ==============
     // ==  Public  ==
     // ==============
 
-    public void setRoutes(@NonNull List<Route> routes)
+    public void setRoutes(@NonNull List<Route> routes, boolean archivedBehavior)
     {
-        mRecyclerAdapter.setRoutes(routes);
+        mRecyclerAdapter.setRoutes(routes, archivedBehavior);
     }
 }

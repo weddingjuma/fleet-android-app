@@ -19,6 +19,8 @@
 
 package com.mapotempo.fleet.dao.model;
 
+import android.support.annotation.Nullable;
+
 import com.couchbase.lite.Document;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
@@ -39,7 +41,7 @@ public class Route extends ModelBase
     // MAPOTEMPO KEY
     public static final String NAME = "name";
     public static final String DATE = "date";
-    public static final String ARCHIVED = "archived";
+    public static final String ARCHIVED_AT = "archived_at";
 
     public Route(IDatabaseHandler databaseHandler, Document document) throws FleetException
     {
@@ -69,6 +71,41 @@ public class Route extends ModelBase
         {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public boolean isArchived()
+    {
+        return mDocument.contains(ARCHIVED_AT);
+    }
+
+    public @Nullable
+    Date archivedDate()
+    {
+        String dateString = mDocument.getString(ARCHIVED_AT);
+        if (dateString != null)
+            return DateUtils.fromStringISO8601(dateString);
+        return null;
+    }
+
+    public void archived()
+    {
+        Date date = new Date();
+        mDocument.setString(ARCHIVED_AT, DateUtils.toStringISO8601(date));
+        save();
+        for (Mission m : getMissions())
+        {
+            m.archived();
+        }
+    }
+
+    public void unArchived()
+    {
+        mDocument.remove(ARCHIVED_AT);
+        save();
+        for (Mission m : getMissions())
+        {
+            m.unArchived();
         }
     }
 }

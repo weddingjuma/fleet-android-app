@@ -21,6 +21,7 @@ package com.mapotempo.fleet.dao.access;
 
 import android.support.annotation.Nullable;
 
+import com.couchbase.lite.Expression;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.accessor.AccessBase;
@@ -31,6 +32,7 @@ import com.mapotempo.fleet.dao.model.MissionActionType;
 import com.mapotempo.fleet.dao.model.submodel.Location;
 
 import java.util.Date;
+import java.util.List;
 
 public class MissionActionAccess extends AccessBase<MissionAction>
 {
@@ -60,4 +62,10 @@ public class MissionActionAccess extends AccessBase<MissionAction>
         res.save();
         return res;
     }
+
+    public List<MissionAction> byMission(Mission mission)
+    {
+        return runQuery(Expression.property(MissionAction.MISSION).equalTo(Expression.string(mission.getId())), null);
+    }
+
 }

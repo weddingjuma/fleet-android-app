@@ -33,11 +33,10 @@ import java.util.Date;
 @ModelType(type = "mission_action")
 public class MissionAction extends ModelBase
 {
-
     // MAPOTEMPO KEY
-    public static final String COMPANY_ID = "company_id";
-    public static final String MISSION_ID = "mission_id";
-    public static final String MISSION_ACTION_TYPE_ID = "mission_action_type_id";
+    public static final String COMPANY = "company_id";
+    public static final String MISSION = "mission_id";
+    public static final String MISSION_ACTION_TYPE = "mission_action_type_id";
     public static final String ACTION_LOCATION = "action_location";
     public static final String DATE = "date";
 
@@ -48,22 +47,22 @@ public class MissionAction extends ModelBase
 
     public void setActionType(MissionActionType statusType)
     {
-        mDocument.setString(MISSION_ACTION_TYPE_ID, statusType.getId());
+        mDocument.setString(MISSION_ACTION_TYPE, statusType.getId());
     }
 
     public void setCompany(Company company)
     {
-        mDocument.setString(COMPANY_ID, company.getId());
+        mDocument.setString(COMPANY, company.getId());
     }
 
     public void setMission(Mission mission)
     {
-        mDocument.setString(MISSION_ID, mission.getId());
+        mDocument.setString(MISSION, mission.getId());
     }
 
     public MissionActionType getActionType()
     {
-        String action_type_id = mDocument.getString(MISSION_ACTION_TYPE_ID);
+        String action_type_id = mDocument.getString(MISSION_ACTION_TYPE);
         try
         {
             MissionActionTypeAccess missionActionTypeAccess = new MissionActionTypeAccess(mDatabaseHandler);

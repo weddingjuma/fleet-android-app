@@ -85,5 +85,19 @@ public abstract class ModelBase extends Base
         }
     }
 
+    /**
+     * All "this" references must be release after purge !
+     */
+    public void purge()
+    {
+        try
+        {
+            mDatabaseHandler.getDatabase().purge(mDocument);
+        } catch (CouchbaseLiteException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
 }

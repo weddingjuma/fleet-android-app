@@ -21,6 +21,7 @@ package com.mapotempo.fleet.manager;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.couchbase.lite.Database;
 import com.mapotempo.fleet.Config;
@@ -28,6 +29,7 @@ import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.api.OnServerCompatibility;
 import com.mapotempo.fleet.core.DatabaseHandler;
 import com.mapotempo.fleet.core.IDatabaseHandler;
+import com.mapotempo.fleet.core.accessor.ModelAccessChangeListener;
 import com.mapotempo.fleet.dao.access.CompanyAccess;
 import com.mapotempo.fleet.dao.access.MetaInfoAccess;
 import com.mapotempo.fleet.dao.access.MissionAccess;
@@ -40,12 +42,17 @@ import com.mapotempo.fleet.dao.access.UserCurrentLocationAccess;
 import com.mapotempo.fleet.dao.access.UserSettingsAccess;
 import com.mapotempo.fleet.dao.model.Company;
 import com.mapotempo.fleet.dao.model.MetaInfo;
+import com.mapotempo.fleet.dao.model.Mission;
+import com.mapotempo.fleet.dao.model.MissionAction;
+import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.fleet.dao.model.User;
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
 import com.mapotempo.fleet.manager.Requirement.FleetConnectionRequirement;
 import com.mapotempo.fleet.utils.HashUtils;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,7 +60,7 @@ import java.util.List;
  */
 public class MapotempoFleetManager implements IDatabaseHandler /*implements MapotempoFleetManagerInterface*/
 {
-
+    private String TAG = MapotempoFleetManager.class.getCanonicalName();
     // == General ===========================================
 
     private MapotempoFleetManager INSTANCE = this;
@@ -90,12 +97,14 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
 
     private OnServerCompatibility mOnServerCompatibility;
 
-    //    private final LiveAccessChangeListener<MetaInfo> mMetaInfoListener = new LiveAccessChangeListener<MetaInfo>() {
-    //        @Override
-    //        public void changed(List<MetaInfo> items) {
-    //            ensureServerCompatibility(item);
-    //        }
-    //    };
+    private final ModelAccessChangeListener mMetaInfoListener = new ModelAccessChangeListener<MetaInfo>()
+    {
+        @Override
+        public void changed(MetaInfo metaInfo)
+        {
+            ensureServerCompatibility(metaInfo);
+        }
+    };
 
     // == Location ==========================================
 
@@ -138,6 +147,9 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         mMissionStatusTypeAccess = new MissionStatusTypeAccess(this);
         mMissionActionTypeAccess = new MissionActionTypeAccess(this);
         mUserCurrentLocationAccess = new UserCurrentLocationAccess(this);
+
+        ensureServerCompatibility(mMetaInfoAccess.all().get(0));
+        mMetaInfoAccess.addListener(mMetaInfoAccess.all().get(0), mMetaInfoListener);
     }
 
     // == MapotempoFleetManagerInterface =====================
@@ -203,63 +215,35 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
             return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public RouteAccess getRouteAccess()
     {
         return mRouteAccess;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public MissionAccess getMissionAccess()
     {
         return mMissionAccess;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public MissionActionAccess getMissionActionAccessInterface()
     {
         return mMissionActionAccess;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public MissionStatusTypeAccess getMissionStatusTypeAccessInterface()
     {
         return mMissionStatusTypeAccess;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public MissionActionTypeAccess getMissionActionTypeAccessInterface()
     {
         return mMissionActionTypeAccess;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     //    public UserTrackAccess getTrackAccess() {
     //        return mUserTrackAccess;
     //    }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public void onlineStatus(boolean status)
     {
         if (!mLockOffline)
@@ -268,28 +252,16 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public boolean isOnline()
     {
         return mDatabaseHandler.isOnline();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public boolean serverCompatibility()
     {
         return serverCompatibility(getMetaInfo());
     }
 
-    /**
-     * Attache a callback to be notify if server version up during app run.
-     */
-    //    @Override
     public void addOnServerCompatibilityChange(OnServerCompatibility onServerCompatibility)
     {
         mOnServerCompatibility = onServerCompatibility;
@@ -337,5 +309,39 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         mDatabaseHandler.release(false);
         // Release ask by user, we don't delete database
         // mLocationManager.releaseManager(); // Release location manager before all
+    }
+
+    public void purgeArchivedRoute(int offset)
+    {
+        Log.d(TAG, "DEBUG purge process");
+        List<Route> routes = getRouteAccess().archived(true);
+        Log.d(TAG, routes.size() + " archived routes found");
+        for (Route route : routes)
+        {
+            Date d = route.archivedDate();
+            if (d != null)
+            {
+                Calendar routeCalendar = Calendar.getInstance();
+                routeCalendar.setTime(d);
+                Calendar todayCalendar = Calendar.getInstance();
+                todayCalendar.add(Calendar.DAY_OF_MONTH, offset);
+                if (todayCalendar.compareTo(routeCalendar) > 0)
+                {
+                    List<Mission> missions = route.getMissions();
+                    Log.d(TAG, missions.size() + " archived missions found");
+                    for (Mission mission : missions)
+                    {
+                        List<MissionAction> missionActions = mission.getMissionActions();
+                        Log.d(TAG, missionActions.size() + " archived missionAction found");
+                        for (MissionAction missionAction : missionActions)
+                        {
+                            missionAction.purge();
+                        }
+                        mission.purge();
+                    }
+                    route.purge();
+                }
+            }
+        }
     }
 }
