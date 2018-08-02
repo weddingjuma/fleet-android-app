@@ -46,6 +46,7 @@ import com.mapotempo.fleet.core.Base;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
+import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.utils.DateUtils;
 
 import java.lang.reflect.Constructor;
@@ -92,18 +93,20 @@ public abstract class AccessBase<T extends ModelBase> extends Base
             mConstructorFromDocument = mModelClazz.getConstructor(IDatabaseHandler.class, Document.class);
         } catch (NoSuchMethodException e)
         {
-            throw new FleetException("Error : wrong definition of fleet model " + mModelClazz + " constructor in : ");
+            throw FLEET_ERROR.asException(FLEET_ERROR.INTERNAL_ERROR, "Error : wrong definition of fleet model " + mModelClazz + " constructor in : " +
+                mModelClazz.getName(), e);
         }
 
         if (mDocumentAnnotation == null)
-            throw new FleetException("Error : The fleet model " + mModelClazz + " need to be annotate with " + ModelType.class);
+            throw FLEET_ERROR.asException(FLEET_ERROR.INTERNAL_ERROR, "Error : The fleet model " + mModelClazz + " need to be annotate with " + ModelType
+                .class, null);
 
         try
         {
             mDatabaseHandler.getDatabase().createIndex(mDocumentAnnotation.type(), IndexBuilder.valueIndex(ValueIndexItem.property("type")));
         } catch (CouchbaseLiteException e)
         {
-            throw new FleetException("Error during index creation", e);
+            throw FLEET_ERROR.asException(FLEET_ERROR.INTERNAL_ERROR, "Error during index creation", e);
         }
         mBaseExpression = Expression.property(mDocumentAnnotation.type_field()).equalTo(Expression.string(mDocumentAnnotation.type()));
     }

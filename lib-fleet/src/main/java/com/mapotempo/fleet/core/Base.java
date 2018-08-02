@@ -20,6 +20,7 @@
 package com.mapotempo.fleet.core;
 
 import com.mapotempo.fleet.api.FleetException;
+import com.mapotempo.fleet.manager.FLEET_ERROR;
 
 public class Base
 {
@@ -29,8 +30,12 @@ public class Base
     {
         mDatabaseHandler = databaseHandler;
         if (mDatabaseHandler == null)
-            throw new FleetException("Error : Fleet model required DatabaseHandler was init");
+        {
+            throw FLEET_ERROR.asException(FLEET_ERROR.INTERNAL_ERROR, "Error : Fleet model required DatabaseHandler was init", null);
+        }
         if (mDatabaseHandler.isRelease())
-            throw new FleetException("Error : Fleet model required a valid DatabaseHandler");
+        {
+            throw FLEET_ERROR.asException(FLEET_ERROR.INTERNAL_ERROR, "Error : Fleet model required a valid DatabaseHandler", null);
+        }
     }
 }

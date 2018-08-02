@@ -25,45 +25,56 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.mapotempo.fleet.dao.model.Route;
-import com.mapotempo.fleet.manager.MapotempoFleetManager;
-import com.mapotempo.lib.MapotempoApplication;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ArchiveDialogFragment extends MapotempoBaseDialogFragment
+/**
+ * ArchiveDayDialogFragment.
+ * This dialog fragment is a support for automatic route archiving.
+ */
+public class ArchiveDayDialogFragment extends MapotempoBaseDialogFragment
 {
+    private List<Route> mRoutesTag = new ArrayList<>();
+
+    public boolean setRoutes(List<Route> routes)
+    {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.MILLISECOND, 0);
+        for (Route route : routes)
+        {
+            Calendar routeCalendar = Calendar.getInstance();
+            routeCalendar.setTime(route.getDate());
+            if (today.compareTo(routeCalendar) > 0)
+            {
+                mRoutesTag.add(route);
+            }
+        }
+        return !mRoutesTag.isEmpty();
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.archive_outdated)
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
             {
                 public void onClick(DialogInterface dialog, int id)
                 {
-                    Calendar today = Calendar.getInstance();
-                    today.set(Calendar.HOUR, 0);
-                    today.set(Calendar.MINUTE, 0);
-                    today.set(Calendar.MILLISECOND, 0);
-                    final MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplication) getContext().getApplicationContext()).getManager();
-                    List<Route> routes = mapotempoFleetManagerInterface.getRouteAccess().all();
-                    for (Route route : routes)
+                    for (Route route : mRoutesTag)
                     {
-                        Calendar routeCalendar = Calendar.getInstance();
-                        routeCalendar.setTime(route.getDate());
-                        if (today.compareTo(routeCalendar) > 0)
-                        {
-                            route.archived();
-                            route.save();
-                        }
+                        route.archived();
                     }
                 }
             })
-            .setNegativeButton("No", new DialogInterface.OnClickListener()
+            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
             {
                 public void onClick(DialogInterface dialog, int id)
                 {

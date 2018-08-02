@@ -19,35 +19,25 @@
 
 package com.mapotempo.fleet.manager;
 
+import android.support.annotation.Nullable;
+
+import com.mapotempo.fleet.api.FleetException;
+
 /**
  * Connection status :
  * 0 : verify
  * 2XX : document missing
  */
-public enum LOGIN_STATUS
+public enum FLEET_ERROR
 {
-    VERIFY(200),
-    LOGIN_ERROR(401),
-    USER_MISSING(404),
-    USER_CURRENT_LOCATION_MISSING(404),
-    USER_SETTING_MISSING(404),
-    META_INFO_MISSING(404),
-    COMPANY_MISSING(404),
-    UNKNOW_ERROR(520);
-
-    private int mCode;
+    VERIFY(),
+    LOGIN_ERROR(),
+    URL_ERROR(),
+    DOCUMENT_ERROR(),
+    INTERNAL_ERROR(),
+    UNKNOWN_ERROR();
 
     private String mPayload;
-
-    LOGIN_STATUS(int code)
-    {
-        mCode = code;
-    }
-
-    public int getCode()
-    {
-        return mCode;
-    }
 
     public void setPayload(String payload)
     {
@@ -57,5 +47,13 @@ public enum LOGIN_STATUS
     public String getPayload()
     {
         return mPayload;
+    }
+
+    public static FleetException asException(FLEET_ERROR error, String message, @Nullable Exception e)
+    {
+        error.setPayload(message);
+        if (e != null)
+            return new FleetException(error, e);
+        return new FleetException(error);
     }
 }

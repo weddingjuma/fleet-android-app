@@ -95,4 +95,6 @@
 
   <!-- Alert dialog -->
   <string name="archive_outdated">Archive outdated route</string>
+  <string name="yes">Yes</string>
+  <string name="no">No</string>
 </resources>

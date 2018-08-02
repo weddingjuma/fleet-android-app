@@ -19,19 +19,29 @@
 
 package com.mapotempo.fleet.api;
 
+import com.mapotempo.fleet.manager.FLEET_ERROR;
+
 /**
  * FleetException.
  */
 public class FleetException extends Exception
 {
+    private FLEET_ERROR mLoginStatus = FLEET_ERROR.UNKNOWN_ERROR;
 
-    public FleetException(String string)
+    public FLEET_ERROR getFleetStatus()
     {
-        super(string);
+        return mLoginStatus;
     }
 
-    public FleetException(String string, Exception e)
+    public FleetException(FLEET_ERROR error_status)
     {
-        super(string, e);
+        super(error_status.getPayload());
+        mLoginStatus = error_status;
+    }
+
+    public FleetException(FLEET_ERROR error_status, Exception e)
+    {
+        super(error_status.getPayload(), e);
+        mLoginStatus = error_status;
     }
 }

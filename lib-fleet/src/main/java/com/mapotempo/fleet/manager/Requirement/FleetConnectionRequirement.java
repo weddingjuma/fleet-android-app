@@ -33,7 +33,7 @@ import com.mapotempo.fleet.dao.model.MetaInfo;
 import com.mapotempo.fleet.dao.model.User;
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
-import com.mapotempo.fleet.manager.LOGIN_STATUS;
+import com.mapotempo.fleet.manager.FLEET_ERROR;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -89,7 +89,7 @@ public class FleetConnectionRequirement implements ConnectionRequirement
     {
         void onConnectionVerify(User user, UserCurrentLocation userCurrentLocation, UserSettings userSettings, Company company, MetaInfo metaInfo);
 
-        void onConnectionFail(LOGIN_STATUS code);
+        void onConnectionFail(FLEET_ERROR code);
     }
 
     public FleetConnectionRequirement(DatabaseHandler databaseHandler) throws FleetException

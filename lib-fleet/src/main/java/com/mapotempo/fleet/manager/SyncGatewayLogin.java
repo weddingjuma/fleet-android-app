@@ -20,12 +20,17 @@
 package com.mapotempo.fleet.manager;
 
 
+import android.content.Context;
+
+import com.mapotempo.fleet.api.FleetException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import mapotempo.com.fleet.R;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Cookie;
@@ -62,15 +67,24 @@ public class SyncGatewayLogin
 
     private SyncGatewayLoginStatus res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
 
-    public SyncGatewayLoginStatus tryLogin(final String login, String password, final String url)
+    public SyncGatewayLoginStatus tryLogin(final String login, String password, final String url, Context context) throws FleetException
     {
         final CountDownLatch cdl = new CountDownLatch(1);
 
         final OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar()).build();
-        // Create Session
-        Request request = new Request.Builder().url(url + "/_session")
-            .post(RequestBody.create(JSON, String.format(jsonTemplate, login, password)))
-            .build();
+
+        Request request;
+        try
+        {
+            // Create Session
+            request = new Request.Builder().url(url + "/_session")
+                .post(RequestBody.create(JSON, String.format(jsonTemplate, login, password)))
+                .build();
+        } catch (IllegalArgumentException e)
+        {
+            throw FLEET_ERROR.asException(FLEET_ERROR.URL_ERROR, context.getString(R.string.invalid_url), e);
+        }
+
 
         // Async post request to prevent
         okHttpClient.newCall(request).enqueue(new Callback()

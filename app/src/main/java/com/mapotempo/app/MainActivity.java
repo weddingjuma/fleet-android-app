@@ -39,7 +39,7 @@ import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.fleet.dao.model.UserSettings;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
-import com.mapotempo.lib.fragments.dialogs.ArchiveDialogFragment;
+import com.mapotempo.lib.fragments.dialogs.ArchiveDayDialogFragment;
 import com.mapotempo.lib.fragments.menu.MainMenuFragment;
 import com.mapotempo.lib.fragments.routes.OnRouteSelectedListener;
 import com.mapotempo.lib.fragments.routes.RoutesListFragment;
@@ -102,8 +102,13 @@ public class MainActivity extends MapotempoBaseActivity implements
         mConnexionReceiver = new ConnexionReceiver();
         if (savedInstanceState == null)
         {
-            ArchiveDialogFragment alertDialog = new ArchiveDialogFragment();
-            alertDialog.show(getSupportFragmentManager(), "ARCHIVE_DIALOG_FRAGMENT");
+            MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
+            ArchiveDayDialogFragment alertDialog = new ArchiveDayDialogFragment();
+            boolean process = alertDialog.setRoutes(mapotempoFleetManagerInterface.getRouteAccess().archived(false));
+            if (process)
+            {
+                alertDialog.show(getSupportFragmentManager(), "ARCHIVE_DIALOG_FRAGMENT");
+            }
         }
 
     }

@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.app.utils.ConnectionManager;
-import com.mapotempo.fleet.manager.LOGIN_STATUS;
+import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.fragments.login.LoginFragment;
 import com.mapotempo.lib.utils.AlertMessageHelper;
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
      * @param manager The connexion associate manager
      */
     @Override
-    public void onLogin(LOGIN_STATUS status,
+    public void onLogin(FLEET_ERROR status,
                         MapotempoFleetManager manager)
     {
         if (manager != null)
@@ -106,9 +106,16 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
             loginFragment.toogleLogginView(false);
             AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_invalid));
             break;
+        case URL_ERROR:
+            loginFragment.toogleLogginView(false);
+            AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), status.getPayload());
+            break;
+        case DOCUMENT_ERROR:
+        case UNKNOWN_ERROR:
         default:
             loginFragment.toogleLogginView(false);
-            AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_server) + "\ncode : " + status.getCode());
+            AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string
+                .login_error_server) + " Full error : " + status.getPayload());
             break;
         }
     }

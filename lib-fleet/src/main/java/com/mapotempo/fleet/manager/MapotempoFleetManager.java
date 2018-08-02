@@ -23,6 +23,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.mapotempo.fleet.Config;
 import com.mapotempo.fleet.api.FleetException;
@@ -311,37 +312,53 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         // mLocationManager.releaseManager(); // Release location manager before all
     }
 
-    public void purgeArchivedRoute(int offset)
+    public void purgeArchivedRoute(final int offset)
     {
-        Log.d(TAG, "DEBUG purge process");
-        List<Route> routes = getRouteAccess().archived(true);
-        Log.d(TAG, routes.size() + " archived routes found");
-        for (Route route : routes)
+        try
         {
-            Date d = route.archivedDate();
-            if (d != null)
+            mDatabaseHandler.mDatabase.inBatch(new Runnable()
             {
-                Calendar routeCalendar = Calendar.getInstance();
-                routeCalendar.setTime(d);
-                Calendar todayCalendar = Calendar.getInstance();
-                todayCalendar.add(Calendar.DAY_OF_MONTH, offset);
-                if (todayCalendar.compareTo(routeCalendar) > 0)
+                @Override
+                public void run()
                 {
-                    List<Mission> missions = route.getMissions();
-                    Log.d(TAG, missions.size() + " archived missions found");
-                    for (Mission mission : missions)
+                    Log.d(TAG, "DEBUG purge process : begin");
+                    List<Route> routes = getRouteAccess().archived(true);
+                    Log.d(TAG, "DEBUG purge process : " + routes.size() + " archived routes found");
+                    for (Route route : routes)
                     {
-                        List<MissionAction> missionActions = mission.getMissionActions();
-                        Log.d(TAG, missionActions.size() + " archived missionAction found");
-                        for (MissionAction missionAction : missionActions)
+                        Date d = route.archivedDate();
+                        if (d != null)
                         {
-                            missionAction.purge();
+                            Calendar routeCalendar = Calendar.getInstance();
+                            routeCalendar.setTime(d);
+                            Calendar todayCalendar = Calendar.getInstance();
+                            todayCalendar.add(Calendar.DAY_OF_MONTH, -offset);
+                            if (todayCalendar.compareTo(routeCalendar) > 0)
+                            {
+                                List<Mission> missions = route.getMissions();
+                                Log.d(TAG, "DEBUG purge process : " + missions.size() + " archived missions found");
+                                for (Mission mission : missions)
+                                {
+                                    List<MissionAction> missionActions = mission.getMissionActions();
+                                    Log.d(TAG, "DEBUG purge process : " + missionActions.size() + "archived missionAction found");
+                                    for (MissionAction missionAction : missionActions)
+                                    {
+                                        Log.d(TAG, "DEBUG purge process : purge missionAction : " + missionAction.getId());
+                                        missionAction.purge();
+                                    }
+                                    mission.purge();
+                                    Log.d(TAG, "DEBUG purge process : purge mission : " + mission.getId());
+                                }
+                                route.purge();
+                                Log.d(TAG, "DEBUG purge process : purge route : " + route.getId());
+                            }
                         }
-                        mission.purge();
                     }
-                    route.purge();
                 }
-            }
+            });
+        } catch (CouchbaseLiteException e)
+        {
+            Log.e(TAG, "Can't run purgeArchivedRoute, reason : " + e.getMessage());
         }
     }
 }

@@ -39,7 +39,7 @@ public class LoginPrefManager
 
     private static final String AUTO_LOGIN = "AutoLogin";
 
-    private static final String URL_CONFIGURATION = "UrlConf";
+    private static final String URL_CONFIGURATION = "UrlConfiguration";
 
     public LoginPrefManager(Context context)
     {

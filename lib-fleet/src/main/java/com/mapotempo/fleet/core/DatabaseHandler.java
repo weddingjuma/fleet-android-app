@@ -36,14 +36,16 @@ import com.couchbase.lite.ReplicatorChangeListener;
 import com.couchbase.lite.ReplicatorConfiguration;
 import com.couchbase.lite.URLEndpoint;
 import com.mapotempo.fleet.api.FleetException;
+import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.utils.HashUtils;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import mapotempo.com.fleet.R;
 
 /**
  * {@inheritDoc}
@@ -105,15 +107,15 @@ public class DatabaseHandler implements IDatabaseHandler
             mDatabase = new Database(mDbname, mDatabaseConfiguration);
         } catch (CouchbaseLiteException e)
         {
-            throw new FleetException("Error : Can't open database");
+            throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't create/access to fleet_local_meta_document : \n", e);
         }
 
         try
         {
             mTargetEndpoint = new URLEndpoint(new URI(syncGatewayUrl));
-        } catch (URISyntaxException e)
+        } catch (Exception e)
         {
-            throw new FleetException("Error : Invalid url endpoint", e);
+            throw FLEET_ERROR.asException(FLEET_ERROR.URL_ERROR, context.getString(R.string.invalid_url) + " : " + e.getMessage(), e);
         }
 
         mLocalMeta = mDatabase.getDocument("fleet_local_meta");
@@ -126,7 +128,7 @@ public class DatabaseHandler implements IDatabaseHandler
                 mLocalMeta = mutableDocument;
             } catch (CouchbaseLiteException e)
             {
-                throw new FleetException("Error : Can't create/access to fleet_local_meta_document", e);
+                throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't create/access to fleet_local_meta_document : \n", e);
             }
         }
     }
@@ -146,7 +148,7 @@ public class DatabaseHandler implements IDatabaseHandler
             mLocalMeta = mutableDocument;
         } catch (CouchbaseLiteException e)
         {
-            throw new FleetException("Error : Can't save to fleet_local_meta_document", e);
+            throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't save to fleet_local_meta_document : \n", e);
         }
     }
 
@@ -286,8 +288,7 @@ public class DatabaseHandler implements IDatabaseHandler
                 mDatabase.close();
         } catch (CouchbaseLiteException e)
         {
-            // TODO Comment exception propagation
-            throw new FleetException("Error during database closing", e);
+            throw new FleetException(FLEET_ERROR.UNKNOWN_ERROR, e);
         }
         release = true;
     }

@@ -26,7 +26,7 @@ import android.util.Log;
 import com.mapotempo.fleet.api.ManagerFactory;
 import com.mapotempo.fleet.core.DatabaseHandler;
 import com.mapotempo.fleet.dao.model.Mission;
-import com.mapotempo.fleet.manager.LOGIN_STATUS;
+import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 
 import org.junit.Before;
@@ -64,7 +64,7 @@ public class ManagerTestInstrumentedTest
 
     MapotempoFleetManager manager = null;
     CountDownLatch cdl = new CountDownLatch(1);
-    LOGIN_STATUS error = null;
+    FLEET_ERROR error = null;
 
     @Before
     public void init()
@@ -83,7 +83,7 @@ public class ManagerTestInstrumentedTest
             new ManagerFactory.OnManagerReadyListener()
             {
                 @Override
-                public void onManagerReady(MapotempoFleetManager m, LOGIN_STATUS errorStatus)
+                public void onManagerReady(MapotempoFleetManager m, FLEET_ERROR errorStatus)
                 {
                     manager = m;
                     cdl.countDown();

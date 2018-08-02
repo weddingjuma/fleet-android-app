@@ -22,7 +22,7 @@ package com.mapotempo.fleet.api;
 import android.content.Context;
 
 import com.mapotempo.fleet.core.DatabaseHandler;
-import com.mapotempo.fleet.manager.LOGIN_STATUS;
+import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.fleet.manager.Requirement.ConnectionRequirement;
 import com.mapotempo.fleet.manager.Requirement.FleetConnectionRequirement;
@@ -66,11 +66,12 @@ public class ManagerFactory
 
     public interface OnManagerReadyListener
     {
-        void onManagerReady(MapotempoFleetManager manager, LOGIN_STATUS errorStatus);
+        void onManagerReady(MapotempoFleetManager manager, FLEET_ERROR errorStatus);
     }
 
     public static void getManagerAsync(final Context context, final String user, final String password, final OnManagerReadyListener onManagerReadyListener, final String url)
     {
+        // TEST url :
         try
         {
             final String sha266User = HashUtils.sha256(user);
@@ -80,7 +81,8 @@ public class ManagerFactory
             SyncGatewayLogin.SyncGatewayLoginStatus status = restLogin.tryLogin(
                 sha266User,
                 password,
-                url);
+                url,
+                context);
 
             switch (status)
             {
@@ -90,7 +92,7 @@ public class ManagerFactory
                 break;
             /* 1.2) Wrong password or login */
             case INVALID:
-                onManagerReadyListener.onManagerReady(null, LOGIN_STATUS.LOGIN_ERROR);
+                onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
                 break;
             /* 1.3) Server is unreachable */
             case SERVER_UNREACHABLE:
@@ -102,9 +104,7 @@ public class ManagerFactory
 
         } catch (FleetException e)
         {
-            LOGIN_STATUS error = LOGIN_STATUS.UNKNOW_ERROR;
-            error.setPayload(e.getMessage());
-            onManagerReadyListener.onManagerReady(null, LOGIN_STATUS.UNKNOW_ERROR);
+            onManagerReadyListener.onManagerReady(null, e.getFleetStatus());
             return;
         }
     }
@@ -146,10 +146,10 @@ public class ManagerFactory
                             onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
                         }
                         else
-                            onManagerReadyListener.onManagerReady(null, LOGIN_STATUS.LOGIN_ERROR);
+                            onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
                     } catch (FleetException e)
                     {
-                        onManagerReadyListener.onManagerReady(null, LOGIN_STATUS.LOGIN_ERROR);
+                        onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
                     }
                 }
             }, 10000);
@@ -174,7 +174,7 @@ public class ManagerFactory
             onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
             return;
         }
-        onManagerReadyListener.onManagerReady(null, LOGIN_STATUS.LOGIN_ERROR);
+        onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
     }
 }
 
