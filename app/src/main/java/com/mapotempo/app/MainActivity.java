@@ -175,12 +175,14 @@ public class MainActivity extends MapotempoBaseActivity implements
     @Override
     public void onMain()
     {
+        mDrawerLayout.closeDrawers();
         setRouteListener(false);
     }
 
     @Override
     public void onArchived()
     {
+        mDrawerLayout.closeDrawers();
         setRouteListener(true);
     }
 
@@ -261,7 +263,7 @@ public class MainActivity extends MapotempoBaseActivity implements
 
     private void addDrawableHandler(Toolbar toolbar)
     {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         if (mDrawerLayout != null)
         {
             ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name)

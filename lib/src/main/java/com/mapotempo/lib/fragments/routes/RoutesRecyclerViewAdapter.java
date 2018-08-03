@@ -156,6 +156,7 @@ class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecyclerViewA
             @Override
             public void onClick(View v)
             {
+                isSwipe = false;
                 if (!mArchiveBehavior)
                 {
                     mRoute.archived();
