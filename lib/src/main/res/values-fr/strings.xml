@@ -29,7 +29,7 @@
 
   <!-- Main Menu -->
   <string name="to_do">A faire</string>
-  <string name="archive">Archive</string>
+  <string name="archive">Archives</string>
   <string name="map">Carte</string>
   <string name="tracking">Suivi</string>
   <string name="settings">Paramètres</string>
@@ -93,7 +93,7 @@
   <string name="country">Pays</string>
 
   <!-- Alert dialog -->
-  <string name="archive_outdated">Archiver les routes dont la date est dépassée</string>
+  <string name="archive_outdated">Vous aves des routes dont la date est dépassée. \n Voules vous les archiver ?</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
 </resources>
