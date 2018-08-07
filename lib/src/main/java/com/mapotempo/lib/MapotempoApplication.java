@@ -28,11 +28,14 @@ import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 
 import io.sentry.Sentry;
+import io.sentry.SentryClient;
 import io.sentry.android.AndroidSentryClientFactory;
 
 public class MapotempoApplication extends Application implements MapotempoApplicationInterface
 {
     private MapotempoFleetManager iFleetManager;
+
+    private SentryClient mSentryClient;
 
     // ======================================
     // ==  Android Application Life cycle  ==
@@ -78,6 +81,7 @@ public class MapotempoApplication extends Application implements MapotempoApplic
 
         if (iFleetManager != null)
         {
+            setSentryInformation(iFleetManager); // Set Sentry extra information before all
             iFleetManager.purgeArchivedRoute(7);
             if (!iFleetManager.serverCompatibility())
             {
@@ -93,12 +97,24 @@ public class MapotempoApplication extends Application implements MapotempoApplic
     private void initSentry()
     {
         Log.i(getClass().getName(), "PRODUCTION MODE : " + !BuildConfig.DEBUG);
-        if (!BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG)
         {
             Log.i(getClass().getName(), "sentry initialisation");
             // Use the Sentry DSN (client key) from the Project Settings page on Sentry
             String sentryDsn = getString(R.string.sentry_config);
-            Sentry.init(sentryDsn, new AndroidSentryClientFactory(this));
+            mSentryClient = Sentry.init(sentryDsn, new AndroidSentryClientFactory(this));
+        }
+    }
+
+    private void setSentryInformation(MapotempoFleetManager manager)
+    {
+        if (mSentryClient != null)
+        {
+            mSentryClient.addTag("fleet_name", manager.getUser().getName());
+            mSentryClient.addTag("fleet_sync_user", manager.getUser().getSyncUser());
+            mSentryClient.addTag("fleet_email", manager.getUser().getEmail());
+            mSentryClient.addTag("fleet_company", manager.getCompany().getName());
+            mSentryClient.addTag("fleet_url", manager.getUrl());
         }
     }
 

@@ -49,7 +49,6 @@ import com.mapotempo.fleet.dao.model.Route;
 import com.mapotempo.fleet.dao.model.User;
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
-import com.mapotempo.fleet.manager.Requirement.FleetConnectionRequirement;
 import com.mapotempo.fleet.utils.HashUtils;
 
 import java.util.Calendar;
@@ -62,6 +61,7 @@ import java.util.List;
 public class MapotempoFleetManager implements IDatabaseHandler /*implements MapotempoFleetManagerInterface*/
 {
     private String TAG = MapotempoFleetManager.class.getCanonicalName();
+
     // == General ===========================================
 
     private MapotempoFleetManager INSTANCE = this;
@@ -71,6 +71,8 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     private String mPassword;
 
     private Context mContext;
+
+    private String mUrl;
 
     public DatabaseHandler mDatabaseHandler;
 
@@ -96,6 +98,8 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
 
     private UserCurrentLocationAccess mUserCurrentLocationAccess;
 
+    // == Listener ================================
+
     private OnServerCompatibility mOnServerCompatibility;
 
     private final ModelAccessChangeListener mMetaInfoListener = new ModelAccessChangeListener<MetaInfo>()
@@ -107,17 +111,7 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         }
     };
 
-    // == Location ==========================================
-
-    private static int LOCATION_TIMEOUT = 30000; // Location timeout in ms
-
-    //    private LocationManager mLocationManager = new LocationManager(null, LOCATION_TIMEOUT);
-
-
     // == Connection sequence ================================
-
-    private FleetConnectionRequirement mConnectionRequirement;
-
 
     private boolean mLockOffline = false;
 
@@ -137,6 +131,7 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
         mContext = context;
         mUser = HashUtils.sha256(user); // Hash user to cover email case.
         mPassword = password;
+        mUrl = url;
         mDatabaseHandler = databaseHandler;
         mMetaInfoAccess = new MetaInfoAccess(this);
         mRouteAccess = new RouteAccess(this);
@@ -155,10 +150,11 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
 
     // == MapotempoFleetManagerInterface =====================
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
+    public String getUrl()
+    {
+        return mUrl;
+    }
+
     public MetaInfo getMetaInfo()
     {
         List<MetaInfo> metaInfos = mMetaInfoAccess.all();
@@ -168,10 +164,6 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
             return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public Company getCompany()
     {
         List<Company> companies = mCompanyAccess.all();
@@ -181,10 +173,6 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
             return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public User getUser()
     {
         List<User> users = mUserAccess.all();
@@ -194,10 +182,6 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
             return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //    @Override
     public UserSettings getUserPreference()
     {
         List<UserSettings> users = mUserSettingsAccess.all();
