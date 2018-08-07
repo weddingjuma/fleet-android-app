@@ -36,10 +36,6 @@ import com.mapotempo.lib.view.action.MissionActionPanel;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link com.mapotempo.fleet.dao.model.Mission} and makes a call to the
- * specified {@link MissionsListFragment.OnMissionSelectedListener}.
- */
 public class ActionsRecyclerViewAdapter extends RecyclerView.Adapter<ActionsRecyclerViewAdapter.ViewHolder>
 {
 

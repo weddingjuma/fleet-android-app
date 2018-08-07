@@ -49,8 +49,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mapotempo.fleet.api.FleetException;
-import com.mapotempo.fleet.core.accessor.ModelAccessChangeListener;
-import com.mapotempo.fleet.core.accessor.ModelAccessToken;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.dao.model.MissionAction;
 import com.mapotempo.fleet.dao.model.MissionActionType;
@@ -120,8 +118,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
     private BottomSheetBehavior mBottomSheetBehavior;
 
     private boolean mButtonsVisibility = true;
-
-    private ModelAccessToken mToken;
 
     private OnMissionDetailsFragmentListener mListener;
 
@@ -269,53 +265,18 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
         super.onResume();
         fillViewFromActivity();
         initBottomSheet(getView());
-        if (mMission != null)
-        {
-            final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-            MapotempoFleetManager manager = mapotempoApplication.getManager();
-            mToken = manager.getMissionAccess().addListener(mMission, new ModelAccessChangeListener<Mission>()
-            {
-                @Override
-                public void changed(final Mission mission)
-                {
-                    getActivity().runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            mMission = mission;
-                            fillViewFromActivity();
-                        }
-                    });
-                }
-            });
-        }
     }
 
     @Override
     public void onPause()
     {
         super.onPause();
-        if (mToken != null)
-        {
-            final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-            MapotempoFleetManager manager = mapotempoApplication.getManager();
-            manager.getMissionAccess().removeListener(mToken);
-            mToken = null;
-        }
     }
 
     @Override
     public void onDestroyView()
     {
         super.onDestroyView();
-
-        if (mToken != null)
-        {
-            final MapotempoApplicationInterface mapotempoApplication = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-            MapotempoFleetManager manager = mapotempoApplication.getManager();
-            manager.getMissionAccess().removeListener(mToken);
-        }
     }
 
     // ===============
@@ -586,7 +547,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
                 {
 
                     doAction(mission, action);
-
                     initMainActionButtons(mission);
                     initActionButtons(mMission);
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
