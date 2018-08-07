@@ -93,7 +93,7 @@
   <string name="country">Pays</string>
 
   <!-- Alert dialog -->
-  <string name="archive_outdated">Vous aves des routes dont la date est dépassée. \n Voules vous les archiver ?</string>
+  <string name="archive_outdated">Vous avez des plannings dont la date est dépassée. \n Voulez-vous les archiver ?</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
 </resources>
