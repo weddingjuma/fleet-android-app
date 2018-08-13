@@ -346,22 +346,26 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
                         fakeIntent.setData(Uri.parse("geo:0,0"));
                         PackageManager packageManager = getActivity().getPackageManager();
                         List<ResolveInfo> activities = packageManager.queryIntentActivities(fakeIntent, 0);
-                        try {
+                        try
+                        {
                             AlertNavDialog.Builder dialog = new AlertNavDialog.Builder(MissionDetailsFragment.this.getContext());
-                            dialog.setView(R.layout.maps_launcher_grid)
-                                  .setActivities(activities)
-                                  .setPackageManager(packageManager)
-                                  .setLat(loc.getLat())
-                                  .setLng(loc.getLon())
-                                  .setOnClick(new AlertNavDialog.OnMapsAppSelected() {
-                                       @Override
-                                       public void onSelected(Intent mapIntent) {
-                                           startActivity(mapIntent);
-                                       }
-                                   })
-                                  .build()
-                                  .show();
-                        } catch (MissingResourceException e) {
+                            dialog.setView(R.layout.navs_launcher_grid)
+                                .setActivities(activities)
+                                .setPackageManager(packageManager)
+                                .setLat(loc.getLat())
+                                .setLng(loc.getLon())
+                                .setOnClick(new AlertNavDialog.OnMapsAppSelected()
+                                {
+                                    @Override
+                                    public void onSelected(Intent mapIntent)
+                                    {
+                                        startActivity(mapIntent);
+                                    }
+                                })
+                                .build()
+                                .show();
+                        } catch (MissingResourceException e)
+                        {
                             System.out.print(e);
                         }
                     }
