@@ -62,6 +62,7 @@ import com.mapotempo.lib.fragments.actions.ActionsListFragment;
 import com.mapotempo.lib.fragments.actions.ActionsRecyclerViewAdapter;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.utils.AddressHelper;
+import com.mapotempo.lib.utils.AlertNavDialog;
 import com.mapotempo.lib.utils.DateHelpers;
 import com.mapotempo.lib.utils.PhoneNumberHelper;
 import com.mapotempo.lib.utils.SVGDrawableHelper;
@@ -72,6 +73,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
+import java.util.MissingResourceException;
 
 public class MissionDetailsFragment extends MapotempoBaseFragment
 {
@@ -340,21 +342,27 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
                     // Check lat/lon object
                     if (loc.isValid())
                     {
-                        // Geo will get the camera to the current loc, ?q= (query) will ask for navigation
-                        Uri location = Uri.parse("geo:" + loc.getLat() + "," + loc.getLon() + "('mission')" + "?q=" + loc.getLat() + "," + loc.getLon());
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
-
+                        Intent fakeIntent = new Intent(Intent.ACTION_VIEW);
+                        fakeIntent.setData(Uri.parse("geo:0,0"));
                         PackageManager packageManager = getActivity().getPackageManager();
-                        List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
-                        boolean isIntentSafe = (activities.size() > 0);
-                        for (ResolveInfo ri : activities)
-                        {
-                            System.out.print(ri.activityInfo.name);
-                            System.out.print(ri.activityInfo.describeContents());
-                        }
-                        if (isIntentSafe)
-                        {
-                            startActivity(mapIntent);
+                        List<ResolveInfo> activities = packageManager.queryIntentActivities(fakeIntent, 0);
+                        try {
+                            AlertNavDialog.Builder dialog = new AlertNavDialog.Builder(MissionDetailsFragment.this.getContext());
+                            dialog.setView(R.layout.maps_launcher_grid)
+                                  .setActivities(activities)
+                                  .setPackageManager(packageManager)
+                                  .setLat(loc.getLat())
+                                  .setLng(loc.getLon())
+                                  .setOnClick(new AlertNavDialog.OnMapsAppSelected() {
+                                       @Override
+                                       public void onSelected(Intent mapIntent) {
+                                           startActivity(mapIntent);
+                                       }
+                                   })
+                                  .build()
+                                  .show();
+                        } catch (MissingResourceException e) {
+                            System.out.print(e);
                         }
                     }
                 }

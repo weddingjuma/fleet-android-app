@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ImageButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="nav_button"
+    android:layout_width="@dimen/nav_button_image_size"
+    android:layout_height="@dimen/nav_button_image_size"
+    android:maxHeight="@dimen/nav_button_image_size"
+    android:minHeight="@dimen/nav_button_image_size"
+    android:maxWidth="@dimen/nav_button_image_size"
+    android:minWidth="@dimen/nav_button_image_size"
+    android:layout_marginBottom="15dp"
+    android:padding="5dp"
+    android:adjustViewBounds="true"
+    android:scaleType="centerCrop"
+    android:clickable="true"
+    android:background="#fff"
+    tools:src="@drawable/mapbox_compass_icon" />

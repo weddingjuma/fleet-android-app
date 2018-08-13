@@ -97,4 +97,8 @@
   <string name="archive_outdated">You have route whose date is past. Do you want to archived them ?</string>
   <string name="yes">Yes</string>
   <string name="no">No</string>
+
+  <!-- NAV DIALOG -->
+  <string name="nav_dialog_title">Navigation Applications available:</string>
+
 </resources>

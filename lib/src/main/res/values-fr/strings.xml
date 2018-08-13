@@ -96,4 +96,8 @@
   <string name="archive_outdated">Vous avez des plannings dont la date est dépassée. \n Voulez-vous les archiver ?</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
+
+  <!-- NAV DIALOG -->
+  <string name="nav_dialog_title">Applications de navigation disponibles:</string>
+
 </resources>

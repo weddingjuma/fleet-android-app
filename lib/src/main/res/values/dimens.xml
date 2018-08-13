@@ -47,4 +47,7 @@
     <dimen name="login_small_icon_size">15dp</dimen>
     <dimen name="login_small_margin_global">10dp</dimen>
 
+    <!-- NAV DIALOG -->
+    <dimen name="nav_button_image_size">60dp</dimen>
+
 </resources>
