@@ -55,10 +55,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * {@inheritDoc}
- */
-public class MapotempoFleetManager implements IDatabaseHandler /*implements MapotempoFleetManagerInterface*/
+public class MapotempoFleetManager implements IDatabaseHandler
 {
     private String TAG = MapotempoFleetManager.class.getCanonicalName();
 
@@ -292,8 +289,6 @@ public class MapotempoFleetManager implements IDatabaseHandler /*implements Mapo
     public void release() throws FleetException
     {
         mDatabaseHandler.release(false);
-        // Release ask by user, we don't delete database
-        // mLocationManager.releaseManager(); // Release location manager before all
     }
 
     public void purgeArchivedRoute(final int offset)
