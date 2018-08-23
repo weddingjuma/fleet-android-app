@@ -67,7 +67,10 @@ public class SyncGatewayLogin
 
     private SyncGatewayLoginStatus res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
 
-    public SyncGatewayLoginStatus tryLogin(final String login, String password, final String url, Context context) throws FleetException
+    public SyncGatewayLoginStatus tryLogin(final String login,
+                                           String password,
+                                           final String url,
+                                           Context context) throws FleetException
     {
         final CountDownLatch cdl = new CountDownLatch(1);
 
@@ -85,8 +88,7 @@ public class SyncGatewayLogin
             throw FLEET_ERROR.asException(FLEET_ERROR.URL_ERROR, context.getString(R.string.invalid_url), e);
         }
 
-
-        // Async post request to prevent
+        // Async post request to prevent main thread blocking
         okHttpClient.newCall(request).enqueue(new Callback()
         {
             @Override
@@ -123,7 +125,6 @@ public class SyncGatewayLogin
 
     private class CookieJar implements okhttp3.CookieJar
     {
-
         private List<Cookie> cookies;
 
         @Override

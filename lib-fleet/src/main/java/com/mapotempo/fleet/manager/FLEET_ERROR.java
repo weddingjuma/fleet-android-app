@@ -33,6 +33,7 @@ public enum FLEET_ERROR
     VERIFY(),
     LOGIN_ERROR(),
     URL_ERROR(),
+    SERVER_UNREACHABLE(),
     DOCUMENT_ERROR(),
     INTERNAL_ERROR(),
     UNKNOWN_ERROR();

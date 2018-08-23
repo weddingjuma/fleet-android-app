@@ -23,7 +23,7 @@
       android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/maps_list_layout"
+        android:id="@+id/navs_list_layout"
         android:padding="5dp"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal"

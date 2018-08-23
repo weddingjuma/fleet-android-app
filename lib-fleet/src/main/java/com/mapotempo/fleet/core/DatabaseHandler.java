@@ -37,6 +37,7 @@ import com.couchbase.lite.ReplicatorConfiguration;
 import com.couchbase.lite.URLEndpoint;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.manager.FLEET_ERROR;
+import com.mapotempo.fleet.manager.SyncGatewayLogin;
 import com.mapotempo.fleet.utils.HashUtils;
 
 import java.net.URI;
@@ -47,40 +48,27 @@ import java.util.concurrent.TimeUnit;
 
 import mapotempo.com.fleet.R;
 
-/**
- * {@inheritDoc}
- */
 public class DatabaseHandler implements IDatabaseHandler
 {
 
     private static String TAG = DatabaseHandler.class.getName();
 
-    final int RELEASE_TIMEOUT = 2;
-
-    private boolean release = false;
+    private final int RELEASE_TIMEOUT = 2;
 
     private Context mContext;
 
+    private boolean release = false;
+
     // Database
     private String mDbname;
-
     public Database mDatabase;
-
     private DatabaseConfiguration mDatabaseConfiguration;
 
     // Connexion params
     private Endpoint mTargetEndpoint;
-
     final private String mUser;
-
     final private String mPassword;
-
-    final private OnCatchLoginError mOnCatchLoginError;
-
-    public interface OnCatchLoginError
-    {
-        void CatchLoginError();
-    }
+    final private String mUrl;
 
     // Replicators
     private Replicator mUserReplicator = null;
@@ -93,14 +81,14 @@ public class DatabaseHandler implements IDatabaseHandler
     private String PASSWORD_SHA256 = "PASSWORD_SHA256";
 
     public DatabaseHandler(Context context,
-                           String user, String password, String syncGatewayUrl, OnCatchLoginError onCatchLoginError) throws FleetException
+                           String user, String password, String url) throws FleetException
     {
         mContext = context;
         mUser = user;
         mPassword = password;
-        mDbname = databaseNameGenerator(mUser, syncGatewayUrl, password);
+        mUrl = url;
+        mDbname = databaseNameGenerator(mUser, url, password);
         mDatabaseConfiguration = new DatabaseConfiguration(mContext);
-        mOnCatchLoginError = onCatchLoginError;
 
         try
         {
@@ -108,14 +96,6 @@ public class DatabaseHandler implements IDatabaseHandler
         } catch (CouchbaseLiteException e)
         {
             throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't create/access to fleet_local_meta_document : \n", e);
-        }
-
-        try
-        {
-            mTargetEndpoint = new URLEndpoint(new URI(syncGatewayUrl));
-        } catch (Exception e)
-        {
-            throw FLEET_ERROR.asException(FLEET_ERROR.URL_ERROR, context.getString(R.string.invalid_url) + " : " + e.getMessage(), e);
         }
 
         mLocalMeta = mDatabase.getDocument("fleet_local_meta");
@@ -131,32 +111,32 @@ public class DatabaseHandler implements IDatabaseHandler
                 throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't create/access to fleet_local_meta_document : \n", e);
             }
         }
-    }
 
-    public boolean checkPassword() throws FleetException
-    {
-        return HashUtils.sha256(mPassword).equals(mLocalMeta.getString(PASSWORD_SHA256));
-    }
-
-    public void savePassword() throws FleetException
-    {
-        MutableDocument mutableDocument = mLocalMeta.toMutable();
-        mutableDocument.setString(PASSWORD_SHA256, HashUtils.sha256(mPassword));
         try
         {
-            mDatabase.save(mutableDocument);
-            mLocalMeta = mutableDocument;
-        } catch (CouchbaseLiteException e)
+            mTargetEndpoint = new URLEndpoint(new URI(url));
+        } catch (Exception e)
         {
-            throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't save to fleet_local_meta_document : \n", e);
+            throw FLEET_ERROR.asException(FLEET_ERROR.URL_ERROR, context.getString(R.string.invalid_url) + " : " + e.getMessage(), e);
         }
+        checkLogin();
     }
 
-    private String databaseNameGenerator(String userName, String url, String mPassword) throws FleetException
+    @Override
+    public Database getDatabase()
     {
-        // Database name must be unique for a username, password and specific url.
-        return "database2_" + HashUtils.sha256(userName).substring(0, 5) + HashUtils.sha256(url).substring(0, 5) + HashUtils.sha256(mPassword).substring(0, 5);
+        return mDatabase;
     }
+
+    @Override
+    public boolean isRelease()
+    {
+        return release;
+    }
+
+    // ==============
+    // ==  Public  ==
+    // ==============
 
     public void configureUserReplication()
     {
@@ -177,14 +157,13 @@ public class DatabaseHandler implements IDatabaseHandler
                 if (change.getStatus().getError() != null)
                 {
                     Log.i(TAG, "Error code ::  " + change.getStatus().getError().getCode());
-                    switch (change.getStatus().getError().getCode())
-                    {
-                    case 10401:
-                        mOnCatchLoginError.CatchLoginError();
-                        break;
-                    default:
-                        break;
-                    }
+                    //                    switch (change.getStatus().getError().getCode())
+                    //                    {
+                    //                    case 10401:
+                    //                        break;
+                    //                    default:
+                    //                        break;
+                    //                    }
                 }
             }
         });
@@ -293,9 +272,12 @@ public class DatabaseHandler implements IDatabaseHandler
         release = true;
     }
 
+    // ===============
+    // ==  Private  ==
+    // ===============
+
     private void stopContinuousReplicator(final Replicator repl) throws InterruptedException
     {
-
         final CountDownLatch latch = new CountDownLatch(1);
         ListenerToken token = repl.addChangeListener(new ReplicatorChangeListener()
         {
@@ -325,21 +307,55 @@ public class DatabaseHandler implements IDatabaseHandler
         printRepl(repl);
     }
 
-
     private void printRepl(Replicator repl)
     {
         Log.d(TAG, "        replicator ref : " + System.identityHashCode(repl) + " status : " + repl.getStatus().getActivityLevel());
     }
 
-    @Override
-    public Database getDatabase()
+    private void checkLogin() throws FleetException
     {
-        return mDatabase;
+        SyncGatewayLogin restLogin = new SyncGatewayLogin();
+        SyncGatewayLogin.SyncGatewayLoginStatus status = restLogin.tryLogin(
+            mUser,
+            mPassword,
+            mUrl,
+            mContext);
+
+        switch (status)
+        {
+        case VALID:
+            savePassword();
+            break;
+        case SERVER_UNREACHABLE:
+            if (!mLocalMeta.contains(PASSWORD_SHA256))
+                throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Server is unreachable", null);
+            if (!HashUtils.sha256(mPassword).equals(mLocalMeta.getString(PASSWORD_SHA256)))
+                throw FLEET_ERROR.asException(FLEET_ERROR.LOGIN_ERROR, "", null);
+            break;
+        case INVALID:
+        default:
+            throw FLEET_ERROR.asException(FLEET_ERROR.LOGIN_ERROR, "", null);
+        }
     }
 
-    @Override
-    public boolean isRelease()
+    private void savePassword() throws FleetException
     {
-        return release;
+        MutableDocument mutableDocument = mLocalMeta.toMutable();
+        mutableDocument.setString(PASSWORD_SHA256, HashUtils.sha256(mPassword));
+        try
+        {
+            mDatabase.save(mutableDocument);
+            mLocalMeta = mutableDocument;
+        } catch (CouchbaseLiteException e)
+        {
+            throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't save to fleet_local_meta_document : \n", e);
+        }
+    }
+
+    private String databaseNameGenerator(String userName, String url, String mPassword) throws FleetException
+    {
+        // Database name must be unique for a username, password and specific url.
+        return "database2_" + HashUtils.sha256(userName).substring(0, 5) + HashUtils.sha256(url).substring(0, 5) /*+ HashUtils.sha256(mPassword).substring(0,
+         5)*/;
     }
 }

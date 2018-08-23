@@ -103,21 +103,21 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
             finish();
             break;
         case LOGIN_ERROR:
-            loginFragment.toogleLogginView(false);
             AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string.login_error_invalid));
             break;
         case URL_ERROR:
-            loginFragment.toogleLogginView(false);
             AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), status.getPayload());
             break;
-        case DOCUMENT_ERROR:
         case UNKNOWN_ERROR:
+        case DOCUMENT_ERROR:
+        case SERVER_UNREACHABLE:
         default:
-            loginFragment.toogleLogginView(false);
             AlertMessageHelper.errorAlert(this, null, getString(R.string.login_error_title), getString(R.string.login_error_short_text), getString(R.string
-                .login_error_server) + " Full error : " + status.getPayload());
+                .login_error_server) + "\n\n" + status.getPayload());
             break;
         }
+
+        loginFragment.toogleLogginView(false);
     }
 }
 

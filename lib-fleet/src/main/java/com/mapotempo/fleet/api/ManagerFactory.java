@@ -26,7 +26,6 @@ import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.fleet.manager.Requirement.ConnectionRequirement;
 import com.mapotempo.fleet.manager.Requirement.FleetConnectionRequirement;
-import com.mapotempo.fleet.manager.SyncGatewayLogin;
 import com.mapotempo.fleet.utils.HashUtils;
 
 import java.util.HashMap;
@@ -75,33 +74,41 @@ public class ManagerFactory
         try
         {
             final String sha266User = HashUtils.sha256(user);
-
-            /* 1) Syncgateway login validation */
-            SyncGatewayLogin restLogin = new SyncGatewayLogin();
-            SyncGatewayLogin.SyncGatewayLoginStatus status = restLogin.tryLogin(
+            final DatabaseHandler databaseHandler = new DatabaseHandler(context,
                 sha266User,
                 password,
-                url,
-                context);
+                url);
+            final FleetConnectionRequirement connectionRequirement = new FleetConnectionRequirement(databaseHandler);
 
-            switch (status)
+            boolean test = connectionRequirement.isSatisfy();
+            if (test)
             {
-            /* 1.1) Correct password and login */
-            case VALID:
-                validLogin(context, sha266User, password, onManagerReadyListener, url);
-                break;
-            /* 1.2) Wrong password or login */
-            case INVALID:
-                onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
-                break;
-            /* 1.3) Server is unreachable */
-            case SERVER_UNREACHABLE:
-            default:
-                unreachableServer(context, sha266User, password, onManagerReadyListener, url);
-                break;
+                databaseHandler.configureMissionReplication();
+                onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
             }
-
-
+            else
+            {
+                connectionRequirement.asyncSatisfy(new ConnectionRequirement.SatisfyListener()
+                {
+                    @Override
+                    public void satisfy(boolean status, String payload)
+                    {
+                        try
+                        {
+                            if (status)
+                            {
+                                databaseHandler.configureMissionReplication();
+                                onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
+                            }
+                            else
+                                onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
+                        } catch (FleetException e)
+                        {
+                            onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
+                        }
+                    }
+                }, 10000);
+            }
         } catch (FleetException e)
         {
             onManagerReadyListener.onManagerReady(null, e.getFleetStatus());
@@ -109,72 +116,15 @@ public class ManagerFactory
         }
     }
 
-    private static void validLogin(final Context context, final String sha266User, final String password, final OnManagerReadyListener onManagerReadyListener, final String url) throws FleetException
+    private static void unreachableSyncServer(final Context context, final String sha266User, final String password, final OnManagerReadyListener onManagerReadyListener, final String url) throws FleetException
     {
-        final DatabaseHandler databaseHandler = new DatabaseHandler(context,
-            sha266User,
-            password,
-            url,
-            new DatabaseHandler.OnCatchLoginError()
-            {
-                @Override
-                public void CatchLoginError()
-                {
-                }
-            });
-        databaseHandler.savePassword();
-
-        final FleetConnectionRequirement connectionRequirement = new FleetConnectionRequirement(databaseHandler);
-
-        boolean test = connectionRequirement.isSatisfy();
-        if (test)
-        {
-            databaseHandler.configureMissionReplication();
-            onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
-        }
-        else
-            connectionRequirement.asyncSatisfy(new ConnectionRequirement.SatisfyListener()
-            {
-                @Override
-                public void satisfy(boolean status, String payload)
-                {
-                    try
-                    {
-                        if (status)
-                        {
-                            databaseHandler.configureMissionReplication();
-                            onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
-                        }
-                        else
-                            onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
-                    } catch (FleetException e)
-                    {
-                        onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
-                    }
-                }
-            }, 10000);
-    }
-
-    private static void unreachableServer(final Context context, final String sha266User, final String password, final OnManagerReadyListener onManagerReadyListener, final String url) throws FleetException
-    {
-        DatabaseHandler databaseHandler = new DatabaseHandler(context,
-            sha266User,
-            password,
-            url,
-            new DatabaseHandler.OnCatchLoginError()
-            {
-                @Override
-                public void CatchLoginError()
-                {
-                }
-            });
-        final FleetConnectionRequirement connectionRequirement = new FleetConnectionRequirement(databaseHandler);
-        if (databaseHandler.checkPassword() && connectionRequirement.isSatisfy())
-        {
-            onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
-            return;
-        }
-        onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
+        //        final FleetConnectionRequirement connectionRequirement = new FleetConnectionRequirement(databaseHandler);
+        //        if (databaseHandler.checkPassword() && connectionRequirement.isSatisfy())
+        //        {
+        //            onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
+        //            return;
+        //        }
+        //        onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
     }
 }
 

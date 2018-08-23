@@ -19,14 +19,16 @@
 
 package com.mapotempo.fleet.core;
 
+import android.support.annotation.NonNull;
+
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.manager.FLEET_ERROR;
 
-public class Base
+public abstract class Base
 {
     protected IDatabaseHandler mDatabaseHandler;
 
-    public Base(IDatabaseHandler databaseHandler) throws FleetException
+    public Base(@NonNull IDatabaseHandler databaseHandler) throws FleetException
     {
         mDatabaseHandler = databaseHandler;
         if (mDatabaseHandler == null)

@@ -33,7 +33,7 @@ public final class AlertNavDialog implements View.OnClickListener {
         builderDialog = new AlertDialog.Builder(builder.getContext());
         builderDialog.setView(builder.getView());
 
-        LinearLayout layout = builder.getView().findViewById(R.id.maps_list_layout);
+        LinearLayout layout = builder.getView().findViewById(R.id.navs_list_layout);
 
         for (ResolveInfo info : builder.getActivities()) {
             ImageButton img = LayoutInflater.from(builder.getContext())
