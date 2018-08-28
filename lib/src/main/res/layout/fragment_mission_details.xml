@@ -341,8 +341,7 @@
   </LinearLayout>
 
   <LinearLayout
-
-      android:id="@+id/comment_layout"
+      android:id="@+id/quantities_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
@@ -352,20 +351,25 @@
       android:weightSum="5"
       android:background="@drawable/bg_mission_detail_item">
 
+
     <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:src="@drawable/ic_description_black_24dp"/>
+        android:src="@drawable/ic_transfer_within_a_station_black_24dp"/>
 
-    <TextView
-        android:id="@+id/comment"
+    <LinearLayout
+        android:id="@+id/quantities_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:textSize="@dimen/fragment_mission_body_detail_size"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+      <!-- include quantities layout here -->
+
+    </LinearLayout>
 
   </LinearLayout>
 
@@ -467,4 +471,34 @@
     </LinearLayout>
 
   </LinearLayout>
+
+  <LinearLayout
+
+      android:id="@+id/comment_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingRight="@dimen/fragment_mission_body_element_padding"
+      android:paddingTop="@dimen/fragment_mission_body_element_padding"
+      android:paddingBottom="@dimen/fragment_mission_body_element_padding"
+      android:weightSum="5"
+      android:background="@drawable/bg_mission_detail_item">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_description_black_24dp"/>
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:textSize="@dimen/fragment_mission_body_detail_size"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+
+  </LinearLayout>
+
 </LinearLayout>

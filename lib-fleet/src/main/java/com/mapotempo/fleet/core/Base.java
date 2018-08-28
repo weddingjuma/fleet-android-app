@@ -21,23 +21,20 @@ package com.mapotempo.fleet.core;
 
 import android.support.annotation.NonNull;
 
-import com.mapotempo.fleet.api.FleetError;
-import com.mapotempo.fleet.api.FleetException;
-
 public abstract class Base
 {
     protected IDatabaseHandler mDatabaseHandler;
 
-    public Base(@NonNull IDatabaseHandler databaseHandler) throws FleetException
+    public Base(@NonNull IDatabaseHandler databaseHandler)
     {
         mDatabaseHandler = databaseHandler;
         if (mDatabaseHandler == null)
         {
-            throw FleetError.asException(FleetError.INTERNAL_ERROR, "Error : Fleet model required DatabaseHandler was init", null);
+            throw new RuntimeException("Error : Fleet model required DatabaseHandler was init");
         }
         if (mDatabaseHandler.isRelease())
         {
-            throw FleetError.asException(FleetError.INTERNAL_ERROR, "Error : Fleet model required a valid DatabaseHandler", null);
+            throw new RuntimeException("Error : Fleet model required a valid DatabaseHandler");
         }
     }
 }

@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.lib.fragments.mission.attachment;
+package com.mapotempo.lib.fragments.survey;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,24 +29,22 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
-public class PictureFragment extends MapotempoBaseDialogFragment
+public class SurveyPictureDialogFragment extends SurveyBaseDialogFragment
 {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    public static PictureFragment newInstance(@Nullable Bitmap init)
+    public static SurveyPictureDialogFragment newInstance(@Nullable Bitmap init)
     {
-        PictureFragment f = new PictureFragment();
+        SurveyPictureDialogFragment f = new SurveyPictureDialogFragment();
         f.mBitmap = init;
         return f;
     }
 
-    public interface PictureListener
+    public interface SurveyPictureListener
     {
         boolean onPictureSave(Bitmap signatureBitmap);
 
@@ -58,11 +56,7 @@ public class PictureFragment extends MapotempoBaseDialogFragment
 
     private ImageView mPicturePad;
 
-    private Button mClearButton;
-
-    private Button mSaveButton;
-
-    private PictureListener mPictureListener = new PictureListener()
+    private SurveyPictureListener mSurveyPictureListener = new SurveyPictureListener()
     {
         @Override
         public boolean onPictureSave(Bitmap signatureBitmap)
@@ -77,45 +71,20 @@ public class PictureFragment extends MapotempoBaseDialogFragment
         }
     };
 
-    public void setPictureListener(PictureListener pictureListener)
+    public void setSurveyPictureListener(SurveyPictureListener surveyPictureListener)
     {
-        mPictureListener = pictureListener;
+        mSurveyPictureListener = surveyPictureListener;
     }
+
+    // ===================================
+    // ==  Android Fragment Life cycle  ==
+    // ===================================
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_picture, container, false);
+        View v = inflater.inflate(R.layout.survey_fragment_picture, container, false);
         mPicturePad = v.findViewById(R.id.picture_pad);
-
-        mClearButton = v.findViewById(R.id.clear_button);
-        mSaveButton = v.findViewById(R.id.save_button);
-
-        mClearButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                setBitmap(null);
-                if (mPictureListener.onPictureClear())
-                {
-                    dismiss();
-                }
-            }
-        });
-
-        mSaveButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (mPictureListener.onPictureSave(mBitmap))
-                {
-                    dismiss();
-                }
-            }
-        });
-
         refreshView();
         return v;
     }
@@ -134,6 +103,39 @@ public class PictureFragment extends MapotempoBaseDialogFragment
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK)
+        {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            setBitmap(imageBitmap);
+            mSaveButton.setEnabled(true);
+        }
+    }
+
+    // ==========================
+    // ==  SurveyBaseDialogFragment  ==
+    // ==========================
+
+    @Override
+    protected boolean onSave()
+    {
+        return mSurveyPictureListener.onPictureSave(mBitmap);
+    }
+
+    @Override
+    protected boolean onClear()
+    {
+        setBitmap(null);
+        return mSurveyPictureListener.onPictureClear();
+    }
+
+    // ===============
+    // ==  Private  ==
+    // ===============
+
     private void setBitmap(Bitmap bitmap)
     {
         mBitmap = bitmap;
@@ -149,18 +151,6 @@ public class PictureFragment extends MapotempoBaseDialogFragment
         else
         {
             mPicturePad.setImageDrawable(null);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK)
-        {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            setBitmap(imageBitmap);
-            mSaveButton.setEnabled(true);
         }
     }
 }

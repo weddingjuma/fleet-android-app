@@ -33,6 +33,7 @@ import com.mapotempo.fleet.dao.access.MissionActionAccess;
 import com.mapotempo.fleet.dao.access.MissionStatusTypeAccess;
 import com.mapotempo.fleet.dao.model.submodel.Address;
 import com.mapotempo.fleet.dao.model.submodel.Location;
+import com.mapotempo.fleet.dao.model.submodel.Quantity;
 import com.mapotempo.fleet.dao.model.submodel.TimeWindow;
 import com.mapotempo.fleet.utils.DateUtils;
 import com.mapotempo.fleet.utils.ModelUtils;
@@ -55,6 +56,7 @@ public class Mission extends ModelBase
     public static final String ETA = "eta";
     public static final String LOCATION = "location";
     public static final String ADDRESS = "address";
+    public static final String QUANTITIES = "quantities";
     // public static final String SYNC_USER = "sync_user";
     public static final String MISSION_STATUS_TYPE_ID = "mission_status_type_id";
     public static final String REFERENCE = "reference";
@@ -70,6 +72,7 @@ public class Mission extends ModelBase
     public static final String SURVEY_SIGNATURE = "survey_signature";
     public static final String SURVEY_SIGNATURE_NAME = "survey_signature_name";
     public static final String SURVEY_COMMENT = "survey_comment";
+    public static final String SURVEY_QUANTITIES = "survey_quantities";
 
     public Mission(IDatabaseHandler databaseHandler, Document document) throws FleetException
     {
@@ -142,26 +145,30 @@ public class Mission extends ModelBase
 
     public Location getLocation()
     {
-        try
-        {
-            Location res = new Location(mDatabaseHandler, mDocument.getDictionary(LOCATION));
-            return res;
-        } catch (FleetException e)
-        {
-            return null;
-        }
+        Location res = new Location(mDatabaseHandler, mDocument.getDictionary(LOCATION));
+        return res;
     }
 
     public Address getAddress()
     {
-        try
+        Address res = new Address(mDatabaseHandler, mDocument.getDictionary(ADDRESS));
+        return res;
+    }
+
+    public List<Quantity> getQuantities()
+    {
+        MutableArray quantities = mDocument.getArray(QUANTITIES);
+        List<Quantity> quantityList = new ArrayList<>();
+
+        if (quantities == null)
+            return quantityList;
+
+        for (int i = 0; i < quantities.count(); i++)
         {
-            Address res = new Address(mDatabaseHandler, mDocument.getDictionary(ADDRESS));
-            return res;
-        } catch (FleetException e)
-        {
-            return null;
+            quantityList.add(new Quantity(mDatabaseHandler, quantities.getDictionary(i)));
         }
+
+        return quantityList;
     }
 
     public Map<String, Object> getCustomData()
@@ -183,14 +190,8 @@ public class Mission extends ModelBase
 
     public Location getSurveyLocation()
     {
-        try
-        {
-            Location res = new Location(mDatabaseHandler, mDocument.getDictionary(SURVEY_LOCATION));
-            return res;
-        } catch (FleetException e)
-        {
-            return null;
-        }
+        Location res = new Location(mDatabaseHandler, mDocument.getDictionary(SURVEY_LOCATION));
+        return res;
     }
 
     public void setSurveyLocation(Location location)
@@ -199,21 +200,15 @@ public class Mission extends ModelBase
             mDocument = mDocument.setDictionary(SURVEY_LOCATION, location.getDictionary());
     }
 
-    public void deleteSurveyLocation()
+    public void clearSurveyLocation()
     {
         mDocument = mDocument.remove(SURVEY_LOCATION);
     }
 
     public Address getSurveyAddress()
     {
-        try
-        {
-            Address res = new Address(mDatabaseHandler, mDocument.getDictionary(SURVEY_ADDRESS));
-            return res;
-        } catch (FleetException e)
-        {
-            return null;
-        }
+        Address res = new Address(mDatabaseHandler, mDocument.getDictionary(SURVEY_ADDRESS));
+        return res;
     }
 
     public void setSurveyAddress(Address address)
@@ -222,7 +217,7 @@ public class Mission extends ModelBase
             mDocument = mDocument.setDictionary(SURVEY_ADDRESS, address.getDictionary());
     }
 
-    public void deleteSurveyAddress()
+    public void clearSurveyAddress()
     {
         mDocument = mDocument.remove(SURVEY_ADDRESS);
     }
@@ -313,5 +308,37 @@ public class Mission extends ModelBase
     public void clearSurveyComment()
     {
         mDocument.remove(SURVEY_COMMENT);
+    }
+
+    @Nullable
+    public List<Quantity> getSurveyQuantities()
+    {
+        MutableArray quantities = mDocument.getArray(SURVEY_QUANTITIES);
+        if (quantities == null)
+            return null;
+
+        List<Quantity> quantityList = new ArrayList<>();
+        for (int i = 0; i < quantities.count(); i++)
+        {
+            quantityList.add(new Quantity(mDatabaseHandler, quantities.getDictionary(i)));
+        }
+
+        return quantityList;
+    }
+
+    public void setSurveyQuantities(List<Quantity> quantities)
+    {
+        MutableArray array = new MutableArray();
+        for (Quantity quantity : quantities)
+        {
+            if (quantity.isValid())
+                array.addDictionary(quantity.getDictionary());
+        }
+        mDocument = mDocument.setArray(SURVEY_QUANTITIES, array);
+    }
+
+    public void deleteSurveyQuantities()
+    {
+        mDocument = mDocument.remove(SURVEY_QUANTITIES);
     }
 }

@@ -26,8 +26,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -41,6 +43,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,12 +54,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.dao.model.MissionAction;
 import com.mapotempo.fleet.dao.model.MissionActionType;
 import com.mapotempo.fleet.dao.model.MissionStatusType;
 import com.mapotempo.fleet.dao.model.submodel.Address;
+import com.mapotempo.fleet.dao.model.submodel.Quantity;
 import com.mapotempo.fleet.dao.model.submodel.TimeWindow;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
@@ -64,8 +67,11 @@ import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.actions.ActionsListFragment;
 import com.mapotempo.lib.fragments.actions.ActionsRecyclerViewAdapter;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
-import com.mapotempo.lib.fragments.mission.attachment.PictureFragment;
-import com.mapotempo.lib.fragments.mission.attachment.SignatureFragment;
+import com.mapotempo.lib.fragments.survey.SurveyAddressDialogFragment;
+import com.mapotempo.lib.fragments.survey.SurveyCommentDialogFragment;
+import com.mapotempo.lib.fragments.survey.SurveyPictureDialogFragment;
+import com.mapotempo.lib.fragments.survey.SurveyQuantityDialogFragment;
+import com.mapotempo.lib.fragments.survey.SurveySignatureDialogFragment;
 import com.mapotempo.lib.utils.AddressHelper;
 import com.mapotempo.lib.utils.AlertNavDialog;
 import com.mapotempo.lib.utils.DateHelpers;
@@ -80,7 +86,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
 
-public class MissionDetailsFragment extends MapotempoBaseFragment
+public class MissionDetailsFragment extends MapotempoBaseFragment implements
+    SurveySignatureDialogFragment.SurveySignatureListener,
+    SurveyQuantityDialogFragment.SurveyQuantityListener,
+    SurveyPictureDialogFragment.SurveyPictureListener,
+    SurveyAddressDialogFragment.SurveyAddressListener,
+    SurveyCommentDialogFragment.SurveyCommentListener
 {
 
     public MissionDetailsFragment()
@@ -125,6 +136,9 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
     private FloatingActionButton mStatusSecondAction;
     private FloatingActionButton mStatusThirdAction;
     private FloatingActionButton mStatusMoreAction;
+
+    private LinearLayout mLayoutQuantities;
+    private LinearLayout mLayoutQuantitiesContainer;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -271,6 +285,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
             }
         });
 
+        // Quantities view
+        mLayoutQuantities = view.findViewById(R.id.quantities_layout);
+        mLayoutQuantitiesContainer = view.findViewById(R.id.quantities_container);
+
         return view;
     }
 
@@ -295,6 +313,168 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
         super.onDestroyView();
     }
 
+    // ===============================
+    // ==  SurveySignatureListener  ==
+    // ===============================
+
+    @Override
+    public boolean onSignatureSave(Bitmap signatureBitmap, String signatoryName)
+    {
+        mMission.setSurveySignature(signatureBitmap);
+        mMission.setSurveySignatoryName(signatoryName);
+        return mMission.save();
+    }
+
+    @Override
+    public boolean onSignatureClear()
+    {
+        mMission.clearSurveySignature();
+        mMission.clearSurveySignatoryName();
+        return mMission.save();
+    }
+
+    // ==============================
+    // ==  SurveyQuantityDialogFragment  ==
+    // ==============================
+
+    @Override
+    public boolean onQuantitySave(List<Quantity> editQuantities)
+    {
+        mMission.setSurveyQuantities(editQuantities);
+        return mMission.save();
+    }
+
+    @Override
+    public boolean onQuantityClear()
+    {
+        mMission.deleteSurveyQuantities();
+        return mMission.save();
+    }
+
+    // ==============================
+    // ==  SurveyPictureListener  ==
+    // ==============================
+
+    @Override
+    public boolean onPictureSave(Bitmap signatureBitmap)
+    {
+        mMission.setSurveyPicture(signatureBitmap);
+        return mMission.save();
+    }
+
+    @Override
+    public boolean onPictureClear()
+    {
+        mMission.clearSurveyPicture();
+        return mMission.save();
+    }
+
+    // ==============================
+    // ==  SurveyPictureListener  ==
+    // ==============================
+
+    @Override
+    public boolean onAddressSave(Address address)
+    {
+        mMission.setSurveyAddress(address);
+        return mMission.save();
+    }
+
+    @Override
+    public boolean onAddressClear()
+    {
+        mMission.clearSurveyAddress();
+        return mMission.save();
+    }
+
+    // ==============================
+    // ==  SurveyCommentListener  ==
+    // ==============================
+
+    @Override
+        public boolean onCommentSave(String comment)
+    {
+        mMission.setSurveyComment(comment);
+        return mMission.save();
+    }
+
+    @Override
+    public boolean onCommentClear()
+    {
+        mMission.clearSurveyComment();
+        return mMission.save();
+    }
+
+    // ==============
+    // ==  Public  ==
+    // ==============
+
+    public void goSurveySignatureFragment()
+    {
+        String tag = "signatureDialog";
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag(tag);
+        if (prev != null)
+            ft.remove(prev);
+        ft.addToBackStack(null);
+        SurveySignatureDialogFragment newFragment = SurveySignatureDialogFragment.newInstance(mMission.getSurveySignature(), mMission.getSurveySignatoryName());
+        newFragment.setSurveySignatureListener(this);
+        newFragment.show(ft, tag);
+    }
+
+    public void goSurveyPictureFragment()
+    {
+        String tag = "pictureDialog";
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag(tag);
+        if (prev != null)
+            ft.remove(prev);
+        ft.addToBackStack(null);
+        SurveyPictureDialogFragment newFragment = SurveyPictureDialogFragment.newInstance(mMission.getSurveyPicture());
+        newFragment.setSurveyPictureListener(this);
+        newFragment.show(ft, tag);
+    }
+
+    public void goSurveyQuantitiesFragment()
+    {
+        String tag = "quantityDialog";
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag(tag);
+        if (prev != null)
+            ft.remove(prev);
+        ft.addToBackStack(null);
+        SurveyQuantityDialogFragment newFragment = SurveyQuantityDialogFragment.newInstance(mMission.getSurveyQuantities() != null ? mMission.getSurveyQuantities() : mMission.getQuantities());
+        newFragment.setListener(this);
+        newFragment.show(ft, tag);
+    }
+
+    public void goSurveyAddressFragment()
+    {
+        String tag = "addressDialog";
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag(tag);
+        if (prev != null)
+            ft.remove(prev);
+        ft.addToBackStack(null);
+        SurveyAddressDialogFragment newFragment = SurveyAddressDialogFragment.newInstance(mMission.getSurveyAddress().isValid() ? mMission.getSurveyAddress() : mMission
+            .getAddress());
+        newFragment.setSurveyAddressListener(this);
+        newFragment.show(ft, tag);
+    }
+
+    public void goSurveyCommentFragment()
+    {
+        String tag = "addressDialog";
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag(tag);
+        if (prev != null)
+            ft.remove(prev);
+        ft.addToBackStack(null);
+        SurveyCommentDialogFragment newFragment = SurveyCommentDialogFragment.newInstance(mMission.getSurveyComment());
+        newFragment.setSurveyCommentListener(this);
+        newFragment.show(ft, tag);
+    }
+
     // ===============
     // ==  Private  ==
     // ===============
@@ -316,7 +496,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
                 case BottomSheetBehavior.STATE_EXPANDED:
                     break;
                 }
-
             }
 
             @Override
@@ -514,6 +693,47 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
             textView.setText(date);
             mLayoutTimeWindowsContainer.addView(textView);
         }
+
+        mLayoutQuantities.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                goSurveyQuantitiesFragment();
+            }
+        });
+        mLayoutQuantitiesContainer.removeAllViews();
+        List<Quantity> quantities = mMission.getSurveyQuantities() != null ? mMission.getSurveyQuantities() : mMission.getQuantities();
+        for (Quantity quantity : quantities)
+        {
+            if (!quantity.isValid()) { continue; }
+
+            View quantityLayout = getLayoutInflater().inflate(R.layout.quantity_layout, null);
+
+            TextView icon = quantityLayout.findViewById(R.id.quantity_icon);
+            TextView label = quantityLayout.findViewById(R.id.quantity_label);
+
+            // PREPARE ICONS WITH FONT AWESOME LIBRARY
+            String iconName = quantity.getUnitIcon().replace("-", "_icon_");
+            String fontIcon;
+
+            try
+            {
+                fontIcon = getString(getResources().getIdentifier(iconName, "string", getActivity().getPackageName()));
+            } catch (Resources.NotFoundException e)
+            {
+                Log.e("Ressource Not Found", e.getMessage());
+                fontIcon = getString(R.string.fa_icon_archive);
+            }
+
+            icon.setText(fontIcon);
+            icon.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/fontawesome-webfont.ttf"));
+
+            // SET LABEL AND VALUE
+            label.setText(String.valueOf(quantity.getQuantity()) + " " + quantity.getLabel());
+
+            mLayoutQuantitiesContainer.addView(quantityLayout);
+        }
     }
 
     private void detailsVisibilityManager()
@@ -522,6 +742,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
         mLayoutTextViewDuration.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
         mLayoutDeliveryAddress.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) ? View.VISIBLE : View.GONE));
         mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
+        mLayoutQuantities.setVisibility((mLayoutQuantitiesContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
         mLayoutPhone.setVisibility(isEmptyTextView(mTextViewPhone) ? View.VISIBLE : View.GONE);
         mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
         mPictureCheckView.setVisibility(mMission.getSurveyPicture() != null ? View.VISIBLE : View.GONE);
@@ -532,76 +753,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
     private boolean isEmptyTextView(TextView textView)
     {
         return textView.getText().toString().trim().length() > 0;
-    }
-
-    public void goSignatureFragment()
-    {
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null)
-        {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        SignatureFragment newFragment = SignatureFragment.newInstance(mMission.getSurveySignature(), mMission.getSurveySignatoryName());
-        newFragment.setSignatureListener(new SignatureFragment.SignatureListener()
-        {
-            @Override
-            public boolean onSignatureSave(Bitmap signatureBitmap, String signatoryName)
-            {
-                mMission.setSurveySignature(signatureBitmap);
-                mMission.setSurveySignatoryName(signatoryName);
-                return mMission.save();
-            }
-
-            @Override
-            public boolean onSignatureClear()
-            {
-                mMission.clearSurveySignature();
-                mMission.clearSurveySignatoryName();
-                return mMission.save();
-            }
-        });
-        newFragment.show(ft, "t");
-    }
-
-    public void goPictureFragment()
-    {
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null)
-        {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        PictureFragment newFragment = PictureFragment.newInstance(mMission.getSurveyPicture());
-        newFragment.setPictureListener(new PictureFragment.PictureListener()
-        {
-            @Override
-            public boolean onPictureSave(Bitmap signatureBitmap)
-            {
-                mMission.setSurveyPicture(signatureBitmap);
-                return mMission.save();
-            }
-
-            @Override
-            public boolean onPictureClear()
-            {
-                mMission.clearSurveyPicture();
-                return mMission.save();
-            }
-        });
-        newFragment.show(ft, "t");
     }
 
     private void initActionButtons(final Mission mission)
@@ -683,25 +834,19 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
         Location loc = getNativeLocation();
         com.mapotempo.fleet.dao.model.submodel.Location locationInterface = null;
 
-        try
-        {
-            if (loc != null)
-                locationInterface = new com.mapotempo.fleet.dao.model.submodel.Location(manager, loc.getLatitude(), loc.getLongitude());
+        if (loc != null)
+            locationInterface = new com.mapotempo.fleet.dao.model.submodel.Location(manager, loc.getLatitude(), loc.getLongitude());
 
-            MissionAction ma = manager.getMissionActionAccessInterface().create(
-                manager.getCompany(),
-                mMission,
-                action,
-                new Date(),
-                locationInterface);
+        MissionAction ma = manager.getMissionActionAccessInterface().create(
+            manager.getCompany(),
+            mMission,
+            action,
+            new Date(),
+            locationInterface);
 
-            // Set mission status type
-            mission.setStatus(action.getNextStatus());
-            mission.save();
-        } catch (FleetException e)
-        {
-            // TODO CL2.0
-        }
+        // Set mission status type
+        mission.setStatus(action.getNextStatus());
+        mission.save();
     }
 
     /**

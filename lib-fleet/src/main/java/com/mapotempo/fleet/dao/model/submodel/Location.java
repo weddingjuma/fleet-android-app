@@ -20,7 +20,6 @@
 package com.mapotempo.fleet.dao.model.submodel;
 
 import com.couchbase.lite.Dictionary;
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.SubModelBase;
 
@@ -29,14 +28,14 @@ public class Location extends SubModelBase
     public static final String LAT = "lat";
     public static final String LON = "lon";
 
-    public Location(IDatabaseHandler iDatabaseHandler, double lat, double lon) throws FleetException
+    public Location(IDatabaseHandler iDatabaseHandler, double lat, double lon)
     {
         super(iDatabaseHandler, null);
         mDictionary.setDouble(LAT, lat);
         mDictionary.setDouble(LON, lon);
     }
 
-    public Location(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    public Location(IDatabaseHandler iDatabaseHandler, Dictionary dictionary)
     {
         super(iDatabaseHandler, dictionary);
     }

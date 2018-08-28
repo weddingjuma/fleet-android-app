@@ -43,7 +43,6 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
@@ -185,21 +184,15 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment
         if (mScrollLocation != null)
         {
             MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
-            try
-            {
-                com.mapotempo.fleet.dao.model.submodel.Location location = new com.mapotempo.fleet.dao.model.submodel.Location(mapotempoFleetManagerInterface, mScrollLocation.getLatitude(), mScrollLocation.getLongitude());
-                mMission.setSurveyLocation(location);
-                mMission.save();
-            } catch (FleetException e)
-            {
-                e.printStackTrace();
-            }
+            com.mapotempo.fleet.dao.model.submodel.Location location = new com.mapotempo.fleet.dao.model.submodel.Location(mapotempoFleetManagerInterface, mScrollLocation.getLatitude(), mScrollLocation.getLongitude());
+            mMission.setSurveyLocation(location);
+            mMission.save();
         }
     }
 
     public void deletePickedLocation()
     {
-        mMission.deleteSurveyLocation();
+        mMission.clearSurveyLocation();
         mMission.save();
         displayLocationMarkers();
     }

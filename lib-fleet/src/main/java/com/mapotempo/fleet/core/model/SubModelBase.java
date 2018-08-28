@@ -23,7 +23,6 @@ import android.support.annotation.Nullable;
 
 import com.couchbase.lite.Dictionary;
 import com.couchbase.lite.MutableDictionary;
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.Base;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 
@@ -31,7 +30,7 @@ public abstract class SubModelBase extends Base
 {
     protected MutableDictionary mDictionary;
 
-    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary) throws FleetException
+    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary)
     {
         super(iDatabaseHandler);
         if (dictionary == null)

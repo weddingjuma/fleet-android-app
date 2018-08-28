@@ -101,30 +101,26 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         case R.id.edit_address:
             if (getCurrentMission() != null)
             {
-                Intent intent = new Intent(this, EditAddressActivity.class);
-                intent.putExtra("mission_id", getCurrentMission().getId());
-                startActivity(intent);
+                mMissionPagerFragment.goSurveyAddressFragment();
             }
             return true;
         case R.id.get_signature:
             if (getCurrentMission() != null)
             {
-                mMissionPagerFragment.goSignatureFragment();
+                mMissionPagerFragment.goSurveySignatureFragment();
             }
             return true;
         case R.id.take_picture:
             if (getCurrentMission() != null)
             {
-                mMissionPagerFragment.goPictureFragment();
+                mMissionPagerFragment.goSurveyPictureFragment();
             }
 
             return true;
         case R.id.write_comment:
             if (getCurrentMission() != null)
             {
-                Intent intent = new Intent(this, EditCommentActivity.class);
-                intent.putExtra("mission_id", getCurrentMission().getId());
-                startActivity(intent);
+                mMissionPagerFragment.goSurveyCommentFragment();
             }
             return true;
         default:

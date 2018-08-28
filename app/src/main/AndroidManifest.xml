@@ -37,8 +37,6 @@
     <activity android:name=".MapActivity"/>
     <activity android:name=".SettingsActivity"/>
     <activity android:name=".EditLocationActivity"/>
-    <activity android:name=".EditAddressActivity"/>
-    <activity android:name=".EditCommentActivity"/>
   </application>
 
 </manifest>

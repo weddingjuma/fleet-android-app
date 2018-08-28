@@ -17,9 +17,8 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.lib.fragments.mission.attachment;
+package com.mapotempo.lib.fragments.survey;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,34 +26,31 @@ import android.support.design.widget.TextInputEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mapotempo.lib.R;
-import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
-public class SignatureFragment extends MapotempoBaseDialogFragment
+public class SurveySignatureDialogFragment extends SurveyBaseDialogFragment
 {
-
-    public static SignatureFragment newInstance(@Nullable Bitmap bitmapInit, @Nullable String signatoryNameInit)
+    public static SurveySignatureDialogFragment newInstance(@Nullable Bitmap bitmapInit, @Nullable String signatoryNameInit)
     {
-        SignatureFragment f = new SignatureFragment();
+        SurveySignatureDialogFragment f = new SurveySignatureDialogFragment();
         f.bitmapInit = bitmapInit;
         f.mSignatoryNameInit = signatoryNameInit;
         return f;
     }
 
-    public interface SignatureListener
+    public interface SurveySignatureListener
     {
         boolean onSignatureSave(Bitmap signatureBitmap, String signatory_name);
 
         boolean onSignatureClear();
     }
 
-    public void setSignatureListener(SignatureListener signatureListener)
+    public void setSurveySignatureListener(SurveySignatureListener surveySignatureListener)
     {
-        mSignatureListener = signatureListener;
+        mSurveySignatureListener = surveySignatureListener;
     }
 
     private Bitmap bitmapInit = null;
@@ -63,15 +59,11 @@ public class SignatureFragment extends MapotempoBaseDialogFragment
 
     private SignaturePad mSignaturePad;
 
-    private Button mClearButton;
-
-    private Button mSaveButton;
-
     private TextView mSignatureMessage;
 
     private TextInputEditText mSignatoryName;
 
-    private SignatureListener mSignatureListener = new SignatureListener()
+    private SurveySignatureListener mSurveySignatureListener = new SurveySignatureListener()
     {
         @Override
         public boolean onSignatureSave(Bitmap signatureBitmap, String signatory_name)
@@ -91,16 +83,10 @@ public class SignatureFragment extends MapotempoBaseDialogFragment
     // ===================================
 
     @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_signature, container, false);
+        View v = inflater.inflate(R.layout.survey_fragment_signature, container, false);
         mSignaturePad = v.findViewById(R.id.signature_pad);
         mSignatureMessage = v.findViewById(R.id.signature_message);
         mSignatoryName = v.findViewById(R.id.signatory_name);
@@ -136,37 +122,33 @@ public class SignatureFragment extends MapotempoBaseDialogFragment
                 mClearButton.setEnabled(false);
             }
         });
-
-        mClearButton = v.findViewById(R.id.clear_button);
-        mSaveButton = v.findViewById(R.id.save_button);
-
-        mClearButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (mSignatureListener.onSignatureClear())
-                {
-                    mSignaturePad.clear();
-                    mSignatureMessage.setVisibility(View.VISIBLE);
-                    dismiss();
-                }
-            }
-        });
-
-        mSaveButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
-                String signatoryName = mSignatoryName.getText()
-                    .toString()
-                    .trim();
-                if (mSignatureListener.onSignatureSave(signatureBitmap, signatoryName))
-                    dismiss();
-            }
-        });
         return v;
+    }
+
+    // ==========================
+    // ==  SurveyBaseDialogFragment  ==
+    // ==========================
+
+    @Override
+    protected boolean onSave()
+    {
+        Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
+        String signatoryName = mSignatoryName.getText()
+            .toString()
+            .trim();
+        if (mSurveySignatureListener.onSignatureSave(signatureBitmap, signatoryName))
+            return true;
+        return false;
+    }
+
+    @Override
+    protected boolean onClear()
+    {
+        if (!mSurveySignatureListener.onSignatureClear())
+            return false;
+        mSignaturePad.clear();
+        mSignatureMessage.setVisibility(View.VISIBLE);
+        return true;
+
     }
 }

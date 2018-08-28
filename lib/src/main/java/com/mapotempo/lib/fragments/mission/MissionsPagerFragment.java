@@ -163,15 +163,24 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
         }
     }
 
-
-    public void goSignatureFragment()
+    public void goSurveySignatureFragment()
     {
-        mPagerAdapter.getFragment(mCurrentPosition).goSignatureFragment();
+        mPagerAdapter.getFragment(mCurrentPosition).goSurveySignatureFragment();
     }
 
-    public void goPictureFragment()
+    public void goSurveyPictureFragment()
     {
-        mPagerAdapter.getFragment(mCurrentPosition).goPictureFragment();
+        mPagerAdapter.getFragment(mCurrentPosition).goSurveyPictureFragment();
+    }
+
+    public void goSurveyAddressFragment()
+    {
+        mPagerAdapter.getFragment(mCurrentPosition).goSurveyAddressFragment();
+    }
+
+    public void goSurveyCommentFragment()
+    {
+        mPagerAdapter.getFragment(mCurrentPosition).goSurveyCommentFragment();
     }
 
 
