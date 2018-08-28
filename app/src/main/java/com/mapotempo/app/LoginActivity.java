@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mapotempo.app.utils.ConnectionManager;
-import com.mapotempo.fleet.manager.FLEET_ERROR;
+import com.mapotempo.fleet.api.FleetError;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.fragments.login.LoginFragment;
 import com.mapotempo.lib.utils.AlertMessageHelper;
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
      * @param manager The connexion associate manager
      */
     @Override
-    public void onLogin(FLEET_ERROR status,
+    public void onLogin(FleetError status,
                         MapotempoFleetManager manager)
     {
         if (manager != null)

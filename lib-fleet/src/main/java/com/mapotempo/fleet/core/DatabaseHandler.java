@@ -35,9 +35,9 @@ import com.couchbase.lite.ReplicatorChange;
 import com.couchbase.lite.ReplicatorChangeListener;
 import com.couchbase.lite.ReplicatorConfiguration;
 import com.couchbase.lite.URLEndpoint;
+import com.mapotempo.fleet.api.FleetError;
 import com.mapotempo.fleet.api.FleetException;
-import com.mapotempo.fleet.manager.FLEET_ERROR;
-import com.mapotempo.fleet.manager.SyncGatewayLogin;
+import com.mapotempo.fleet.rest.syncgateway.Session;
 import com.mapotempo.fleet.utils.HashUtils;
 
 import java.net.URI;
@@ -81,13 +81,16 @@ public class DatabaseHandler implements IDatabaseHandler
     private String PASSWORD_SHA256 = "PASSWORD_SHA256";
 
     public DatabaseHandler(Context context,
-                           String user, String password, String url) throws FleetException
+                           String user,
+                           String password,
+                           String url) throws FleetException
     {
         mContext = context;
         mUser = user;
         mPassword = password;
-        mUrl = url;
-        mDbname = databaseNameGenerator(mUser, url, password);
+        mUrl = urlWSConverter(url);
+
+        mDbname = databaseNameGenerator(mUser, mUrl, password);
         mDatabaseConfiguration = new DatabaseConfiguration(mContext);
 
         try
@@ -95,7 +98,7 @@ public class DatabaseHandler implements IDatabaseHandler
             mDatabase = new Database(mDbname, mDatabaseConfiguration);
         } catch (CouchbaseLiteException e)
         {
-            throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't create/access to fleet_local_meta_document : \n", e);
+            throw FleetError.asException(FleetError.UNKNOWN_ERROR, "Error : Can't open database", e);
         }
 
         mLocalMeta = mDatabase.getDocument("fleet_local_meta");
@@ -108,18 +111,20 @@ public class DatabaseHandler implements IDatabaseHandler
                 mLocalMeta = mutableDocument;
             } catch (CouchbaseLiteException e)
             {
-                throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't create/access to fleet_local_meta_document : \n", e);
+                throw FleetError.asException(FleetError.UNKNOWN_ERROR, "Error : Can't create/access to fleet_local_meta_document", e);
             }
         }
 
+        Log.d(TAG, mUrl);
         try
         {
-            mTargetEndpoint = new URLEndpoint(new URI(url));
+            mTargetEndpoint = new URLEndpoint(new URI(mUrl));
         } catch (Exception e)
         {
-            throw FLEET_ERROR.asException(FLEET_ERROR.URL_ERROR, context.getString(R.string.invalid_url) + " : " + e.getMessage(), e);
+            throw FleetError.asException(FleetError.URL_ERROR, context.getString(R.string.invalid_url) + " : " + e.getMessage(), e);
         }
-        checkLogin();
+
+        verifyLogin();
     }
 
     @Override
@@ -267,7 +272,7 @@ public class DatabaseHandler implements IDatabaseHandler
                 mDatabase.close();
         } catch (CouchbaseLiteException e)
         {
-            throw new FleetException(FLEET_ERROR.UNKNOWN_ERROR, e);
+            throw new FleetException(FleetError.UNKNOWN_ERROR, e);
         }
         release = true;
     }
@@ -312,29 +317,31 @@ public class DatabaseHandler implements IDatabaseHandler
         Log.d(TAG, "        replicator ref : " + System.identityHashCode(repl) + " status : " + repl.getStatus().getActivityLevel());
     }
 
-    private void checkLogin() throws FleetException
+    private void verifyLogin() throws FleetException
     {
-        SyncGatewayLogin restLogin = new SyncGatewayLogin();
-        SyncGatewayLogin.SyncGatewayLoginStatus status = restLogin.tryLogin(
+        Session session = Session.create(
+            mUrl,
             mUser,
             mPassword,
-            mUrl,
             mContext);
 
-        switch (status)
+        switch (session.getSessionStatus())
         {
-        case VALID:
+        case SESSION_OPEN:
             savePassword();
+            Session.delete(session);
             break;
         case SERVER_UNREACHABLE:
             if (!mLocalMeta.contains(PASSWORD_SHA256))
-                throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Server is unreachable", null);
+                throw FleetError.asException(FleetError.SERVER_UNREACHABLE, "Error : Server is unreachable", null);
             if (!HashUtils.sha256(mPassword).equals(mLocalMeta.getString(PASSWORD_SHA256)))
-                throw FLEET_ERROR.asException(FLEET_ERROR.LOGIN_ERROR, "", null);
+                throw FleetError.asException(FleetError.LOGIN_ERROR, "", null);
             break;
-        case INVALID:
+        case SESSION_ERROR:
+            throw FleetError.asException(FleetError.LOGIN_ERROR, "Error : password or login invalid", null);
+        case SESSION_CLOSE:
         default:
-            throw FLEET_ERROR.asException(FLEET_ERROR.LOGIN_ERROR, "", null);
+            throw FleetError.asException(FleetError.UNKNOWN_ERROR, "", null);
         }
     }
 
@@ -348,7 +355,7 @@ public class DatabaseHandler implements IDatabaseHandler
             mLocalMeta = mutableDocument;
         } catch (CouchbaseLiteException e)
         {
-            throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error : Can't save to fleet_local_meta_document : \n", e);
+            throw FleetError.asException(FleetError.UNKNOWN_ERROR, "Error : Can't save to fleet_local_meta_document : \n", e);
         }
     }
 
@@ -357,5 +364,20 @@ public class DatabaseHandler implements IDatabaseHandler
         // Database name must be unique for a username, password and specific url.
         return "database2_" + HashUtils.sha256(userName).substring(0, 5) + HashUtils.sha256(url).substring(0, 5) /*+ HashUtils.sha256(mPassword).substring(0,
          5)*/;
+    }
+
+    private String urlWSConverter(String url)
+    {
+        // Silently replace web  HTTP URLs with socket URLs.
+        if (url.regionMatches(true, 0, "http:", 0, 5))
+        {
+            return "ws:" + url.substring(5);
+        }
+        else if (url.regionMatches(true, 0, "https:", 0, 5))
+        {
+            return "wss:" + url.substring(6);
+        }
+        else
+            return url;
     }
 }

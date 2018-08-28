@@ -21,6 +21,7 @@ package com.mapotempo.fleet.manager.Requirement;
 
 import android.util.Log;
 
+import com.mapotempo.fleet.api.FleetError;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.DatabaseHandler;
 import com.mapotempo.fleet.dao.access.CompanyAccess;
@@ -33,7 +34,6 @@ import com.mapotempo.fleet.dao.model.MetaInfo;
 import com.mapotempo.fleet.dao.model.User;
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
-import com.mapotempo.fleet.manager.FLEET_ERROR;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -89,7 +89,7 @@ public class FleetConnectionRequirement implements ConnectionRequirement
     {
         void onConnectionVerify(User user, UserCurrentLocation userCurrentLocation, UserSettings userSettings, Company company, MetaInfo metaInfo);
 
-        void onConnectionFail(FLEET_ERROR code);
+        void onConnectionFail(FleetError code);
     }
 
     public FleetConnectionRequirement(DatabaseHandler databaseHandler) throws FleetException

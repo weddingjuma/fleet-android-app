@@ -17,11 +17,12 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.fleet.manager;
+package com.mapotempo.fleet.rest.syncgateway;
 
 
 import android.content.Context;
 
+import com.mapotempo.fleet.api.FleetError;
 import com.mapotempo.fleet.api.FleetException;
 
 import java.io.IOException;
@@ -30,7 +31,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import mapotempo.com.fleet.R;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Cookie;
@@ -41,86 +41,37 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SyncGatewayLogin
+public class Session
 {
     // http://www.vogella.com/tutorials/JavaLibrary-OkHttp/article.html
     // https://developer.couchbase.com/documentation/mobile/2.0/references/sync-gateway/rest-api/index.html
 
-    public enum SyncGatewayLoginStatus
+    private static String TAG = Session.class.getName();
+
+    public enum LoginStatus
     {
-        VALID,
-        INVALID,
+        SESSION_OPEN,
+        SESSION_CLOSE,
+        SESSION_ERROR,
         SERVER_UNREACHABLE
     }
 
-    private static String TAG = SyncGatewayLogin.class.getName();
+    private LoginStatus mSessionStatus;
 
+    private final OkHttpClient mOkHttpClient;
 
-    private static final MediaType JSON
-        = MediaType.parse("application/json; charset=utf-8");
+    private String mUrl;
 
-    private String jsonTemplate = "" +
-        "{" +
-        "\"name\": \"%s\"," +
-        "\"password\": \"%s\"" +
-        "}";
-
-    private SyncGatewayLoginStatus res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
-
-    public SyncGatewayLoginStatus tryLogin(final String login,
-                                           String password,
-                                           final String url,
-                                           Context context) throws FleetException
+    public Session(String url)
     {
-        final CountDownLatch cdl = new CountDownLatch(1);
+        mUrl = url;
+        mSessionStatus = LoginStatus.SESSION_CLOSE;
+        mOkHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar()).build();
+    }
 
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new CookieJar()).build();
-
-        Request request;
-        try
-        {
-            // Create Session
-            request = new Request.Builder().url(url + "/_session")
-                .post(RequestBody.create(JSON, String.format(jsonTemplate, login, password)))
-                .build();
-        } catch (IllegalArgumentException e)
-        {
-            throw FLEET_ERROR.asException(FLEET_ERROR.URL_ERROR, context.getString(R.string.invalid_url), e);
-        }
-
-        // Async post request to prevent main thread blocking
-        okHttpClient.newCall(request).enqueue(new Callback()
-        {
-            @Override
-            public void onFailure(Call call, IOException e)
-            {
-                cdl.countDown();
-                res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException
-            {
-                cdl.countDown();
-                if (response.code() == 200)
-                    res = SyncGatewayLoginStatus.VALID;
-                else
-                    res = SyncGatewayLoginStatus.INVALID;
-                Request request = new Request.Builder().url(url + "/_session").delete().build();
-                okHttpClient.newCall(request);
-            }
-        });
-
-        try
-        {
-            cdl.await(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e)
-        {
-            res = SyncGatewayLoginStatus.SERVER_UNREACHABLE;
-        } finally
-        {
-            return res;
-        }
+    public LoginStatus getSessionStatus()
+    {
+        return mSessionStatus;
     }
 
     private class CookieJar implements okhttp3.CookieJar
@@ -140,6 +91,79 @@ public class SyncGatewayLogin
                 return cookies;
             return new ArrayList<Cookie>();
 
+        }
+    }
+
+    private static final MediaType JSON
+        = MediaType.parse("application/json; charset=utf-8");
+
+    private static final String jsonTemplate = "" +
+        "{" +
+        "\"name\": \"%s\"," +
+        "\"password\": \"%s\"" +
+        "}";
+
+    public static Session create(String url,
+                                 final String login,
+                                 String password,
+                                 Context context) throws FleetException
+    {
+        final Session res = new Session(url);
+
+        final CountDownLatch cdl = new CountDownLatch(1);
+
+        Request request;
+        try
+        {
+            // Create Session Request
+            request = new Request.Builder().url(url + "/_session")
+                .post(RequestBody.create(JSON, String.format(jsonTemplate, login, password)))
+                .build();
+        } catch (IllegalArgumentException e)
+        {
+            throw FleetError.asException(FleetError.URL_ERROR, "invalid url", e);
+        }
+
+        // Async post request to prevent main thread blocking
+        res.mOkHttpClient.newCall(request).enqueue(new Callback()
+        {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                cdl.countDown();
+                res.mSessionStatus = LoginStatus.SERVER_UNREACHABLE;
+            }
+
+            @Override
+            public void onResponse(Call call, Response response)
+            {
+                cdl.countDown();
+                if (response.code() == 200)
+                    res.mSessionStatus = LoginStatus.SESSION_OPEN;
+                else
+                    res.mSessionStatus = LoginStatus.SESSION_ERROR;
+            }
+        });
+
+        try
+        {
+            cdl.await(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e)
+        {
+            res.mSessionStatus = LoginStatus.SERVER_UNREACHABLE;
+        } finally
+        {
+            return res;
+        }
+    }
+
+    public static void delete(Session session)
+    {
+        if (session.mSessionStatus.equals(LoginStatus.SESSION_OPEN))
+        {
+            Request request = new Request.Builder().url(session.mUrl + "/_session").delete().build();
+            session.mOkHttpClient.newCall(request);
+            session.mSessionStatus = LoginStatus.SESSION_CLOSE;
         }
     }
 }

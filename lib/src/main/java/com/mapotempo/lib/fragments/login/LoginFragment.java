@@ -41,8 +41,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.mapotempo.fleet.api.FleetError;
 import com.mapotempo.fleet.api.ManagerFactory;
-import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.R;
 
@@ -62,7 +62,7 @@ import com.mapotempo.lib.R;
  * </code>
  * </p>
  * This fragment require the implementation of {@link OnLoginFragmentImplementation} directly in the Activity that hold the Login Fragment.
- * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(FLEET_ERROR, MapotempoFleetManager)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
+ * You will have to implement the {@link OnLoginFragmentImplementation#onLogin(FleetError, MapotempoFleetManager)} which will be called by an async task. If the library doesn't respond then, a timeout will stop the attempt and give the user back to the login page.
  * <p>
  * As you'ill need to use the manager during the whole life cycle of the application, we highly recommend to keep a reference to it in a descendant of Application.
  * </p>
@@ -260,7 +260,7 @@ public class LoginFragment extends Fragment
 
     public interface OnLoginFragmentImplementation
     {
-        void onLogin(FLEET_ERROR status,
+        void onLogin(FleetError status,
                      MapotempoFleetManager manager);
     }
 
@@ -297,7 +297,7 @@ public class LoginFragment extends Fragment
         ManagerFactory.OnManagerReadyListener onUserAvailable = new ManagerFactory.OnManagerReadyListener()
         {
             @Override
-            public void onManagerReady(final MapotempoFleetManager manager, final FLEET_ERROR errorStatus)
+            public void onManagerReady(final MapotempoFleetManager manager, final FleetError errorStatus)
             {
                 getActivity().runOnUiThread(new Runnable()
                 {

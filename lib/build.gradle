@@ -35,7 +35,6 @@ repositories {
   mavenLocal()
   jcenter()
   maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
-  maven { url "http://files.couchbase.com/maven2/" }
   google()
 }
 

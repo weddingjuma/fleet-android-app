@@ -22,14 +22,10 @@ package com.mapotempo.fleet.api;
 import android.content.Context;
 
 import com.mapotempo.fleet.core.DatabaseHandler;
-import com.mapotempo.fleet.manager.FLEET_ERROR;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.fleet.manager.Requirement.ConnectionRequirement;
 import com.mapotempo.fleet.manager.Requirement.FleetConnectionRequirement;
 import com.mapotempo.fleet.utils.HashUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 //**
 // * ManagerFactory.
@@ -56,21 +52,13 @@ public class ManagerFactory
 
     private static String TAG = ManagerFactory.class.getName();
 
-    private static Map tokenMpa = new HashMap<>();
-
-    private static class FactoryToken
-    {
-        boolean called = false;
-    }
-
     public interface OnManagerReadyListener
     {
-        void onManagerReady(MapotempoFleetManager manager, FLEET_ERROR errorStatus);
+        void onManagerReady(MapotempoFleetManager manager, FleetError errorStatus);
     }
 
     public static void getManagerAsync(final Context context, final String user, final String password, final OnManagerReadyListener onManagerReadyListener, final String url)
     {
-        // TEST url :
         try
         {
             final String sha266User = HashUtils.sha256(user);
@@ -101,30 +89,19 @@ public class ManagerFactory
                                 onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
                             }
                             else
-                                onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
+                                onManagerReadyListener.onManagerReady(null, FleetError.LOGIN_ERROR);
                         } catch (FleetException e)
                         {
-                            onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
+                            onManagerReadyListener.onManagerReady(null, FleetError.LOGIN_ERROR);
                         }
                     }
                 }, 10000);
             }
         } catch (FleetException e)
         {
-            onManagerReadyListener.onManagerReady(null, e.getFleetStatus());
+            onManagerReadyListener.onManagerReady(null, e.getFleetError());
             return;
         }
-    }
-
-    private static void unreachableSyncServer(final Context context, final String sha266User, final String password, final OnManagerReadyListener onManagerReadyListener, final String url) throws FleetException
-    {
-        //        final FleetConnectionRequirement connectionRequirement = new FleetConnectionRequirement(databaseHandler);
-        //        if (databaseHandler.checkPassword() && connectionRequirement.isSatisfy())
-        //        {
-        //            onManagerReadyListener.onManagerReady(new MapotempoFleetManager(context, sha266User, password, databaseHandler, url), null);
-        //            return;
-        //        }
-        //        onManagerReadyListener.onManagerReady(null, FLEET_ERROR.LOGIN_ERROR);
     }
 }
 

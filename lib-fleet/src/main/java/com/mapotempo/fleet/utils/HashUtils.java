@@ -19,8 +19,8 @@
 
 package com.mapotempo.fleet.utils;
 
+import com.mapotempo.fleet.api.FleetError;
 import com.mapotempo.fleet.api.FleetException;
-import com.mapotempo.fleet.manager.FLEET_ERROR;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +39,7 @@ public class HashUtils
 
         } catch (NoSuchAlgorithmException e)
         {
-            throw FLEET_ERROR.asException(FLEET_ERROR.UNKNOWN_ERROR, "Error with : " + algorithm + " algorithm", e);
+            throw FleetError.asException(FleetError.UNKNOWN_ERROR, "Error with : " + algorithm + " algorithm", e);
         }
     }
 

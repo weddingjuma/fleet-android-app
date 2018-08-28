@@ -17,18 +17,16 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.fleet.manager;
+package com.mapotempo.fleet.api;
 
 import android.support.annotation.Nullable;
-
-import com.mapotempo.fleet.api.FleetException;
 
 /**
  * Connection status :
  * 0 : verify
  * 2XX : document missing
  */
-public enum FLEET_ERROR
+public enum FleetError
 {
     VERIFY(),
     LOGIN_ERROR(),
@@ -50,9 +48,9 @@ public enum FLEET_ERROR
         return mPayload;
     }
 
-    public static FleetException asException(FLEET_ERROR error, String message, @Nullable Exception e)
+    public static FleetException asException(FleetError error, String payload, @Nullable Exception e)
     {
-        error.setPayload(message);
+        error.setPayload(payload);
         if (e != null)
             return new FleetException(error, e);
         return new FleetException(error);
