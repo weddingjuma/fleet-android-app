@@ -59,7 +59,7 @@ public class DatabaseHandlerInstrumentedTest
             baseUrl.toString());
     }
 
-    @Test
+    @Test(expected = FleetException.class)
     public void shouldThrowFleetExceptionWithLoginError() throws Exception
     {
         Context appContext = InstrumentationRegistry.getTargetContext();
@@ -78,10 +78,11 @@ public class DatabaseHandlerInstrumentedTest
         {
             Assert.assertNotNull(e.getFleetError());
             Assert.assertEquals(e.getFleetError(), FleetError.LOGIN_ERROR);
+            throw e;
         }
     }
 
-    @Test
+    @Test(expected = FleetException.class)
     public void shouldThrowFleetExceptionWithServerUnreachable() throws Exception
     {
         Context appContext = InstrumentationRegistry.getTargetContext();
@@ -94,10 +95,11 @@ public class DatabaseHandlerInstrumentedTest
         {
             Assert.assertNotNull(e.getFleetError());
             Assert.assertEquals(e.getFleetError(), FleetError.SERVER_UNREACHABLE);
+            throw e;
         }
     }
 
-    @Test
+    @Test(expected = FleetException.class)
     public void shouldThrowFleetExceptionWithURLError() throws Exception
     {
         Context appContext = InstrumentationRegistry.getTargetContext();
@@ -110,6 +112,7 @@ public class DatabaseHandlerInstrumentedTest
         {
             Assert.assertNotNull(e.getFleetError());
             Assert.assertEquals(e.getFleetError(), FleetError.URL_ERROR);
+            throw e;
         }
     }
 }
