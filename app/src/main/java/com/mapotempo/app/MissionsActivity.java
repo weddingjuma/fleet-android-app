@@ -60,9 +60,9 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
 
     private int mCurrentIndex = 0;
 
-    private String PORTRAIT_PAGER_VISIBILITY_TAG = "portrait_pager_visibility";
+    private String MISSION_IS_SELECTED_TAG = "portrait_pager_visibility";
 
-    private boolean mPagerRestoreVisibility = false;
+    private boolean mMissionIsSelected = false;
 
     @Override
     public boolean onSupportNavigateUp()
@@ -74,8 +74,11 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
     @Override
     public void onBackPressed()
     {
-        if (mMissionPagerFragment.isVisible() && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            missionPagerFragmentVisibility(false);
+        if (mMissionIsSelected && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            mMissionIsSelected = false;
+            refreshMissionPagerFragmentVisibility();
+        }
         else
             super.onBackPressed();
     }
@@ -123,7 +126,7 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
 
         if (savedInstanceState != null)
         {
-            mPagerRestoreVisibility = savedInstanceState.getBoolean(PORTRAIT_PAGER_VISIBILITY_TAG, false);
+            mMissionIsSelected = savedInstanceState.getBoolean(MISSION_IS_SELECTED_TAG, false);
             mCurrentIndex = savedInstanceState.getInt(CURRENT_INDEX_TAG, 0);
         }
     }
@@ -131,8 +134,10 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if (mMissionPagerFragment.isVisible() && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        if (mMissionIsSelected || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
             getMenuInflater().inflate(com.mapotempo.app.R.menu.menu_mission, menu);
+        }
         return true;
     }
 
@@ -156,10 +161,7 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
             }
         }, route);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            missionPagerFragmentVisibility(mPagerRestoreVisibility);
-        else
-            missionPagerFragmentVisibility(true);
+        refreshMissionPagerFragmentVisibility();
     }
 
     @Override
@@ -173,11 +175,7 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            savedInstanceState.putBoolean(PORTRAIT_PAGER_VISIBILITY_TAG, mMissionPagerFragment.isVisible());
-        else
-            savedInstanceState.putBoolean(PORTRAIT_PAGER_VISIBILITY_TAG, mPagerRestoreVisibility);
-
+        savedInstanceState.putBoolean(MISSION_IS_SELECTED_TAG, mMissionIsSelected);
         savedInstanceState.putInt(CURRENT_INDEX_TAG, mCurrentIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -188,8 +186,9 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
     @Override
     public void onMissionSelected(final Mission mission)
     {
-        missionPagerFragmentVisibility(true);
+        mMissionIsSelected = true;
         mCurrentIndex = findIndex(mission);
+        refreshMissionPagerFragmentVisibility();
         refreshFragments();
     }
 
@@ -215,22 +214,16 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         startActivity(intent);
     }
 
-    // ===============git gui
+    // ===============
     // ==  Private  ==
     // ===============
-    private void missionPagerFragmentVisibility(boolean visibility)
+    private void refreshMissionPagerFragmentVisibility()
     {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (visibility)
-        {
-            mPagerRestoreVisibility = visibility;
+        if (mMissionIsSelected || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
             transaction.show(mMissionPagerFragment).commit();
-        }
         else
-        {
-            mPagerRestoreVisibility = visibility;
             transaction.hide(mMissionPagerFragment).commit();
-        }
         invalidateOptionsMenu();
     }
 
