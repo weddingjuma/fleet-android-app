@@ -25,54 +25,50 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
-import com.mapotempo.lib.fragments.map.MapLocationPickerFragment;
+import com.mapotempo.lib.fragments.mission.MissionCommentEditorFragment;
 
-public class EditLocationActivity extends MapotempoBaseActivity
+public class EditCommentActivity extends MapotempoBaseActivity
 {
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_location_activity);
+        setContentView(R.layout.edit_comment_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.survey_location);
+        getSupportActionBar().setTitle(R.string.write_comment);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
-    public boolean onSupportNavigateUp()
-    {
-        onBackPressed();
-        return true;
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.menu_edit_location, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_comment, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        MapLocationPickerFragment mapLocationPickerFragment = (MapLocationPickerFragment) getSupportFragmentManager().findFragmentById(R.id.edit_location_fragment);
+        MissionCommentEditorFragment missionCommentEditorFragment = (MissionCommentEditorFragment) getSupportFragmentManager().findFragmentById(R.id.mission_comment_fragment);
 
         switch (item.getItemId())
         {
-        case R.id.validate_location:
-            mapLocationPickerFragment.savePickedLocation();
-            finish();
-            return true;
-        case R.id.reset_location:
-            mapLocationPickerFragment.deletePickedLocation();
-            return true;
+        case R.id.validate_comment:
+            missionCommentEditorFragment.saveComment();
+            onBackPressed();
+            break;
+        case R.id.reset_comment:
+            missionCommentEditorFragment.clearComment();
+            break;
         default:
-            return super.onOptionsItemSelected(item);
+            onBackPressed();
+            break;
         }
+
+        return true;
     }
 }

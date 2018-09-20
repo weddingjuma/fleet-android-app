@@ -19,6 +19,9 @@
 
 package com.mapotempo.fleet.dao.model;
 
+import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
+
 import com.couchbase.lite.Dictionary;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.MutableArray;
@@ -60,9 +63,13 @@ public class Mission extends ModelBase
     public static final String DURATION = "duration";
     public static final String TIME_WINDOWS = "time_windows";
     public static final String CUSTOM_DATA = "custom_data";
+    public static final String ARCHIVED_AT = "archived_at";
     public static final String SURVEY_LOCATION = "survey_location";
     public static final String SURVEY_ADDRESS = "survey_address";
-    public static final String ARCHIVED_AT = "archived_at";
+    public static final String SURVEY_PICTURE = "survey_picture";
+    public static final String SURVEY_SIGNATURE = "survey_signature";
+    public static final String SURVEY_SIGNATURE_NAME = "survey_signature_name";
+    public static final String SURVEY_COMMENT = "survey_comment";
 
     public Mission(IDatabaseHandler databaseHandler, Document document) throws FleetException
     {
@@ -78,7 +85,9 @@ public class Mission extends ModelBase
     public Date getDate()
     {
         String dateString = mDocument.getString(DATE);
-        return DateUtils.fromStringISO8601(dateString);
+        if (dateString != null)
+            return DateUtils.fromStringISO8601(dateString);
+        return DateUtils.fromStringISO8601("");
     }
 
     public Date getETAOrDefault()
@@ -248,5 +257,67 @@ public class Mission extends ModelBase
     {
         mDocument.remove(ARCHIVED_AT);
         save();
+    }
+
+    public Bitmap getSurveyPicture()
+    {
+        return imageOutputProcess(SURVEY_PICTURE);
+    }
+
+    public void setSurveyPicture(Bitmap bitmap)
+    {
+        imageInputProcess(bitmap, SURVEY_PICTURE);
+    }
+
+    public void clearSurveyPicture()
+    {
+        mDocument.remove(SURVEY_PICTURE);
+    }
+
+    public Bitmap getSurveySignature()
+    {
+        return imageOutputProcess(SURVEY_SIGNATURE);
+    }
+
+    public void setSurveySignature(Bitmap bitmap)
+    {
+        imageInputProcess(bitmap, SURVEY_SIGNATURE);
+    }
+
+    public void clearSurveySignature()
+    {
+        mDocument.remove(SURVEY_SIGNATURE);
+    }
+
+    public void setSurveySignatoryName(String surveySignatoryName)
+    {
+        mDocument.setString(SURVEY_SIGNATURE_NAME, surveySignatoryName);
+    }
+
+    @Nullable
+    public String getSurveySignatoryName()
+    {
+        return mDocument.getString(SURVEY_SIGNATURE_NAME);
+    }
+
+    public void clearSurveySignatoryName()
+    {
+        mDocument.remove(SURVEY_SIGNATURE_NAME);
+    }
+
+    public void setSurveyComment(String comment)
+    {
+        mDocument.setString(SURVEY_COMMENT, comment);
+    }
+
+    @Nullable
+    public String getSurveyComment()
+    {
+        return mDocument.getString(SURVEY_COMMENT);
+    }
+
+    public void clearSurveyComment()
+    {
+        mDocument.remove(SURVEY_COMMENT);
     }
 }
