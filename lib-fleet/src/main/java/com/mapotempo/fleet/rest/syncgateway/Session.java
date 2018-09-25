@@ -130,18 +130,18 @@ public class Session
             @Override
             public void onFailure(Call call, IOException e)
             {
-                cdl.countDown();
                 res.mSessionStatus = LoginStatus.SERVER_UNREACHABLE;
+                cdl.countDown();
             }
 
             @Override
             public void onResponse(Call call, Response response)
             {
-                cdl.countDown();
                 if (response.code() == 200)
                     res.mSessionStatus = LoginStatus.SESSION_OPEN;
                 else
                     res.mSessionStatus = LoginStatus.SESSION_ERROR;
+                cdl.countDown();
             }
         });
 
