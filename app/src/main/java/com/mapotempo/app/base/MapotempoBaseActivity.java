@@ -42,18 +42,9 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity
         try
         {
             super.onCreate(savedInstanceState, persistentState);
-        } catch (Exception e)
+        } catch (RuntimeException e)
         {
-            // Catch only MapotempoManagerMissingException exception
-            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException)
-            {
-                e.printStackTrace();
-                intentLoginActivity();
-            }
-            else
-            {
-                throw e;
-            }
+            manageException(e);
         }
     }
 
@@ -63,18 +54,9 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity
         try
         {
             super.onCreate(savedInstanceState);
-        } catch (Exception e)
+        } catch (RuntimeException e)
         {
-            // Catch only MapotempoManagerMissingException exception
-            if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException)
-            {
-                e.printStackTrace();
-                intentLoginActivity();
-            }
-            else
-            {
-                throw e;
-            }
+            manageException(e);
         }
     }
 
@@ -86,16 +68,7 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity
             super.setContentView(view);
         } catch (InflateException e)
         {
-            // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException)
-            {
-                e.printStackTrace();
-                intentLoginActivity();
-            }
-            else
-            {
-                throw e;
-            }
+            manageException(e);
         }
     }
 
@@ -107,16 +80,7 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity
             super.setContentView(view, params);
         } catch (InflateException e)
         {
-            // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException)
-            {
-                e.printStackTrace();
-                intentLoginActivity();
-            }
-            else
-            {
-                throw e;
-            }
+            manageException(e);
         }
     }
 
@@ -128,16 +92,21 @@ public abstract class MapotempoBaseActivity extends AppCompatActivity
             super.setContentView(layoutResID);
         } catch (InflateException e)
         {
-            // Catch only MapotempoManagerMissingException exception
-            if (e.getCause() instanceof MapotempoManagerMissingException)
-            {
-                e.printStackTrace();
-                intentLoginActivity();
-            }
-            else
-            {
-                throw e;
-            }
+            manageException(e);
+        }
+    }
+
+    private void manageException(RuntimeException e) throws RuntimeException
+    {
+        // Catch only MapotempoManagerMissingException exception
+        if (e instanceof MapotempoManagerMissingException || e.getCause() instanceof MapotempoManagerMissingException)
+        {
+            e.printStackTrace();
+            intentLoginActivity();
+        }
+        else
+        {
+            throw e;
         }
     }
 
