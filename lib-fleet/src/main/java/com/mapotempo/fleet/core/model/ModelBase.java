@@ -78,6 +78,11 @@ public abstract class ModelBase extends Base
         try
         {
             mDatabaseHandler.getDatabase().save(mDocument);
+            // Update mutable document
+            mDocument = mDatabaseHandler
+                .getDatabase()
+                .getDocument(mDocument.getId())
+                .toMutable();
             return true;
         } catch (CouchbaseLiteException e)
         {
