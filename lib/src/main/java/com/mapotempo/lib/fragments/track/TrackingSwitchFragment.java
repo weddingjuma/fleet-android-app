@@ -20,14 +20,20 @@
 package com.mapotempo.lib.fragments.track;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -40,6 +46,7 @@ import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
 import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
 import com.mapotempo.lib.MapotempoApplicationInterface;
+import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 import com.mapotempo.lib.utils.Haversine;
 
@@ -59,12 +66,13 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
 
     private Location mLastLocation;
 
+    final static int REQUEST_ACCESS_FINE_LOCATION = 666;
+
     // ===================================
     // ==  Android Fragment Life cycle  ==
     // ===================================
 
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         mSwitchTracking = new SwitchCompat(getContext());
@@ -73,11 +81,24 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
             @Override
             public void onClick(View v)
             {
-                boolean hooked = hookLocationListener(mSwitchTracking.isChecked());
-                mSwitchTracking.setChecked(hooked);
-                UserSettings up = mMapotempoApplicationInterface.getManager().getUserPreference();
-                up.setBoolPreference(UserSettings.Preference.TRACKING_ENABLE, mSwitchTracking.isChecked());
-                up.save();
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                {
+                    if (mSwitchTracking.isChecked())
+                    {
+                        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) == true)
+                            explain();
+                        else
+                            askForPermission();
+                    }
+                }
+                else
+                {
+                    boolean hooked = hookLocationListener(mSwitchTracking.isChecked());
+                    mSwitchTracking.setChecked(hooked);
+                    UserSettings up = mMapotempoApplicationInterface.getManager().getUserPreference();
+                    up.setBoolPreference(UserSettings.Preference.TRACKING_ENABLE, mSwitchTracking.isChecked());
+                    up.save();
+                }
             }
         });
         return mSwitchTracking;
@@ -87,13 +108,49 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        initLocationManager();
 
         mMapotempoApplicationInterface = (MapotempoApplicationInterface) getActivity().getApplicationContext();
-        boolean check = (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-            && mMapotempoApplicationInterface.getManager().getUserPreference().getBoolPreference(UserSettings.Preference.TRACKING_ENABLE);
+        initLocationManager();
+
+        boolean check = mMapotempoApplicationInterface.getManager().getUserPreference().getBoolPreference(UserSettings.Preference.TRACKING_ENABLE);
         mSwitchTracking.setChecked(check);
-        hookLocationListener(check);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))
+                explain();
+            else
+                askForPermission();
+        }
+        else
+        {
+            hookLocationListener(check);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_ACCESS_FINE_LOCATION)
+        {
+            for (int i = 0; i < permissions.length; i++)
+            {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED)
+                {
+                    hookLocationListener(mSwitchTracking.isChecked());
+                }
+                else if (shouldShowRequestPermissionRationale(permissions[i]) == false)
+                {
+                    displayOptions();
+                }
+                else
+                {
+                    mSwitchTracking.setChecked(false);
+                }
+            }
+        }
     }
 
     @Override
@@ -188,6 +245,41 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
     private void initLocationManager()
     {
         mLocMngr = (LocationManager) getActivity().getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+
+        if (!mLocMngr.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && !mLocMngr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.enable_location_services);
+            dialog.setMessage(R.string.location_is_disabled_long_text);
+            dialog.setPositiveButton(R.string.connection_settings, new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt)
+                {
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                }
+            });
+            dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener()
+            {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt)
+                {
+                }
+            });
+            dialog.show();
+        }
+    }
+
+    // NewLoc accuracy test
+    private boolean accuracyTester(Location newLoc, Location oldLoc)
+    {
+        Double dist = Haversine.distance(newLoc.getLatitude(), newLoc.getLongitude(), oldLoc.getLatitude(), oldLoc.getLongitude());
+        if (dist + oldLoc.getAccuracy() > newLoc.getAccuracy())
+            return true;
+        return false;
     }
 
     private boolean hookLocationListener(boolean hook_status)
@@ -213,15 +305,38 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
         }
     }
 
-    // NewLoc accuracy test
-    private boolean accuracyTester(Location newLoc, Location oldLoc)
+    private void displayOptions()
     {
-        Double dist = Haversine.distance(newLoc.getLatitude(), newLoc.getLongitude(), oldLoc.getLatitude(), oldLoc.getLongitude());
-        if (dist + oldLoc.getAccuracy() > newLoc.getAccuracy())
+        Snackbar.make(getView(), com.mapotempo.lib.R.string.disabled_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.settings, new View.OnClickListener()
         {
-            return true;
-        }
-        else
-            return false;
+            @Override
+            public void onClick(View view)
+            {
+                final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                final Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        }).show();
+    }
+
+    private void explain()
+    {
+        askForPermission();
+
+        Snackbar.make(getView(), com.mapotempo.lib.R.string.explaination_location_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.Activate,
+            new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    askForPermission();
+                }
+            }).show();
+    }
+
+    private void askForPermission()
+    {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
     }
 }

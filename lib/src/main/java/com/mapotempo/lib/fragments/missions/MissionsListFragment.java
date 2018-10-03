@@ -19,18 +19,11 @@
 
 package com.mapotempo.lib.fragments.missions;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -64,8 +57,6 @@ public class MissionsListFragment extends MapotempoBaseFragment
     private LiveAccessToken missionChangeListenerToken;
 
     private ListBehavior mBehavior = ListBehavior.FOCUS;
-
-    final static int REQUEST_ACCESS_FINE_LOCATION = 666;
 
     // ===================================
     // ==  Android Fragment Life cycle  ==
@@ -135,39 +126,6 @@ public class MissionsListFragment extends MapotempoBaseFragment
         super.onPause();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))
-                explain();
-            else
-                askForPermission();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_ACCESS_FINE_LOCATION)
-        {
-            for (int i = 0; i < permissions.length; i++)
-            {
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
-                {
-                    if (!shouldShowRequestPermissionRationale(permissions[i]))
-                    {
-                        displayOptions();
-                    }
-                }
-            }
-        }
-    }
-
     // ==============
     // ==  Public  ==
     // ==============
@@ -197,43 +155,5 @@ public class MissionsListFragment extends MapotempoBaseFragment
         mRecyclerView.smoothScrollToPosition(position);
         if (mRecyclerAdapter != null)
             mRecyclerAdapter.setMissionFocus(position);
-    }
-
-    // ===============
-    // ==  Private  ==
-    // ===============
-
-    private void displayOptions()
-    {
-        Snackbar.make(getView(), com.mapotempo.lib.R.string.disabled_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.settings, new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                final Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-            }
-        }).show();
-    }
-
-    private void explain()
-    {
-        askForPermission();
-
-        Snackbar.make(getView(), com.mapotempo.lib.R.string.explaination_location_permission, Snackbar.LENGTH_LONG).setAction(com.mapotempo.lib.R.string.Activate, new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                askForPermission();
-            }
-        }).show();
-    }
-
-    private void askForPermission()
-    {
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
     }
 }
