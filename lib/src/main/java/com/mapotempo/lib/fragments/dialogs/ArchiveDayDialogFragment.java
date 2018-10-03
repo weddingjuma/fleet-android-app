@@ -50,7 +50,7 @@ public class ArchiveDayDialogFragment extends MapotempoBaseDialogFragment
         {
             Calendar routeCalendar = Calendar.getInstance();
             routeCalendar.setTime(route.getDate());
-            if (today.compareTo(routeCalendar) > 0)
+            if (today.getTime().compareTo(routeCalendar.getTime()) > 0)
             {
                 mRoutesTag.add(route);
             }
