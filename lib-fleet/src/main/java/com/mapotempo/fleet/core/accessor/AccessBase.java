@@ -155,8 +155,9 @@ public abstract class AccessBase<T extends ModelBase> extends Base
     public T getNew()
     {
         MutableDocument document = new MutableDocument();
+        Log.d(TAG, "Create new instance of " + mDocumentAnnotation.type_field() + ":" + mDocumentAnnotation.type());
         document.setString(mDocumentAnnotation.type_field(), mDocumentAnnotation.type());
-        return getInstance(new MutableDocument());
+        return getInstance(document);
     }
 
     /**

@@ -47,21 +47,6 @@ public abstract class ModelBase extends Base
 
     public MutableDocument mDocument;
 
-    public ModelBase(IDatabaseHandler databaseHandler) throws FleetException
-    {
-        super(databaseHandler);
-        mDocument = new MutableDocument();
-        mDatabaseHandler.getDatabase().addDocumentChangeListener(mDocument.getId(), new DocumentChangeListener()
-        {
-            @Override
-            public void changed(DocumentChange change)
-            {
-                change.getDocumentID();
-
-            }
-        });
-    }
-
     public ModelBase(IDatabaseHandler databaseHandler, Document document) throws FleetException
     {
         super(databaseHandler);
