@@ -30,6 +30,7 @@ import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,15 +43,10 @@ public class ArchiveDayDialogFragment extends MapotempoBaseDialogFragment
 
     public boolean setRoutes(List<Route> routes)
     {
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.MILLISECOND, 0);
+        Date threshold = todayMinight();
         for (Route route : routes)
         {
-            Calendar routeCalendar = Calendar.getInstance();
-            routeCalendar.setTime(route.getDate());
-            if (today.getTime().compareTo(routeCalendar.getTime()) > 0)
+            if (threshold.compareTo(route.getDate()) > 0)
             {
                 mRoutesTag.add(route);
             }
@@ -81,5 +77,15 @@ public class ArchiveDayDialogFragment extends MapotempoBaseDialogFragment
                 }
             });
         return builder.create();
+    }
+
+    private Date todayMinight()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        return calendar.getTime();
     }
 }
