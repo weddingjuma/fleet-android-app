@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">Mapotempo Live</string>
+  <string name="app_name">Mapotempo Live</string>
 
-    <!-- SINGLE MISSION ACTIVITY STRINGS -->
-    <string name="mission">Mission</string>
+  <!-- SINGLE MISSION ACTIVITY STRINGS -->
+  <string name="mission">Mission</string>
 
-    <!-- SINGLE MAP ACTIVITY STRINGS -->
-    <string name="map">Carte</string>
+  <!-- SINGLE MAP ACTIVITY STRINGS -->
+  <string name="map">Carte</string>
 
-    <!-- SINGLE MAP ACTIVITY STRINGS -->
-    <string name="settings">Parametre</string>
+  <!-- SINGLE MAP ACTIVITY STRINGS -->
+  <string name="settings">Paramètres</string>
 
 </resources>

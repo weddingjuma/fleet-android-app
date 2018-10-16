@@ -10,7 +10,7 @@
   <string name="action_sign_up">Essai gratuit</string>
   <string name="connexion_in_progress">Connexion en cours...</string>
   <string name="remember_me">Se souvenir de moi</string>
-  <string name="advanced_login_parameter">Parametre de connexion avancé</string>
+  <string name="advanced_login_parameter">Paramètre de connexion avancé</string>
   <string name="invalid_login_format">Le format de login est invalide, vérifier les espaces.</string>
   <string name="fleet_server_compatibility_error">Votre application nécessite une mise à pour communiquer avec le serveur fleet.</string>
 
@@ -71,8 +71,8 @@
   <string name="day">"Jours"</string>
   <string name="automatic">"Automatique"</string>
   <string name="automatic_data_update">"Mise à jours automatique des données"</string>
-  <string name="data_settings">Parametre des données</string>
-  <string name="map_settings">Parametre de la carte</string>
+  <string name="data_settings">Paramètre des données</string>
+  <string name="map_settings">Paramètre de la carte</string>
   <string name="map_zoom_button">"Bouton de zoom de la carte"</string>
   <string name="map_current_position">"Position courrante sur la carte"</string>
 
