@@ -21,8 +21,6 @@ package com.mapotempo.app;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -90,7 +88,7 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
     {
         switch (item.getItemId())
         {
-        case R.id.survey_location:
+        case R.id.edit_location:
             if (getCurrentMission() != null)
             {
                 Intent intent = new Intent(this, EditLocationActivity.class);
@@ -98,31 +96,10 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
                 startActivity(intent);
             }
             return true;
-        case R.id.edit_address:
+        case R.id.edit_mission_address:
             if (getCurrentMission() != null)
             {
                 Intent intent = new Intent(this, EditAddressActivity.class);
-                intent.putExtra("mission_id", getCurrentMission().getId());
-                startActivity(intent);
-            }
-            return true;
-        case R.id.get_signature:
-            if (getCurrentMission() != null)
-            {
-                mMissionPagerFragment.goSignatureFragment();
-            }
-            return true;
-        case R.id.take_picture:
-            if (getCurrentMission() != null)
-            {
-                mMissionPagerFragment.goPictureFragment();
-            }
-
-            return true;
-        case R.id.write_comment:
-            if (getCurrentMission() != null)
-            {
-                Intent intent = new Intent(this, EditCommentActivity.class);
                 intent.putExtra("mission_id", getCurrentMission().getId());
                 startActivity(intent);
             }
@@ -160,15 +137,6 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         if (mMissionIsSelected || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
         {
             getMenuInflater().inflate(com.mapotempo.app.R.menu.menu_mission, menu);
-            for (int i = 0; i < menu.size(); i++)
-            {
-                Drawable drawable = menu.getItem(i).getIcon();
-                if (drawable != null)
-                {
-                    drawable.mutate();
-                    drawable.setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);
-                }
-            }
         }
         return true;
     }

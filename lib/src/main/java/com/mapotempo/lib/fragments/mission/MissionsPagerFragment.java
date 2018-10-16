@@ -163,18 +163,6 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
         }
     }
 
-
-    public void goSignatureFragment()
-    {
-        mPagerAdapter.getFragment(mCurrentPosition).goSignatureFragment();
-    }
-
-    public void goPictureFragment()
-    {
-        mPagerAdapter.getFragment(mCurrentPosition).goPictureFragment();
-    }
-
-
     public boolean onBackPressed()
     {
         MissionDetailsFragment missionDetailsFragment = mPagerAdapter.getFragment(mViewPager.getCurrentItem());

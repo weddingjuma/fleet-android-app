@@ -38,7 +38,7 @@ public class EditLocationActivity extends MapotempoBaseActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.survey_location);
+        getSupportActionBar().setTitle(R.string.edit_location);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }

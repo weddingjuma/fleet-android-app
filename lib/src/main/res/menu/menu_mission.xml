@@ -1,33 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:theme="@style/MapotempoTheme">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/MapotempoTheme">
 
-  <!-- Settings, should always be in the overflow -->
+    <!-- Settings, should always be in the overflow -->
+    <item
+        android:id="@+id/edit_location"
+        android:title="@string/edit_location"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/edit_address"
-      android:title="@string/edit_address"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/edit_mission_address"
+        android:title="@string/edit_address"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/survey_location"
-      android:title="@string/survey_location"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/get_signature"
-      android:title="@string/get_signature"
-      android:icon="@drawable/ic_pencil_square_o_24dp"
-      app:showAsAction="always"/>
-
-  <item
-      android:id="@+id/take_picture"
-      android:title="@string/take_picture"
-      android:icon="@drawable/ic_photo_camera_black_24dp"
-      app:showAsAction="always"/>
-
-  <item
-      android:id="@+id/write_comment"
-      android:title="@string/write_comment"
-      app:showAsAction="never"/>
 </menu>
