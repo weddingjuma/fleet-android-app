@@ -7,16 +7,16 @@
   <string name="pref_map_current_position" translatable="false">CurrentPosition</string>
 
   <!--  MAP CONFIG -->
-  <string name="mapbox_access_token_dummy">pk.mapox-token-dummy</string>
-  <string name="tilehosting_base_url">https://maps.tilehosting.com</string>
-  <string name="tilehosting_access_token"></string>
+  <string name="mapbox_access_token_dummy" translatable="false">pk.mapox-token-dummy</string>
+  <string name="tilehosting_base_url" translatable="false">https://maps.tilehosting.com</string>
+  <string name="tilehosting_access_token" translatable="false"></string>
 
   <!--  FLEET -->
-  <string name="default_fleet_url_default">wss://mobile.fleet.mapotempo.com</string>
-  <string name="default_fleet_port_default">4984</string>
-  <string name="default_fleet_db_default">db</string>
+  <string name="default_fleet_url_default" translatable="false">wss://mobile.fleet.mapotempo.com</string>
+  <string name="default_fleet_port_default" translatable="false">4984</string>
+  <string name="default_fleet_db_default" translatable="false">db</string>
 
   <!-- SENTRY -->
   <!-- "https://publicKey:secretKey@host:port/1?options" -->
-  <string name="sentry_config"></string>
+  <string name="sentry_config" translatable="false"></string>
 </resources>
