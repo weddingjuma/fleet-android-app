@@ -252,6 +252,7 @@ public abstract class AccessBase<T extends ModelBase> extends Base
     protected LiveAccessToken createLiveQuery(final LiveAccessChangeListener<T> changeListener, @Nullable Expression expression, @Nullable String sortField)
     {
         Query query = getQuery(expression, sortField);
+
         ListenerToken listenerToken = query.addChangeListener(new QueryChangeListener()
         {
             @Override
@@ -296,15 +297,15 @@ public abstract class AccessBase<T extends ModelBase> extends Base
         } catch (InstantiationException e)
         {
             e.printStackTrace();
-            throw new UnknownError(e.getMessage());
+            throw new RuntimeException(e);
         } catch (IllegalAccessException e)
         {
             e.printStackTrace();
-            throw new UnknownError(e.getMessage());
+            throw new RuntimeException(e);
         } catch (InvocationTargetException e)
         {
             e.printStackTrace();
-            throw new UnknownError(e.getMessage());
+            throw new RuntimeException(e);
         }
         return res;
     }
