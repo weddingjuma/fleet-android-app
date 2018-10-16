@@ -17,49 +17,70 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.lib.fragments.signature;
+package com.mapotempo.lib.fragments.mission.attachment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
-import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
 public class SignatureFragment extends MapotempoBaseDialogFragment
 {
 
-    public static SignatureFragment newInstance()
+    public static SignatureFragment newInstance(@Nullable Bitmap bitmapInit, @Nullable String signatoryNameInit)
     {
         SignatureFragment f = new SignatureFragment();
+        f.bitmapInit = bitmapInit;
+        f.mSignatoryNameInit = signatoryNameInit;
         return f;
     }
 
-    public interface SignatureSaveListener
+    public interface SignatureListener
     {
-        boolean onSignatureSave(Bitmap signatureBitmap);
+        boolean onSignatureSave(Bitmap signatureBitmap, String signatory_name);
+
+        boolean onSignatureClear();
     }
 
-    public void setSignatureSaveListener(SignatureSaveListener signatureSaveListener)
+    public void setSignatureListener(SignatureListener signatureListener)
     {
-        mSignatureSaveListener = signatureSaveListener;
+        mSignatureListener = signatureListener;
     }
+
+    private Bitmap bitmapInit = null;
+
+    private String mSignatoryNameInit = "";
 
     private SignaturePad mSignaturePad;
+
     private Button mClearButton;
+
     private Button mSaveButton;
-    private Mission mMission = null;
-    private Context mContext = null;
-    private SignatureSaveListener mSignatureSaveListener = new SignatureSaveListener()
+
+    private TextView mSignatureMessage;
+
+    private TextInputEditText mSignatoryName;
+
+    private SignatureListener mSignatureListener = new SignatureListener()
     {
         @Override
-        public boolean onSignatureSave(Bitmap signatureBitmap)
+        public boolean onSignatureSave(Bitmap signatureBitmap, String signatory_name)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean onSignatureClear()
         {
             return true;
         }
@@ -69,12 +90,10 @@ public class SignatureFragment extends MapotempoBaseDialogFragment
     // ==  Android Fragment Life cycle  ==
     // ===================================
 
-
     @Override
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        mContext = context;
     }
 
     @Override
@@ -83,12 +102,24 @@ public class SignatureFragment extends MapotempoBaseDialogFragment
     {
         View v = inflater.inflate(R.layout.fragment_signature, container, false);
         mSignaturePad = v.findViewById(R.id.signature_pad);
+        mSignatureMessage = v.findViewById(R.id.signature_message);
+        mSignatoryName = v.findViewById(R.id.signatory_name);
+
+        if (bitmapInit != null)
+        {
+            mSignaturePad.setSignatureBitmap(bitmapInit);
+            mSignatureMessage.setVisibility(View.GONE);
+        }
+
+        if (mSignatoryNameInit != null)
+            mSignatoryName.setText(mSignatoryNameInit);
+
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener()
         {
             @Override
             public void onStartSigning()
             {
-                //Toast.makeText(SignatureActivity.this, "OnStartSigning", Toast.LENGTH_SHORT).show();
+                mSignatureMessage.setVisibility(View.GONE);
             }
 
             @Override
@@ -114,7 +145,12 @@ public class SignatureFragment extends MapotempoBaseDialogFragment
             @Override
             public void onClick(View view)
             {
-                mSignaturePad.clear();
+                if (mSignatureListener.onSignatureClear())
+                {
+                    mSignaturePad.clear();
+                    mSignatureMessage.setVisibility(View.VISIBLE);
+                    dismiss();
+                }
             }
         });
 
@@ -124,10 +160,11 @@ public class SignatureFragment extends MapotempoBaseDialogFragment
             public void onClick(View view)
             {
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
-                if (mSignatureSaveListener.onSignatureSave(signatureBitmap))
-                {
+                String signatoryName = mSignatoryName.getText()
+                    .toString()
+                    .trim();
+                if (mSignatureListener.onSignatureSave(signatureBitmap, signatoryName))
                     dismiss();
-                }
             }
         });
         return v;

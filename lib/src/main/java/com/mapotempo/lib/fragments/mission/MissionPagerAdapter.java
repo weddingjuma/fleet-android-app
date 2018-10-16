@@ -90,11 +90,9 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter
         notifyDataSetChanged();
     }
 
-
     public List<Mission> getMissionsList()
     {
         return mMissions;
     }
-
 
 }

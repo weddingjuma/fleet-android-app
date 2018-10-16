@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -38,6 +39,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +64,8 @@ import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.actions.ActionsListFragment;
 import com.mapotempo.lib.fragments.actions.ActionsRecyclerViewAdapter;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
+import com.mapotempo.lib.fragments.mission.attachment.PictureFragment;
+import com.mapotempo.lib.fragments.mission.attachment.SignatureFragment;
 import com.mapotempo.lib.utils.AddressHelper;
 import com.mapotempo.lib.utils.AlertNavDialog;
 import com.mapotempo.lib.utils.DateHelpers;
@@ -110,6 +115,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
 
     private LinearLayout mLayoutComment;
     private TextView mTextViewComment;
+
+    private ImageView mPictureCheckView;
+    private ImageView mSignatureCheckView;
+    private ImageView mCommentCheckView;
 
     private MissionActionPanel mStatusCurrent;
     private FloatingActionButton mStatusFirstAction;
@@ -241,6 +250,11 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
         // Comment view
         mLayoutComment = view.findViewById(R.id.comment_layout);
         mTextViewComment = view.findViewById(R.id.comment);
+
+        // Attachment view
+        mPictureCheckView = view.findViewById(R.id.picture_check);
+        mSignatureCheckView = view.findViewById(R.id.signature_check);
+        mCommentCheckView = view.findViewById(R.id.comment_check);
 
         // Action button
         mStatusFirstAction = view.findViewById(R.id.first_action);
@@ -507,6 +521,9 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
         mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
         mLayoutPhone.setVisibility(isEmptyTextView(mTextViewPhone) ? View.VISIBLE : View.GONE);
         mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
+        mPictureCheckView.setVisibility(mMission.getSurveyPicture() != null ? View.VISIBLE : View.GONE);
+        mCommentCheckView.setVisibility(mMission.getSurveyComment() != null ? View.VISIBLE : View.GONE);
+        mSignatureCheckView.setVisibility(mMission.getSurveySignature() != null ? View.VISIBLE : View.GONE);
     }
 
     private boolean isEmptyTextView(TextView textView)
@@ -514,36 +531,75 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
         return textView.getText().toString().trim().length() > 0;
     }
 
-    //    private void goSignatureFragment(Context context) {
-    //        // DialogFragment.show() will take care of adding the fragment
-    //        // in a transaction.  We also want to remove any currently showing
-    //        // dialog, so make our own transaction and take care of that here.
-    //        FragmentTransaction ft = getFragmentManager().beginTransaction();
-    //        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-    //        if (prev != null) {
-    //            ft.remove(prev);
-    //        }
-    //        ft.addToBackStack(null);
-    //
-    //        // Create and show the dialog.
-    //        SignatureFragment newFragment = SignatureFragment.newInstance();
-    //        newFragment.setSignatureSaveListener(new SignatureFragment.SignatureSaveListener() {
-    //            @Override
-    //            public boolean onSignatureSave(Bitmap signatureBitmap) {
-    //                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    //                signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-    //                ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
-    //                mMission.setAttachment("signature", "image/jpeg", bi);
-    //                if (mMission.save()) {
-    //                    Toast.makeText(getContext(), R.string.save_signature_success, Toast.LENGTH_SHORT).show();
-    //                    return true;
-    //                } else
-    //                    Toast.makeText(getContext(), R.string.save_signature_fail, Toast.LENGTH_SHORT).show();
-    //                return false;
-    //            }
-    //        });
-    //        newFragment.show(ft, "t");
-    //    }
+    public void goSignatureFragment()
+    {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null)
+        {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        SignatureFragment newFragment = SignatureFragment.newInstance(mMission.getSurveySignature(), mMission.getSurveySignatoryName());
+        newFragment.setSignatureListener(new SignatureFragment.SignatureListener()
+        {
+            @Override
+            public boolean onSignatureSave(Bitmap signatureBitmap, String signatoryName)
+            {
+                mMission.setSurveySignature(signatureBitmap);
+                mMission.setSurveySignatoryName(signatoryName);
+                return mMission.save();
+            }
+
+            @Override
+            public boolean onSignatureClear()
+            {
+                mMission.clearSurveySignature();
+                mMission.clearSurveySignatoryName();
+                return mMission.save();
+            }
+        });
+        newFragment.show(ft, "t");
+    }
+
+    public void goPictureFragment()
+    {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null)
+        {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        PictureFragment newFragment = PictureFragment.newInstance(mMission.getSurveyPicture());
+        newFragment.setPictureListener(new PictureFragment.PictureListener()
+        {
+            @Override
+            public boolean onPictureSave(Bitmap signatureBitmap)
+            {
+                mMission.setSurveyPicture(signatureBitmap);
+                return mMission.save();
+            }
+
+            @Override
+            public boolean onPictureClear()
+            {
+                mMission.clearSurveyPicture();
+                return mMission.save();
+            }
+        });
+        newFragment.show(ft, "t");
+    }
 
     private void initActionButtons(final Mission mission)
     {
@@ -641,7 +697,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
             mission.save();
         } catch (FleetException e)
         {
-            //            TODO CL2.0
+            // TODO CL2.0
         }
     }
 

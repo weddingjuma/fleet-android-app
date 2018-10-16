@@ -22,24 +22,31 @@
   <string name="login_error_invalid">Either password and login doesn\'t match, please try again.</string>
   <string name="login_error_server">Verify data connexion, if problem persist please contact support.</string>
 
-  <!-- USER DATA PREF -->
+  <!-- Signature pad-->
+  <string name="signature_message">Sign here</string>
+  <string name="signatory_name">Signatory name</string>
   <string name="agreement">I agree the terms and conditions.</string>
-  <string name="clear_pad">Clear Pad</string>
-  <string name="save_signature">Save Signature</string>
+  <string name="clear">Clear</string>
+  <string name="save">Save</string>
   <string name="save_signature_success">Save Signature Success</string>
   <string name="save_signature_fail">Save Signature Fail</string>
 
   <!-- Main Menu -->
   <string name="to_do">To do</string>
   <string name="archive">Archives</string>
+  <string name="map">Map</string>
   <string name="tracking">Tracking</string>
   <string name="settings">Settings</string>
   <string name="help">Help</string>
   <string name="sign_out">Sign Out</string>
 
   <!-- Edit Menu -->
-  <string name="edit_address">Survey the address</string>
-  <string name="edit_location">Survey the position</string>
+  <string name="edit_address">Edit the address</string>
+  <string name="survey_location">Survey the position</string>
+  <string name="get_signature">Get a signature</string>
+  <string name="take_picture">Take a picture</string>
+  <string name="write_comment">Write a comment</string>
+  <string name="reset_comment">Delete le comment</string>
   <string name="reset_location">Delete the surveyed location</string>
   <string name="reset_address">Reset</string>
   <string name="validate_location">Save</string>
@@ -92,6 +99,9 @@
   <string name="city">City</string>
   <string name="state">State</string>
   <string name="country">Country</string>
+
+  <!-- Mission comment edition -->
+  <string name="comment">Comment</string>
 
   <!-- Alert dialog -->
   <string name="archive_outdated">You have route whose date is past. Do you want to archived them ?</string>

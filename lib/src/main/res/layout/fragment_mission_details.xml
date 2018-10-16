@@ -1,372 +1,470 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:backgroundTint="@android:color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:theme="@style/MapotempoTheme">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:backgroundTint="@android:color/white"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              tools:theme="@style/MapotempoTheme">
 
-    <!-- MAP FRAGMENT -->
+  <!-- MAP FRAGMENT -->
+
+  <FrameLayout
+      android:id="@+id/mapContainer"
+      android:layout_width="match_parent"
+      android:layout_height="150dp">
+
+    <ProgressBar
+        android:id="@+id/mapLoader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"/>
+
+    <ImageView
+        android:id="@+id/mapImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/mapMarker"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:paddingTop="25dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_location_on_black_24dp"
+        android:tint="@color/colorMapoGreen"/>
+
+  </FrameLayout>
+
+  <!-- MISSION HEADER -->
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="80dp"
+      android:weightSum="12"
+      android:paddingLeft="@dimen/fragment_mission_header_padding_horizontal"
+      android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="9"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="@dimen/fragment_mission_body_title_size"
+          android:textStyle="bold"
+          android:textAlignment="gravity"
+          tools:text="Mission numéro 1"/>
+
+      <TextView
+          android:id="@+id/reference"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="@dimen/fragment_mission_body_time_windows_size"
+          android:textAlignment="gravity"
+          tools:text="Ref : H4DAZ456D"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+      <com.mapotempo.lib.view.action.MissionActionPanel
+          android:id="@+id/status"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:paddingTop="@dimen/view_mission_action_status_padding"
+          android:paddingBottom="@dimen/view_mission_action_status_padding"
+          app:showLabel="true"
+          tools:background="@android:color/holo_orange_dark"/>
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <!-- MISSION DETAILS -->
+
+  <LinearLayout
+      android:id="@+id/delivery_address_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:clickable="true"
+      android:paddingRight="@dimen/fragment_mission_body_element_padding"
+      android:paddingTop="@dimen/fragment_mission_body_element_padding"
+      android:paddingBottom="@dimen/fragment_mission_body_element_padding"
+      android:weightSum="5"
+      android:background="@drawable/bg_action_detail_item">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_location_on_black_24dp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/delivery_address"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="@dimen/fragment_mission_body_subtitle_size"
+          tools:text="Pépinière éco-créative, 9 Rue André Darbon\nSonner à la porte\n33000 Bordeaux\nFrance"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:src="@drawable/ic_navigation_black_72dp"
+        android:tint="@color/colorMapoBlueDark"
+        />
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/delivery_date_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingRight="@dimen/fragment_mission_body_element_padding"
+      android:paddingTop="@dimen/fragment_mission_body_element_padding"
+      android:paddingBottom="@dimen/fragment_mission_body_element_padding"
+      android:weightSum="5"
+      android:background="@drawable/bg_mission_detail_item">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_access_time_black_24dp"/>
+
+    <LinearLayout
+        android:layout_weight="4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:weightSum="4"
+          android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/fragment_mission_body_detail_size"
+            android:gravity="center_vertical"
+            android:text="@string/planned"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+          <TextView
+              android:id="@+id/delivery_planned_hours"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/fragment_mission_body_detail_size"
+              tools:text="8:30"/>
+
+
+          <TextView
+              android:id="@+id/delivery_planned_date"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/fragment_mission_body_sub_detail_size"
+              android:text="18/01/2018"
+              tools:text="18/01/2018"/>
+        </LinearLayout>
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/delivery_duration_layout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="@dimen/fragment_mission_body_element_padding"
+          android:weightSum="4"
+          android:orientation="horizontal"
+          android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/fragment_mission_body_detail_size"
+            android:text="@string/visit_duration"/>
+
+        <TextView
+            android:id="@+id/delivery_duration"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/fragment_mission_body_detail_size"
+            tools:text="5h 10min 3s"/>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/time_windows_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingRight="@dimen/fragment_mission_body_element_padding"
+      android:paddingTop="@dimen/fragment_mission_body_element_padding"
+      android:paddingBottom="@dimen/fragment_mission_body_element_padding"
+      android:weightSum="5"
+      android:background="@drawable/bg_mission_detail_item">
+
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_timelapse_black_24dp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:weightSum="4"
+        android:orientation="horizontal">
+
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_weight="2"
+          android:layout_height="wrap_content"
+          android:textSize="@dimen/fragment_mission_body_detail_size"
+          android:text="@string/time_windows"
+          tools:text="@string/time_windows"/>
+
+      <LinearLayout
+          android:id="@+id/time_windows_container"
+          android:layout_width="0dp"
+          android:layout_weight="2"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/fragment_mission_body_detail_size"
+            android:text="10:00-11:20"
+            tools:text="10:00-11:20"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/fragment_mission_body_detail_size"
+            android:text="14:00-16:00"
+            tools:text="14:00-16:00"/>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/phone_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingRight="@dimen/fragment_mission_body_element_padding"
+      android:paddingTop="@dimen/fragment_mission_body_element_padding"
+      android:paddingBottom="@dimen/fragment_mission_body_element_padding"
+      android:weightSum="5"
+      android:background="@drawable/bg_mission_detail_item">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_local_phone_black_24dp"/>
 
     <FrameLayout
-        android:id="@+id/mapContainer"
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4">
 
-        <ProgressBar
-            android:id="@+id/mapLoader"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="40dp" />
-
-        <ImageView
-            android:id="@+id/mapImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
-
-        <ImageView
-            android:id="@+id/mapMarker"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:paddingTop="25dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_location_on_black_24dp"
-            android:tint="@color/colorMapoGreen" />
+      <TextView
+          android:id="@+id/phone"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="@dimen/fragment_mission_body_detail_size"
+          android:autoLink="phone"
+          tools:text="0605040302"/>
 
     </FrameLayout>
 
-    <!-- MISSION HEADER -->
+
+  </LinearLayout>
+
+  <LinearLayout
+
+      android:id="@+id/comment_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingRight="@dimen/fragment_mission_body_element_padding"
+      android:paddingTop="@dimen/fragment_mission_body_element_padding"
+      android:paddingBottom="@dimen/fragment_mission_body_element_padding"
+      android:weightSum="5"
+      android:background="@drawable/bg_mission_detail_item">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_description_black_24dp"/>
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:textSize="@dimen/fragment_mission_body_detail_size"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+
+  </LinearLayout>
+
+  <LinearLayout
+
+      android:id="@+id/attachment_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingRight="@dimen/fragment_mission_body_element_padding"
+      android:paddingTop="@dimen/fragment_mission_body_element_padding"
+      android:paddingBottom="@dimen/fragment_mission_body_element_padding"
+      android:weightSum="5"
+      android:background="@drawable/bg_mission_detail_item">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_attachment_black_24dp"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:minHeight="80dp"
-        android:weightSum="12"
-        android:paddingLeft="@dimen/fragment_mission_header_padding_horizontal"
-        android:orientation="horizontal">
+        android:layout_weight="4"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_title_size"
-                android:textStyle="bold"
-                android:textAlignment="gravity"
-                tools:text="Mission numéro 1" />
-
-            <TextView
-                android:id="@+id/reference"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_time_windows_size"
-                android:textAlignment="gravity"
-                tools:text="Ref : H4DAZ456D" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-
-            <com.mapotempo.lib.view.action.MissionActionPanel
-                android:id="@+id/status"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="@dimen/view_mission_action_status_padding"
-                android:paddingBottom="@dimen/view_mission_action_status_padding"
-                app:showLabel="true"
-                tools:background="@android:color/holo_orange_dark" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- MISSION DETAILS -->
-
-    <LinearLayout
-        android:id="@+id/delivery_address_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:clickable="true"
-        android:paddingRight="@dimen/fragment_mission_body_element_padding"
-        android:paddingTop="@dimen/fragment_mission_body_element_padding"
-        android:paddingBottom="@dimen/fragment_mission_body_element_padding"
-        android:weightSum="5"
-        android:background="@drawable/bg_action_detail_item">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_location_on_black_24dp" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/delivery_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_subtitle_size"
-                tools:text="Pépinière éco-créative, 9 Rue André Darbon\nSonner à la porte\n33000 Bordeaux\nFrance" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/ic_navigation_black_72dp"
-            android:tint="@color/colorMapoBlueDark"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/delivery_date_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/fragment_mission_body_element_padding"
-        android:paddingTop="@dimen/fragment_mission_body_element_padding"
-        android:paddingBottom="@dimen/fragment_mission_body_element_padding"
-        android:weightSum="5"
-        android:background="@drawable/bg_mission_detail_item">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_access_time_black_24dp" />
-
-        <LinearLayout
-            android:layout_weight="4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="4"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="match_parent"
-                    android:textSize="@dimen/fragment_mission_body_detail_size"
-                    android:gravity="center_vertical"
-                    android:text="@string/planned" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/delivery_planned_hours"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:textSize="@dimen/fragment_mission_body_detail_size"
-                        tools:text="8:30" />
-
-
-                    <TextView
-                        android:id="@+id/delivery_planned_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:textSize="@dimen/fragment_mission_body_sub_detail_size"
-                        android:text="18/01/2018"
-                        tools:text="18/01/2018" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/delivery_duration_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/fragment_mission_body_element_padding"
-                android:weightSum="4"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/fragment_mission_body_detail_size"
-                    android:text="@string/visit_duration" />
-
-                <TextView
-                    android:id="@+id/delivery_duration"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textSize="@dimen/fragment_mission_body_detail_size"
-                    tools:text="5h 10min 3s" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/time_windows_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/fragment_mission_body_element_padding"
-        android:paddingTop="@dimen/fragment_mission_body_element_padding"
-        android:paddingBottom="@dimen/fragment_mission_body_element_padding"
-        android:weightSum="5"
-        android:background="@drawable/bg_mission_detail_item">
-
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_timelapse_black_24dp" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:weightSum="4"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_detail_size"
-                android:text="@string/time_windows"
-                tools:text="@string/time_windows" />
-
-            <LinearLayout
-                android:id="@+id/time_windows_container"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/fragment_mission_body_detail_size"
-                    android:text="10:00-11:20"
-                    tools:text="10:00-11:20" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/fragment_mission_body_detail_size"
-                    android:text="14:00-16:00"
-                    tools:text="14:00-16:00" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/phone_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/fragment_mission_body_element_padding"
-        android:paddingTop="@dimen/fragment_mission_body_element_padding"
-        android:paddingBottom="@dimen/fragment_mission_body_element_padding"
-        android:weightSum="5"
-        android:background="@drawable/bg_mission_detail_item">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_local_phone_black_24dp" />
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4">
-
-            <TextView
-                android:id="@+id/phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/fragment_mission_body_detail_size"
-                android:autoLink="phone"
-                tools:text="0605040302" />
-
-        </FrameLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-
-        android:id="@+id/comment_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/fragment_mission_body_element_padding"
-        android:paddingTop="@dimen/fragment_mission_body_element_padding"
-        android:paddingBottom="@dimen/fragment_mission_body_element_padding"
-        android:weightSum="5"
-        android:background="@drawable/bg_mission_detail_item">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_description_black_24dp" />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:weightSum="6">
 
         <TextView
-            android:id="@+id/comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:textSize="@dimen/fragment_mission_body_detail_size"
-            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+            android:text="signature"/>
 
+
+        <ImageView
+            android:id="@+id/signature_check"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:src="@drawable/ic_check_black_24dp"
+            android:tint="@color/colorMapoGreen"/>
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:weightSum="6">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="@dimen/fragment_mission_body_detail_size"
+            android:text="photo"/>
+
+        <ImageView
+            android:id="@+id/picture_check"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:src="@drawable/ic_check_black_24dp"
+            android:tint="@color/colorMapoGreen"/>
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:weightSum="6">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="@dimen/fragment_mission_body_detail_size"
+            android:text="commentaire"/>
+
+        <ImageView
+            android:id="@+id/comment_check"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:src="@drawable/ic_check_black_24dp"
+            android:tint="@color/colorMapoGreen"/>
+
+      </LinearLayout>
     </LinearLayout>
 
+  </LinearLayout>
 </LinearLayout>
