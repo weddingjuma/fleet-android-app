@@ -359,7 +359,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment
                                     @Override
                                     public void onSelected(Intent mapIntent)
                                     {
-                                        startActivity(mapIntent);
+                                        if (isAdded())
+                                        {
+                                            startActivity(mapIntent);
+                                        }
                                     }
                                 })
                                 .build()
