@@ -153,7 +153,10 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         Route route = mapotempoFleetManagerInterface.getRouteAccess().get(mRouteId);
 
         if (route == null)
+        {
             super.onBackPressed();
+            return;
+        }
 
         mLiveAccessToken = mapotempoFleetManagerInterface.getMissionAccess().byRoute_AddListener(new LiveAccessChangeListener<Mission>()
         {
