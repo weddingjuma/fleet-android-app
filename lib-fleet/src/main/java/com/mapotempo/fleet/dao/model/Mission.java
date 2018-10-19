@@ -77,16 +77,12 @@ public class Mission extends ModelBase
 
     public Date getDate()
     {
-        String dateString = mDocument.getString(DATE);
-        return DateUtils.fromStringISO8601(dateString);
+        return parseISO8601Field(DATE, new Date(0));
     }
 
     public Date getETAOrDefault()
     {
-        String eta = mDocument.getString(ETA);
-        if (eta != null)
-            return DateUtils.fromStringISO8601(eta);
-        return getDate();
+        return parseISO8601Field(ETA, getDate());
     }
 
     public String getReference()

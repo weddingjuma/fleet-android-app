@@ -36,7 +36,7 @@ import java.util.List;
 @ModelType(type = "route")
 public class Route extends ModelBase
 {
-    final static private String TAG = Mission.class.toString();
+    final static private String TAG = Route.class.toString();
 
     // MAPOTEMPO KEY
     public static final String NAME = "name";
@@ -56,8 +56,7 @@ public class Route extends ModelBase
 
     public Date getDate()
     {
-        String dateString = mDocument.getString(DATE);
-        return DateUtils.fromStringISO8601(dateString);
+        return parseISO8601Field(DATE, new Date(0));
     }
 
     public List<Mission> getMissions()
@@ -82,10 +81,7 @@ public class Route extends ModelBase
     public @Nullable
     Date archivedDate()
     {
-        String dateString = mDocument.getString(ARCHIVED_AT);
-        if (dateString != null)
-            return DateUtils.fromStringISO8601(dateString);
-        return null;
+        return parseISO8601Field(ARCHIVED_AT, null);
     }
 
     public void archived()
