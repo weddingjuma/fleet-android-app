@@ -33,7 +33,7 @@ public class RouteAccess extends AccessBase<Route>
 {
     public RouteAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, Route.class, "");
+        super(databaseHandler, Route.class, "date");
     }
 
     public List<Route> archived(boolean archived)
