@@ -27,12 +27,14 @@ android {
       signingConfig signingConfigs.fleetDebug
       applicationIdSuffix '.debug'
       minifyEnabled false
+      resValue "string", "app_name", "Mapotempo Live" + applicationIdSuffix
     }
 
     release {
       signingConfig signingConfigs.fleetDebug
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      resValue "string", "app_name", "Mapotempo Live"
     }
   }
 
