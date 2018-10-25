@@ -21,31 +21,19 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
              tools:context="com.mapotempo.lib.fragments.mission.MissionCommentEditorFragment">
 
   <LinearLayout
       android:padding="15dp"
       android:orientation="vertical"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="wrap_content">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/comment"
+        android:inputType="text|textLongMessage|textMultiLine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium">
-
-      <android.support.design.widget.TextInputEditText
-          android:layout_weight="1"
-          android:id="@+id/comment"
-          android:inputType="text|textLongMessage|textMultiLine"
-          android:hint="@string/comment"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
-
-    </android.support.design.widget.TextInputLayout>
+        android:layout_height="match_parent"/>
 
   </LinearLayout>
 
