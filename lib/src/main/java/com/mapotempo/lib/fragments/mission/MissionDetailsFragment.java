@@ -60,6 +60,7 @@ import com.mapotempo.fleet.dao.model.MissionActionType;
 import com.mapotempo.fleet.dao.model.MissionStatusType;
 import com.mapotempo.fleet.dao.model.submodel.Address;
 import com.mapotempo.fleet.dao.model.submodel.Quantity;
+import com.mapotempo.fleet.dao.model.submodel.SopacLOG;
 import com.mapotempo.fleet.dao.model.submodel.TimeWindow;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
@@ -72,6 +73,7 @@ import com.mapotempo.lib.fragments.survey.SurveyCommentDialogFragment;
 import com.mapotempo.lib.fragments.survey.SurveyPictureDialogFragment;
 import com.mapotempo.lib.fragments.survey.SurveyQuantityDialogFragment;
 import com.mapotempo.lib.fragments.survey.SurveySignatureDialogFragment;
+import com.mapotempo.lib.fragments.survey.SurveySopacNFCTemperatureDialogFragment;
 import com.mapotempo.lib.utils.AddressHelper;
 import com.mapotempo.lib.utils.AlertNavDialog;
 import com.mapotempo.lib.utils.DateHelpers;
@@ -91,7 +93,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
     SurveyQuantityDialogFragment.SurveyQuantityListener,
     SurveyPictureDialogFragment.SurveyPictureListener,
     SurveyAddressDialogFragment.SurveyAddressListener,
-    SurveyCommentDialogFragment.SurveyCommentListener
+    SurveyCommentDialogFragment.SurveyCommentListener,
+    SurveySopacNFCTemperatureDialogFragment.SurveySopacNFCTemperatureListener
 {
 
     public MissionDetailsFragment()
@@ -139,6 +142,9 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
     private LinearLayout mLayoutQuantities;
     private LinearLayout mLayoutQuantitiesContainer;
+
+    private LinearLayout mLayoutTemperatures;
+    private LinearLayout mLayoutTemperaturesContainer;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -289,6 +295,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         mLayoutQuantities = view.findViewById(R.id.quantities_layout);
         mLayoutQuantitiesContainer = view.findViewById(R.id.quantities_container);
 
+        // Temperatures view
+        mLayoutTemperatures = view.findViewById(R.id.temperatures_layout);
+        mLayoutTemperaturesContainer = view.findViewById(R.id.temperatures_container);
+
         return view;
     }
 
@@ -301,17 +311,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         initBottomSheet(getView());
     }
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        super.onDestroyView();
-    }
 
     // ===============================
     // ==  SurveySignatureListener  ==
@@ -387,12 +386,12 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         return mMission.save();
     }
 
-    // ==============================
+    // =============================
     // ==  SurveyCommentListener  ==
-    // ==============================
+    // =============================
 
     @Override
-        public boolean onCommentSave(String comment)
+    public boolean onCommentSave(String comment)
     {
         mMission.setSurveyComment(comment);
         return mMission.save();
@@ -402,6 +401,30 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
     public boolean onCommentClear()
     {
         mMission.clearSurveyComment();
+        return mMission.save();
+    }
+
+    // ========================================
+    // ==  SurveySopacNFCTemperatureListener ==
+    // ========================================
+
+
+    @Override
+    public boolean onSopacNFCSave(List<SopacLOG> sopacLOGs)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean onSopacNFCClear()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean onSopacNFCClearOne(List<SopacLOG> sopacLOGs)
+    {
+        mMission.setSurveySopacLOGS(sopacLOGs);
         return mMission.save();
     }
 
@@ -464,7 +487,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
     public void goSurveyCommentFragment()
     {
-        String tag = "addressDialog";
+        String tag = "commentDialog";
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag(tag);
         if (prev != null)
@@ -472,6 +495,20 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         ft.addToBackStack(null);
         SurveyCommentDialogFragment newFragment = SurveyCommentDialogFragment.newInstance(mMission.getSurveyComment());
         newFragment.setSurveyCommentListener(this);
+        newFragment.show(ft, tag);
+    }
+
+    public void goSurveySopacTemperatureFragment(@Nullable Long sopacId)
+    {
+        String tag = "sopacDialog";
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag(tag);
+        if (prev != null)
+            ft.remove(prev);
+        ft.addToBackStack(null);
+        SurveySopacNFCTemperatureDialogFragment newFragment = SurveySopacNFCTemperatureDialogFragment.newInstance(mMission
+            .getSurveySopacLOGS(), sopacId);
+        newFragment.setSurveySopacNFCTemperatureListener(this);
         newFragment.show(ft, tag);
     }
 
@@ -572,12 +609,12 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
     private void fillViewData(Mission mission)
     {
-        mapVisivilityManager();
+        mapVisibilityManager();
         detailsContentManager(mission);
         detailsVisibilityManager();
     }
 
-    private void mapVisivilityManager()
+    private void mapVisibilityManager()
     {
         final com.mapotempo.fleet.dao.model.submodel.Location location = mMission.getSurveyLocation().isValid() ? mMission.getSurveyLocation() : mMission.getLocation();
         final MissionDetailsFragment INSTANCE = this;
@@ -658,9 +695,11 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
     private void detailsContentManager(Mission mission)
     {
+        // - Name and Reference
         mMissionName.setText(mission.getName());
         mMissionReference.setText(mission.getReference());
 
+        // - Date
         mTextViewHours.setText(DateHelpers.parse(mission.getETAOrDefault(), DateHelpers.DateStyle.HOURMINUTES));
         mTextViewDate.setText(DateHelpers.parse(mission.getETAOrDefault(), DateHelpers.DateStyle.SHORTDATE));
         mTextViewDuration.setText(DateHelpers.FormatedHour(getContext(), mission.getDuration()));
@@ -679,12 +718,16 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
             AddressHelper.addBackDashIfNonNull(addressInterface.getCity(), ""),
             addressInterface.getCountry().trim());
 
+        // - Address
         mTextViewDeliveryAddress.setText(fullAdress);
 
+        // - Phone number
         mTextViewPhone.setText(PhoneNumberHelper.intenationalPhoneNumber(mission.getPhone()));
 
+        // - Comment
         mTextViewComment.setText(mission.getComment());
 
+        // - TimeWindows
         mLayoutTimeWindowsContainer.removeAllViews();
         for (TimeWindow tw : mMission.getTimeWindows())
         {
@@ -694,6 +737,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
             mLayoutTimeWindowsContainer.addView(textView);
         }
 
+        // - Quantities
         mLayoutQuantities.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -734,6 +778,32 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
             mLayoutQuantitiesContainer.addView(quantityLayout);
         }
+
+        // - Temperatures
+        mLayoutTemperaturesContainer.removeAllViews();
+        List<SopacLOG> sopacLOGList = mMission.getSurveySopacLOGS();
+        for (final SopacLOG sopacLOG : sopacLOGList)
+        {
+            if (!sopacLOG.isValid()) { continue; }
+
+            View temperatureLayout = getLayoutInflater().inflate(R.layout.temperature_layout, null);
+            temperatureLayout.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    goSurveySopacTemperatureFragment(sopacLOG.getTagID());
+                }
+            });
+
+            TextView device_id = temperatureLayout.findViewById(R.id.device_id);
+            TextView temperature = temperatureLayout.findViewById(R.id.temperature);
+            ImageView warning = temperatureLayout.findViewById(R.id.warning);
+            device_id.setText(Long.toString(sopacLOG.getTagID()));
+            temperature.setText(Float.toString(sopacLOG.getTemperatures().get(sopacLOG.getTemperatures().size() - 1).getValue()) + sopacLOG.getUnity());
+            warning.setVisibility(sopacLOG.getBreaches() > 0 ? View.VISIBLE : View.INVISIBLE);
+            mLayoutTemperaturesContainer.addView(temperatureLayout);
+        }
     }
 
     private void detailsVisibilityManager()
@@ -743,6 +813,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         mLayoutDeliveryAddress.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) ? View.VISIBLE : View.GONE));
         mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
         mLayoutQuantities.setVisibility((mLayoutQuantitiesContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
+        mLayoutTemperatures.setVisibility((mLayoutTemperaturesContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
         mLayoutPhone.setVisibility(isEmptyTextView(mTextViewPhone) ? View.VISIBLE : View.GONE);
         mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
         mPictureCheckView.setVisibility(mMission.getSurveyPicture() != null ? View.VISIBLE : View.GONE);

@@ -82,12 +82,12 @@ public class SurveyCommentDialogFragment extends SurveyBaseDialogFragment
         return view;
     }
 
-    // ==========================
+    // ================================
     // ==  SurveyBaseDialogFragment  ==
-    // ==========================
+    // ================================
 
     @Override
-    protected boolean onSave()
+    protected boolean onPositive()
     {
         return mSurveyCommentListener.onCommentSave(mCommentTIET.getText().toString());
     }

@@ -17,48 +17,47 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.fleet.core.model;
+package com.mapotempo.fleet.dao.model.submodel;
 
 import android.support.annotation.Nullable;
 
 import com.couchbase.lite.Dictionary;
-import com.couchbase.lite.MutableDictionary;
-import com.mapotempo.fleet.core.Base;
 import com.mapotempo.fleet.core.IDatabaseHandler;
+import com.mapotempo.fleet.core.model.SubModelBase;
 import com.mapotempo.fleet.utils.DateUtils;
 
 import java.util.Date;
 
-public abstract class SubModelBase extends Base
+public class Temperature extends SubModelBase
 {
-    private static String TAG = ModelBase.class.getName();
+    public static final String VALUE = "value";
+    public static final String DATE = "date";
 
-    protected MutableDictionary mDictionary;
-
-    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary)
+    public Temperature(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary)
     {
-        super(iDatabaseHandler);
-        if (dictionary == null)
-            mDictionary = new MutableDictionary();
-        else
-            mDictionary = dictionary.toMutable();
+        super(iDatabaseHandler, dictionary);
     }
 
-    public MutableDictionary getDictionary()
+    public Temperature(IDatabaseHandler iDatabaseHandler, float value, Date date)
     {
-        return mDictionary;
+        super(iDatabaseHandler, null);
+        mDictionary.setFloat(VALUE, value);
+        mDictionary.setString(DATE, DateUtils.toStringISO8601(date));
     }
 
-    protected Date parseISO8601Field(String tag, Date _default)
+    public float getValue()
     {
-        String dateString = mDictionary.getString(tag);
-        if (dateString == null)
-        {
-            android.util.Log.d(TAG, "dateless dictionary");
-            return _default;
-        }
-        return DateUtils.fromStringISO8601(dateString);
+        return mDictionary.getFloat(VALUE);
     }
 
-    public abstract boolean isValid();
+    public Date getDate()
+    {
+        return parseISO8601Field(DATE, new Date(0));
+    }
+
+    @Override
+    public boolean isValid()
+    {
+        return mDictionary.contains(VALUE) && mDictionary.contains(DATE);
+    }
 }

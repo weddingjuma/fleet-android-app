@@ -22,6 +22,7 @@ package com.mapotempo.fleet.dao.model;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 
+import com.couchbase.lite.Array;
 import com.couchbase.lite.Dictionary;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.MutableArray;
@@ -34,6 +35,7 @@ import com.mapotempo.fleet.dao.access.MissionStatusTypeAccess;
 import com.mapotempo.fleet.dao.model.submodel.Address;
 import com.mapotempo.fleet.dao.model.submodel.Location;
 import com.mapotempo.fleet.dao.model.submodel.Quantity;
+import com.mapotempo.fleet.dao.model.submodel.SopacLOG;
 import com.mapotempo.fleet.dao.model.submodel.TimeWindow;
 import com.mapotempo.fleet.utils.DateUtils;
 import com.mapotempo.fleet.utils.ModelUtils;
@@ -41,6 +43,7 @@ import com.mapotempo.fleet.utils.ModelUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +76,7 @@ public class Mission extends ModelBase
     public static final String SURVEY_SIGNATURE_NAME = "survey_signature_name";
     public static final String SURVEY_COMMENT = "survey_comment";
     public static final String SURVEY_QUANTITIES = "survey_quantities";
+    public static final String SURVEY_SOPAC_LOGS = "survey_sopac_logs";
 
     public Mission(IDatabaseHandler databaseHandler, Document document) throws FleetException
     {
@@ -316,24 +320,13 @@ public class Mission extends ModelBase
         MutableArray quantities = mDocument.getArray(SURVEY_QUANTITIES);
         if (quantities == null)
             return null;
-
-        List<Quantity> quantityList = new ArrayList<>();
-        for (int i = 0; i < quantities.count(); i++)
-        {
-            quantityList.add(new Quantity(mDatabaseHandler, quantities.getDictionary(i)));
-        }
-
+        List<Quantity> quantityList = ModelUtils.arrayToSubmodelList(mDatabaseHandler, quantities, Quantity.class);
         return quantityList;
     }
 
     public void setSurveyQuantities(List<Quantity> quantities)
     {
-        MutableArray array = new MutableArray();
-        for (Quantity quantity : quantities)
-        {
-            if (quantity.isValid())
-                array.addDictionary(quantity.getDictionary());
-        }
+        Array array = ModelUtils.submodelListToArray(mDatabaseHandler, quantities, Quantity.class);
         mDocument = mDocument.setArray(SURVEY_QUANTITIES, array);
     }
 
@@ -341,4 +334,33 @@ public class Mission extends ModelBase
     {
         mDocument = mDocument.remove(SURVEY_QUANTITIES);
     }
+
+    @Nullable
+    public List<SopacLOG> getSurveySopacLOGS()
+    {
+        return ModelUtils.arrayToSubmodelList(mDatabaseHandler, mDocument.getArray(SURVEY_SOPAC_LOGS), SopacLOG.class);
+    }
+
+    public void setSurveySopacLOGS(List<SopacLOG> surveySopacLOGS)
+    {
+        Array array = ModelUtils.submodelListToArray(mDatabaseHandler, surveySopacLOGS, SopacLOG.class);
+        mDocument = mDocument.setArray(SURVEY_SOPAC_LOGS, array);
+    }
+
+    @Nullable
+    public void addSurveySopacLOG(SopacLOG surveySopacLOG)
+    {
+        List<SopacLOG> oldList = getSurveySopacLOGS();
+        List<SopacLOG> newList = new LinkedList<>(oldList);
+        for (SopacLOG sopacLOG : oldList)
+        {
+            if (sopacLOG.getTagID() == surveySopacLOG.getTagID())
+            {
+                newList.remove(sopacLOG);
+            }
+        }
+        newList.add(surveySopacLOG);
+        setSurveySopacLOGS(newList);
+    }
+
 }

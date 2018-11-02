@@ -14,6 +14,12 @@
       android:title="@string/survey_location"
       app:showAsAction="never"/>
 
+  <!--<item-->
+  <!--android:id="@+id/edit_sopac"-->
+  <!--android:title="edit sopac"-->
+  <!--android:icon="@drawable/ic_nfc_black_24dp"-->
+  <!--app:showAsAction="always"/>-->
+
   <item
       android:id="@+id/get_signature"
       android:title="@string/get_signature"

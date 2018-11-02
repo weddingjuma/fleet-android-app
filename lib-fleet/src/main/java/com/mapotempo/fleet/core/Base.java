@@ -21,8 +21,12 @@ package com.mapotempo.fleet.core;
 
 import android.support.annotation.NonNull;
 
+import com.mapotempo.fleet.core.model.ModelBase;
+
 public abstract class Base
 {
+    private static String TAG = ModelBase.class.getName();
+
     protected IDatabaseHandler mDatabaseHandler;
 
     public Base(@NonNull IDatabaseHandler databaseHandler)

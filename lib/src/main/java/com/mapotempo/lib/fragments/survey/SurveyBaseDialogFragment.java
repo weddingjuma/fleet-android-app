@@ -32,21 +32,21 @@ import com.mapotempo.lib.fragments.base.MapotempoBaseDialogFragment;
 
 abstract public class SurveyBaseDialogFragment extends MapotempoBaseDialogFragment
 {
-    protected Button mClearButton;
+    protected Button mNegativeButton;
 
-    protected Button mSaveButton;
+    protected Button mPositiveButton;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        mClearButton = view.findViewById(R.id.clear_button);
-        mSaveButton = view.findViewById(R.id.save_button);
+        mNegativeButton = view.findViewById(R.id.negative_button);
+        mPositiveButton = view.findViewById(R.id.positive_button);
 
-        if (mClearButton == null || mSaveButton == null)
+        if (mNegativeButton == null || mPositiveButton == null)
             throw new RuntimeException("save_button id or clear_button layout missing in " + this.getClass().getName() + " view");
 
-        mClearButton.setOnClickListener(new View.OnClickListener()
+        mNegativeButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -56,15 +56,25 @@ abstract public class SurveyBaseDialogFragment extends MapotempoBaseDialogFragme
             }
         });
 
-        mSaveButton.setOnClickListener(new View.OnClickListener()
+        mPositiveButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                if (onSave())
+                if (onPositive())
                     dismiss();
             }
         });
+    }
+
+    public void setPositiveText(int resid)
+    {
+        mPositiveButton.setText(resid);
+    }
+
+    public void setNegativeText(int resid)
+    {
+        mNegativeButton.setText(resid);
     }
 
     @NonNull
@@ -76,7 +86,11 @@ abstract public class SurveyBaseDialogFragment extends MapotempoBaseDialogFragme
         return dialog;
     }
 
-    abstract protected boolean onSave();
+    // ================================
+    // ==  SurveyBaseDialogFragment  ==
+    // ================================
+
+    abstract protected boolean onPositive();
 
     abstract protected boolean onClear();
 }

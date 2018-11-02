@@ -19,32 +19,41 @@
 
 package com.mapotempo.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.mapotempo.app.base.MapotempoBaseActivity;
 import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
 import com.mapotempo.fleet.core.accessor.LiveAccessToken;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.dao.model.Route;
+import com.mapotempo.fleet.dao.model.submodel.SopacLOG;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
+import com.mapotempo.lib.MapotempoApplication;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.fragments.mission.MissionsPagerFragment;
 import com.mapotempo.lib.fragments.mission.OnMissionDetailsFragmentListener;
 import com.mapotempo.lib.fragments.mission.OnMissionFocusListener;
 import com.mapotempo.lib.fragments.missions.MissionsListFragment;
 import com.mapotempo.lib.fragments.missions.OnMissionSelectedListener;
+import com.mapotempo.lib.utils.SopacBackgroundTagProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.blulog.blulib.nfc.NfcUtils;
 
 public class MissionsActivity extends MapotempoBaseActivity implements OnMissionSelectedListener, OnMissionFocusListener, OnMissionDetailsFragmentListener
 {
@@ -65,6 +74,8 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
     private String MISSION_IS_SELECTED_TAG = "portrait_pager_visibility";
 
     private boolean mMissionIsSelected = false;
+
+    static private SopacBackgroundTagProcessor mSopacBackgroundTagProcessor = null;
 
     @Override
     public boolean onSupportNavigateUp()
@@ -197,6 +208,9 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         }, route);
 
         refreshMissionPagerFragmentVisibility();
+
+        if (mMissionPagerFragment.isAdded())
+            NfcUtils.enableNfcForgroundDispatch(this);
     }
 
     @Override
@@ -205,6 +219,9 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         super.onPause();
         MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getApplicationContext()).getManager();
         mapotempoFleetManagerInterface.getMissionAccess().removeListener(mLiveAccessToken);
+
+        if (mMissionPagerFragment.isAdded())
+            NfcUtils.enableNfcForgroundDispatch(this);
     }
 
     @Override
@@ -213,6 +230,54 @@ public class MissionsActivity extends MapotempoBaseActivity implements OnMission
         savedInstanceState.putBoolean(MISSION_IS_SELECTED_TAG, mMissionIsSelected);
         savedInstanceState.putInt(CURRENT_INDEX_TAG, mCurrentIndex);
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        if (mMissionIsSelected)
+        {
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            final Activity activity = this;
+            mSopacBackgroundTagProcessor = new SopacBackgroundTagProcessor(((MapotempoApplication) (getApplication())).getManager())
+            {
+                @Override
+                protected void onPreExecute()
+                {
+                    Toast.makeText(activity, "Téléchargement en cours, n'enlever pas l'enregistreur", Toast.LENGTH_LONG).show();
+                    super.onPreExecute();
+                }
+
+                @Override
+                protected void onPostExecute(final SopacLOG sopacLOG)
+                {
+                    super.onPostExecute(sopacLOG);
+                    if (sopacLOG == null)
+                    {
+                        Toast.makeText(activity, "Erreur durant le téléchargement", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            synchronized (this)
+                            {
+                                Mission mission = getCurrentMission();
+                                mission.addSurveySopacLOG(sopacLOG);
+                                mission.save();
+                                Toast.makeText(activity, "Données relevées avec succès", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+
+            };
+            mSopacBackgroundTagProcessor.execute(tag);
+        }
     }
 
     // ===========================================

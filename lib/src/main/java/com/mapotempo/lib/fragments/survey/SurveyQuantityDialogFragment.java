@@ -101,12 +101,12 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
         return v;
     }
 
-    // ==========================
+    // ================================
     // ==  SurveyBaseDialogFragment  ==
-    // ==========================
+    // ================================
 
     @Override
-    protected boolean onSave()
+    protected boolean onPositive()
     {
         return mSurveyQuantityListener.onQuantitySave(mEditQuantities);
     }

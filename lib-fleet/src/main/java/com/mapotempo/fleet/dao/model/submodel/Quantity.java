@@ -13,7 +13,6 @@ public class Quantity extends SubModelBase
     public static final String UNIT_ICON = "unit_icon";
     public static final String QUANTITY_FORMATTED = "quantity_formatted";
 
-
     public Quantity(IDatabaseHandler iDatabaseHandler, Dictionary dictionary)
     {
         super(iDatabaseHandler, dictionary);

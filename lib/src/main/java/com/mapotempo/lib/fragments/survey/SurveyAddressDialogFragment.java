@@ -113,12 +113,12 @@ public class SurveyAddressDialogFragment extends SurveyBaseDialogFragment
         return view;
     }
 
-    // ==========================
+    // ================================
     // ==  SurveyBaseDialogFragment  ==
-    // ==========================
+    // ================================
 
     @Override
-    protected boolean onSave()
+    protected boolean onPositive()
     {
         MapotempoFleetManager mapotempoFleetManager = ((MapotempoApplication) getActivity().getApplication()).getManager();
         Address surveyAddress = new Address(mapotempoFleetManager, mStreetTIET.getText().toString(),

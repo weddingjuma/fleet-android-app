@@ -44,7 +44,6 @@ import java.util.Date;
  */
 public abstract class ModelBase extends Base
 {
-
     private static String TAG = ModelBase.class.getName();
 
     public MutableDocument mDocument;

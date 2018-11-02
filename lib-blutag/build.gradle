@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('blutaglibrary-1.7.41-blutag-release.aar'))

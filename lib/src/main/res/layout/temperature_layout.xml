@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © Mapotempo, 2018
+  ~
+  ~ This file is part of Mapotempo.
+  ~
+  ~ Mapotempo is free software. You can redistribute it and/or
+  ~ modify since you respect the terms of the GNU Affero General
+  ~ Public License as published by the Free Software Foundation,
+  ~ either version 3 of the License, or (at your option) any later version.
+  ~
+  ~ Mapotempo is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  ~ or FITNESS FOR A PARTICULAR PURPOSE.  See the Licenses for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Mapotempo. If not, see:
+  ~ <http://www.gnu.org/licenses/agpl.html>
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10">
+
+  <TextView
+      android:id="@+id/device_id"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="5"
+      android:textSize="@dimen/fragment_mission_body_detail_size"
+      tools:text="Tag ID : 123456789"/>
+
+  <TextView
+      android:id="@+id/temperature"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="3"
+      android:gravity="center"
+      android:textSize="@dimen/fragment_mission_body_detail_size"
+      tools:text="18°C"/>
+
+  <ImageView
+      android:id="@+id/warning"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="2"
+      android:src="@drawable/ic_warning_black_24dp"
+      android:padding="2dp"
+      android:tint="@color/colorOrange"/>
+
+</LinearLayout>

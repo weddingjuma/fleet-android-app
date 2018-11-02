@@ -33,7 +33,8 @@ import android.widget.ImageView;
 
 import com.mapotempo.lib.R;
 
-public class SurveyPictureDialogFragment extends SurveyBaseDialogFragment
+public class
+SurveyPictureDialogFragment extends SurveyBaseDialogFragment
 {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -111,16 +112,16 @@ public class SurveyPictureDialogFragment extends SurveyBaseDialogFragment
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             setBitmap(imageBitmap);
-            mSaveButton.setEnabled(true);
+            mPositiveButton.setEnabled(true);
         }
     }
 
-    // ==========================
+    // ================================
     // ==  SurveyBaseDialogFragment  ==
-    // ==========================
+    // ================================
 
     @Override
-    protected boolean onSave()
+    protected boolean onPositive()
     {
         return mSurveyPictureListener.onPictureSave(mBitmap);
     }

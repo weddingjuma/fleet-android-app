@@ -99,17 +99,14 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
         LinearLayout content = view.findViewById(R.id.mission_view_content);
 
         mPagerAdapter = new MissionPagerAdapter(getFragmentManager(), new ArrayList<Mission>());
-        ViewPager viewPager = (ViewPager) getActivity().getLayoutInflater().inflate(R.layout.view_pager, null);
-        viewPager.setPageTransformer(true, new MissionsPagerBorderTransformer());
-        mViewPager = viewPager.findViewById(R.id.mission_viewpager);
-        // mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        mViewPager = (ViewPager) getActivity().getLayoutInflater().inflate(R.layout.view_pager, null);
+        mViewPager.setPageTransformer(true, new MissionsPagerBorderTransformer());
         setPagerChangeListener();
-        content.addView(viewPager);
+        content.addView(mViewPager);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setCurrentItem(mCurrentPosition, false);
         return view;
     }
-
 
     @Override
     public void onDetach()
@@ -183,6 +180,10 @@ public class MissionsPagerFragment extends MapotempoBaseFragment
         mPagerAdapter.getFragment(mCurrentPosition).goSurveyCommentFragment();
     }
 
+    public void goSurveySopacTemperatureFragment()
+    {
+        mPagerAdapter.getFragment(mCurrentPosition).goSurveySopacTemperatureFragment(null);
+    }
 
     public boolean onBackPressed()
     {

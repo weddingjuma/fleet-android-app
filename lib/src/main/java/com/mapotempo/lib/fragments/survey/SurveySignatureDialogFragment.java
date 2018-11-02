@@ -111,26 +111,26 @@ public class SurveySignatureDialogFragment extends SurveyBaseDialogFragment
             @Override
             public void onSigned()
             {
-                mSaveButton.setEnabled(true);
-                mClearButton.setEnabled(true);
+                mPositiveButton.setEnabled(true);
+                mNegativeButton.setEnabled(true);
             }
 
             @Override
             public void onClear()
             {
-                mSaveButton.setEnabled(false);
-                mClearButton.setEnabled(false);
+                mPositiveButton.setEnabled(false);
+                mNegativeButton.setEnabled(false);
             }
         });
         return v;
     }
 
-    // ==========================
+    // ================================
     // ==  SurveyBaseDialogFragment  ==
-    // ==========================
+    // ================================
 
     @Override
-    protected boolean onSave()
+    protected boolean onPositive()
     {
         Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
         String signatoryName = mSignatoryName.getText()
