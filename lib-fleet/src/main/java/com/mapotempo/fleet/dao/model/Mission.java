@@ -130,7 +130,7 @@ public class Mission extends ModelBase
     public List<TimeWindow> getTimeWindows()
     {
         MutableArray array = mDocument.getArray(TIME_WINDOWS);
-        return ModelUtils.arrayToSubmodelList(array, TimeWindow.class);
+        return ModelUtils.arrayToSubmodelList(mDatabaseHandler, array, TimeWindow.class);
     }
 
     public Location getLocation()
