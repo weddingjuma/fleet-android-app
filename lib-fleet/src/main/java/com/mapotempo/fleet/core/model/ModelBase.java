@@ -33,9 +33,11 @@ import com.couchbase.lite.internal.support.Log;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.Base;
 import com.mapotempo.fleet.core.IDatabaseHandler;
+import com.mapotempo.fleet.utils.DateUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 
 /**
  * ModelBase.
@@ -103,7 +105,6 @@ public abstract class ModelBase extends Base
         }
     }
 
-
     protected @Nullable
     Bitmap imageOutputProcess(String tag)
     {
@@ -119,5 +120,16 @@ public abstract class ModelBase extends Base
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
         mDocument = mDocument.setBlob(tag, new Blob("image/jpeg", bi));
+    }
+
+    protected Date parseISO8601Field(String tag, Date _default)
+    {
+        String dateString = mDocument.getString(tag);
+        if (dateString == null)
+        {
+            android.util.Log.d(TAG, "Dateless Route for " + getId());
+            return _default;
+        }
+        return DateUtils.fromStringISO8601(dateString);
     }
 }

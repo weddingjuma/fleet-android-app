@@ -39,7 +39,7 @@ public class MissionAccess extends AccessBase<Mission>
 
     public MissionAccess(IDatabaseHandler databaseHandler) throws FleetException
     {
-        super(databaseHandler, Mission.class, null);
+        super(databaseHandler, Mission.class, "date");
     }
 
     public void purgeOutdated()

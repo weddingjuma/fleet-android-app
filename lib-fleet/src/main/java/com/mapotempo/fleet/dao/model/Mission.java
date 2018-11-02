@@ -84,18 +84,12 @@ public class Mission extends ModelBase
 
     public Date getDate()
     {
-        String dateString = mDocument.getString(DATE);
-        if (dateString != null)
-            return DateUtils.fromStringISO8601(dateString);
-        return DateUtils.fromStringISO8601("");
+        return parseISO8601Field(DATE, new Date(0));
     }
 
     public Date getETAOrDefault()
     {
-        String eta = mDocument.getString(ETA);
-        if (eta != null)
-            return DateUtils.fromStringISO8601(eta);
-        return getDate();
+        return parseISO8601Field(ETA, getDate());
     }
 
     public String getReference()
@@ -143,7 +137,7 @@ public class Mission extends ModelBase
     public List<TimeWindow> getTimeWindows()
     {
         MutableArray array = mDocument.getArray(TIME_WINDOWS);
-        return ModelUtils.arrayToSubmodelList(array, TimeWindow.class);
+        return ModelUtils.arrayToSubmodelList(mDatabaseHandler, array, TimeWindow.class);
     }
 
     public Location getLocation()

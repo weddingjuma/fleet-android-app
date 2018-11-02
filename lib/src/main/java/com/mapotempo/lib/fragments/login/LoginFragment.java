@@ -25,10 +25,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.method.PasswordTransformationMethod;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -209,21 +207,6 @@ public class LoginFragment extends Fragment
         {
             attemptLogin();
         }
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        TextInputLayout passwordLayout = getView().findViewById(R.id.password_layout);
-
-        if (!mLoginPrefManager.getAutoLoginPref())
-            mPasswordView.setText(null);
-
-        // Simple Trick to reset the Icon of CheckableImageButton [Cuz of LIBRARY_GROUP restriction]
-        mPasswordView.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        passwordLayout.setPasswordVisibilityToggleEnabled(false);
-        passwordLayout.setPasswordVisibilityToggleEnabled(true);
     }
 
     @Override

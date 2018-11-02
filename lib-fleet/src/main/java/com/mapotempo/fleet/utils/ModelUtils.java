@@ -21,6 +21,7 @@ package com.mapotempo.fleet.utils;
 
 import com.couchbase.lite.Array;
 import com.couchbase.lite.Dictionary;
+import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.SubModelBase;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +31,9 @@ import java.util.List;
 public class ModelUtils
 {
 
-    public static <T extends SubModelBase> List<T> arrayToSubmodelList(Array array, Class<T> submodelClazz)
+    public static <T extends SubModelBase> List<T> arrayToSubmodelList(IDatabaseHandler databaseHandler,
+                                                                       Array array,
+                                                                       Class<T> submodelClazz)
     {
         List<T> res = new ArrayList<>();
         if (array == null)
@@ -40,22 +43,24 @@ public class ModelUtils
             Dictionary dico = array.getDictionary(i);
             try
             {
-                res.add(submodelClazz.getConstructor(Dictionary.class).newInstance(dico));
+                res.add(submodelClazz
+                    .getConstructor(IDatabaseHandler.class, Dictionary.class)
+                    .newInstance(databaseHandler, dico));
             } catch (NoSuchMethodException e)
             {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (IllegalAccessException e)
             {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (InstantiationException e)
             {
-                e.printStackTrace();
+                throw new RuntimeException();
             } catch (InvocationTargetException e)
             {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (Exception e)
             {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         return res;
