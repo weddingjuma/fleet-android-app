@@ -17,8 +17,8 @@ android {
     applicationId "com.mapotempo.mapotempo_fleet_android"
     minSdkVersion 19
     targetSdkVersion 27
-    versionCode 362
-    versionName "3.6.2"
+    versionCode 363
+    versionName "3.6.3"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
