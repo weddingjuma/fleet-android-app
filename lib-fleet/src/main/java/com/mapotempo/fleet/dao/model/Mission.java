@@ -75,7 +75,6 @@ public class Mission extends ModelBase
     public static final String SURVEY_SIGNATURE = "survey_signature";
     public static final String SURVEY_SIGNATURE_NAME = "survey_signature_name";
     public static final String SURVEY_COMMENT = "survey_comment";
-    public static final String SURVEY_QUANTITIES = "survey_quantities";
     public static final String SURVEY_SOPAC_LOGS = "survey_sopac_logs";
 
     public Mission(IDatabaseHandler databaseHandler, Document document) throws FleetException
@@ -174,6 +173,13 @@ public class Mission extends ModelBase
 
         return quantityList;
     }
+
+    public void setQuantities(List<Quantity> quantities)
+    {
+        Array array = ModelUtils.submodelListToArray(mDatabaseHandler, quantities, Quantity.class);
+        mDocument = mDocument.setArray(QUANTITIES, array);
+    }
+
 
     public Map<String, Object> getCustomData()
     {
@@ -312,27 +318,6 @@ public class Mission extends ModelBase
     public void clearSurveyComment()
     {
         mDocument.remove(SURVEY_COMMENT);
-    }
-
-    @Nullable
-    public List<Quantity> getSurveyQuantities()
-    {
-        MutableArray quantities = mDocument.getArray(SURVEY_QUANTITIES);
-        if (quantities == null)
-            return null;
-        List<Quantity> quantityList = ModelUtils.arrayToSubmodelList(mDatabaseHandler, quantities, Quantity.class);
-        return quantityList;
-    }
-
-    public void setSurveyQuantities(List<Quantity> quantities)
-    {
-        Array array = ModelUtils.submodelListToArray(mDatabaseHandler, quantities, Quantity.class);
-        mDocument = mDocument.setArray(SURVEY_QUANTITIES, array);
-    }
-
-    public void deleteSurveyQuantities()
-    {
-        mDocument = mDocument.remove(SURVEY_QUANTITIES);
     }
 
     @Nullable

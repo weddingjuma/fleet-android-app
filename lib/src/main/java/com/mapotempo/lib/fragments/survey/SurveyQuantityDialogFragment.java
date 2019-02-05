@@ -137,7 +137,7 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
                 @Override
                 public void onClick(View v)
                 {
-                    quantity.setQuantity(quantity.getQuantity() - 1);
+                    quantity.setSurveyQuantity(quantity.getPreferedQuantity() - 1);
                     refreshView();
                 }
             });
@@ -148,13 +148,13 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
                 @Override
                 public void onClick(View v)
                 {
-                    quantity.setQuantity(quantity.getQuantity() + 1);
+                    quantity.setSurveyQuantity(quantity.getPreferedQuantity() + 1);
                     refreshView();
                 }
             });
 
             TextView label = quantityLayout.findViewById(R.id.quantity_label);
-            label.setText(String.valueOf(quantity.getQuantity()) + " " + quantity.getLabel());
+            label.setText(String.valueOf(quantity.getPreferedQuantity()) + " " + quantity.getLabel());
 
             String iconName = quantity.getUnitIcon().replace("-", "_icon_");
             String fontIcon;

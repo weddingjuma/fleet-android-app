@@ -339,14 +339,19 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
     @Override
     public boolean onQuantitySave(List<Quantity> editQuantities)
     {
-        mMission.setSurveyQuantities(editQuantities);
+        mMission.setQuantities(editQuantities);
         return mMission.save();
     }
 
     @Override
     public boolean onQuantityClear()
     {
-        mMission.deleteSurveyQuantities();
+        List<Quantity> quantities = mMission.getQuantities();
+        for (Quantity quantity : quantities)
+        {
+            quantity.removeSurveyQuantity();
+        }
+        mMission.setQuantities(quantities);
         return mMission.save();
     }
 
@@ -355,6 +360,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
     // ==============================
 
     @Override
+
     public boolean onPictureSave(Bitmap signatureBitmap)
     {
         mMission.setSurveyPicture(signatureBitmap);
@@ -466,7 +472,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         if (prev != null)
             ft.remove(prev);
         ft.addToBackStack(null);
-        SurveyQuantityDialogFragment newFragment = SurveyQuantityDialogFragment.newInstance(mMission.getSurveyQuantities() != null ? mMission.getSurveyQuantities() : mMission.getQuantities());
+        SurveyQuantityDialogFragment newFragment = SurveyQuantityDialogFragment.newInstance(mMission.getQuantities());
         newFragment.setListener(this);
         newFragment.show(ft, tag);
     }
@@ -747,7 +753,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
             }
         });
         mLayoutQuantitiesContainer.removeAllViews();
-        List<Quantity> quantities = mMission.getSurveyQuantities() != null ? mMission.getSurveyQuantities() : mMission.getQuantities();
+        List<Quantity> quantities = mMission.getQuantities();
         for (Quantity quantity : quantities)
         {
             if (!quantity.isValid()) { continue; }
@@ -774,7 +780,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
             icon.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/fontawesome-webfont.ttf"));
 
             // SET LABEL AND VALUE
-            label.setText(String.valueOf(quantity.getQuantity()) + " " + quantity.getLabel());
+            label.setText(String.valueOf(quantity.getPreferedQuantity()) + " " + quantity.getLabel());
 
             mLayoutQuantitiesContainer.addView(quantityLayout);
         }
