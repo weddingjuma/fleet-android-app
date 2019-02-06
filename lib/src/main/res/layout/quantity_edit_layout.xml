@@ -21,6 +21,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:minWidth="500dp"
     android:layout_height="wrap_content"
     android:weightSum="5">
 
