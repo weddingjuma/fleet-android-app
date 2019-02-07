@@ -69,6 +69,9 @@
   <string name="time_windows">"Time Windows"</string>
   <string name="quantities">"Quantities"</string>
   <string name="directions">"directions"</string>
+  <string name="survey_signature">"signature"</string>
+  <string name="survey_picture">"picture"</string>
+  <string name="survey_comment">"comment"</string>
 
   <!-- Settings -->
   <string name="profil">Profil</string>
@@ -84,6 +87,10 @@
   <string name="map_settings">Map settings</string>
   <string name="map_zoom_button">"Map zoom button"</string>
   <string name="map_current_position">"Map current position"</string>
+
+  <!-- Connexion settings -->
+  <string name="validate">"Validate"</string>
+  <string name="reset">"Reset"</string>
 
   <!-- Time -->
   <string name="hour">hour</string>

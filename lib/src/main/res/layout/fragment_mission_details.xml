@@ -409,7 +409,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:textSize="@dimen/fragment_mission_body_detail_size"
-            android:text="signature"/>
+            android:text="@string/survey_signature"/>
 
 
         <ImageView
@@ -433,7 +433,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:textSize="@dimen/fragment_mission_body_detail_size"
-            android:text="photo"/>
+            android:text="@string/survey_picture"/>
 
         <ImageView
             android:id="@+id/picture_check"
@@ -457,7 +457,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:textSize="@dimen/fragment_mission_body_detail_size"
-            android:text="commentaire"/>
+            android:text="@string/survey_comment"/>
 
         <ImageView
             android:id="@+id/comment_check"
