@@ -41,7 +41,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
 import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
@@ -191,31 +190,26 @@ public class TrackingSwitchFragment extends MapotempoBaseFragment implements Loc
             //                //mnc = Integer.parseInt(networkOperator.substring(3));
             //            }
 
-            try
+
+            if (mLastLocation == null || (mLastLocation != null && accuracyTester(location, mLastLocation)))
             {
-                if (mLastLocation == null || (mLastLocation != null && accuracyTester(location, mLastLocation)))
-                {
-                    mLastLocation = location;
-                    LocationDetails locationDetails = new LocationDetails(mMapotempoApplicationInterface.getManager(),
-                        location.getLatitude(),
-                        location.getLongitude(),
-                        new Date(),
-                        (double) location.getAccuracy(),
-                        (double) location.getSpeed(),
-                        (double) location.getBearing()
-                        , location.getAltitude(),
-                        0,
-                        cid,
-                        lac,
-                        mcc,
-                        mnc);
-                    UserCurrentLocation userCurrentLocation = mMapotempoApplicationInterface.getManager().getCurrentLocation();
-                    userCurrentLocation.setLocation(locationDetails);
-                    userCurrentLocation.save();
-                }
-            } catch (FleetException e)
-            {
-                // TODO CL2.0
+                mLastLocation = location;
+                LocationDetails locationDetails = new LocationDetails(mMapotempoApplicationInterface.getManager(),
+                    location.getLatitude(),
+                    location.getLongitude(),
+                    new Date(),
+                    (double) location.getAccuracy(),
+                    (double) location.getSpeed(),
+                    (double) location.getBearing()
+                    , location.getAltitude(),
+                    0,
+                    cid,
+                    lac,
+                    mcc,
+                    mnc);
+                UserCurrentLocation userCurrentLocation = mMapotempoApplicationInterface.getManager().getCurrentLocation();
+                userCurrentLocation.setLocation(locationDetails);
+                userCurrentLocation.save();
             }
         }
     }

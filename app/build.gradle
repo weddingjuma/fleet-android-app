@@ -17,8 +17,8 @@ android {
     applicationId "com.mapotempo.mapotempo_fleet_android"
     minSdkVersion 19
     targetSdkVersion 27
-    versionCode 352
-    versionName "3.5.2"
+    versionCode 366
+    versionName "3.6.6"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
@@ -27,12 +27,14 @@ android {
       signingConfig signingConfigs.fleetDebug
       applicationIdSuffix '.debug'
       minifyEnabled false
+      resValue "string", "app_name", "Mapotempo Live" + applicationIdSuffix
     }
 
     release {
       signingConfig signingConfigs.fleetDebug
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      resValue "string", "app_name", "Mapotempo Live"
     }
   }
 

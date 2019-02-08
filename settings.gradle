@@ -1,2 +1,2 @@
-include ':app', ':lib-fleet', 'lib'
+include ':app', ':lib-fleet', 'lib', ':lib-blutag'
 

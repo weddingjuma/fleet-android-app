@@ -23,15 +23,19 @@ import android.support.annotation.Nullable;
 
 import com.couchbase.lite.Dictionary;
 import com.couchbase.lite.MutableDictionary;
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.Base;
 import com.mapotempo.fleet.core.IDatabaseHandler;
+import com.mapotempo.fleet.utils.DateUtils;
+
+import java.util.Date;
 
 public abstract class SubModelBase extends Base
 {
+    private static String TAG = ModelBase.class.getName();
+
     protected MutableDictionary mDictionary;
 
-    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary) throws FleetException
+    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary)
     {
         super(iDatabaseHandler);
         if (dictionary == null)
@@ -43,6 +47,17 @@ public abstract class SubModelBase extends Base
     public MutableDictionary getDictionary()
     {
         return mDictionary;
+    }
+
+    protected Date parseISO8601Field(String tag, Date _default)
+    {
+        String dateString = mDictionary.getString(tag);
+        if (dateString == null)
+        {
+            android.util.Log.d(TAG, "dateless dictionary");
+            return _default;
+        }
+        return DateUtils.fromStringISO8601(dateString);
     }
 
     public abstract boolean isValid();

@@ -20,7 +20,6 @@
 package com.mapotempo.fleet.dao.model.submodel;
 
 import com.couchbase.lite.Dictionary;
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.SubModelBase;
 import com.mapotempo.fleet.utils.DateUtils;
@@ -32,14 +31,14 @@ public class TimeWindow extends SubModelBase
     public static final String START = "start";
     public static final String END = "end";
 
-    public TimeWindow(IDatabaseHandler iDatabaseHandler, Date start, Date end) throws FleetException
+    public TimeWindow(IDatabaseHandler iDatabaseHandler, Date start, Date end)
     {
         super(iDatabaseHandler, null);
         mDictionary.setString(START, DateUtils.toStringISO8601(start));
         mDictionary.setString(END, DateUtils.toStringISO8601(end));
     }
 
-    public TimeWindow(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    public TimeWindow(IDatabaseHandler iDatabaseHandler, Dictionary dictionary)
     {
         super(iDatabaseHandler, dictionary);
     }

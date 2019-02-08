@@ -18,7 +18,5 @@
   -->
 
 <resources>
-  <string name="app_name">fleet</string>
-
   <string name="invalid_url">Url invalide</string>
 </resources>

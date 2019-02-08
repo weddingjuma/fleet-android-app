@@ -20,10 +20,12 @@
   <string name="login_error_invalid">Votre mot de passe ou login est invalide, essayez de nouveau.</string>
   <string name="login_error_server">Veuillez verifier votre connexion, si le problème persiste veuillez contacter le support.</string>
 
-  <!-- USER DATA PREF -->
+  <!-- Signature pad-->
+  <string name="signature_message">Signez ici</string>
+  <string name="signatory_name">Nom du signataire</string>
   <string name="agreement">J\'accepte les termes et conditions.</string>
-  <string name="clear_pad">Effacer</string>
-  <string name="save_signature">Sauvegarder la signature</string>
+  <string name="clear">Effacer</string>
+  <string name="save">Sauvegarder</string>
   <string name="save_signature_success">La signature a été sauvegardée avec succès</string>
   <string name="save_signature_fail">La signature n\'a pas été sauvegardée</string>
 
@@ -38,7 +40,11 @@
 
   <!-- Edit Menu -->
   <string name="edit_address">Éditer l\'adresse</string>
-  <string name="edit_location">Relever la position</string>
+  <string name="survey_location">Relever la position</string>
+  <string name="get_signature">Obtenir une signature</string>
+  <string name="take_picture">Prendre une photo</string>
+  <string name="write_comment">Rédiger un commentaire</string>
+  <string name="reset_comment">Supprimer le commentaire</string>
   <string name="reset_location">Supprimer la position relevé</string>
   <string name="reset_address">Supprimer l\'adresse relevé</string>
   <string name="validate_location">Enregistrer</string>
@@ -59,7 +65,12 @@
   <string name="planned">"Planifié : "</string>
   <string name="visit_duration">"Durée de la visite : "</string>
   <string name="time_windows">"Plage horaire"</string>
-  <string name="directions">"itinéraire"</string>
+  <string name="quantities">"Unité livrables"</string>
+  <string name="directions">"directions"</string>
+  <string name="survey_signature">"signature"</string>
+  <string name="survey_picture">"photo"</string>
+  <string name="survey_comment">"commentaire"</string>
+
 
   <!-- Settings -->
   <string name="profil">Profil</string>
@@ -76,6 +87,10 @@
   <string name="map_zoom_button">"Bouton de zoom de la carte"</string>
   <string name="map_current_position">"Position courrante sur la carte"</string>
 
+  <!-- Connexion settings -->
+  <string name="validate">"Valider"</string>
+  <string name="reset">"Réinitialiser"</string>
+
   <!-- Time -->
   <string name="hour">heure</string>
   <string name="minute">minute</string>
@@ -91,6 +106,9 @@
   <string name="city">Ville</string>
   <string name="state">Région</string>
   <string name="country">Pays</string>
+
+  <!-- Mission comment edition -->
+  <string name="comment">Commentaire</string>
 
   <!-- Alert dialog -->
   <string name="archive_outdated">Vous avez des plannings dont la date est dépassée. \n Voulez-vous les archiver ?</string>

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import com.mapotempo.app.utils.ConnectionManager;
 import com.mapotempo.fleet.api.FleetError;
@@ -46,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         setTheme(R.style.AppTheme_Night);
+        TextView textView = findViewById(R.id.version_code_container);
+        textView.setText(BuildConfig.VERSION_NAME);
     }
 
     // =====================================================

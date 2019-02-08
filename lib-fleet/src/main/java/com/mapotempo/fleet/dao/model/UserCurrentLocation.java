@@ -41,14 +41,8 @@ public class UserCurrentLocation extends ModelBase
 
     public LocationDetails getLocation()
     {
-        try
-        {
-            LocationDetails res = new LocationDetails(mDatabaseHandler, mDocument.getDictionary(LOCATION_DETAIL));
-            return res;
-        } catch (FleetException e)
-        {
-            return null;
-        }
+        LocationDetails res = new LocationDetails(mDatabaseHandler, mDocument.getDictionary(LOCATION_DETAIL));
+        return res;
     }
 
     public void setLocation(LocationDetails location)

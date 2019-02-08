@@ -75,6 +75,7 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter
     @Override
     public int getItemPosition(Object object)
     {
+        super.getItemPosition(object);
         return POSITION_NONE;
     }
 
@@ -90,11 +91,9 @@ class MissionPagerAdapter extends FragmentStatePagerAdapter
         notifyDataSetChanged();
     }
 
-
     public List<Mission> getMissionsList()
     {
         return mMissions;
     }
-
 
 }

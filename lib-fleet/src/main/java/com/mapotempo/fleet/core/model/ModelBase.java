@@ -19,16 +19,24 @@
 
 package com.mapotempo.fleet.core.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.annotation.Nullable;
+
+import com.couchbase.lite.Blob;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.DocumentChange;
 import com.couchbase.lite.DocumentChangeListener;
 import com.couchbase.lite.MutableDocument;
+import com.couchbase.lite.internal.support.Log;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.Base;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.utils.DateUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
 /**
@@ -36,7 +44,6 @@ import java.util.Date;
  */
 public abstract class ModelBase extends Base
 {
-
     private static String TAG = ModelBase.class.getName();
 
     public MutableDocument mDocument;
@@ -74,7 +81,12 @@ public abstract class ModelBase extends Base
             return true;
         } catch (CouchbaseLiteException e)
         {
+            Log.info(">>>>>>>", e.toString());
+            e.printStackTrace();
             return false;
+        } finally
+        {
+
         }
     }
 
@@ -90,6 +102,23 @@ public abstract class ModelBase extends Base
         {
             e.printStackTrace();
         }
+    }
+
+    protected @Nullable
+    Bitmap imageOutputProcess(String tag)
+    {
+        Blob blob = mDocument.getBlob(tag);
+        if (blob != null)
+            return BitmapFactory.decodeByteArray(blob.getContent(), 0, blob.getContent().length);
+        return null;
+    }
+
+    protected void imageInputProcess(Bitmap bitmap, String tag)
+    {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        ByteArrayInputStream bi = new ByteArrayInputStream(stream.toByteArray());
+        mDocument = mDocument.setBlob(tag, new Blob("image/jpeg", bi));
     }
 
     protected Date parseISO8601Field(String tag, Date _default)

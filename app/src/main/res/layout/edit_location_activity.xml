@@ -17,33 +17,26 @@
   ~ <http://www.gnu.org/licenses/agpl.html>
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.mapotempo.app.MapActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.mapotempo.app.MapActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorLightGrey"
-        android:orientation="vertical">
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/colorMapoBlue"
+      app:popupTheme="@style/AppTheme"
+      android:theme="@style/HeaderTheme"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorMapoBlue"
-            app:popupTheme="@style/AppTheme"
-            android:theme="@style/HeaderTheme" />
+  <fragment
+      class="com.mapotempo.lib.fragments.map.MapLocationPickerFragment"
+      android:id="@+id/edit_location_fragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
-        <fragment
-            class="com.mapotempo.lib.fragments.map.MapLocationPickerFragment"
-            android:id="@+id/edit_location_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

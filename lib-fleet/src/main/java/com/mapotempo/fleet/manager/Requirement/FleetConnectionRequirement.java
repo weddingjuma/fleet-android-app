@@ -81,7 +81,7 @@ public class FleetConnectionRequirement implements ConnectionRequirement
 
     private final int TIMER_PERIOD = 2000;
 
-    private int mVerifyCounter = 0;
+    private long mInitTime = 0;
 
     // == Private Interface =================================
 
@@ -136,6 +136,7 @@ public class FleetConnectionRequirement implements ConnectionRequirement
             // == 4) - Launch Verify timer
             // ===========================
             final VerifyTimerTask timerTask = new VerifyTimerTask(listener, timeout);
+            mInitTime = System.currentTimeMillis();
             mVerifyTimer.schedule(timerTask, TIMER_DELAY, TIMER_PERIOD);
         }
         else
@@ -176,7 +177,7 @@ public class FleetConnectionRequirement implements ConnectionRequirement
             Company company = mCompanyAccess.all().size() > 0 ? (Company) mCompanyAccess.all().get(0) : null;
             MetaInfo metaInfo = mMetaInfoAccess.all().size() > 0 ? (MetaInfo) mMetaInfoAccess.all().get(0) : null;
             // Timeout check
-            if (System.currentTimeMillis() - scheduledExecutionTime() >= mTimeout)
+            if (System.currentTimeMillis() - mInitTime >= mTimeout)
             {
                 cancel();
                 mListener.satisfy(isSatisfy(), "");

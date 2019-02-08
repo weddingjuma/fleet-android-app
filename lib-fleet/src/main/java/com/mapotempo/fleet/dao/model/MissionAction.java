@@ -86,14 +86,8 @@ public class MissionAction extends ModelBase
 
     public Location getLocation()
     {
-        try
-        {
-            Location res = new Location(mDatabaseHandler, mDocument.getDictionary(ACTION_LOCATION));
-            return res;
-        } catch (FleetException e)
-        {
-            return null;
-        }
+        Location res = new Location(mDatabaseHandler, mDocument.getDictionary(ACTION_LOCATION));
+        return res;
     }
 
     public void setLocation(Location location)

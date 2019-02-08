@@ -20,7 +20,6 @@
 package com.mapotempo.fleet.dao.model.submodel;
 
 import com.couchbase.lite.Dictionary;
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.utils.DateUtils;
 
@@ -52,7 +51,7 @@ public class LocationDetails extends Location
                            Integer cid,
                            Integer lac,
                            Integer mcc,
-                           Integer mnc) throws FleetException
+                           Integer mnc)
     {
         super(iDatabaseHandler, lat, lon);
         mDictionary.setString(DATE, DateUtils.toStringISO8601(date));
@@ -67,7 +66,7 @@ public class LocationDetails extends Location
         mDictionary.setInt(MNC, mnc);
     }
 
-    public LocationDetails(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    public LocationDetails(IDatabaseHandler iDatabaseHandler, Dictionary dictionary)
     {
         super(iDatabaseHandler, dictionary);
     }

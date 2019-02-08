@@ -20,7 +20,6 @@
 package com.mapotempo.fleet.dao.model.submodel;
 
 import com.couchbase.lite.Dictionary;
-import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.SubModelBase;
 
@@ -34,7 +33,7 @@ public class Address extends SubModelBase
     private static final String COUNTRY = "country";
     private static final String DETAIL = "detail";
 
-    public Address(IDatabaseHandler iDatabaseHandler, String street, String postalCode, String city, String state, String country, String detail) throws FleetException
+    public Address(IDatabaseHandler iDatabaseHandler, String street, String postalCode, String city, String state, String country, String detail)
     {
         super(iDatabaseHandler, null);
         mDictionary.setString(STREET, street);
@@ -45,7 +44,7 @@ public class Address extends SubModelBase
         mDictionary.setString(DETAIL, detail);
     }
 
-    public Address(IDatabaseHandler iDatabaseHandler, Dictionary dictionary) throws FleetException
+    public Address(IDatabaseHandler iDatabaseHandler, Dictionary dictionary)
     {
         super(iDatabaseHandler, dictionary);
     }
@@ -56,10 +55,20 @@ public class Address extends SubModelBase
         return res != null ? res : "";
     }
 
+    public void setStreet(String street)
+    {
+        mDictionary.setString(STREET, street);
+    }
+
     public String getPostalcode()
     {
         String res = mDictionary.getString(POSTALCODE);
         return res != null ? res : "";
+    }
+
+    public void setPostalcode(String postalcode)
+    {
+        mDictionary.setString(POSTALCODE, postalcode);
     }
 
     public String getCity()
@@ -68,10 +77,20 @@ public class Address extends SubModelBase
         return res != null ? res : "";
     }
 
+    public void setCity(String city)
+    {
+        mDictionary.setString(CITY, city);
+    }
+
     public String getState()
     {
         String res = mDictionary.getString(STATE);
         return res != null ? res : "";
+    }
+
+    public void setState(String state)
+    {
+        mDictionary.setString(STATE, state);
     }
 
     public String getCountry()
@@ -80,10 +99,20 @@ public class Address extends SubModelBase
         return res != null ? res : "";
     }
 
+    public void setCountry(String country)
+    {
+        mDictionary.setString(COUNTRY, country);
+    }
+
     public String getDetail()
     {
         String res = mDictionary.getString(DETAIL);
         return res != null ? res : "";
+    }
+
+    public void setDetail(String detail)
+    {
+        mDictionary.setString(DETAIL, detail);
     }
 
     public boolean isValid()

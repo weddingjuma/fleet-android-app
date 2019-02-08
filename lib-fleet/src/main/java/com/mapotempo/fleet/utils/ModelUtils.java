@@ -21,15 +21,31 @@ package com.mapotempo.fleet.utils;
 
 import com.couchbase.lite.Array;
 import com.couchbase.lite.Dictionary;
+import com.couchbase.lite.MutableArray;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.SubModelBase;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModelUtils
 {
+    public static <T extends SubModelBase> Array submodelListToArray(IDatabaseHandler databaseHandler,
+                                                                     List<T> list,
+                                                                     Class<T> submodelClazz)
+    {
+        MutableArray res = new MutableArray();
+        for (SubModelBase quantity : list)
+        {
+            if (quantity.isValid())
+                res.addDictionary(quantity.getDictionary());
+            else
+                throw new RuntimeException("Submodel must be valid");
+        }
+        return res;
+    }
 
     public static <T extends SubModelBase> List<T> arrayToSubmodelList(IDatabaseHandler databaseHandler,
                                                                        Array array,
@@ -38,30 +54,30 @@ public class ModelUtils
         List<T> res = new ArrayList<>();
         if (array == null)
             return res;
-        for (int i = 0; i < array.count(); i++)
+
+        try
         {
-            Dictionary dico = array.getDictionary(i);
-            try
+            Constructor<T> submodelConstructor = submodelClazz.getConstructor(IDatabaseHandler.class, Dictionary.class);
+            for (int i = 0; i < array.count(); i++)
             {
-                res.add(submodelClazz
-                    .getConstructor(IDatabaseHandler.class, Dictionary.class)
-                    .newInstance(databaseHandler, dico));
-            } catch (NoSuchMethodException e)
-            {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e)
-            {
-                throw new RuntimeException(e);
-            } catch (InstantiationException e)
-            {
-                throw new RuntimeException();
-            } catch (InvocationTargetException e)
-            {
-                throw new RuntimeException(e);
-            } catch (Exception e)
-            {
-                throw new RuntimeException(e);
+                Dictionary dico = array.getDictionary(i);
+                res.add(submodelConstructor.newInstance(databaseHandler, dico));
             }
+        } catch (NoSuchMethodException e)
+        {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e)
+        {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e)
+        {
+            throw new RuntimeException();
+        } catch (InvocationTargetException e)
+        {
+            throw new RuntimeException(e);
+        } catch (Exception e)
+        {
+            throw new RuntimeException(e);
         }
         return res;
     }
