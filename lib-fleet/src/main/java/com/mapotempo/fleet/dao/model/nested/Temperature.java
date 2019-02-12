@@ -17,18 +17,18 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.fleet.dao.model.submodel;
+package com.mapotempo.fleet.dao.model.nested;
 
 import android.support.annotation.Nullable;
 
 import com.couchbase.lite.Dictionary;
 import com.mapotempo.fleet.core.IDatabaseHandler;
-import com.mapotempo.fleet.core.model.SubModelBase;
+import com.mapotempo.fleet.core.model.NestedModelBase;
 import com.mapotempo.fleet.utils.DateUtils;
 
 import java.util.Date;
 
-public class Temperature extends SubModelBase
+public class Temperature extends NestedModelBase
 {
     public static final String VALUE = "value";
     public static final String DATE = "date";

@@ -32,11 +32,11 @@ import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
 import com.mapotempo.fleet.dao.access.MissionActionAccess;
 import com.mapotempo.fleet.dao.access.MissionStatusTypeAccess;
-import com.mapotempo.fleet.dao.model.submodel.Address;
-import com.mapotempo.fleet.dao.model.submodel.Location;
-import com.mapotempo.fleet.dao.model.submodel.Quantity;
-import com.mapotempo.fleet.dao.model.submodel.SopacLOG;
-import com.mapotempo.fleet.dao.model.submodel.TimeWindow;
+import com.mapotempo.fleet.dao.model.nested.Address;
+import com.mapotempo.fleet.dao.model.nested.Location;
+import com.mapotempo.fleet.dao.model.nested.Quantity;
+import com.mapotempo.fleet.dao.model.nested.SopacLOG;
+import com.mapotempo.fleet.dao.model.nested.TimeWindow;
 import com.mapotempo.fleet.utils.DateUtils;
 import com.mapotempo.fleet.utils.ModelUtils;
 

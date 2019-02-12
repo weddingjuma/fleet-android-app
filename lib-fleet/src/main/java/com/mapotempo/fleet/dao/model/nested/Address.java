@@ -17,13 +17,13 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.fleet.dao.model.submodel;
+package com.mapotempo.fleet.dao.model.nested;
 
 import com.couchbase.lite.Dictionary;
 import com.mapotempo.fleet.core.IDatabaseHandler;
-import com.mapotempo.fleet.core.model.SubModelBase;
+import com.mapotempo.fleet.core.model.NestedModelBase;
 
-public class Address extends SubModelBase
+public class Address extends NestedModelBase
 {
 
     private static final String STREET = "street";

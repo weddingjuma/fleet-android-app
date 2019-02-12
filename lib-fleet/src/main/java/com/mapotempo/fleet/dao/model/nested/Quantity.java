@@ -1,10 +1,10 @@
-package com.mapotempo.fleet.dao.model.submodel;
+package com.mapotempo.fleet.dao.model.nested;
 
 import com.couchbase.lite.Dictionary;
 import com.mapotempo.fleet.core.IDatabaseHandler;
-import com.mapotempo.fleet.core.model.SubModelBase;
+import com.mapotempo.fleet.core.model.NestedModelBase;
 
-public class Quantity extends SubModelBase
+public class Quantity extends NestedModelBase
 {
 
     public static final String DELIVERABLE_UNIT_ID = "deliverable_unit_id";

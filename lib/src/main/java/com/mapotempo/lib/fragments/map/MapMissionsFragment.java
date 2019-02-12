@@ -43,7 +43,7 @@ import com.mapotempo.fleet.core.accessor.LiveAccessChangeListener;
 import com.mapotempo.fleet.core.accessor.LiveAccessToken;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.dao.model.Route;
-import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
+import com.mapotempo.fleet.dao.model.nested.LocationDetails;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;

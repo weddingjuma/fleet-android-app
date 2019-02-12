@@ -36,8 +36,8 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.Series;
-import com.mapotempo.fleet.dao.model.submodel.SopacLOG;
-import com.mapotempo.fleet.dao.model.submodel.Temperature;
+import com.mapotempo.fleet.dao.model.nested.SopacLOG;
+import com.mapotempo.fleet.dao.model.nested.Temperature;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;
 

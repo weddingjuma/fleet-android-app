@@ -58,10 +58,10 @@ import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.dao.model.MissionAction;
 import com.mapotempo.fleet.dao.model.MissionActionType;
 import com.mapotempo.fleet.dao.model.MissionStatusType;
-import com.mapotempo.fleet.dao.model.submodel.Address;
-import com.mapotempo.fleet.dao.model.submodel.Quantity;
-import com.mapotempo.fleet.dao.model.submodel.SopacLOG;
-import com.mapotempo.fleet.dao.model.submodel.TimeWindow;
+import com.mapotempo.fleet.dao.model.nested.Address;
+import com.mapotempo.fleet.dao.model.nested.Quantity;
+import com.mapotempo.fleet.dao.model.nested.SopacLOG;
+import com.mapotempo.fleet.dao.model.nested.TimeWindow;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
@@ -573,7 +573,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
             {
                 if (mMission != null)
                 {
-                    com.mapotempo.fleet.dao.model.submodel.Location loc = (mission.getSurveyLocation().isValid()) ? mission.getSurveyLocation() :
+                    com.mapotempo.fleet.dao.model.nested.Location loc = (mission.getSurveyLocation().isValid()) ? mission.getSurveyLocation() :
                         mission.getLocation();
                     // Check lat/lon object
                     if (loc.isValid())
@@ -622,7 +622,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
     private void mapVisibilityManager()
     {
-        final com.mapotempo.fleet.dao.model.submodel.Location location = mMission.getSurveyLocation().isValid() ? mMission.getSurveyLocation() : mMission.getLocation();
+        final com.mapotempo.fleet.dao.model.nested.Location location = mMission.getSurveyLocation().isValid() ? mMission.getSurveyLocation() : mMission.getLocation();
         final MissionDetailsFragment INSTANCE = this;
 
         // Asynchronously fill the mapImageView when the widget is draw to retrieve dimensions.
@@ -909,10 +909,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
          * TODO: Refactor me at getNativeLocation Call
          */
         Location loc = getNativeLocation();
-        com.mapotempo.fleet.dao.model.submodel.Location locationInterface = null;
+        com.mapotempo.fleet.dao.model.nested.Location locationInterface = null;
 
         if (loc != null)
-            locationInterface = new com.mapotempo.fleet.dao.model.submodel.Location(manager, loc.getLatitude(), loc.getLongitude());
+            locationInterface = new com.mapotempo.fleet.dao.model.nested.Location(manager, loc.getLatitude(), loc.getLongitude());
 
         MissionAction ma = manager.getMissionActionAccessInterface().create(
             manager.getCompany(),

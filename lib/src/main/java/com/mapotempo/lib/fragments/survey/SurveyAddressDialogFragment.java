@@ -27,7 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.dao.model.submodel.Address;
+import com.mapotempo.fleet.dao.model.nested.Address;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
 import com.mapotempo.lib.MapotempoApplication;
 import com.mapotempo.lib.R;

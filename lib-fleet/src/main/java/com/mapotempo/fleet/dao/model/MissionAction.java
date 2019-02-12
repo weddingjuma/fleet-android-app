@@ -25,7 +25,7 @@ import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
 import com.mapotempo.fleet.dao.access.MissionActionTypeAccess;
-import com.mapotempo.fleet.dao.model.submodel.Location;
+import com.mapotempo.fleet.dao.model.nested.Location;
 import com.mapotempo.fleet.utils.DateUtils;
 
 import java.util.Date;

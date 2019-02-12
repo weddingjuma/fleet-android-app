@@ -29,13 +29,16 @@ import com.mapotempo.fleet.utils.DateUtils;
 
 import java.util.Date;
 
-public abstract class SubModelBase extends Base
+/**
+ * NestedModelBase
+ */
+public abstract class NestedModelBase extends Base
 {
     private static String TAG = ModelBase.class.getName();
 
     protected MutableDictionary mDictionary;
 
-    public SubModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary)
+    public NestedModelBase(IDatabaseHandler iDatabaseHandler, @Nullable Dictionary dictionary)
     {
         super(iDatabaseHandler);
         if (dictionary == null)

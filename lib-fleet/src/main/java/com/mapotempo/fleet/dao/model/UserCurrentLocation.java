@@ -24,7 +24,7 @@ import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
-import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
+import com.mapotempo.fleet.dao.model.nested.LocationDetails;
 
 @ModelType(type = "user_current_location")
 public class UserCurrentLocation extends ModelBase

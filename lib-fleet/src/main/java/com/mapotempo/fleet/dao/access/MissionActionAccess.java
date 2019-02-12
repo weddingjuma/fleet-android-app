@@ -29,7 +29,7 @@ import com.mapotempo.fleet.dao.model.Company;
 import com.mapotempo.fleet.dao.model.Mission;
 import com.mapotempo.fleet.dao.model.MissionAction;
 import com.mapotempo.fleet.dao.model.MissionActionType;
-import com.mapotempo.fleet.dao.model.submodel.Location;
+import com.mapotempo.fleet.dao.model.nested.Location;
 
 import java.util.Date;
 import java.util.List;

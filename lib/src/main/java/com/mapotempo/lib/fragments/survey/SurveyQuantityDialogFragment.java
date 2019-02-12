@@ -32,7 +32,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mapotempo.fleet.dao.model.submodel.Quantity;
+import com.mapotempo.fleet.dao.model.nested.Quantity;
 import com.mapotempo.lib.R;
 
 import java.util.List;

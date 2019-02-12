@@ -184,7 +184,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment
         if (mScrollLocation != null)
         {
             MapotempoFleetManager mapotempoFleetManagerInterface = ((MapotempoApplicationInterface) getActivity().getApplicationContext()).getManager();
-            com.mapotempo.fleet.dao.model.submodel.Location location = new com.mapotempo.fleet.dao.model.submodel.Location(mapotempoFleetManagerInterface, mScrollLocation.getLatitude(), mScrollLocation.getLongitude());
+            com.mapotempo.fleet.dao.model.nested.Location location = new com.mapotempo.fleet.dao.model.nested.Location(mapotempoFleetManagerInterface, mScrollLocation.getLatitude(), mScrollLocation.getLongitude());
             mMission.setSurveyLocation(location);
             mMission.save();
         }
@@ -221,7 +221,7 @@ public class MapLocationPickerFragment extends MapotempoBaseFragment
             @Override
             public void onMapReady(final MapboxMap mapboxMap)
             {
-                com.mapotempo.fleet.dao.model.submodel.Location locationInterface;
+                com.mapotempo.fleet.dao.model.nested.Location locationInterface;
                 LatLng latLng = new LatLng(0, 0);
 
                 if (getNativeLocation() != null)

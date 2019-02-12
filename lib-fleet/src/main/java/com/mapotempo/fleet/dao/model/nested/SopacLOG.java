@@ -17,20 +17,20 @@
  * <http://www.gnu.org/licenses/agpl.html>
  */
 
-package com.mapotempo.fleet.dao.model.submodel;
+package com.mapotempo.fleet.dao.model.nested;
 
 import android.support.annotation.Nullable;
 
 import com.couchbase.lite.Dictionary;
 import com.mapotempo.fleet.core.IDatabaseHandler;
-import com.mapotempo.fleet.core.model.SubModelBase;
+import com.mapotempo.fleet.core.model.NestedModelBase;
 import com.mapotempo.fleet.utils.DateUtils;
 import com.mapotempo.fleet.utils.ModelUtils;
 
 import java.util.Date;
 import java.util.List;
 
-public class SopacLOG extends SubModelBase
+public class SopacLOG extends NestedModelBase
 {
     public static final String BLUE_TAG_ID = "blue_tag_id";
     public static final String SURVEY_DATE = "survey_date";

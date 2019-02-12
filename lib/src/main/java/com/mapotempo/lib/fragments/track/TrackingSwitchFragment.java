@@ -43,7 +43,7 @@ import android.view.ViewGroup;
 
 import com.mapotempo.fleet.dao.model.UserCurrentLocation;
 import com.mapotempo.fleet.dao.model.UserSettings;
-import com.mapotempo.fleet.dao.model.submodel.LocationDetails;
+import com.mapotempo.fleet.dao.model.nested.LocationDetails;
 import com.mapotempo.lib.MapotempoApplicationInterface;
 import com.mapotempo.lib.R;
 import com.mapotempo.lib.fragments.base.MapotempoBaseFragment;

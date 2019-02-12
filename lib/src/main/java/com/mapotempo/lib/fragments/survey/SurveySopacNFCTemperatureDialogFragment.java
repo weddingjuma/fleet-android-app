@@ -27,7 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapotempo.fleet.dao.model.submodel.SopacLOG;
+import com.mapotempo.fleet.dao.model.nested.SopacLOG;
 import com.mapotempo.lib.R;
 
 import java.util.List;

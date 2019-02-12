@@ -23,7 +23,7 @@ import com.couchbase.lite.Array;
 import com.couchbase.lite.Dictionary;
 import com.couchbase.lite.MutableArray;
 import com.mapotempo.fleet.core.IDatabaseHandler;
-import com.mapotempo.fleet.core.model.SubModelBase;
+import com.mapotempo.fleet.core.model.NestedModelBase;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -32,12 +32,12 @@ import java.util.List;
 
 public class ModelUtils
 {
-    public static <T extends SubModelBase> Array submodelListToArray(IDatabaseHandler databaseHandler,
-                                                                     List<T> list,
-                                                                     Class<T> submodelClazz)
+    public static <T extends NestedModelBase> Array submodelListToArray(IDatabaseHandler databaseHandler,
+                                                                        List<T> list,
+                                                                        Class<T> submodelClazz)
     {
         MutableArray res = new MutableArray();
-        for (SubModelBase quantity : list)
+        for (NestedModelBase quantity : list)
         {
             if (quantity.isValid())
                 res.addDictionary(quantity.getDictionary());
@@ -47,9 +47,9 @@ public class ModelUtils
         return res;
     }
 
-    public static <T extends SubModelBase> List<T> arrayToSubmodelList(IDatabaseHandler databaseHandler,
-                                                                       Array array,
-                                                                       Class<T> submodelClazz)
+    public static <T extends NestedModelBase> List<T> arrayToSubmodelList(IDatabaseHandler databaseHandler,
+                                                                          Array array,
+                                                                          Class<T> submodelClazz)
     {
         List<T> res = new ArrayList<>();
         if (array == null)
