@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -44,6 +45,7 @@ import com.mapotempo.lib.fragments.menu.MainMenuFragment;
 import com.mapotempo.lib.fragments.routes.OnRouteSelectedListener;
 import com.mapotempo.lib.fragments.routes.RoutesListFragment;
 
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends MapotempoBaseActivity implements
@@ -291,31 +293,32 @@ public class MainActivity extends MapotempoBaseActivity implements
         public void onReceive(Context context, Intent intent)
         {
             MapotempoFleetManager manager = ((MapotempoApplication) getApplicationContext()).getManager();
-
             final ConnectivityManager connMgr = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            final android.net.NetworkInfo wifi = connMgr
-                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-            final android.net.NetworkInfo mobile = connMgr
-                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-            if (wifi != null && wifi.isConnected())
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            String connexionType = "";
+            if (networkInfo != null)
             {
-                Log.d(">>>>>>>>>>>>> " + intent.getAction(), "wifi");
-                manager.onlineStatus(true);
-            }
-            else if (mobile != null && mobile.isConnected())
-            {
-                Log.d(">>>>>>>>>>>>> " + intent.getAction(), "data");
-                boolean status = manager.getUserPreference().getBoolPreference(UserSettings.Preference.MOBILE_DATA_USAGE);
+                boolean status = true;
+                switch (networkInfo.getType())
+                {
+                case ConnectivityManager.TYPE_WIFI:
+                    connexionType = "wifi";
+                    Log.d(TAG, intent.getAction() + " wifi");
+                    break;
+                case ConnectivityManager.TYPE_MOBILE:
+                    Log.d(TAG, intent.getAction() + " mobile_data");
+                    connexionType = "mobile_data";
+                    status = manager.getUserPreference().getBoolPreference(UserSettings.Preference.MOBILE_DATA_USAGE);
+                    break;
+                default:
+                    Log.d(TAG, intent.getAction() + " network down");
+                    break;
+                }
+                UserSettings userSettings = manager.getUserPreference();
+                userSettings.setConnexionInformation(new Date(), connexionType, "", BuildConfig.VERSION_NAME);
+                userSettings.save();
                 manager.onlineStatus(status);
-            }
-            else
-            {
-                Log.d(">>>>>>>>>>>>> " + intent.getAction(), "network down");
-                ((MapotempoApplication) getApplicationContext()).getManager().onlineStatus(false);
             }
         }
     }

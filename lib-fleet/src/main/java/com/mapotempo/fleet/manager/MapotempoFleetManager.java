@@ -25,7 +25,7 @@ import android.util.Log;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
-import com.mapotempo.fleet.Config;
+import com.mapotempo.fleet.BuildConfig;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.api.OnServerCompatibility;
 import com.mapotempo.fleet.core.DatabaseHandler;
@@ -222,21 +222,17 @@ public class MapotempoFleetManager implements IDatabaseHandler
         return mMissionActionTypeAccess;
     }
 
-    //    public UserTrackAccess getTrackAccess() {
-    //        return mUserTrackAccess;
-    //    }
-
     public void onlineStatus(boolean status)
     {
         if (!mLockOffline)
         {
-            mDatabaseHandler.onlineStatus(status);
+            mDatabaseHandler.setReplicatorsStatus(status);
         }
     }
 
     public boolean isOnline()
     {
-        return mDatabaseHandler.isOnline();
+        return mDatabaseHandler.getReplicatorsStatus();
     }
 
     public boolean serverCompatibility()
@@ -264,7 +260,7 @@ public class MapotempoFleetManager implements IDatabaseHandler
     private void ensureServerCompatibility(@Nullable MetaInfo metaInfo)
     {
         boolean status = serverCompatibility(metaInfo);
-        mDatabaseHandler.onlineStatus(status);
+        mDatabaseHandler.setReplicatorsStatus(status);
         mLockOffline = !status;
 
         // Notify user

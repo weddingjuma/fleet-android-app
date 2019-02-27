@@ -20,14 +20,28 @@
 package com.mapotempo.fleet.dao.model;
 
 import com.couchbase.lite.Document;
+import com.mapotempo.fleet.BuildConfig;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.core.IDatabaseHandler;
 import com.mapotempo.fleet.core.model.ModelBase;
 import com.mapotempo.fleet.core.model.ModelType;
+import com.mapotempo.fleet.utils.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @ModelType(type = "user_settings")
 public class UserSettings extends ModelBase
 {
+    String TAG = UserSettings.class.getName();
+
+    public static final String CURRENT_SIGN_IN_AT = "current_sign_in_at";
+    public static final String CURRENT_SIGN_IN_IP = "current_sign_in_ip";
+    public static final String CURRENT_APP_VERSION = "current_app_version";
+    public static final String CURRENT_LIB_VERSION = "current_lib_version";
+    public static final String CURRENT_SIGN_IN_CONNEXION_TYPE = "current_sign_in_connexion_type";
+    public static final String CURRENT_SIGN_TIME_ZONE = "current_sign_in_time_zone";
+    public static final String SIGN_IN_COUNT = "sign_in_count";
 
     // MAPOTEMPO KEY
     public static final String NIGHT_MODE = "night_mode";
@@ -125,5 +139,19 @@ public class UserSettings extends ModelBase
     public void setNightModePreference(NightModePreference status)
     {
         mDocument.setString(NIGHT_MODE, status.toString());
+    }
+
+    public void setConnexionInformation(Date currentSignInAt,
+                                        String currentSignInConnexiontype,
+                                        String currentSignInIp,
+                                        String currentAppVersion)
+    {
+        mDocument.setString(CURRENT_SIGN_IN_AT, DateUtils.toStringISO8601(currentSignInAt));
+        mDocument.setString(CURRENT_SIGN_IN_IP, currentSignInIp);
+        mDocument.setString(CURRENT_APP_VERSION, currentAppVersion);
+        mDocument.setInt(SIGN_IN_COUNT, mDocument.getInt(SIGN_IN_COUNT) + 1);
+        mDocument.setString(CURRENT_SIGN_IN_CONNEXION_TYPE, currentSignInConnexiontype);
+        mDocument.setString(CURRENT_LIB_VERSION, BuildConfig.VERSION_NAME);
+        mDocument.setString(CURRENT_SIGN_TIME_ZONE, Calendar.getInstance().getTimeZone().getID());
     }
 }

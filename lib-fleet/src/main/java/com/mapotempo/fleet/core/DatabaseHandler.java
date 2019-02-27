@@ -35,6 +35,7 @@ import com.couchbase.lite.ReplicatorChange;
 import com.couchbase.lite.ReplicatorChangeListener;
 import com.couchbase.lite.ReplicatorConfiguration;
 import com.couchbase.lite.URLEndpoint;
+import com.mapotempo.fleet.R;
 import com.mapotempo.fleet.api.FleetError;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.rest.syncgateway.Session;
@@ -46,14 +47,12 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import mapotempo.com.fleet.R;
-
 public class DatabaseHandler implements IDatabaseHandler
 {
 
     private static String TAG = DatabaseHandler.class.getName();
 
-    private final int RELEASE_TIMEOUT = 2;
+    private final int RELEASE_TIMEOUT = 5;
 
     private Context mContext;
 
@@ -207,22 +206,31 @@ public class DatabaseHandler implements IDatabaseHandler
         mReplicatorList.add(mMissionReplicator);
     }
 
-    public void onlineStatus(boolean status)
+    /**
+     * Set all replicators status.
+     *
+     * @param status The new status
+     */
+    public void setReplicatorsStatus(boolean status)
     {
+        Log.d(TAG, (status ? "Start" : "Stop") + " all replicator");
         for (Replicator r : mReplicatorList)
         {
             if (!status)
             {
                 r.stop();
+                continue;
             }
-            else
-            {
-                r.start();
-            }
+            r.start();
         }
     }
 
-    public boolean isOnline()
+    /**
+     * Get replicators status.
+     *
+     * @return true if at least one of replicators is started, false else
+     */
+    public boolean getReplicatorsStatus()
     {
         for (Replicator r : mReplicatorList)
         {
