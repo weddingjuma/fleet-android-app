@@ -255,7 +255,7 @@ public class MapotempoFleetManager implements IDatabaseHandler
     private boolean serverCompatibility(@Nullable MetaInfo metaInfo)
     {
         if (metaInfo != null)
-            return (metaInfo.getMinimalClientVersion() <= Config.CLIENT_VERSION);
+            return (metaInfo.getMinimalClientVersion() <= BuildConfig.VERSION_CODE);
         else
             return false;
     }
