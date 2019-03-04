@@ -21,11 +21,11 @@ package com.mapotempo.lib;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapotempo.fleet.api.FleetException;
 import com.mapotempo.fleet.manager.MapotempoFleetManager;
+import com.mapotempo.lib.utils.Toaster;
 
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
@@ -120,6 +120,6 @@ public class MapotempoApplication extends Application implements MapotempoApplic
 
     private void displayErrorServerCompatibility()
     {
-        Toast.makeText(this, getResources().getString(R.string.fleet_server_compatibility_error), Toast.LENGTH_LONG).show();
+        Toaster.getInstance().msgLong(this, getResources().getString(R.string.fleet_server_compatibility_error));
     }
 }
