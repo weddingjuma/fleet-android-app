@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright © Mapotempo, 2019
+  ~
+  ~ This file is part of Mapotempo.
+  ~
+  ~ Mapotempo is free software. You can redistribute it and/or
+  ~ modify since you respect the terms of the GNU Affero General
+  ~ Public License as published by the Free Software Foundation,
+  ~ either version 3 of the License, or (at your option) any later version.
+  ~
+  ~ Mapotempo is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  ~ or FITNESS FOR A PARTICULAR PURPOSE.  See the Licenses for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Mapotempo. If not, see:
+  ~ <http://www.gnu.org/licenses/agpl.html>
+  -->
+
+<vector android:height="24dp"
+        android:viewportHeight="1792"
+        android:viewportWidth="1792"
+        android:width="24dp"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+  <path
+      android:fillColor="#FF000000"
+      android:pathData="M1088,832q0,-26 -19,-45t-45,-19h-256q-26,0 -45,19t-19,45 19,45 45,19h256q26,0 45,-19t19,-45zM1664,640v960q0,26 -19,45t-45,19h-1408q-26,0 -45,-19t-19,-45v-960q0,-26 19,-45t45,-19h1408q26,0 45,19t19,45zM1728,192v256q0,26 -19,45t-45,19h-1536q-26,0 -45,-19t-19,-45v-256q0,-26 19,-45t45,-19h1536q26,0 45,19t19,45z"/>
+</vector>

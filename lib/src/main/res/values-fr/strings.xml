@@ -70,7 +70,7 @@
   <string name="survey_signature">"signature"</string>
   <string name="survey_picture">"photo"</string>
   <string name="survey_comment">"commentaire"</string>
-
+  <string name="click_here_to_update">"Cliquez ici pour éditer"</string>
 
   <!-- Settings -->
   <string name="profil">Profil</string>

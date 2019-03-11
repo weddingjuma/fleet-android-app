@@ -20,6 +20,7 @@
 package com.mapotempo.lib.fragments.survey;
 
 import android.app.Dialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,18 @@ abstract public class SurveyBaseDialogFragment extends MapotempoBaseDialogFragme
     protected Button mNegativeButton;
 
     protected Button mPositiveButton;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        // FIXME Close dialog fragment on restored activity
+        if (savedInstanceState != null)
+        {
+            dismiss();
+        }
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
@@ -84,6 +97,12 @@ abstract public class SurveyBaseDialogFragment extends MapotempoBaseDialogFragme
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         return dialog;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
     }
 
     // ================================

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.mission.MissionsPagerFragment">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".fragments.mission.MissionsPagerFragment"
+             tools:theme="@style/MapotempoTheme"
+             tools:visibility="visible">
 
-    <LinearLayout
-        android:background="@color/cardview_dark_background"
-        android:id="@+id/mission_view_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@color/colorDarkGrey"
-        android:orientation="horizontal" />
+  <LinearLayout
+      android:background="@color/cardview_dark_background"
+      android:id="@+id/mission_view_content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:backgroundTint="@color/colorDarkGrey"
+      android:orientation="horizontal"/>
 
 </FrameLayout>

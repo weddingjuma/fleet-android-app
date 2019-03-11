@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="MissionsListFragment">
-        <attr name="ViewStyle" format="enum">
-            <enum name="FOCUS" value="0" />
-            <enum name="SIMPLE" value="1" />
-        </attr>
-    </declare-styleable>
+  <declare-styleable name="MissionsListFragment">
+    <attr name="ViewStyle" format="enum">
+      <enum name="FOCUS" value="0"/>
+      <enum name="SIMPLE" value="1"/>
+    </attr>
+  </declare-styleable>
 
-    <declare-styleable name="MissionActionPanel">
-        <attr name="showLabel" format="boolean" />
-    </declare-styleable>
+  <declare-styleable name="MissionActionPanel">
+    <attr name="showLabel" format="boolean"/>
+  </declare-styleable>
+
+  <declare-styleable name="MissionDetailSectionLayout">
+    <attr name="detail_icon" format="integer"/>
+  </declare-styleable>
 </resources>

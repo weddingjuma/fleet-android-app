@@ -30,22 +30,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.mapotempo.fleet.dao.model.submodel.Quantity;
 import com.mapotempo.lib.R;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
 {
+    SearchView mSearchView;
+
     public static SurveyQuantityDialogFragment newInstance(@NonNull List<Quantity> editQuantities)
     {
         if (editQuantities == null)
             throw new RuntimeException("editQuantities can't be null");
 
         SurveyQuantityDialogFragment f = new SurveyQuantityDialogFragment();
-        f.mEditQuantities = editQuantities;
+        f.mQuantities = editQuantities;
         return f;
     }
 
@@ -61,7 +65,9 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
         mSurveyQuantityListener = surveyQuantityListener;
     }
 
-    private List<Quantity> mEditQuantities;
+    private List<Quantity> mQuantities;
+
+    private String mFilter = "";
 
     private LinearLayout mLayoutQuantitiesContainer;
 
@@ -98,6 +104,29 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
         View v = inflater.inflate(R.layout.survey_fragment_quantities, container, false);
         mLayoutQuantitiesContainer = v.findViewById(R.id.quantities_container);
         refreshView();
+        mSearchView = v.findViewById(R.id.label_filter);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                mFilter = newText
+                    .replace("{", "")
+                    .replace("}", "")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("[", "")
+                    .replace("]", "");
+                refreshView();
+                return true;
+            }
+        });
         return v;
     }
 
@@ -108,7 +137,7 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
     @Override
     protected boolean onPositive()
     {
-        return mSurveyQuantityListener.onQuantitySave(mEditQuantities);
+        return mSurveyQuantityListener.onQuantitySave(mQuantities);
     }
 
     @Override
@@ -125,7 +154,9 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
     {
         mLayoutQuantitiesContainer.removeAllViews();
 
-        for (final Quantity quantity : mEditQuantities)
+        List<Quantity> quantities = quantitiesFilter();
+
+        for (final Quantity quantity : quantities)
         {
             if (!quantity.isValid()) { continue; }
 
@@ -174,4 +205,24 @@ public class SurveyQuantityDialogFragment extends SurveyBaseDialogFragment
             mLayoutQuantitiesContainer.addView(quantityLayout);
         }
     }
+
+    /**
+     * quantitiesFilter
+     *
+     * @return Return filtered quantities
+     */
+    private List<Quantity> quantitiesFilter()
+    {
+        List<Quantity> res = new LinkedList<>();
+        for (Quantity quantity : mQuantities)
+        {
+            if (quantity.getLabel().toLowerCase().matches(".*" + mFilter.toLowerCase() + ".*"))
+            {
+                res.add(quantity);
+            }
+        }
+        return res;
+    }
+
+
 }

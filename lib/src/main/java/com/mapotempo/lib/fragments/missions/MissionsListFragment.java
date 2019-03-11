@@ -74,6 +74,7 @@ public class MissionsListFragment extends MapotempoBaseFragment
         {
             mBehavior = ListBehavior.fromInteger(Integer.parseInt(behaviorType.toString()));
         }
+        a.recycle();
     }
 
     @Override

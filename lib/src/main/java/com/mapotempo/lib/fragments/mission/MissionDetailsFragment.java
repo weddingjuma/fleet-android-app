@@ -101,8 +101,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
     {
     }
 
-    private static final String COLOR_GREEN = "56b881";
-
     private Mission mMission;
 
     private FrameLayout mMapContainer;
@@ -140,6 +138,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
     private FloatingActionButton mStatusThirdAction;
     private FloatingActionButton mStatusMoreAction;
 
+    private TextView mTextViewQuantities;
     private LinearLayout mLayoutQuantities;
     private LinearLayout mLayoutQuantitiesContainer;
 
@@ -152,7 +151,9 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
     private OnMissionDetailsFragmentListener mListener;
 
-    static int MAP_IMAGE_WIDTH_QUALITY = 500;
+    static private String SURVEY_DIALOG_TAG = "survey_dialog_tag";
+
+    static private int MAP_IMAGE_WIDTH_QUALITY = 500;
 
     // ==============
     // ==  Public  ==
@@ -292,6 +293,8 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         });
 
         // Quantities view
+
+        mTextViewQuantities = view.findViewById(R.id.quantities_message);
         mLayoutQuantities = view.findViewById(R.id.quantities_layout);
         mLayoutQuantitiesContainer = view.findViewById(R.id.quantities_container);
 
@@ -302,7 +305,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         return view;
     }
 
-    //
     @Override
     public void onResume()
     {
@@ -310,7 +312,6 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         fillViewFromActivity();
         initBottomSheet(getView());
     }
-
 
     // ===============================
     // ==  SurveySignatureListener  ==
@@ -440,87 +441,66 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
 
     public void goSurveySignatureFragment()
     {
-        String tag = "signatureDialog";
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag(tag);
-        if (prev != null)
-            ft.remove(prev);
-        ft.addToBackStack(null);
+        FragmentTransaction ft = closeSurveyFragment(getFragmentManager().beginTransaction());
         SurveySignatureDialogFragment newFragment = SurveySignatureDialogFragment.newInstance(mMission.getSurveySignature(), mMission.getSurveySignatoryName());
         newFragment.setSurveySignatureListener(this);
-        newFragment.show(ft, tag);
+        newFragment.show(ft, SURVEY_DIALOG_TAG);
     }
 
     public void goSurveyPictureFragment()
     {
-        String tag = "pictureDialog";
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag(tag);
-        if (prev != null)
-            ft.remove(prev);
-        ft.addToBackStack(null);
+        FragmentTransaction ft = closeSurveyFragment(getFragmentManager().beginTransaction());
         SurveyPictureDialogFragment newFragment = SurveyPictureDialogFragment.newInstance(mMission.getSurveyPicture());
         newFragment.setSurveyPictureListener(this);
-        newFragment.show(ft, tag);
+        newFragment.show(ft, SURVEY_DIALOG_TAG);
     }
 
     public void goSurveyQuantitiesFragment()
     {
-        String tag = "quantityDialog";
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag(tag);
-        if (prev != null)
-            ft.remove(prev);
-        ft.addToBackStack(null);
+        FragmentTransaction ft = closeSurveyFragment(getFragmentManager().beginTransaction());
         SurveyQuantityDialogFragment newFragment = SurveyQuantityDialogFragment.newInstance(mMission.getQuantities());
         newFragment.setListener(this);
-        newFragment.show(ft, tag);
+        newFragment.show(ft, SURVEY_DIALOG_TAG);
     }
 
     public void goSurveyAddressFragment()
     {
-        String tag = "addressDialog";
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag(tag);
-        if (prev != null)
-            ft.remove(prev);
-        ft.addToBackStack(null);
+        FragmentTransaction ft = closeSurveyFragment(getFragmentManager().beginTransaction());
         SurveyAddressDialogFragment newFragment = SurveyAddressDialogFragment.newInstance(mMission.getSurveyAddress().isValid() ? mMission.getSurveyAddress() : mMission
             .getAddress());
         newFragment.setSurveyAddressListener(this);
-        newFragment.show(ft, tag);
+        newFragment.show(ft, SURVEY_DIALOG_TAG);
     }
 
     public void goSurveyCommentFragment()
     {
-        String tag = "commentDialog";
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag(tag);
-        if (prev != null)
-            ft.remove(prev);
-        ft.addToBackStack(null);
+        FragmentTransaction ft = closeSurveyFragment(getFragmentManager().beginTransaction());
         SurveyCommentDialogFragment newFragment = SurveyCommentDialogFragment.newInstance(mMission.getSurveyComment());
         newFragment.setSurveyCommentListener(this);
-        newFragment.show(ft, tag);
+        newFragment.show(ft, SURVEY_DIALOG_TAG);
     }
 
     public void goSurveySopacTemperatureFragment(@Nullable Long sopacId)
     {
-        String tag = "sopacDialog";
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag(tag);
-        if (prev != null)
-            ft.remove(prev);
-        ft.addToBackStack(null);
+        FragmentTransaction ft = closeSurveyFragment(getFragmentManager().beginTransaction());
         SurveySopacNFCTemperatureDialogFragment newFragment = SurveySopacNFCTemperatureDialogFragment.newInstance(mMission
             .getSurveySopacLOGS(), sopacId);
         newFragment.setSurveySopacNFCTemperatureListener(this);
-        newFragment.show(ft, tag);
+        newFragment.show(ft, SURVEY_DIALOG_TAG);
     }
 
     // ===============
     // ==  Private  ==
     // ===============
+
+    private FragmentTransaction closeSurveyFragment(FragmentTransaction ft)
+    {
+        Fragment prev = getFragmentManager().findFragmentByTag(SURVEY_DIALOG_TAG);
+        if (prev != null)
+            ft.remove(prev);
+        ft.addToBackStack(null);
+        return ft;
+    }
 
     private void initBottomSheet(View view)
     {
@@ -756,7 +736,10 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         List<Quantity> quantities = mMission.getQuantities();
         for (Quantity quantity : quantities)
         {
-            if (!quantity.isValid()) { continue; }
+            if (!quantity.isValid() || quantity.getPreferedQuantity() == 0.) { continue; }
+
+            // Hide message if at least one quantity is displayed
+            mTextViewQuantities.setVisibility(View.GONE);
 
             View quantityLayout = getLayoutInflater().inflate(R.layout.quantity_layout, null);
 
@@ -818,7 +801,7 @@ public class MissionDetailsFragment extends MapotempoBaseFragment implements
         mLayoutTextViewDuration.setVisibility(isEmptyTextView(mTextViewDuration) ? View.VISIBLE : View.GONE);
         mLayoutDeliveryAddress.setVisibility((isEmptyTextView(mTextViewDeliveryAddress) ? View.VISIBLE : View.GONE));
         mLayoutTimeWindows.setVisibility((mLayoutTimeWindowsContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
-        mLayoutQuantities.setVisibility((mLayoutQuantitiesContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
+        mLayoutQuantities.setVisibility((mMission.getQuantities().size() > 0 ? View.VISIBLE : View.GONE));
         mLayoutTemperatures.setVisibility((mLayoutTemperaturesContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE));
         mLayoutPhone.setVisibility(isEmptyTextView(mTextViewPhone) ? View.VISIBLE : View.GONE);
         mLayoutComment.setVisibility(isEmptyTextView(mTextViewComment) ? View.VISIBLE : View.GONE);
