@@ -264,7 +264,11 @@ public abstract class AccessBase<T extends ModelBase> extends Base
                 {
                     String id = result.getString("id");
                     Document doc = mDatabaseHandler.getDatabase().getDocument(id);
-                    res.add(getInstance(doc));
+
+                    if (doc != null) // In some case document may have been deleted between query and model creation
+                    {
+                        res.add(getInstance(doc));
+                    }
                 }
                 changeListener.changed(res);
             }
