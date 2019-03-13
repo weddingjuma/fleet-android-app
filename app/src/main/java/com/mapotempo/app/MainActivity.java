@@ -75,7 +75,8 @@ public class MainActivity extends MapotempoBaseActivity implements
                 public void run()
                 {
                     RoutesListFragment fragment = (RoutesListFragment) getSupportFragmentManager().findFragmentById(R.id.routeList);
-                    fragment.setRoutes(routes, mArchivedMode);
+                    if (fragment != null)
+                        fragment.setRoutes(routes, mArchivedMode);
                 }
             });
         }
